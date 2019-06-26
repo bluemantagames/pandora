@@ -46,8 +46,14 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        var movement = card.GetComponent<Movement>();
+
         if (mapListener != null)
+        {
+            if (movement != null) movement.map = mapListener;
+
             mapListener.SpawnCard(card);
+        }
 
         CleanUpDrag(true);
     }
