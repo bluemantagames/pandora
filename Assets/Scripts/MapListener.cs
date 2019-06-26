@@ -29,11 +29,13 @@ public class MapListener : MonoBehaviour
      */
     public bool IsObstacle(Vector2 position)
     {
-        //return obstaclePositions.Contains(position);
-        return position.x < 0 && position.y < 0 && position.x > mapSize.x && position.y > mapSize.y;
+        var isOutOfBounds = (position.x < 0 && position.y < 0 && position.x > mapSize.x && position.y > mapSize.y);
+        var isTower = obstaclePositions.Contains(position);
+
+        return isTower || isOutOfBounds;
     }
     
-    public Vector2 WorldPositionGridCell(Vector2 position)
+    public Vector2 WorldPositionToGridCell(Vector2 position)
     {
         Vector2 spritePosition = Camera.main.WorldToScreenPoint(transform.position);
         Vector2 screenPosition = Camera.main.WorldToScreenPoint(position);
@@ -53,6 +55,24 @@ public class MapListener : MonoBehaviour
         );
 
         return cellPosition;
+    }
+
+    public Vector2 GridCellToWorldPosition(Vector2 cell)
+    {
+        Vector2 spritePosition = Camera.main.WorldToScreenPoint(transform.position);
+
+        float cellHeight = sprite.rect.height / mapSize.y;
+        float cellWidth = sprite.rect.width / mapSize.x;
+
+        Vector2 screenPoint = new Vector2(
+            spritePosition.x + (cell.x * cellWidth),
+            spritePosition.y + (cell.y * cellHeight)
+        );
+
+        Debug.Log("Cell " + cell);
+        Debug.Log("Screen point " + Camera.main.ScreenToWorldPoint(screenPoint));
+
+        return Camera.main.ScreenToWorldPoint(screenPoint);
     }
 
     public void Update()
@@ -91,13 +111,15 @@ public class MapListener : MonoBehaviour
     {
         var set = new HashSet<Vector2>();
 
-        for (var x = 0f; x < towerPosition.x + towerSize; x++)
+        for (var x = 0f; x < towerSize; x++)
         {
-            for (var y = 0f; y < towerPosition.x + towerSize; y++)
+            for (var y = 0f; y < towerSize; y++)
             {
-                set.Add(new Vector2(x, y));
+                set.Add(new Vector2(towerPosition.x + x, towerPosition.y + y));
             }
         }
+
+        Debug.Log("Tower positions " + string.Join(",", set));
 
         return set;
     }

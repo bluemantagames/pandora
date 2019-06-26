@@ -2,26 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QueueItem<T> : IComparable<QueueItem<T>>
+struct QueueItem
 {
-    public float priority;
-    public T item;
+    public List<Vector2> points;
+    public HashSet<Vector2> pointsSet;
 
-    public QueueItem(T _item, float _priority)
+    public QueueItem(List<Vector2> _points, HashSet<Vector2> _pointsSet)
     {
-        priority = _priority;
-        item = _item;
+        points = _points;
+        pointsSet = _pointsSet;
     }
 
     public override string ToString()
     {
-        var items = item as List<Vector2>;
-
-        return $"QueueItem: Priority: {priority}, Item: {string.Join(",", items)}";
-    }
-
-    public int CompareTo(QueueItem<T> other)
-    {
-        return priority.CompareTo(other.priority);
+        return string.Join(",", points);
     }
 }

@@ -9,29 +9,93 @@ public class Movement : MonoBehaviour
 {
     Rigidbody2D body;
     float speed = 1f;
-    bool calculationDone = false;
+    Vector2 currentTarget;
+    Vector2 worldCurrentTarget;
+    Vector2 direction;
+    List<Vector2> currentPath;
 
     public MapListener map;
+
+    // Start is called before the first frame update
+    void Awake()
+    {
+        body = GetComponent<Rigidbody2D>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Vector2 position = transform.position;
+        var currentPosition = CurrentCellPosition();
+
+        // if no path has been calculated, calculate one and point the object to the first position in the queue
+        if (currentPath == null)
+        {
+            currentPath = FindPath(new Vector2(2, 8));
+
+            Debug.Log("Found path " + string.Join(",", currentPath));
+
+            AdvancePosition(currentPosition);
+        }
+
+
+        // if current position is in the queue it means we need to advance target
+        if (currentPath.Contains(currentPosition))
+        {
+            AdvancePosition(currentPosition);
+        }
+
+        position += direction * (Time.deltaTime * speed);
+
+        body.MovePosition(position);
+    }
+
+    /**
+     * This sets the new grid cell target for the pathing and removes the current from the queue, effectively
+     * "advancing" pathing forward
+     */
+    private void AdvancePosition(Vector2 currentPosition)
+    {
+        if (currentPath.Count() > 1) // if path still has elements after we remove the current target
+        {
+            Debug.Log("Advancing from " + currentPosition);
+
+            currentPath.Remove(currentPosition);
+
+            currentTarget = currentPath.First();
+            worldCurrentTarget = map.GridCellToWorldPosition(currentTarget);
+            direction = (currentTarget - currentPosition).normalized;
+        } else
+        {
+            direction = Vector2.zero;
+        }
+    }
+
 
     /**
      * Very simple and probably shitty and not at all optimized A* implementation
      */
     List<Vector2> FindPath(Vector2 end)
     {
-        var evaluatedPositions = new HashSet<Vector2>();
-        var priorityQueue = new SimplePriorityQueue<List<Vector2>>();
-        var currentPosition = map.WorldPositionGridCell(transform.position);
+        var priorityQueue = new SimplePriorityQueue<QueueItem>();
+        var currentPosition = map.WorldPositionToGridCell(transform.position);
 
-        var evaluatingPosition = 
-            new List<Vector2> { map.WorldPositionGridCell(transform.position) };
+        int pass = 0;
+
+        var evaluatingPosition =
+            new QueueItem(
+                new List<Vector2> { map.WorldPositionToGridCell(transform.position) },
+                new HashSet<Vector2>()
+            );
 
         Vector2 item;
 
         // get the last item in the queue
-        while ((item = evaluatingPosition.Last()) != end )
+        while ((item = evaluatingPosition.points.Last()) != end )
         {
-            var positionsCount = evaluatingPosition.Count();
-            Vector2? lastPosition = (positionsCount >= 2) ? evaluatingPosition[positionsCount - 2] : (null as Vector2?);
+            var positionsCount = evaluatingPosition.points.Count();
+
+            Debug.Log("Evaluating " + string.Join(",", evaluatingPosition));
 
             // check all surrounding positions
             for (var x = -1f; x <= 1f; x++)
@@ -40,45 +104,42 @@ public class Movement : MonoBehaviour
                 {
                     var advance = new Vector2(item.x + x, item.y + y);
 
-                    if (advance != item && !map.IsObstacle(advance) && advance != lastPosition) // except the current positions, obstacles or going back
+                    var isAdvanceRedundant = evaluatingPosition.pointsSet.Contains(advance);
+
+                    if (advance != item && !map.IsObstacle(advance) && !isAdvanceRedundant) // except the current positions, obstacles or going back
                     {
                         var distanceToEnd = Vector2.Distance(advance, end); // use the distance between this point and the end as h(n)
                         var distanceFromStart = Vector2.Distance(currentPosition, advance); // use the distance between this point and the start as g(n)
                         var priority = distanceFromStart + distanceToEnd; // priority is h(n) ++ g(n)
-                        var currentPositions = new List<Vector2>(evaluatingPosition) { advance };
+                        var currentPositions = new List<Vector2>(evaluatingPosition.points) { advance };
+
+                        Debug.Log("Enqueuing " + string.Join(",", currentPositions) + "with priority " + priority);
 
                         priorityQueue.Enqueue(
-                            currentPositions,
+                            new QueueItem(currentPositions, new HashSet<Vector2>(currentPositions)),
                             priority
                         );
                     }
                 }
             }
 
+            pass += 1;
+
+            if (pass > 1000)
+            {
+                Debug.Log("Short circuiting after 1000 passes");
+
+                return evaluatingPosition.points;
+            }
+
             evaluatingPosition = priorityQueue.Dequeue();
         }
 
-        return evaluatingPosition;
+        return evaluatingPosition.points;
     }
 
-    // Start is called before the first frame update
-    void Awake()
+    private Vector2 CurrentCellPosition()
     {
-        body = GetComponent<Rigidbody2D>();
-
-        if (!calculationDone)
-        {
-            Debug.Log("Found path " + string.Join(",", FindPath(new Vector2(2, 8))));
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Vector2 position = transform.position;
-
-        position.y = position.y + (Time.deltaTime * speed);
-
-        body.MovePosition(position);
+        return map.WorldPositionToGridCell(transform.position);
     }
 }
