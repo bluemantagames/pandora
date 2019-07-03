@@ -8,18 +8,20 @@ using Priority_Queue;
 public class Movement : MonoBehaviour
 {
     Rigidbody2D body;
-    float speed = 1f;
     Vector2 currentTarget;
     Vector2 worldCurrentTarget;
     Vector2 direction;
     List<Vector2> currentPath;
+    TeamComponent team;
 
+    public float speed = 1f;
     public MapListener map;
 
     // Start is called before the first frame update
     void Awake()
     {
         body = GetComponent<Rigidbody2D>();
+        team = GetComponent<TeamComponent>();
     }
 
     // Update is called once per frame
@@ -31,23 +33,31 @@ public class Movement : MonoBehaviour
         // if no path has been calculated, calculate one and point the object to the first position in the queue
         if (currentPath == null)
         {
-            currentPath = FindPath(new Vector2(2, 8));
+            currentPath = FindPath(map.GetTarget(currentPosition, team.team));
 
             Debug.Log("Found path " + string.Join(",", currentPath));
 
             AdvancePosition(currentPosition);
         }
 
-
         // if current position is in the queue it means we need to advance target
         if (currentPath.Contains(currentPosition))
         {
+            GetComponent<LifeComponent>().AssignDamage(10);
+
             AdvancePosition(currentPosition);
         }
 
         position += direction * (Time.deltaTime * speed);
 
         body.MovePosition(position);
+
+        var enemy = map.GetNearestEnemy(currentPosition, team.team);
+
+        if (enemy != null)
+        {
+            currentPath = null;
+        }
     }
 
     /**
@@ -65,9 +75,11 @@ public class Movement : MonoBehaviour
             currentTarget = currentPath.First();
             worldCurrentTarget = map.GridCellToWorldPosition(currentTarget);
             direction = (currentTarget - currentPosition).normalized;
-        } else
+        }
+        else
         {
             direction = Vector2.zero;
+            currentPath = null;
         }
     }
 
@@ -91,7 +103,7 @@ public class Movement : MonoBehaviour
         Vector2 item;
 
         // get the last item in the queue
-        while ((item = evaluatingPosition.points.Last()) != end )
+        while ((item = evaluatingPosition.points.Last()) != end)
         {
             var positionsCount = evaluatingPosition.points.Count();
 

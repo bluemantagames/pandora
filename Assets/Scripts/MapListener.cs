@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 
 public class MapListener : MonoBehaviour
@@ -34,7 +35,7 @@ public class MapListener : MonoBehaviour
 
         return isTower || isOutOfBounds;
     }
-    
+
     public Vector2 WorldPositionToGridCell(Vector2 position)
     {
         Vector2 spritePosition = Camera.main.WorldToScreenPoint(transform.position);
@@ -85,14 +86,79 @@ public class MapListener : MonoBehaviour
             Destroy(lastPuppet);
     }
 
-    public void SpawnCard(GameObject card)
+    public void SpawnCard(GameObject card, int team)
     {
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 1;
 
         var cell = GetWorldPointedCell();
 
-        Instantiate(card, cell, Quaternion.identity);
+        var cardObject = Instantiate(card, cell, Quaternion.identity, transform);
+
+        cardObject.GetComponent<TeamComponent>().team = team;
+    }
+
+    public Vector2? GetNearestEnemy(Vector2 position, int team)
+    {
+        float? minDistance = null;
+        Vector2? enemyPosition = null;
+
+        foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
+        {
+            var gameObject = component.gameObject;
+            var gameObjectPosition = WorldPositionToGridCell(gameObject.transform.position);
+            var distance = Vector2.Distance(gameObjectPosition, position);
+            var isTargetValid = (minDistance == null || minDistance > distance) && component.team != team;
+
+            if (isTargetValid)
+            {
+                minDistance = distance;
+                enemyPosition = gameObjectPosition;
+            }
+        }
+
+        return enemyPosition;
+    }
+
+    public Vector2 GetTarget(Vector2 position, int team)
+    {
+        Vector2? lanePosition = null;
+        float firstLaneX = 2, secondLaneX = 11;
+
+        var enemyPosition = GetNearestEnemy(position, team);
+
+        // if no enemies found and not on a lane, go back on a lane
+        if (enemyPosition == null && position.x != firstLaneX && position.x != secondLaneX)
+        {
+            float xTarget, increment;
+
+            Vector2 targetLanePosition = position;
+
+
+            if (position.x <= mapSize.x / 2)
+            {
+                xTarget = firstLaneX;
+                increment = -1f;
+            }
+            else
+            {
+                xTarget = secondLaneX;
+                increment = 1f;
+            }
+
+            while (targetLanePosition.x != xTarget)
+            {
+                targetLanePosition.y += 1;
+                targetLanePosition.x += increment;
+            }
+
+            lanePosition = targetLanePosition;
+        }
+
+        Debug.Log(enemyPosition ?? lanePosition);
+
+        // go to enemy position, or a lane, or to the end of the world
+        return enemyPosition ?? lanePosition ?? new Vector2(position.x, 90);
     }
 
     public void OnUICardCollision(GameObject puppet)
@@ -104,7 +170,7 @@ public class MapListener : MonoBehaviour
 
         var cell = GetWorldPointedCell();
 
-        lastPuppet = Instantiate(puppet, cell, Quaternion.identity);
+        lastPuppet = Instantiate(puppet, cell, Quaternion.identity, transform);
     }
 
     private HashSet<Vector2> GetTowerPositions(Vector2 towerPosition, float towerSize = 3f)

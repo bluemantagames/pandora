@@ -11,6 +11,7 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
 
     public GameObject puppet;
     public GameObject card;
+    public int team = 1;
 
     private void CleanUpDrag(bool returnToPosition)
     {
@@ -52,7 +53,7 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
         {
             if (movement != null) movement.map = mapListener;
 
-            mapListener.SpawnCard(card);
+            mapListener.SpawnCard(card, team);
         }
 
         CleanUpDrag(true);
