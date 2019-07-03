@@ -4,23 +4,13 @@ using UnityEngine;
 
 public class MeleeCombatBehaviour : MonoBehaviour
 {
-    public float attackAnimationMs = 300f;
-    public float backswingDurationMs = 100f;
-    public Animator animator;
-    float timeSinceLastStateChange = 0f;
+    float damage = 10f;
     LifeComponent target = null;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+    public void MeleeAssignDamage() {
         if (target == null)
             return;
-        
+
+        target.AssignDamage(damage);
     }
 }
