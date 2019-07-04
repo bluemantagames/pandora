@@ -1,8 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TeamComponent : MonoBehaviour
+﻿namespace CRclone
 {
-    public int team;
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+
+    public class TeamComponent : MonoBehaviour
+    {
+        public int team;
+    }
 }

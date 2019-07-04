@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
-
-struct QueueItem
+﻿namespace CRclone
 {
-    public List<Vector2> points;
-    public HashSet<Vector2> pointsSet;
+    using System;
+    using System.Collections.Generic;
+    using UnityEngine;
 
-    public QueueItem(List<Vector2> _points, HashSet<Vector2> _pointsSet)
+    struct QueueItem
     {
-        points = _points;
-        pointsSet = _pointsSet;
-    }
+        public List<Vector2> points;
+        public HashSet<Vector2> pointsSet;
 
-    public override string ToString()
-    {
-        return string.Join(",", points);
+        public QueueItem(List<Vector2> _points, HashSet<Vector2> _pointsSet)
+        {
+            points = _points;
+            pointsSet = _pointsSet;
+        }
+
+        public override string ToString()
+        {
+            return string.Join(",", points);
+        }
     }
 }

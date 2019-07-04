@@ -1,34 +1,38 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class LifeComponent : MonoBehaviour
+﻿namespace CRclone
 {
-    public float lifeValue = 100;
-    public Image mask;
-    float maskOriginalSize;
-    float maxLife;
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+    using UnityEngine.UI;
 
-    // Start is called before the first frame update
-    void Start()
+    public class LifeComponent : MonoBehaviour
     {
-        maskOriginalSize = mask.rectTransform.rect.width;
-        maxLife = lifeValue;
+        public float lifeValue = 100;
+        public Image mask;
+        float maskOriginalSize;
+        float maxLife;
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            maskOriginalSize = mask.rectTransform.rect.width;
+            maxLife = lifeValue;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
+        public void AssignDamage(float value)
+        {
+            lifeValue -= value;
+
+            float lifePercent = lifeValue / maxLife;
+
+            mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void AssignDamage(float value)
-    {
-        lifeValue -= value;
-
-        float lifePercent = lifeValue / maxLife;
-
-        mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
-    }
 }
