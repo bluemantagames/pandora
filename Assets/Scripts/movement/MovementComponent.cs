@@ -40,7 +40,7 @@ namespace CRclone.Movement
 
             Debug.Log("Enemy " + enemy);
 
-            // first and foremost, if an enemy is in range attack them
+            // first and foremost, if an enemy is in range: attack them
             if (enemy != null && targetEnemy == null)
             {
                 targetEnemy = enemy;
@@ -50,11 +50,17 @@ namespace CRclone.Movement
                 return new MovementState(enemy, MovementStateEnum.MovingTowardsEnemy);
             }
 
+            // remove targeted enemy if they are dead
+            if (targetEnemy != null && targetEnemy.enemy.GetComponent<LifeComponent>().isDead) {
+                targetEnemy = null;
+            }
+
+            // if you're attacking an enemy: keep attacking
             if (targetEnemy != null && combatBehaviour.IsInRange(currentPosition, targetEnemy.enemyCell)) {
                 return new MovementState(enemy, MovementStateEnum.EnemyApproached);
             }
 
-            // if no path has been calculated, calculate one and point the object to the first position in the queue
+            // if no path has been calculated: calculate one and point the object to the first position in the queue
             if (currentPath == null)
             {
                 currentPath = FindPath(map.GetTarget(currentPosition, team.team));

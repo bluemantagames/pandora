@@ -111,7 +111,8 @@
                 var gameObject = component.gameObject;
                 var gameObjectPosition = WorldPositionToGridCell(gameObject.transform.position);
                 var distance = Vector2.Distance(gameObjectPosition, position);
-                var isTargetValid = (minDistance == null || minDistance > distance) && component.team != team;
+                var lifeComponent = gameObject.GetComponent<LifeComponent>();
+                var isTargetValid = (minDistance == null || minDistance > distance) && component.team != team && !lifeComponent.isDead;
 
                 if (isTargetValid)
                 {

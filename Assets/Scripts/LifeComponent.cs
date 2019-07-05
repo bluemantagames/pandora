@@ -11,6 +11,7 @@
         public Image mask;
         float maskOriginalSize;
         float maxLife;
+        public bool isDead = false;
 
         // Start is called before the first frame update
         void Start()
@@ -32,6 +33,15 @@
             float lifePercent = lifeValue / maxLife;
 
             mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
+
+            if (lifeValue <= 0) {
+                isDead = true;
+
+                GetComponent<Rigidbody2D>().simulated = false;
+                GetComponent<MeleeCombatBehaviour>().StopAttacking();
+
+                // TODO: Play "die" animation
+            }
         }
     }
 
