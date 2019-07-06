@@ -1,9 +1,11 @@
-﻿namespace CRclone
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using CRclone.Combat;
+
+namespace CRclone
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-    using UnityEngine.UI;
 
     public class LifeComponent : MonoBehaviour
     {
@@ -34,11 +36,12 @@
 
             mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
 
-            if (lifeValue <= 0) {
+            if (lifeValue <= 0)
+            {
                 isDead = true;
 
                 GetComponent<Rigidbody2D>().simulated = false;
-                GetComponent<MeleeCombatBehaviour>().StopAttacking();
+                GetComponent<CombatBehaviour>().StopAttacking();
 
                 // TODO: Play "die" animation
             }

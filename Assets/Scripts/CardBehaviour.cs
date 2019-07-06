@@ -7,7 +7,6 @@ using CRclone.Movement;
 
 namespace CRclone
 {
-
     public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         Vector3 originalPosition;
@@ -35,7 +34,7 @@ namespace CRclone
         {
             transform.position = Input.mousePosition;
 
-            var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(transform.position), Vector2.up, 0f, LayerMask.GetMask("Default"));
+            var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(transform.position), Vector2.up, 0f, LayerMask.GetMask("Map"));
 
             if (hit.collider != null)
             {

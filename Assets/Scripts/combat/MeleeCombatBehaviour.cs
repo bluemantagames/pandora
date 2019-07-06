@@ -1,23 +1,26 @@
-﻿namespace CRclone
-{
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-    public class MeleeCombatBehaviour : MonoBehaviour
+namespace CRclone.Combat
+{
+
+    public class MeleeCombatBehaviour : MonoBehaviour, CombatBehaviour
     {
         float damage = 10f;
         GameObject target = null;
-        public bool isAttacking = false;
+        public bool isAttacking { get; private set; } = false;
 
-        public bool IsInRange(Vector2 currentPosition, Vector2 targetPosition) {
+        public bool IsInRange(Vector2 currentPosition, Vector2 targetPosition)
+        {
             return Vector2.Distance(currentPosition, targetPosition) <= 2f;
         }
 
         /** Returns true if enemy has died */
         public void AttackEnemy(Enemy target)
         {
-            if (!isAttacking) {
+            if (!isAttacking)
+            {
                 this.target = target.enemy;
 
                 var animator = GetComponent<Animator>();
@@ -28,7 +31,8 @@
             }
         }
 
-        public void StopAttacking() {
+        public void StopAttacking()
+        {
             isAttacking = false;
             target = null;
 
@@ -47,7 +51,8 @@
 
             lifeComponent.AssignDamage(damage);
 
-            if (lifeComponent.lifeValue <= 0) {
+            if (lifeComponent.lifeValue <= 0)
+            {
                 StopAttacking();
             }
         }

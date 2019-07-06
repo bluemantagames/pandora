@@ -1,16 +1,22 @@
+using UnityEngine;
+using CRclone.Movement;
+
 namespace CRclone
 {
-    using UnityEngine;
-
     public class Enemy
     {
         public GameObject enemy;
-        public Vector2 enemyCell;
+        public Vector2 enemyCell
+        {
+            get
+            {
+                return enemy.GetComponent<MovementComponent>().map.WorldPositionToGridCell(enemy.transform.position);
+            }
+        }
 
-        public Enemy(GameObject enemy, Vector2 enemyCell)
+        public Enemy(GameObject enemy)
         {
             this.enemy = enemy;
-            this.enemyCell = enemyCell;
         }
     }
 

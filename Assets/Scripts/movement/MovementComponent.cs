@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Linq;
 using Priority_Queue;
 using CRclone;
+using CRclone.Combat;
 
 namespace CRclone.Movement
 {
@@ -17,7 +18,7 @@ namespace CRclone.Movement
         List<Vector2> currentPath;
         TeamComponent team;
         Enemy targetEnemy;
-        MeleeCombatBehaviour combatBehaviour;
+        CombatBehaviour combatBehaviour;
 
         public float speed = 1f;
         public MapListener map;
@@ -27,7 +28,7 @@ namespace CRclone.Movement
         {
             body = GetComponent<Rigidbody2D>();
             team = GetComponent<TeamComponent>();
-            combatBehaviour = GetComponent<MeleeCombatBehaviour>();
+            combatBehaviour = GetComponent<CombatBehaviour>();
         }
 
         // Update is called once per frame

@@ -103,7 +103,6 @@
         public Enemy GetNearestEnemy(Vector2 position, int team)
         {
             float? minDistance = null;
-            Vector2? enemyPosition = null;
             GameObject enemy = null;
 
             foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
@@ -117,14 +116,13 @@
                 if (isTargetValid)
                 {
                     minDistance = distance;
-                    enemyPosition = gameObjectPosition;
                     enemy = gameObject;
                 }
             }
 
-            if (enemyPosition != null && enemy != null)
+            if (enemy != null)
             {
-                return new Enemy(enemy, enemyPosition.Value);
+                return new Enemy(enemy);
             }
             else
             {
