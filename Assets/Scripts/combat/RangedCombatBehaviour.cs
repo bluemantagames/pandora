@@ -14,6 +14,14 @@ namespace CRclone.Combat
         public bool isAttacking { get; private set; } = false;
         public GameObject projectile;
 
+        public CombatType combatType
+        {
+            get
+            {
+                return CombatType.Ranged;
+            }
+        }
+
         public bool IsInRange(Vector2 currentPosition, Vector2 targetPosition)
         {
             return Vector2.Distance(currentPosition, targetPosition) <= 11f;
@@ -51,9 +59,10 @@ namespace CRclone.Combat
 
             Debug.Log("Spawning projectile");
 
-            var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity, transform);
+            var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
 
             projectileObject.GetComponent<ProjectileBehaviour>().target = target;
+            projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;
 
             var map = GetComponent<MovementComponent>().map;
 

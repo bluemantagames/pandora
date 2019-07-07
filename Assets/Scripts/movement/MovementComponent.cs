@@ -37,7 +37,7 @@ namespace CRclone.Movement
             Vector2 position = transform.position;
             var currentPosition = CurrentCellPosition();
 
-            var enemy = map.GetNearestEnemy(currentPosition, team.team);
+            var enemy = map.GetNearestEnemy(gameObject, currentPosition, team.team);
 
             Debug.Log("Enemy " + enemy);
 
@@ -64,7 +64,7 @@ namespace CRclone.Movement
             // if no path has been calculated: calculate one and point the object to the first position in the queue
             if (currentPath == null)
             {
-                currentPath = FindPath(map.GetTarget(currentPosition, team.team));
+                currentPath = FindPath(map.GetTarget(gameObject, currentPosition, team.team));
 
                 Debug.Log("Found path " + string.Join(",", currentPath));
 

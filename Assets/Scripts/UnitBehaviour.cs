@@ -15,6 +15,8 @@ namespace CRclone
         {
             movementComponent = GetComponent<MovementComponent>();
             combatBehaviour = GetComponent<CombatBehaviour>();
+            
+            Debug.Log($"CombatBehaviour is {combatBehaviour}");
         }
 
         // Update is called once per frame
@@ -26,6 +28,8 @@ namespace CRclone
                 Debug.Log("Attacking arrgh");
 
                 combatBehaviour.AttackEnemy(state.enemy);
+            } else if (state.state != MovementStateEnum.EnemyApproached && combatBehaviour.isAttacking) {
+                combatBehaviour.StopAttacking();
             }
 
             Debug.Log("Movement state " + state);

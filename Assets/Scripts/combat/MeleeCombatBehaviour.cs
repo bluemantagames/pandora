@@ -11,6 +11,14 @@ namespace CRclone.Combat
         GameObject target = null;
         public bool isAttacking { get; private set; } = false;
 
+        public CombatType combatType
+        {
+            get
+            {
+                return CombatType.Melee;
+            }
+        }
+
         public bool IsInRange(Vector2 currentPosition, Vector2 targetPosition)
         {
             return Vector2.Distance(currentPosition, targetPosition) <= 2f;

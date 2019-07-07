@@ -9,6 +9,7 @@ namespace CRclone.Combat
     {
         Rigidbody2D body;
 
+        public GameObject parent;
         public float speed = 1f;
         public Enemy target;
 
@@ -20,14 +21,17 @@ namespace CRclone.Combat
             {
                 Debug.Log("Collided with target " + other);
 
-                foreach (var rangedCombat in GetComponentsInParent<RangedCombatBehaviour>())
-                {
-                    rangedCombat.ProjectileCollided();
+                var behaviour = parent.GetComponent<RangedCombatBehaviour>();
 
-                    Destroy(this);
-
-                    gameObject.SetActive(false);
+                if (behaviour != null) {
+                    behaviour.ProjectileCollided();
+                } else {
+                    Debug.LogWarning("Could not find ProjectileCollided in parent");
                 }
+
+                Destroy(this);
+
+                gameObject.SetActive(false);
             }
         }
 

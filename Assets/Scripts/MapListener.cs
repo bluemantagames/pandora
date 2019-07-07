@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Linq;
     using System.Collections.Generic;
+    using CRclone.Combat;
 
     public class MapListener : MonoBehaviour
     {
@@ -100,23 +101,34 @@
             cardObject.GetComponent<TeamComponent>().team = team;
         }
 
-        public Enemy GetNearestEnemy(Vector2 position, int team)
+        public Enemy GetNearestEnemy(GameObject unit, Vector2 position, int team)
         {
             float? minDistance = null;
             GameObject enemy = null;
 
             foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
             {
-                var gameObject = component.gameObject;
-                var gameObjectPosition = WorldPositionToGridCell(gameObject.transform.position);
+                var targetGameObject = component.gameObject;
+                var gameObjectPosition = WorldPositionToGridCell(targetGameObject.transform.position);
                 var distance = Vector2.Distance(gameObjectPosition, position);
-                var lifeComponent = gameObject.GetComponent<LifeComponent>();
-                var isTargetValid = (minDistance == null || minDistance > distance) && component.team != team && !lifeComponent.isDead;
+                var lifeComponent = targetGameObject.GetComponent<LifeComponent>();
+
+                Debug.Log($"Our layer {unit.layer}");
+                Debug.Log($"Target layer {targetGameObject.layer}");
+                Debug.Log($"CombatBehaviour from nearest enemy {unit.GetComponent<CombatBehaviour>()}");
+
+                var canUnitsFight = // Units can fight if:
+                    (targetGameObject.layer == gameObject.layer) || // same layer (ground & ground, flying & flying)
+                    (targetGameObject.layer == Constants.FLYING_LAYER && unit.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying and we are ranged
+                    (unit.layer == Constants.FLYING_LAYER); // we're flying
+
+                var isTargetValid =
+                    (minDistance == null || minDistance > distance) && component.team != team && !lifeComponent.isDead && canUnitsFight;
 
                 if (isTargetValid)
                 {
                     minDistance = distance;
-                    enemy = gameObject;
+                    enemy = targetGameObject;
                 }
             }
 
@@ -130,12 +142,12 @@
             }
         }
 
-        public Vector2 GetTarget(Vector2 position, int team)
+        public Vector2 GetTarget(GameObject unit, Vector2 position, int team)
         {
             Vector2? lanePosition = null;
             float firstLaneX = 2, secondLaneX = 11;
 
-            var enemyPosition = GetNearestEnemy(position, team)?.enemyCell;
+            var enemyPosition = GetNearestEnemy(unit, position, team)?.enemyCell;
 
             // if no enemies found and not on a lane, go back on a lane
             if (enemyPosition == null && position.x != firstLaneX && position.x != secondLaneX)

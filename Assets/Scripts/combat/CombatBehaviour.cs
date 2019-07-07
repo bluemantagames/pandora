@@ -5,6 +5,7 @@ namespace CRclone.Combat {
     interface CombatBehaviour {
         /** True if the unit is currently in combat */
         bool isAttacking { get; }
+        CombatType combatType { get; }
 
         /** Begins attacking an enemy */
         void AttackEnemy(Enemy target);
@@ -12,5 +13,6 @@ namespace CRclone.Combat {
         void StopAttacking();
         /** Checks whether a position is in attack range */
         bool IsInRange(Vector2 currentPosition, Vector2 targetPosition);
+
     }
 }
