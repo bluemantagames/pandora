@@ -8,6 +8,9 @@ TextureImporter:
   - first:
       213: 8845121271864692217
     second: dragon_projectile_smoke
+  - first:
+      213: 8865729233865765387
+    second: fireball_sprite
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -109,7 +112,7 @@ TextureImporter:
         width: 35
         height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -130,7 +133,7 @@ TextureImporter:
         width: 38
         height: 34
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -138,6 +141,27 @@ TextureImporter:
       bones: []
       spriteID: fc5bc20806122bf458e8281da52edc49
       internalID: 8845121271864692217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fireball_sprite
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 109
+        width: 45
+        height: 44
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4c8643b3be50d3409b4fb59390004b4
+      internalID: 8865729233865765387
       vertices: []
       indices: 
       edges: []

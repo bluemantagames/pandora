@@ -25,7 +25,7 @@ namespace CRclone
             var state = movementComponent.Move();
 
             if (state.state == MovementStateEnum.EnemyApproached && !combatBehaviour.isAttacking) {
-                Debug.Log("Attacking arrgh");
+                Debug.Log("Unit is now attacking");
 
                 combatBehaviour.AttackEnemy(state.enemy);
             } else if (state.state != MovementStateEnum.EnemyApproached && combatBehaviour.isAttacking) {

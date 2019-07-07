@@ -1,11 +1,11 @@
-﻿namespace CRclone
-{
-    using UnityEngine;
-    using System.Collections;
-    using System.Linq;
-    using System.Collections.Generic;
-    using CRclone.Combat;
+﻿using UnityEngine;
+using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
+using CRclone.Combat;
 
+namespace CRclone
+{
     public class MapListener : MonoBehaviour
     {
         Vector2 mapSize = new Vector2(16, 13);
@@ -112,6 +112,8 @@
                 var gameObjectPosition = WorldPositionToGridCell(targetGameObject.transform.position);
                 var distance = Vector2.Distance(gameObjectPosition, position);
                 var lifeComponent = targetGameObject.GetComponent<LifeComponent>();
+
+                if (lifeComponent == null) continue; // skip spells
 
                 Debug.Log($"Our layer {unit.layer}");
                 Debug.Log($"Target layer {targetGameObject.layer}");

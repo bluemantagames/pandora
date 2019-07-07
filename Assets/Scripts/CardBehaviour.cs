@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using CRclone.Movement;
+using CRclone.Spell;
 
 namespace CRclone
 {
@@ -53,13 +54,17 @@ namespace CRclone
         public void OnEndDrag(PointerEventData eventData)
         {
             var movement = card.GetComponent<MovementComponent>();
+            var projectileSpell = card.GetComponent<ProjectileSpellBehaviour>();
 
             if (mapListener != null)
             {
                 if (movement != null) movement.map = mapListener;
+                if (projectileSpell != null) projectileSpell.map = mapListener;
 
                 mapListener.SpawnCard(card, team);
             }
+
+
 
             CleanUpDrag(true);
         }
