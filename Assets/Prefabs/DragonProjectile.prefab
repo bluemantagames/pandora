@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5687362912629012030}
   - component: {fileID: 5687362912629012029}
   - component: {fileID: 5709001385554795573}
-  - component: {fileID: 8874539654513684948}
+  - component: {fileID: 4061167875481412185}
   m_Layer: 11
   m_Name: DragonProjectile
   m_TagString: Untagged
@@ -130,7 +130,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.35, y: 0.45}
   m_EdgeRadius: 0
---- !u!114 &8874539654513684948
+--- !u!114 &4061167875481412185
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5687362912629012028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cfde0ab05d443143a570ffdf71639f3, type: 3}
+  m_Script: {fileID: 11500000, guid: 5cb915e9a2682074cb3c4ce721a3acce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
