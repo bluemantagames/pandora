@@ -64,8 +64,6 @@ namespace CRclone
                 mapListener.SpawnCard(card, team);
             }
 
-
-
             CleanUpDrag(true);
         }
 
