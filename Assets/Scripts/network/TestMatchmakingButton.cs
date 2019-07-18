@@ -8,6 +8,10 @@ namespace CRclone.Network {
             NetworkControllerSingleton.instance.StartMatchmaking();
         }
 
+        public void StartMatch() {
+            NetworkControllerSingleton.instance.StartMatch();
+        }
+
     }
 
 }
