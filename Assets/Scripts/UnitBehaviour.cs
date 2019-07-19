@@ -6,7 +6,8 @@ using CRclone.Combat;
 
 namespace CRclone
 {
-    public class UnitBehaviour : MonoBehaviour {
+    public class UnitBehaviour : MonoBehaviour
+    {
         MovementComponent movementComponent;
         CombatBehaviour combatBehaviour;
 
@@ -15,7 +16,7 @@ namespace CRclone
         {
             movementComponent = GetComponent<MovementComponent>();
             combatBehaviour = GetComponent<CombatBehaviour>();
-            
+
             Debug.Log($"CombatBehaviour is {combatBehaviour}");
         }
 
@@ -24,15 +25,19 @@ namespace CRclone
         {
             var state = movementComponent.Move();
 
-            if (state.state == MovementStateEnum.EnemyApproached && !combatBehaviour.isAttacking) {
+            if (state.state == MovementStateEnum.EnemyApproached && !combatBehaviour.isAttacking)
+            {
                 Debug.Log("Unit is now attacking");
 
                 combatBehaviour.AttackEnemy(state.enemy);
-            } else if (state.state != MovementStateEnum.EnemyApproached && combatBehaviour.isAttacking) {
+            }
+            else if (state.state != MovementStateEnum.EnemyApproached && combatBehaviour.isAttacking)
+            {
                 combatBehaviour.StopAttacking();
             }
 
             Debug.Log("Movement state " + state);
+
         }
     }
 }

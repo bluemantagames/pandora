@@ -7,6 +7,8 @@ using System.Net.Sockets;
 using System.Threading;
 using Pandora.Messages;
 using Google.Protobuf;
+using CRclone.Network.Messages;
+using System.Collections.Concurrent;
 
 namespace CRclone.Network
 {
@@ -17,6 +19,9 @@ namespace CRclone.Network
         private string matchToken = null;
         private Socket matchSocket = null;
         private Thread networkThread = null;
+        private Thread receiveThread = null;
+        private ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
+        public ConcurrentQueue<SpawnMessage> spawnQueue = new ConcurrentQueue<SpawnMessage>();
 
         private static NetworkControllerSingleton privateInstance = null;
 
@@ -92,6 +97,58 @@ namespace CRclone.Network
             SendMessage(
                 envelope.ToByteArray()
             );
+
+            receiveThread = new Thread(new ThreadStart(ReceiveLoop));
+
+            receiveThread.Start();
+
+            Message message;
+
+            while (true) { // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+                var isMessageDequeued = queue.TryDequeue(out message);
+
+                if (isMessageDequeued) {
+                    SendMessage(message.ToBytes(matchToken));
+                }
+            }
+        }
+
+        public void ReceiveLoop() {
+            while (true) { // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+                var sizeBytes = new Byte[4];
+
+                matchSocket.Receive(sizeBytes, sizeBytes.Length, 0);
+
+                if (BitConverter.IsLittleEndian) { // we receive bytes in big endian
+                    Array.Reverse(sizeBytes);
+                }
+
+                var size = BitConverter.ToInt32(sizeBytes, 0);
+
+                Debug.Log($"Asking for {size} bytes");
+
+                var messageBytes = new Byte[size];
+
+                matchSocket.Receive(messageBytes, messageBytes.Length, 0);
+
+                var envelope = ServerEnvelope.Parser.ParseFrom(messageBytes);
+
+                Debug.Log($"Received {envelope}");
+
+                if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Spawn) { // enqueue spawns and let the main thread handle it
+                    spawnQueue.Enqueue(new SpawnMessage {
+                        unitName = envelope.Spawn.UnitName,
+                        cellX = envelope.Spawn.X,
+                        cellY = envelope.Spawn.Y
+                    });
+                }
+            }
+        }
+
+        public void EnqueueMessage(Message message) {
+            // Enqueue the message instead of sending directly so that we do the blocking part in another thread
+            // since this is usually executed by the main unity thread
+            queue.Enqueue(message);
         }
 
         private void SendMessage(byte[] message)
@@ -106,6 +163,11 @@ namespace CRclone.Network
             
             matchSocket.Send(lengthBytes);
             matchSocket.Send(message);
+        }
+
+        public void Stop() {
+            receiveThread?.Abort();
+            networkThread?.Abort();
         }
     }
 

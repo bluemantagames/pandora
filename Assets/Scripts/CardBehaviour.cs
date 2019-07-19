@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using CRclone.Movement;
 using CRclone.Spell;
+using CRclone.Network;
 
 namespace CRclone
 {
@@ -16,6 +17,7 @@ namespace CRclone
         public GameObject puppet;
         public GameObject card;
         public int team = 1;
+        public string cardName;
 
         private void CleanUpDrag(bool returnToPosition)
         {
@@ -61,7 +63,7 @@ namespace CRclone
                 if (movement != null) movement.map = mapListener;
                 if (projectileSpell != null) projectileSpell.map = mapListener;
 
-                mapListener.SpawnCard(card, team);
+                mapListener.SpawnCard(cardName);
             }
 
             CleanUpDrag(true);
@@ -80,6 +82,8 @@ namespace CRclone
             PlayerPrefs.SetInt("Screenmanager Resolution Width", 800);
             PlayerPrefs.SetInt("Screenmanager Resolution Height", 600);
             PlayerPrefs.SetInt("Screenmanager Is Fullscreen mode", 0);
+
+            NetworkControllerSingleton.instance.Stop();
         }
     }
 }

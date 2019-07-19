@@ -31,7 +31,6 @@ namespace CRclone.Movement
             combatBehaviour = GetComponent<CombatBehaviour>();
         }
 
-        // Update is called once per frame
         public MovementState Move()
         {
             Vector2 position = transform.position;

@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using CRclone.Movement;
+using CRclone.Spell;
 using CRclone.Combat;
+using CRclone.Network;
+using CRclone.Network.Messages;
 
 namespace CRclone
 {
@@ -12,6 +17,7 @@ namespace CRclone
         Sprite sprite;
         GameObject lastPuppet;
         HashSet<Vector2> obstaclePositions;
+        int team = 0;
 
         public void Awake()
         {
@@ -81,6 +87,14 @@ namespace CRclone
 
         public void Update()
         {
+            SpawnMessage spawn;
+
+            if (NetworkControllerSingleton.instance.spawnQueue.TryDequeue(out spawn))
+            {
+                Debug.Log($"Received {spawn} - spawning unit");
+
+                SpawnUnit(spawn.unitName, spawn.cellX, spawn.cellY);
+            }
         }
 
         public void DestroyPuppet()
@@ -89,16 +103,36 @@ namespace CRclone
                 Destroy(lastPuppet);
         }
 
-        public void SpawnCard(GameObject card, int team)
+        public void SpawnCard(string cardName)
         {
-            var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePosition.z = 1;
+            var mapCell = GetPointedCell();
 
-            var cell = GetWorldPointedCell();
+            NetworkControllerSingleton.instance.EnqueueMessage(
+                new SpawnMessage
+                {
+                    unitName = cardName,
+                    cellX = (int)Math.Floor(mapCell.x),
+                    cellY = (int)Math.Floor(mapCell.y)
+                }
+            );
+        }
 
-            var cardObject = Instantiate(card, cell, Quaternion.identity, transform);
+        public void SpawnUnit(string unitName, int cellX, int cellY)
+        {
+            Debug.Log($"Spawning {unitName} in {cellX}, {cellY}");
 
-            cardObject.GetComponent<TeamComponent>().team = team;
+            var card = Resources.Load($"Cards/{unitName}") as GameObject;
+            var cardPosition = GridCellToWorldPosition(new Vector2(cellX, cellY));
+
+            var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
+
+            cardObject.GetComponent<TeamComponent>().team = ++team;
+
+            var movement = cardObject.GetComponent<MovementComponent>();
+            var projectileSpell = cardObject.GetComponent<ProjectileSpellBehaviour>();
+
+            if (movement != null) movement.map = this;
+            if (projectileSpell != null) projectileSpell.map = this;
         }
 
         public Enemy GetNearestEnemy(GameObject unit, Vector2 position, int team)
@@ -158,13 +192,22 @@ namespace CRclone
 
                 Vector2 targetLanePosition = position;
 
-
-                if (position.x <= mapSize.x / 2)
+                if (position.x <= mapSize.x / 2 && position.x >= firstLaneX) // if in the middle and near the first lane
                 {
                     xTarget = firstLaneX;
                     increment = -1f;
                 }
-                else
+                else if (position.x < firstLaneX) // if on the left
+                {
+                    xTarget = firstLaneX;
+                    increment = 1f;
+                }
+                else if (position.x > mapSize.x / 2 && position.x > secondLaneX) // if on the right
+                {
+                    xTarget = secondLaneX;
+                    increment = -1f;
+                }
+                else // if in the middle and near the second lane 
                 {
                     xTarget = secondLaneX;
                     increment = 1f;
@@ -247,7 +290,6 @@ namespace CRclone
 
         private Vector2 GetWorldPointedCell()
         {
-
             var cell = GetPointedCell();
 
             float cellHeight = sprite.rect.height / mapSize.y;
