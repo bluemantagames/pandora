@@ -22,6 +22,7 @@ namespace CRclone.Network
         private Thread receiveThread = null;
         private ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
         public ConcurrentQueue<SpawnMessage> spawnQueue = new ConcurrentQueue<SpawnMessage>();
+        public bool matchStarted = false;
 
         private static NetworkControllerSingleton privateInstance = null;
 
@@ -104,22 +105,27 @@ namespace CRclone.Network
 
             Message message;
 
-            while (true) { // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+            while (true)
+            { // TODO: Check if this impacts CPU and let the thread sleep a while if it does
                 var isMessageDequeued = queue.TryDequeue(out message);
 
-                if (isMessageDequeued) {
+                if (isMessageDequeued)
+                {
                     SendMessage(message.ToBytes(matchToken));
                 }
             }
         }
 
-        public void ReceiveLoop() {
-            while (true) { // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+        public void ReceiveLoop()
+        {
+            while (true)
+            { // TODO: Check if this impacts CPU and let the thread sleep a while if it does
                 var sizeBytes = new Byte[4];
 
                 matchSocket.Receive(sizeBytes, sizeBytes.Length, 0);
 
-                if (BitConverter.IsLittleEndian) { // we receive bytes in big endian
+                if (BitConverter.IsLittleEndian)
+                { // we receive bytes in big endian
                     Array.Reverse(sizeBytes);
                 }
 
@@ -135,8 +141,15 @@ namespace CRclone.Network
 
                 Debug.Log($"Received {envelope}");
 
-                if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Spawn) { // enqueue spawns and let the main thread handle it
-                    spawnQueue.Enqueue(new SpawnMessage {
+                if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Start)
+                {
+                    matchStarted = true;
+                }
+
+                if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Spawn)
+                { // enqueue spawns and let the main thread handle it
+                    spawnQueue.Enqueue(new SpawnMessage
+                    {
                         unitName = envelope.Spawn.UnitName,
                         cellX = envelope.Spawn.X,
                         cellY = envelope.Spawn.Y
@@ -145,7 +158,8 @@ namespace CRclone.Network
             }
         }
 
-        public void EnqueueMessage(Message message) {
+        public void EnqueueMessage(Message message)
+        {
             // Enqueue the message instead of sending directly so that we do the blocking part in another thread
             // since this is usually executed by the main unity thread
             queue.Enqueue(message);
@@ -157,15 +171,17 @@ namespace CRclone.Network
 
             Debug.Log($"Sending {lengthBytes.Length} bytes as message length");
 
-            if (BitConverter.IsLittleEndian) {
+            if (BitConverter.IsLittleEndian)
+            {
                 Array.Reverse(lengthBytes);
             }
-            
+
             matchSocket.Send(lengthBytes);
             matchSocket.Send(message);
         }
 
-        public void Stop() {
+        public void Stop()
+        {
             receiveThread?.Abort();
             networkThread?.Abort();
         }

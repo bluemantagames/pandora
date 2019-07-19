@@ -47,17 +47,15 @@ namespace CRclone
 
         public Vector2 WorldPositionToGridCell(Vector2 position)
         {
-            Vector2 spritePosition = Camera.main.WorldToScreenPoint(transform.position);
-            Vector2 screenPosition = Camera.main.WorldToScreenPoint(position);
+
+            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / mapSize.y;
+            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / mapSize.x;
 
             Vector2 gridPosition =
                 new Vector2(
-                    screenPosition.x - spritePosition.x,
-                    screenPosition.y - spritePosition.y
+                    position.x - transform.position.x,
+                    position.y - transform.position.y
                 );
-
-            float cellHeight = sprite.rect.height / mapSize.y;
-            float cellWidth = sprite.rect.width / mapSize.x;
 
             Vector2 cellPosition = new Vector2(
                 Mathf.Floor(gridPosition.x / cellWidth),
@@ -69,20 +67,18 @@ namespace CRclone
 
         public Vector2 GridCellToWorldPosition(Vector2 cell)
         {
-            Vector2 spritePosition = Camera.main.WorldToScreenPoint(transform.position);
-
-            float cellHeight = sprite.rect.height / mapSize.y;
-            float cellWidth = sprite.rect.width / mapSize.x;
+            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / mapSize.y;
+            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / mapSize.x;
 
             Vector2 screenPoint = new Vector2(
-                spritePosition.x + (cell.x * cellWidth),
-                spritePosition.y + (cell.y * cellHeight)
+                transform.position.x + (cell.x * cellWidth),
+                transform.position.y + (cell.y * cellHeight)
             );
 
             Debug.Log("Cell " + cell);
-            Debug.Log("Screen point " + Camera.main.ScreenToWorldPoint(screenPoint));
+            Debug.Log("Screen point " + screenPoint);
 
-            return Camera.main.ScreenToWorldPoint(screenPoint);
+            return screenPoint;
         }
 
         public void Update()
@@ -115,6 +111,11 @@ namespace CRclone
                     cellY = (int)Math.Floor(mapCell.y)
                 }
             );
+
+            if (!NetworkControllerSingleton.instance.matchStarted)
+            {
+                SpawnUnit(cardName, (int)Math.Floor(mapCell.x), (int)Math.Floor(mapCell.y));
+            }
         }
 
         public void SpawnUnit(string unitName, int cellX, int cellY)
@@ -124,7 +125,7 @@ namespace CRclone
             var card = Resources.Load($"Cards/{unitName}") as GameObject;
             var cardPosition = GridCellToWorldPosition(new Vector2(cellX, cellY));
 
-            var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
+            var cardObject = Instantiate(card, cardPosition, Quaternion.identity);
 
             cardObject.GetComponent<TeamComponent>().team = ++team;
 
@@ -232,12 +233,9 @@ namespace CRclone
         {
             DestroyPuppet();
 
-            var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePosition.z = 1;
-
             var cell = GetWorldPointedCell();
 
-            lastPuppet = Instantiate(puppet, cell, Quaternion.identity, transform);
+            lastPuppet = Instantiate(puppet, cell, Quaternion.identity);
         }
 
         private HashSet<Vector2> GetTowerPositions(Vector2 towerPosition, float towerSize = 3f)
@@ -259,26 +257,31 @@ namespace CRclone
 
         private Vector2 GetPointedCell()
         {
-            Vector2 position = Camera.main.WorldToScreenPoint(transform.position);
+            Vector2 worldMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             Vector2 mousePosition =
                 new Vector2(
-                    Input.mousePosition.x - position.x,
-                    Input.mousePosition.y - position.y
+                    worldMouse.x - transform.position.x,
+                    worldMouse.y - transform.position.y
                 );
 
             Debug.Log(
-                "Rect" + position
+                "Cell Rect " + transform.position
             );
 
 
             Debug.Log(
-                "Mouse " + Input.mousePosition
+                "Cell Mouse " + Input.mousePosition
             );
 
+            Debug.Log($"Cell X bounds {GetComponent<SpriteRenderer>().bounds.size.x}");
 
-            float cellHeight = sprite.rect.height / mapSize.y;
-            float cellWidth = sprite.rect.width / mapSize.x;
+            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / mapSize.y;
+            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / mapSize.x;
+
+            Debug.Log($"Cell width {cellWidth}");
+            Debug.Log($"Cell mouse position {mousePosition.x}");
+            Debug.Log($"Cell position {mousePosition.x / cellWidth}");
 
             Vector2 cellPosition = new Vector2(
                 Mathf.Floor(mousePosition.x / cellWidth),
@@ -292,16 +295,18 @@ namespace CRclone
         {
             var cell = GetPointedCell();
 
-            float cellHeight = sprite.rect.height / mapSize.y;
-            float cellWidth = sprite.rect.width / mapSize.x;
+            Debug.Log($"Pointed cell {cell}");
 
-            var worldCellPoint = Camera.main.WorldToScreenPoint(transform.position);
+            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / mapSize.y;
+            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / mapSize.x;
+
+            var worldCellPoint = transform.position;
 
             worldCellPoint.x += cellWidth * cell.x + (cellWidth / 2);
             worldCellPoint.y += cellHeight * cell.y + (cellHeight / 2);
             worldCellPoint.z = 1;
 
-            return Camera.main.ScreenToWorldPoint(worldCellPoint);
+            return worldCellPoint;
         }
     }
 }
