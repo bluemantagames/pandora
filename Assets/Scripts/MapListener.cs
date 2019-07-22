@@ -71,12 +71,12 @@ namespace CRclone
             float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / mapSize.x;
 
             Vector2 screenPoint = new Vector2(
-                transform.position.x + (cell.x * cellWidth),
-                transform.position.y + (cell.y * cellHeight)
+                transform.position.x + (cell.x * cellWidth) + cellWidth / 2,
+                transform.position.y + (cell.y * cellHeight) + cellHeight / 2
             );
 
-            Debug.Log("Cell " + cell);
-            Debug.Log("Screen point " + screenPoint);
+            Debug.Log($"Spawning in cell {cell}");
+            Debug.Log($"Screen point {screenPoint}");
 
             return screenPoint;
         }
