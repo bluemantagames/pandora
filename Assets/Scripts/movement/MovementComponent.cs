@@ -22,6 +22,8 @@ namespace CRclone.Movement
 
         public float speed = 1f;
         public MapListener map;
+        float unitsPerSecond = 0f;
+        float seconds = 0f;
 
         // Start is called before the first frame update
         void Awake()
@@ -76,7 +78,17 @@ namespace CRclone.Movement
                 AdvancePosition(currentPosition);
             }
 
-            position += direction * (Time.deltaTime * speed);
+            seconds += Time.deltaTime;
+            unitsPerSecond += Time.deltaTime * speed;
+
+            if (seconds >= 1) {
+                Debug.Log($"Units per second: {unitsPerSecond}");
+
+                seconds = 0;
+                unitsPerSecond = 0;
+            }
+
+            position += direction * (Time.fixedDeltaTime * speed);
 
             body.MovePosition(position);
 
