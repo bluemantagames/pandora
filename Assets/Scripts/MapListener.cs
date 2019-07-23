@@ -125,7 +125,7 @@ namespace CRclone
             var card = Resources.Load($"Cards/{unitName}") as GameObject;
             var cardPosition = GridCellToWorldPosition(new Vector2(cellX, cellY));
 
-            var cardObject = Instantiate(card, cardPosition, Quaternion.identity);
+            var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
 
             cardObject.GetComponent<TeamComponent>().team = ++team;
 
@@ -143,6 +143,8 @@ namespace CRclone
 
             foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
             {
+                Debug.Log($"Checking {component}");
+
                 var targetGameObject = component.gameObject;
                 var gameObjectPosition = WorldPositionToGridCell(targetGameObject.transform.position);
                 var distance = Vector2.Distance(gameObjectPosition, position);
@@ -155,12 +157,14 @@ namespace CRclone
                 Debug.Log($"CombatBehaviour from nearest enemy {unit.GetComponent<CombatBehaviour>()}");
 
                 var canUnitsFight = // Units can fight if:
-                    (targetGameObject.layer == gameObject.layer) || // same layer (ground & ground, flying & flying)
+                    (targetGameObject.layer == unit.layer) || // same layer (ground & ground, flying & flying)
                     (targetGameObject.layer == Constants.FLYING_LAYER && unit.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying and we are ranged
                     (unit.layer == Constants.FLYING_LAYER); // we're flying
 
                 var isTargetValid =
                     (minDistance == null || minDistance > distance) && component.team != team && !lifeComponent.isDead && canUnitsFight;
+                
+                Debug.Log($"Target valid {isTargetValid} units can fight {canUnitsFight}");
 
                 if (isTargetValid)
                 {

@@ -40,7 +40,7 @@ namespace CRclone.Movement
 
             var enemy = map.GetNearestEnemy(gameObject, currentPosition, team.team);
 
-            Debug.Log("Enemy " + enemy);
+            Debug.Log($"Enemy {enemy}");
 
             // first and foremost, if an enemy is in range: attack them
             if (enemy != null && targetEnemy == null)
