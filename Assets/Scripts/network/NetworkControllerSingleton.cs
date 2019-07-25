@@ -144,6 +144,10 @@ namespace CRclone.Network
                 if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Start)
                 {
                     matchStarted = true;
+
+                    TeamComponent.assignedTeam = envelope.Start.Team;
+
+                    Debug.Log($"We're team {TeamComponent.assignedTeam}");
                 }
 
                 if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Spawn)
@@ -152,7 +156,8 @@ namespace CRclone.Network
                     {
                         unitName = envelope.Spawn.UnitName,
                         cellX = envelope.Spawn.X,
-                        cellY = envelope.Spawn.Y
+                        cellY = envelope.Spawn.Y,
+                        team = envelope.Spawn.Team
                     });
                 }
             }

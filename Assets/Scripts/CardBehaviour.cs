@@ -63,7 +63,7 @@ namespace CRclone
                 if (movement != null) movement.map = mapListener;
                 if (projectileSpell != null) projectileSpell.map = mapListener;
 
-                mapListener.SpawnCard(cardName);
+                mapListener.SpawnCard(cardName, team);
             }
 
             CleanUpDrag(true);

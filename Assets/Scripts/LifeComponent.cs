@@ -40,8 +40,11 @@ namespace CRclone
             {
                 isDead = true;
 
+                Debug.Log("BB I'M DYING");
+
                 GetComponent<Rigidbody2D>().simulated = false;
                 GetComponent<CombatBehaviour>().StopAttacking();
+                GetComponent<SpriteRenderer>().enabled = false;
 
                 // TODO: Play "die" animation
             }

@@ -17,10 +17,12 @@ namespace CRclone
         Sprite sprite;
         GameObject lastPuppet;
         HashSet<Vector2> obstaclePositions;
-        int team = 0;
 
         public void Awake()
         {
+            Screen.fullScreen = false;
+            Screen.SetResolution(1080, 1920, false);
+
             sprite = GetComponent<SpriteRenderer>().sprite;
 
             var firstTowerPosition = new Vector2(1, 3);
@@ -89,7 +91,7 @@ namespace CRclone
             {
                 Debug.Log($"Received {spawn} - spawning unit");
 
-                SpawnUnit(spawn.unitName, spawn.cellX, spawn.cellY);
+                SpawnUnit(spawn.unitName, spawn.cellX, spawn.cellY, spawn.team);
             }
         }
 
@@ -99,7 +101,7 @@ namespace CRclone
                 Destroy(lastPuppet);
         }
 
-        public void SpawnCard(string cardName)
+        public void SpawnCard(string cardName, int team)
         {
             var mapCell = GetPointedCell();
 
@@ -108,17 +110,18 @@ namespace CRclone
                 {
                     unitName = cardName,
                     cellX = (int)Math.Floor(mapCell.x),
-                    cellY = (int)Math.Floor(mapCell.y)
+                    cellY = (int)Math.Floor(mapCell.y),
+                    team = TeamComponent.assignedTeam
                 }
             );
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
-                SpawnUnit(cardName, (int)Math.Floor(mapCell.x), (int)Math.Floor(mapCell.y));
+                SpawnUnit(cardName, (int)Math.Floor(mapCell.x), (int)Math.Floor(mapCell.y), team);
             }
         }
 
-        public void SpawnUnit(string unitName, int cellX, int cellY)
+        public void SpawnUnit(string unitName, int cellX, int cellY, int team)
         {
             Debug.Log($"Spawning {unitName} in {cellX}, {cellY}");
 
@@ -127,7 +130,7 @@ namespace CRclone
 
             var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
 
-            cardObject.GetComponent<TeamComponent>().team = ++team;
+            cardObject.GetComponent<TeamComponent>().team = team;
 
             var movement = cardObject.GetComponent<MovementComponent>();
             var projectileSpell = cardObject.GetComponent<ProjectileSpellBehaviour>();

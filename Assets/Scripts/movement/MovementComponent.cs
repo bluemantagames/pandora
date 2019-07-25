@@ -52,9 +52,11 @@ namespace CRclone.Movement
                 return new MovementState(enemy, MovementStateEnum.MovingTowardsEnemy);
             }
 
-            // remove targeted enemy if they are dead
+            // remove targeted enemy if they are dead and recalculate pathing
             if (targetEnemy != null && targetEnemy.enemy.GetComponent<LifeComponent>().isDead) {
                 targetEnemy = null;
+
+                currentPath = null;
             }
 
             // if you're attacking an enemy: keep attacking

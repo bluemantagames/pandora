@@ -6,12 +6,14 @@ namespace CRclone.Network.Messages {
         public string unitName;
         public int cellX;
         public int cellY;
+        public int team;
 
         public byte[] ToBytes(string matchToken) {
             var spawn = new Spawn {
                 UnitName = unitName,
                 X = cellX,
-                Y = cellY
+                Y = cellY,
+                Team = team
             };
 
             var envelope = new ClientEnvelope {

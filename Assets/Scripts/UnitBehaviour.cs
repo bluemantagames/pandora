@@ -10,12 +10,14 @@ namespace CRclone
     {
         MovementComponent movementComponent;
         CombatBehaviour combatBehaviour;
+        LifeComponent lifeComponent;
 
         // Start is called before the first frame update
         void Start()
         {
             movementComponent = GetComponent<MovementComponent>();
             combatBehaviour = GetComponent<CombatBehaviour>();
+            lifeComponent = GetComponent<LifeComponent>();
 
             Debug.Log($"CombatBehaviour is {combatBehaviour}");
         }
@@ -23,6 +25,8 @@ namespace CRclone
         // Update is called once per frame
         void Update()
         {
+            if (lifeComponent.isDead) return; // Do nothing if dead
+
             var state = movementComponent.Move();
 
             if (state.state == MovementStateEnum.EnemyApproached && !combatBehaviour.isAttacking)

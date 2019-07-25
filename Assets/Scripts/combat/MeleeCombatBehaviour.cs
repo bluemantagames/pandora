@@ -44,6 +44,8 @@ namespace CRclone.Combat
             isAttacking = false;
             target = null;
 
+            Debug.Log($"Combat: Stop attacking {GetComponent<TeamComponent>().team}");
+
             var animator = GetComponent<Animator>();
 
             animator.SetBool("Attacking", false);
@@ -55,14 +57,11 @@ namespace CRclone.Combat
             if (target == null)
                 return;
 
+            Debug.Log($"Combat: Dealing damage {GetComponent<TeamComponent>().team}");
+
             var lifeComponent = target.GetComponent<LifeComponent>();
 
             lifeComponent.AssignDamage(damage);
-
-            if (lifeComponent.lifeValue <= 0)
-            {
-                StopAttacking();
-            }
         }
     }
 }
