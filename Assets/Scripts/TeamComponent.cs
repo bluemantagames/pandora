@@ -9,5 +9,9 @@
         // Team assigned by the server
         static public int assignedTeam = 1;
         public int team;
+
+        public bool IsOpponent() {
+            return team != assignedTeam;
+        }
     }
 }

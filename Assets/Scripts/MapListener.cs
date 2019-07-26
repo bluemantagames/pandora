@@ -13,26 +13,46 @@ namespace CRclone
 {
     public class MapListener : MonoBehaviour
     {
-        Vector2 mapSize = new Vector2(16, 13);
+        int bottomMapSizeX = 16;
+        int bottomMapSizeY = 13;
+        int mapSizeX;
+        int mapSizeY;
+        Vector2 bottomMapSize;
         Sprite sprite;
         GameObject lastPuppet;
         HashSet<Vector2> obstaclePositions;
+        float firstLaneX = 2, secondLaneX = 13;
 
         public void Awake()
         {
+            mapSizeX = bottomMapSizeX;
+            mapSizeY = (bottomMapSizeY * 2) + 1;
+
+            bottomMapSize = new Vector2(bottomMapSizeX, bottomMapSizeY);
+
             Screen.fullScreen = false;
             Screen.SetResolution(1080, 1920, false);
 
             sprite = GetComponent<SpriteRenderer>().sprite;
 
             var firstTowerPosition = new Vector2(1, 3);
-            var secondTowerPosition = new Vector2(1, 3);
+            var secondTowerPosition = new Vector2(12, 3);
+            var thirdTowerPosition = new Vector2(1, 21);
+            var fourthTowerPosition = new Vector2(12, 21);
 
             obstaclePositions =
                 GetTowerPositions(firstTowerPosition);
 
             obstaclePositions.UnionWith(
                 GetTowerPositions(secondTowerPosition)
+            );
+
+            obstaclePositions.UnionWith(
+                GetTowerPositions(thirdTowerPosition)
+            );
+            
+            obstaclePositions.UnionWith(
+                GetTowerPositions(fourthTowerPosition)
             );
         }
 
@@ -41,17 +61,29 @@ namespace CRclone
          */
         public bool IsObstacle(Vector2 position)
         {
-            var isOutOfBounds = (position.x < 0 && position.y < 0 && position.x > mapSize.x && position.y > mapSize.y);
-            var isTower = obstaclePositions.Contains(position);
+            var riverY = 13f;
+            var riverPositions = new List<Vector2>();
 
-            return isTower || isOutOfBounds;
+            for (var x = 0; x < bottomMapSize.x; x++)
+            {
+                if (x != firstLaneX && x != secondLaneX)
+                {
+                    riverPositions.Add(new Vector2(x, riverY));
+                }
+            }
+
+            var isOutOfBounds = (position.x < 0 && position.y < 0 && position.x >= bottomMapSize.x && position.y >= bottomMapSize.y);
+            var isTower = obstaclePositions.Contains(position);
+            var isRiver = riverPositions.Contains(position);
+
+            return isRiver || isTower || isOutOfBounds;
         }
 
         public Vector2 WorldPositionToGridCell(Vector2 position)
         {
 
-            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / mapSize.y;
-            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / mapSize.x;
+            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / bottomMapSize.y;
+            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / bottomMapSize.x;
 
             Vector2 gridPosition =
                 new Vector2(
@@ -69,18 +101,18 @@ namespace CRclone
 
         public Vector2 GridCellToWorldPosition(Vector2 cell)
         {
-            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / mapSize.y;
-            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / mapSize.x;
+            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / bottomMapSize.y;
+            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / bottomMapSize.x;
 
-            Vector2 screenPoint = new Vector2(
+            Vector2 worldPosition = new Vector2(
                 transform.position.x + (cell.x * cellWidth) + cellWidth / 2,
                 transform.position.y + (cell.y * cellHeight) + cellHeight / 2
             );
 
             Debug.Log($"Spawning in cell {cell}");
-            Debug.Log($"Screen point {screenPoint}");
+            Debug.Log($"World point {worldPosition}");
 
-            return screenPoint;
+            return worldPosition;
         }
 
         public void Update()
@@ -126,9 +158,14 @@ namespace CRclone
             Debug.Log($"Spawning {unitName} in {cellX}, {cellY}");
 
             var card = Resources.Load($"Cards/{unitName}") as GameObject;
+
+            if (team != TeamComponent.assignedTeam) { // flip Y if opponent
+                cellY = mapSizeY - 1 - cellY;
+            }
+
             var cardPosition = GridCellToWorldPosition(new Vector2(cellX, cellY));
 
-            var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
+            var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform.parent);
 
             cardObject.GetComponent<TeamComponent>().team = team;
 
@@ -144,7 +181,7 @@ namespace CRclone
             float? minDistance = null;
             GameObject enemy = null;
 
-            foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
+            foreach (TeamComponent component in transform.parent.GetComponentsInChildren<TeamComponent>())
             {
                 Debug.Log($"Checking {component}");
 
@@ -166,7 +203,7 @@ namespace CRclone
 
                 var isTargetValid =
                     (minDistance == null || minDistance > distance) && component.team != team && !lifeComponent.isDead && canUnitsFight;
-                
+
                 Debug.Log($"Target valid {isTargetValid} units can fight {canUnitsFight}");
 
                 if (isTargetValid)
@@ -189,9 +226,9 @@ namespace CRclone
         public Vector2 GetTarget(GameObject unit, Vector2 position, int team)
         {
             Vector2? lanePosition = null;
-            float firstLaneX = 2, secondLaneX = 11;
 
             var enemyPosition = GetNearestEnemy(unit, position, team)?.enemyCell;
+            var towerY = 20;
 
             // if no enemies found and not on a lane, go back on a lane
             if (enemyPosition == null && position.x != firstLaneX && position.x != secondLaneX)
@@ -200,7 +237,7 @@ namespace CRclone
 
                 Vector2 targetLanePosition = position;
 
-                if (position.x <= mapSize.x / 2 && position.x >= firstLaneX) // if in the middle and near the first lane
+                if (position.x <= bottomMapSize.x / 2 && position.x >= firstLaneX) // if in the middle and near the first lane
                 {
                     xTarget = firstLaneX;
                     increment = -1f;
@@ -210,7 +247,7 @@ namespace CRclone
                     xTarget = firstLaneX;
                     increment = 1f;
                 }
-                else if (position.x > mapSize.x / 2 && position.x > secondLaneX) // if on the right
+                else if (position.x > bottomMapSize.x / 2 && position.x > secondLaneX) // if on the right
                 {
                     xTarget = secondLaneX;
                     increment = -1f;
@@ -221,19 +258,25 @@ namespace CRclone
                     increment = 1f;
                 }
 
+                var yIncrement = (unit.GetComponent<TeamComponent>().IsOpponent()) ? -1 : 1;
+
                 while (targetLanePosition.x != xTarget)
                 {
-                    targetLanePosition.y += 1;
+                    targetLanePosition.y += yIncrement;
                     targetLanePosition.x += increment;
                 }
 
                 lanePosition = targetLanePosition;
             }
 
+            if (unit.GetComponent<TeamComponent>().IsOpponent()) { // flip the tower Y objective if opponent
+                towerY = mapSizeY - 1 - towerY;
+            }
+
             Debug.Log(enemyPosition ?? lanePosition);
 
             // go to enemy position, or a lane, or to the end of the world
-            return enemyPosition ?? lanePosition ?? new Vector2(position.x, 90);
+            return enemyPosition ?? lanePosition ?? new Vector2(position.x, towerY);
         }
 
         public void OnUICardCollision(GameObject puppet)
@@ -283,8 +326,8 @@ namespace CRclone
 
             Debug.Log($"Cell X bounds {GetComponent<SpriteRenderer>().bounds.size.x}");
 
-            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / mapSize.y;
-            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / mapSize.x;
+            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / bottomMapSize.y;
+            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / bottomMapSize.x;
 
             Debug.Log($"Cell width {cellWidth}");
             Debug.Log($"Cell mouse position {mousePosition.x}");
@@ -304,8 +347,8 @@ namespace CRclone
 
             Debug.Log($"Pointed cell {cell}");
 
-            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / mapSize.y;
-            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / mapSize.x;
+            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / bottomMapSize.y;
+            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / bottomMapSize.x;
 
             var worldCellPoint = transform.position;
 

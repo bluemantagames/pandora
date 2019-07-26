@@ -126,6 +126,8 @@ namespace CRclone.Movement
          */
         List<Vector2> FindPath(Vector2 end)
         {
+            Debug.Log($"Searching path for {end}");
+
             var priorityQueue = new SimplePriorityQueue<QueueItem>();
             var currentPosition = map.WorldPositionToGridCell(transform.position);
 
