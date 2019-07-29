@@ -50,7 +50,7 @@ namespace CRclone
             obstaclePositions.UnionWith(
                 GetTowerPositions(thirdTowerPosition)
             );
-            
+
             obstaclePositions.UnionWith(
                 GetTowerPositions(fourthTowerPosition)
             );
@@ -159,7 +159,8 @@ namespace CRclone
 
             var card = Resources.Load($"Cards/{unitName}") as GameObject;
 
-            if (team != TeamComponent.assignedTeam) { // flip Y if opponent
+            if (team != TeamComponent.assignedTeam)
+            { // flip Y if opponent
                 cellY = mapSizeY - 1 - cellY;
             }
 
@@ -223,6 +224,34 @@ namespace CRclone
             }
         }
 
+        // Finds units in a gridcell-space rectangle
+        public List<GameObject> GetUnitsInRect(Vector2 origin, int widthCells, int heightCells)
+        {
+            var units = new List<GameObject>();
+            var lowerRange = Math.Min(origin.y, origin.y + heightCells);
+            var higherRange = Math.Max(origin.y, origin.y + heightCells);
+
+            foreach (var component in transform.parent.GetComponentsInChildren<UnitBehaviour>())
+            {
+                var cell = WorldPositionToGridCell(component.gameObject.transform.position);
+
+                Debug.Log($"Checking {cell} in {origin.x} / {origin.x + widthCells}");
+                Debug.Log($"Checking {cell} in {origin.y} / {origin.y + heightCells}");
+
+                if (
+                    cell.x >= origin.x &&
+                    cell.x <= origin.x + widthCells &&
+                    cell.y >= lowerRange &&
+                    cell.y <= higherRange
+                )
+                {
+                    units.Add(component.gameObject);
+                }
+            }
+
+            return units;
+        }
+
         public Vector2 GetTarget(GameObject unit, Vector2 position, int team)
         {
             Vector2? lanePosition = null;
@@ -269,7 +298,8 @@ namespace CRclone
                 lanePosition = targetLanePosition;
             }
 
-            if (unit.GetComponent<TeamComponent>().IsOpponent()) { // flip the tower Y objective if opponent
+            if (unit.GetComponent<TeamComponent>().IsOpponent())
+            { // flip the tower Y objective if opponent
                 towerY = mapSizeY - 1 - towerY;
             }
 
