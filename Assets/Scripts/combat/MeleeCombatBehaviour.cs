@@ -63,5 +63,10 @@ namespace CRclone.Combat
 
             lifeComponent.AssignDamage(damage);
         }
+
+        // Do nothing, we don't have projectiles
+        public void ProjectileCollided() {
+        }
+
     }
 }

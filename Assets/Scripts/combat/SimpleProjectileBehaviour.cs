@@ -30,9 +30,9 @@ namespace CRclone.Combat
                     Debug.LogWarning("Could not find ProjectileCollided in parent");
                 }
 
-                Destroy(this);
-
                 gameObject.SetActive(false);
+
+                Destroy(this);
             }
         }
 

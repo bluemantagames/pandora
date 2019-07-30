@@ -14,5 +14,8 @@ namespace CRclone.Combat {
         /** Checks whether a position is in attack range */
         bool IsInRange(Vector2 currentPosition, Vector2 targetPosition);
 
+        /** Called if a launched projectile collided */
+        void ProjectileCollided();
+
     }
 }

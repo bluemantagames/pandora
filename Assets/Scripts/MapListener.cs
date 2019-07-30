@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace CRclone
         GameObject lastPuppet;
         HashSet<Vector2> obstaclePositions;
         float firstLaneX = 2, secondLaneX = 13;
+
+        public GameObject textObject;
 
         public void Awake()
         {
@@ -54,6 +57,19 @@ namespace CRclone
             obstaclePositions.UnionWith(
                 GetTowerPositions(fourthTowerPosition)
             );
+
+            for (var x = 0; x < mapSizeX; x++) {
+                var gridPosition = GridCellToWorldPosition(new Vector2(x, mapSizeY + 1));
+
+                SpawnText(gridPosition, x.ToString());
+            }
+
+
+            for(var y = 0; y < mapSizeY; y++) {
+                var gridPosition = GridCellToWorldPosition(new Vector2(-1, y));
+
+                SpawnText(gridPosition, y.ToString());
+            }
         }
 
         /**
@@ -387,6 +403,12 @@ namespace CRclone
             worldCellPoint.z = 1;
 
             return worldCellPoint;
+        }
+
+        private void SpawnText(Vector2 position, string text) {
+            var canvas = Instantiate(textObject, position, Quaternion.identity, transform);
+
+            canvas.GetComponentInChildren<Text>().text = text;
         }
     }
 }

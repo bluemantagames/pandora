@@ -481,6 +481,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 1696013673}
+  projectile: {fileID: 5687362912629012028, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
+    type: 3}
+  aggroBoxOrigin: {x: 0, y: 15}
+  aggroBoxEnd: {x: 7, y: 20}
 --- !u!114 &186943428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,7 +497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2ed2f1cdbd60d45922e93321311966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 1, y: 21}
+  position: {x: 0, y: 20}
 --- !u!114 &186943429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565,7 +569,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 240306759}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.289, y: 4.094, z: 16.21875}
+  m_LocalPosition: {x: 0.737, y: 4.079, z: 16.21875}
   m_LocalScale: {x: 0.34498, y: 0.39832, z: 1}
   m_Children: []
   m_Father: {fileID: 806737586}
@@ -2747,7 +2751,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1665238652}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.059, y: 1.507, z: 16.710938}
+  m_LocalPosition: {x: -1.92, y: 1.533, z: 16.710938}
   m_LocalScale: {x: 0.34498, y: 0.39832, z: 1}
   m_Children: []
   m_Father: {fileID: 186943426}
@@ -2952,6 +2956,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1667a802bbce15f44a79e14f4b0fc50a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textObject: {fileID: 8625465531379632721, guid: c4b37cb968ea549479f17adeeb8d6051,
+    type: 3}
 --- !u!212 &1696013674
 SpriteRenderer:
   m_ObjectHideFlags: 0
