@@ -58,14 +58,16 @@ namespace CRclone
                 GetTowerPositions(fourthTowerPosition)
             );
 
-            for (var x = 0; x < mapSizeX; x++) {
+            for (var x = 0; x < mapSizeX; x++)
+            {
                 var gridPosition = GridCellToWorldPosition(new Vector2(x, mapSizeY + 1));
 
                 SpawnText(gridPosition, x.ToString());
             }
 
 
-            for(var y = 0; y < mapSizeY; y++) {
+            for (var y = 0; y < mapSizeY; y++)
+            {
                 var gridPosition = GridCellToWorldPosition(new Vector2(-1, y));
 
                 SpawnText(gridPosition, y.ToString());
@@ -126,7 +128,7 @@ namespace CRclone
             );
 
             Debug.Log($"Spawning in cell {cell}");
-            Debug.Log($"World point {worldPosition}");
+            Debug.Log($"World point GridCellToWorldPosition {worldPosition}");
 
             return worldPosition;
         }
@@ -241,7 +243,7 @@ namespace CRclone
         }
 
         // Finds units in a gridcell-space rectangle
-        public List<GameObject> GetUnitsInRect(Vector2 origin, int widthCells, int heightCells)
+        public List<GameObject> GetUnitsInRect(Vector2 origin, int widthCells, int heightCells, int? team)
         {
             var units = new List<GameObject>();
             var lowerRange = Math.Min(origin.y, origin.y + heightCells);
@@ -254,11 +256,15 @@ namespace CRclone
                 Debug.Log($"Checking {cell} in {origin.x} / {origin.x + widthCells}");
                 Debug.Log($"Checking {cell} in {origin.y} / {origin.y + heightCells}");
 
+                var isDead = component.gameObject.GetComponent<LifeComponent>()?.isDead ?? true;
+                var isOpponent = (team != null) ? team != component.gameObject.GetComponent<TeamComponent>().team : true;
+
                 if (
                     cell.x >= origin.x &&
                     cell.x <= origin.x + widthCells &&
                     cell.y >= lowerRange &&
-                    cell.y <= higherRange
+                    cell.y <= higherRange &&
+                    !isDead && isOpponent
                 )
                 {
                     units.Add(component.gameObject);
@@ -405,7 +411,8 @@ namespace CRclone
             return worldCellPoint;
         }
 
-        private void SpawnText(Vector2 position, string text) {
+        private void SpawnText(Vector2 position, string text)
+        {
             var canvas = Instantiate(textObject, position, Quaternion.identity, transform);
 
             canvas.GetComponentInChildren<Text>().text = text;

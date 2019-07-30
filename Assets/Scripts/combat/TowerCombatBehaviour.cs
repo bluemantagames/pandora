@@ -24,7 +24,12 @@ namespace CRclone.Combat
         public float cooldown = 0.3f;
 
         TeamComponent teamComponent;
-        Vector2 worldTowerPosition;
+        Vector2 worldTowerPosition { 
+            get {
+                return map.GridCellToWorldPosition(GetComponent<TowerPositionComponent>().position);
+            }
+        }
+
         GameObject currentTarget;
         LifeComponent targetLifeComponent;
         int aggroBoxHeight, aggroBoxWidth;
@@ -32,46 +37,12 @@ namespace CRclone.Combat
 
 
         /** Begins attacking an enemy */
-        public void AttackEnemy(Enemy target)
-        {
-            if (currentTarget == null) return;
-
-            isAttacking = true;
-
-            var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
-
-            projectileObject.GetComponent<ProjectileBehaviour>().target = target;
-            projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;
-
-        }
-
-        /** Stops attacking an enemy */
-        public void StopAttacking()
-        {
-            currentTarget = null;
-            targetLifeComponent = null;
-            isAttacking = false;
-        }
-
-        /** Checks whether a position is in attack range, not used */
-        public bool IsInRange(Vector2 currentPosition, Vector2 targetPosition)
-        {
-            return false;
-        }
-
-        /** Called if a launched projectile collided */
-        public void ProjectileCollided()
-        {
-            targetLifeComponent.AssignDamage(damage);
-        }
-
         void Awake()
         {
-            aggroBoxHeight = (int)(aggroBoxEnd.y - aggroBoxOrigin.y);
-            aggroBoxWidth = (int)(aggroBoxEnd.x - aggroBoxOrigin.x);
+            aggroBoxHeight = (int) (aggroBoxEnd.y - aggroBoxOrigin.y);
+            aggroBoxWidth = (int) (aggroBoxEnd.x - aggroBoxOrigin.x);
 
             teamComponent = GetComponent<TeamComponent>();
-            worldTowerPosition = map.GridCellToWorldPosition(GetComponent<TowerPositionComponent>().position);
         }
 
         // Update is called once per frame
@@ -79,7 +50,7 @@ namespace CRclone.Combat
         {
             if (currentTarget == null)
             {
-                var units = map.GetUnitsInRect(aggroBoxOrigin, aggroBoxWidth, aggroBoxHeight);
+                var units = map.GetUnitsInRect(aggroBoxOrigin, aggroBoxWidth, aggroBoxHeight, teamComponent.team);
 
                 float? closestDistance = null;
                 GameObject closestUnit = null;
@@ -126,5 +97,38 @@ namespace CRclone.Combat
                 }
             }
         }
+
+        public void AttackEnemy(Enemy target)
+        {
+            if (currentTarget == null) return;
+
+            isAttacking = true;
+
+            var projectileObject = Instantiate(projectile, worldTowerPosition, Quaternion.identity);
+
+            projectileObject.GetComponent<ProjectileBehaviour>().target = target;
+            projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;
+        }
+
+        /** Stops attacking an enemy */
+        public void StopAttacking()
+        {
+            currentTarget = null;
+            targetLifeComponent = null;
+            isAttacking = false;
+        }
+
+        /** Checks whether a position is in attack range, not used */
+        public bool IsInRange(Vector2 currentPosition, Vector2 targetPosition)
+        {
+            return false;
+        }
+
+        /** Called if a launched projectile collided */
+        public void ProjectileCollided()
+        {
+            targetLifeComponent.AssignDamage(damage);
+        }
+
     }
 }

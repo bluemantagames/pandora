@@ -22,7 +22,7 @@ namespace CRclone.Combat
             {
                 Debug.Log("Collided with target " + other);
 
-                var behaviour = parent.GetComponent<RangedCombatBehaviour>();
+                var behaviour = parent.GetComponent<CombatBehaviour>();
 
                 if (behaviour != null) {
                     behaviour.ProjectileCollided();

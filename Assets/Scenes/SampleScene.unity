@@ -459,8 +459,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 186943425}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.13257678, y: 1.6090233, z: -19.27636}
-  m_LocalScale: {x: 1.2007396, y: 1.2007396, z: 1.2007396}
+  m_LocalPosition: {x: -0.523, y: 1.742, z: -19.27636}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1320756859}
   - {fileID: 1665238653}
@@ -485,6 +485,9 @@ MonoBehaviour:
     type: 3}
   aggroBoxOrigin: {x: 0, y: 15}
   aggroBoxEnd: {x: 7, y: 20}
+  range: 5
+  damage: 20
+  cooldown: 0.3
 --- !u!114 &186943428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,7 +500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2ed2f1cdbd60d45922e93321311966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 20}
+  position: {x: 1, y: 21}
 --- !u!114 &186943429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1896,8 +1899,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1320756857}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.927124, y: 1.1289673, z: 16.710938}
-  m_LocalScale: {x: 0.29163492, y: 0.3452, z: 1}
+  m_LocalPosition: {x: -1.9288, y: 1.2078, z: 16.710938}
+  m_LocalScale: {x: 0.34878227, y: 0.4138959, z: 1}
   m_Children: []
   m_Father: {fileID: 186943426}
   m_RootOrder: 0
@@ -2751,7 +2754,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1665238652}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.92, y: 1.533, z: 16.710938}
+  m_LocalPosition: {x: -1.928, y: 1.609, z: 16.710938}
   m_LocalScale: {x: 0.34498, y: 0.39832, z: 1}
   m_Children: []
   m_Father: {fileID: 186943426}

@@ -41,7 +41,6 @@ namespace CRclone
             }
 
             Debug.Log("Movement state " + state);
-
         }
     }
 }
