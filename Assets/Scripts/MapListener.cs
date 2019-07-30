@@ -243,7 +243,7 @@ namespace CRclone
         }
 
         // Finds units in a gridcell-space rectangle
-        public List<GameObject> GetUnitsInRect(Vector2 origin, int widthCells, int heightCells, int? team)
+        public List<GameObject> GetUnitsInRect(Vector2 origin, int widthCells, int heightCells)
         {
             var units = new List<GameObject>();
             var lowerRange = Math.Min(origin.y, origin.y + heightCells);
@@ -257,14 +257,13 @@ namespace CRclone
                 Debug.Log($"Checking {cell} in {origin.y} / {origin.y + heightCells}");
 
                 var isDead = component.gameObject.GetComponent<LifeComponent>()?.isDead ?? true;
-                var isOpponent = (team != null) ? team != component.gameObject.GetComponent<TeamComponent>().team : true;
 
                 if (
                     cell.x >= origin.x &&
                     cell.x <= origin.x + widthCells &&
                     cell.y >= lowerRange &&
                     cell.y <= higherRange &&
-                    !isDead && isOpponent
+                    !isDead
                 )
                 {
                     units.Add(component.gameObject);

@@ -22,6 +22,7 @@ namespace CRclone.Combat
         public int range = 5;
         public float damage = 3f;
         public float cooldown = 0.3f;
+        public bool isOpponent = false;
 
         TeamComponent teamComponent;
         Vector2 worldTowerPosition { 
@@ -50,13 +51,18 @@ namespace CRclone.Combat
         {
             if (currentTarget == null)
             {
-                var units = map.GetUnitsInRect(aggroBoxOrigin, aggroBoxWidth, aggroBoxHeight, teamComponent.team);
+                var units = map.GetUnitsInRect(aggroBoxOrigin, aggroBoxWidth, aggroBoxHeight);
 
                 float? closestDistance = null;
                 GameObject closestUnit = null;
 
                 foreach (var unit in units)
                 {
+                    var team = unit.GetComponent<TeamComponent>().team;
+
+                    if (isOpponent && team != TeamComponent.assignedTeam) continue;
+                    if (!isOpponent && team == TeamComponent.assignedTeam) continue;
+
                     var distance = Vector2.Distance(
                         worldTowerPosition, unit.transform.position
                     );
