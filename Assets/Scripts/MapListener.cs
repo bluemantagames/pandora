@@ -195,7 +195,7 @@ namespace CRclone
             if (projectileSpell != null) projectileSpell.map = this;
         }
 
-        public Enemy GetNearestEnemy(GameObject unit, Vector2 position, int team)
+        public Enemy GetNearestEnemy(GameObject unit, Vector2 position, int team, float range)
         {
             float? minDistance = null;
             GameObject enemy = null;
@@ -206,10 +206,18 @@ namespace CRclone
 
                 var targetGameObject = component.gameObject;
                 var gameObjectPosition = WorldPositionToGridCell(targetGameObject.transform.position);
+
+                var towerPositionComponent = targetGameObject.GetComponent<TowerPositionComponent>();
+
+                if (towerPositionComponent != null)
+                {
+                    gameObjectPosition = towerPositionComponent.position;
+                }
+
                 var distance = Vector2.Distance(gameObjectPosition, position);
                 var lifeComponent = targetGameObject.GetComponent<LifeComponent>();
 
-                if (lifeComponent == null) continue; // skip spells
+                if (lifeComponent == null || lifeComponent.isDead) continue; // skip spells
 
                 Debug.Log($"Our layer {unit.layer}");
                 Debug.Log($"Target layer {targetGameObject.layer}");
@@ -221,9 +229,9 @@ namespace CRclone
                     (unit.layer == Constants.FLYING_LAYER); // we're flying
 
                 var isTargetValid =
-                    (minDistance == null || minDistance > distance) && component.team != team && !lifeComponent.isDead && canUnitsFight;
+                    (minDistance == null || minDistance > distance) && (distance <= range) && component.team != team && !lifeComponent.isDead && canUnitsFight;
 
-                Debug.Log($"Target valid {isTargetValid} units can fight {canUnitsFight}");
+                Debug.Log($"Distance {distance} Target valid {isTargetValid} units can fight {canUnitsFight}");
 
                 if (isTargetValid)
                 {
@@ -273,11 +281,11 @@ namespace CRclone
             return units;
         }
 
-        public Vector2 GetTarget(GameObject unit, Vector2 position, int team)
+        public Vector2 GetTarget(GameObject unit, Vector2 position, int team, float aggroRange)
         {
             Vector2? lanePosition = null;
 
-            var enemyPosition = GetNearestEnemy(unit, position, team)?.enemyCell;
+            var enemyPosition = GetNearestEnemy(unit, position, team, aggroRange)?.enemyCell;
             var towerY = 20;
 
             // if no enemies found and not on a lane, go back on a lane

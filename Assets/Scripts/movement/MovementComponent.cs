@@ -19,6 +19,7 @@ namespace CRclone.Movement
         TeamComponent team;
         Enemy targetEnemy;
         CombatBehaviour combatBehaviour;
+        public float aggroRange = 10;
 
         public float speed = 1f;
         public MapListener map;
@@ -38,7 +39,7 @@ namespace CRclone.Movement
             Vector2 position = transform.position;
             var currentPosition = CurrentCellPosition();
 
-            var enemy = map.GetNearestEnemy(gameObject, currentPosition, team.team);
+            var enemy = map.GetNearestEnemy(gameObject, currentPosition, team.team, aggroRange);
 
             Debug.Log($"Enemy {enemy}");
 
@@ -54,6 +55,8 @@ namespace CRclone.Movement
 
             // remove targeted enemy if they are dead and recalculate pathing
             if (targetEnemy != null && targetEnemy.enemy.GetComponent<LifeComponent>().isDead) {
+                Debug.Log("Target down");
+
                 targetEnemy = null;
 
                 currentPath = null;
@@ -67,7 +70,7 @@ namespace CRclone.Movement
             // if no path has been calculated: calculate one and point the object to the first position in the queue
             if (currentPath == null)
             {
-                currentPath = FindPath(map.GetTarget(gameObject, currentPosition, team.team));
+                currentPath = FindPath(map.GetTarget(gameObject, currentPosition, team.team, aggroRange));
 
                 Debug.Log("Found path " + string.Join(",", currentPath));
 

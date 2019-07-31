@@ -49,6 +49,8 @@ namespace CRclone.Combat
         // Update is called once per frame
         void Update()
         {
+            if (GetComponent<LifeComponent>().isDead) return; // you dead man
+
             if (currentTarget == null)
             {
                 var units = map.GetUnitsInRect(aggroBoxOrigin, aggroBoxWidth, aggroBoxHeight);

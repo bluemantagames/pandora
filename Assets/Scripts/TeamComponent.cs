@@ -8,7 +8,7 @@
     {
         // Team assigned by the server
         static public int assignedTeam = 1;
-        public int team;
+        public virtual int team { get; set; }
 
         public bool IsOpponent() {
             return team != assignedTeam;

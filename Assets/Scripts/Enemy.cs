@@ -10,7 +10,16 @@ namespace CRclone
         {
             get
             {
-                return enemy.GetComponent<MovementComponent>().map.WorldPositionToGridCell(enemy.transform.position);
+                var towerPosition = enemy.GetComponent<TowerPositionComponent>();
+
+                if (towerPosition != null)
+                {
+                    return towerPosition.position;
+                }
+                else
+                {
+                    return GameObject.Find("arena_bot").GetComponent<MapListener>().WorldPositionToGridCell(enemy.transform.position);
+                }
             }
         }
 

@@ -36,15 +36,24 @@ namespace CRclone
 
             mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
 
+
             if (lifeValue <= 0)
             {
                 isDead = true;
 
                 Debug.Log("BB I'M DYING");
 
-                GetComponent<Rigidbody2D>().simulated = false;
                 GetComponent<CombatBehaviour>().StopAttacking();
-                GetComponent<SpriteRenderer>().enabled = false;
+
+                foreach (var rigidBody in GetComponentsInChildren<Rigidbody2D>()) {
+                    rigidBody.simulated = false;
+                }
+
+                foreach (var renderer in GetComponentsInChildren<SpriteRenderer>()) {
+                    Debug.Log("Disabling renderer");
+
+                    renderer.enabled = false;
+                }
 
                 // TODO: Play "die" animation
             }
