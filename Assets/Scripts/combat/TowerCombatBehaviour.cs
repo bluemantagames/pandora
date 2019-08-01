@@ -12,6 +12,8 @@ namespace CRclone.Combat
         public Vector2 aggroBoxOrigin, aggroBoxEnd; // bottom left corner
 
         public bool isAttacking { get; private set; }
+        public bool isMiddle = false;
+
         public CombatType combatType
         {
             get
@@ -24,12 +26,17 @@ namespace CRclone.Combat
         public float cooldown = 0.3f;
         public bool isOpponent = false;
 
-        TeamComponent teamComponent;
-        Vector2 worldTowerPosition { 
-            get {
+        TowerTeamComponent teamComponent;
+        Vector2 worldTowerPosition
+        {
+            get
+            {
                 return map.GridCellToWorldPosition(GetComponent<TowerPositionComponent>().position);
             }
         }
+
+        public bool isFrontTowerDestroyed = false;
+        public GameObject middleTower = null;
 
         GameObject currentTarget;
         LifeComponent targetLifeComponent;
@@ -40,16 +47,18 @@ namespace CRclone.Combat
         /** Begins attacking an enemy */
         void Awake()
         {
-            aggroBoxHeight = (int) (aggroBoxEnd.y - aggroBoxOrigin.y);
-            aggroBoxWidth = (int) (aggroBoxEnd.x - aggroBoxOrigin.x);
+            aggroBoxHeight = (int)(aggroBoxEnd.y - aggroBoxOrigin.y);
+            aggroBoxWidth = (int)(aggroBoxEnd.x - aggroBoxOrigin.x);
 
-            teamComponent = GetComponent<TeamComponent>();
+            teamComponent = GetComponent<TowerTeamComponent>();
         }
 
         // Update is called once per frame
         void Update()
         {
             if (GetComponent<LifeComponent>().isDead) return; // you dead man
+
+            if (isMiddle && !isFrontTowerDestroyed) return;
 
             if (currentTarget == null)
             {
@@ -138,5 +147,14 @@ namespace CRclone.Combat
             targetLifeComponent.AssignDamage(damage);
         }
 
+        public void OnDead()
+        {
+            if (middleTower != null)
+            {
+                Debug.Log("Enabling middle tower");
+
+                middleTower.GetComponent<TowerCombatBehaviour>().isFrontTowerDestroyed = true;
+            }
+        }
     }
 }

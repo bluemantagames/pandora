@@ -17,5 +17,7 @@ namespace CRclone.Combat {
         /** Called if a launched projectile collided */
         void ProjectileCollided();
 
+        void OnDead();
+
     }
 }

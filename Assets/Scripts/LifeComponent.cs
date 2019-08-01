@@ -44,6 +44,7 @@ namespace CRclone
                 Debug.Log("BB I'M DYING");
 
                 GetComponent<CombatBehaviour>().StopAttacking();
+                GetComponent<CombatBehaviour>().OnDead();
 
                 foreach (var rigidBody in GetComponentsInChildren<Rigidbody2D>()) {
                     rigidBody.simulated = false;

@@ -79,5 +79,7 @@ namespace CRclone.Combat
 
             lifeComponent.AssignDamage(damage);
         }
+
+        public void OnDead() {}
     }
 }

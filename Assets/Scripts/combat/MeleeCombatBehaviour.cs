@@ -68,5 +68,7 @@ namespace CRclone.Combat
         public void ProjectileCollided() {
         }
 
+        public void OnDead() {}
+
     }
 }

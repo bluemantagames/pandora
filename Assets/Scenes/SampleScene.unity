@@ -373,10 +373,13 @@ MonoBehaviour:
     type: 3}
   aggroBoxOrigin: {x: 0, y: 6}
   aggroBoxEnd: {x: 7, y: 11}
+  isMiddle: 0
   range: 5
-  damage: 20
+  damage: 0
   cooldown: 0.3
   isOpponent: 0
+  isFrontTowerDestroyed: 0
+  middleTower: {fileID: 231804828}
 --- !u!114 &168480970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,7 +535,7 @@ Transform:
   - {fileID: 1665238653}
   - {fileID: 1712561596}
   m_Father: {fileID: 996488288}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &186943427
 MonoBehaviour:
@@ -551,10 +554,13 @@ MonoBehaviour:
     type: 3}
   aggroBoxOrigin: {x: 0, y: 15}
   aggroBoxEnd: {x: 7, y: 20}
+  isMiddle: 0
   range: 5
   damage: 0
   cooldown: 0.3
   isOpponent: 1
+  isFrontTowerDestroyed: 0
+  middleTower: {fileID: 322000263}
 --- !u!114 &186943428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,6 +610,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 231804829}
+  - component: {fileID: 231804832}
+  - component: {fileID: 231804831}
+  - component: {fileID: 231804830}
+  - component: {fileID: 231804833}
   m_Layer: 0
   m_Name: BottomMiddleTower
   m_TagString: Untagged
@@ -626,8 +636,72 @@ Transform:
   - {fileID: 182872372}
   - {fileID: 736425879}
   m_Father: {fileID: 996488288}
-  m_RootOrder: 5
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &231804830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231804828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733e88c63e6713f4fa432c8e37a8f31f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeValue: 100
+  mask: {fileID: 983627225}
+  isDead: 0
+--- !u!114 &231804831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231804828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b2ed2f1cdbd60d45922e93321311966, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  position: {x: 6, y: 0}
+--- !u!114 &231804832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231804828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eeb700b83d124f4fb4a845d04c21c86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  map: {fileID: 1696013673}
+  projectile: {fileID: 5687362912629012028, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
+    type: 3}
+  aggroBoxOrigin: {x: 0, y: 0}
+  aggroBoxEnd: {x: 15, y: 11}
+  isMiddle: 1
+  range: 5
+  damage: 20
+  cooldown: 0.3
+  isOpponent: 0
+  isFrontTowerDestroyed: 0
+  middleTower: {fileID: 0}
+--- !u!114 &231804833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231804828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d97e031da3793438b657c8e9dc46da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &240306759
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,6 +791,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 322000264}
+  - component: {fileID: 322000268}
+  - component: {fileID: 322000267}
+  - component: {fileID: 322000266}
+  - component: {fileID: 322000265}
   m_Layer: 0
   m_Name: TopMiddleTower
   m_TagString: Untagged
@@ -739,8 +817,72 @@ Transform:
   - {fileID: 352954989}
   - {fileID: 841981645}
   m_Father: {fileID: 996488288}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &322000265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322000263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d97e031da3793438b657c8e9dc46da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &322000266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322000263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733e88c63e6713f4fa432c8e37a8f31f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeValue: 100
+  mask: {fileID: 983627225}
+  isDead: 0
+--- !u!114 &322000267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322000263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b2ed2f1cdbd60d45922e93321311966, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  position: {x: 6, y: 26}
+--- !u!114 &322000268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322000263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eeb700b83d124f4fb4a845d04c21c86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  map: {fileID: 1696013673}
+  projectile: {fileID: 5687362912629012028, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
+    type: 3}
+  aggroBoxOrigin: {x: 0, y: 15}
+  aggroBoxEnd: {x: 16, y: 26}
+  isMiddle: 1
+  range: 5
+  damage: 20
+  cooldown: 0.3
+  isOpponent: 1
+  isFrontTowerDestroyed: 0
+  middleTower: {fileID: 0}
 --- !u!1001 &352276157
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1484,7 +1626,7 @@ Transform:
   - {fileID: 240306760}
   - {fileID: 1782060907}
   m_Father: {fileID: 996488288}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &806737587
 MonoBehaviour:
@@ -1503,10 +1645,13 @@ MonoBehaviour:
     type: 3}
   aggroBoxOrigin: {x: 8, y: 15}
   aggroBoxEnd: {x: 15, y: 20}
+  isMiddle: 0
   range: 5
   damage: 20
   cooldown: 0.3
   isOpponent: 1
+  isFrontTowerDestroyed: 0
+  middleTower: {fileID: 322000263}
 --- !u!114 &806737588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1678,6 +1823,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1404080528}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &983627225 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5539664017006594674, guid: 503a6e3202059d544917af9d213f3f03,
+    type: 3}
+  m_PrefabInstance: {fileID: 905907879}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &996488287
 GameObject:
   m_ObjectHideFlags: 0
@@ -1710,10 +1867,10 @@ Transform:
   - {fileID: 1697915150}
   - {fileID: 1793146100}
   - {fileID: 140615180}
-  - {fileID: 231804829}
   - {fileID: 806737586}
   - {fileID: 186943426}
   - {fileID: 322000264}
+  - {fileID: 231804829}
   - {fileID: 1673095995}
   - {fileID: 168480968}
   m_Father: {fileID: 0}
@@ -3033,10 +3190,13 @@ MonoBehaviour:
     type: 3}
   aggroBoxOrigin: {x: 8, y: 6}
   aggroBoxEnd: {x: 15, y: 11}
+  isMiddle: 0
   range: 5
   damage: 20
   cooldown: 0.3
   isOpponent: 0
+  isFrontTowerDestroyed: 0
+  middleTower: {fileID: 231804828}
 --- !u!114 &1673095997
 MonoBehaviour:
   m_ObjectHideFlags: 0
