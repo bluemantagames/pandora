@@ -286,9 +286,12 @@ namespace CRclone
             Vector2? lanePosition = null;
 
             var enemyPosition = GetNearestEnemy(unit, position, team, aggroRange)?.enemyCell;
+
             var towerY = 20;
+
             var middleTowerY = 24;
             var middleTowerX = 6;
+
             var isOpponent = unit.GetComponent<TeamComponent>().IsOpponent();
 
             TowerPosition targetTowerPosition;

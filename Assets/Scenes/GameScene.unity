@@ -690,7 +690,7 @@ MonoBehaviour:
   aggroBoxEnd: {x: 15, y: 11}
   isMiddle: 1
   range: 5
-  damage: 20
+  damage: 0
   cooldown: 0.3
   isOpponent: 0
   isFrontTowerDestroyed: 0
@@ -801,7 +801,7 @@ GameObject:
   - component: {fileID: 322000267}
   - component: {fileID: 322000266}
   - component: {fileID: 322000265}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TopMiddleTower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -850,7 +850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeValue: 100
-  mask: {fileID: 983627225}
+  mask: {fileID: 1889245575}
   isDead: 0
 --- !u!114 &322000267
 MonoBehaviour:
@@ -1657,7 +1657,7 @@ MonoBehaviour:
   aggroBoxEnd: {x: 15, y: 20}
   isMiddle: 0
   range: 5
-  damage: 20
+  damage: 0
   cooldown: 0.3
   isOpponent: 1
   isFrontTowerDestroyed: 0
@@ -3213,7 +3213,7 @@ MonoBehaviour:
   aggroBoxEnd: {x: 15, y: 11}
   isMiddle: 0
   range: 5
-  damage: 20
+  damage: 0
   cooldown: 0.3
   isOpponent: 0
   isFrontTowerDestroyed: 0
@@ -3761,6 +3761,18 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5539664017006594674, guid: 503a6e3202059d544917af9d213f3f03,
     type: 3}
   m_PrefabInstance: {fileID: 352276157}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1889245575 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5539664017006594674, guid: 503a6e3202059d544917af9d213f3f03,
+    type: 3}
+  m_PrefabInstance: {fileID: 786270577}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
