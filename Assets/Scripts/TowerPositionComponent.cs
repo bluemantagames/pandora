@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Bottom left grid cell
-public class TowerPositionComponent: MonoBehaviour
+namespace CRclone
 {
-    public Vector2 position;
+
+    // Bottom left grid cell
+    public class TowerPositionComponent : MonoBehaviour
+    {
+        public Vector2 position;
+        public TowerPosition towerPosition = TowerPosition.TopLeft; 
+    }
 }

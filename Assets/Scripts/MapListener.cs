@@ -287,6 +287,17 @@ namespace CRclone
 
             var enemyPosition = GetNearestEnemy(unit, position, team, aggroRange)?.enemyCell;
             var towerY = 20;
+            var middleTowerY = 24;
+            var middleTowerX = 6;
+            var isOpponent = unit.GetComponent<TeamComponent>().IsOpponent();
+
+            TowerPosition targetTowerPosition;
+
+            if (position.x < bottomMapSizeX / 2) {
+                targetTowerPosition = isOpponent ? TowerPosition.BottomLeft : TowerPosition.TopLeft;
+            } else {
+                targetTowerPosition = isOpponent ? TowerPosition.BottomRight : TowerPosition.BottomLeft;
+            }
 
             // if no enemies found and not on a lane, go back on a lane
             if (enemyPosition == null && position.x != firstLaneX && position.x != secondLaneX)
@@ -316,7 +327,7 @@ namespace CRclone
                     increment = 1f;
                 }
 
-                var yIncrement = (unit.GetComponent<TeamComponent>().IsOpponent()) ? -1 : 1;
+                var yIncrement = isOpponent ? -1 : 1;
 
                 while (targetLanePosition.x != xTarget)
                 {
@@ -327,15 +338,33 @@ namespace CRclone
                 lanePosition = targetLanePosition;
             }
 
-            if (unit.GetComponent<TeamComponent>().IsOpponent())
+            if (isOpponent)
             { // flip the tower Y objective if opponent
                 towerY = mapSizeY - 1 - towerY;
+                middleTowerY = mapSizeY - 1 - middleTowerY;
             }
 
-            Debug.Log(enemyPosition ?? lanePosition);
+            var isFrontTowerPresent = false;
+
+            foreach (var component in transform.parent.GetComponentsInChildren<TowerPositionComponent>())
+            {
+                if (component.towerPosition == targetTowerPosition && !component.gameObject.GetComponent<LifeComponent>().isDead)
+                {
+
+                    Debug.Log($"Going to {component.gameObject.GetComponent<LifeComponent>().isDead} {component.gameObject.GetComponent<LifeComponent>().lifeValue}");
+                    isFrontTowerPresent = true;
+                }
+            }
+
+            var towerPosition = (isFrontTowerPresent) ?
+             new Vector2(position.x, towerY) : new Vector2(middleTowerX, middleTowerY);
+
+            var endPosition = enemyPosition ?? lanePosition ?? towerPosition;
+
+            Debug.Log($"Going to {endPosition} (target is {targetTowerPosition}) ({isFrontTowerPresent})");
 
             // go to enemy position, or a lane, or to the end of the world
-            return enemyPosition ?? lanePosition ?? new Vector2(position.x, towerY);
+            return endPosition;
         }
 
         public void OnUICardCollision(GameObject puppet)
