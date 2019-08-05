@@ -6,6 +6,7 @@ using System.Linq;
 using Priority_Queue;
 using CRclone;
 using CRclone.Combat;
+using UnityEngine.Profiling;
 
 namespace CRclone.Movement
 {
@@ -25,10 +26,12 @@ namespace CRclone.Movement
         public MapListener map;
         float unitsPerSecond = 0f;
         float seconds = 0f;
+        private SimplePriorityQueue<QueueItem> priorityQueue;
 
         // Start is called before the first frame update
         void Awake()
         {
+            priorityQueue = new SimplePriorityQueue<QueueItem>();
             body = GetComponent<Rigidbody2D>();
             team = GetComponent<TeamComponent>();
             combatBehaviour = GetComponent<CombatBehaviour>();
@@ -129,9 +132,12 @@ namespace CRclone.Movement
          */
         List<Vector2> FindPath(Vector2 end)
         {
+            Profiler.BeginSample("FindPath");
+
             Debug.Log($"Searching path for {end}");
 
-            var priorityQueue = new SimplePriorityQueue<QueueItem>();
+            priorityQueue.Clear();
+
             var currentPosition = map.WorldPositionToGridCell(transform.position);
 
             int pass = 0;
@@ -188,6 +194,8 @@ namespace CRclone.Movement
 
                 evaluatingPosition = priorityQueue.Dequeue();
             }
+
+            Profiler.EndSample();
 
             return evaluatingPosition.points;
         }
