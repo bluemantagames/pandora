@@ -86,7 +86,7 @@ namespace CRclone.Pool
         {
             PooledObjects = new ConcurrentBag<T>();
             Profiling = new PoolProfiling { Enabled = profilingEnabled };
-            // If no create function is provided, try to use the defalt constructor
+            // If no create function is provided, try to use the default constructor
             CreateFunction = createFunction ?? (() => Activator.CreateInstance<T>());
             ResetFunction = resetFunction;
             DisposeFunction = disposeFunction;
@@ -141,7 +141,7 @@ namespace CRclone.Pool
         }
 
         /// <summary>
-        /// Gets an object from the pool. If there's no object
+        /// Gets an object from the pool. If there aren't any object
         /// available, a new one is instantiated.
         /// </summary>
         public T GetObject()
