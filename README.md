@@ -1,4 +1,4 @@
-# CRClone (codename pandora)
+# Pandora
 
 This is a [Unity](https://unity.com) project
 

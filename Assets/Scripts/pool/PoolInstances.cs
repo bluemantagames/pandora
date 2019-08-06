@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CRclone.Pool
+namespace Pandora.Pool
 {
     /// <summary>
     /// A shared collection of pool instances.

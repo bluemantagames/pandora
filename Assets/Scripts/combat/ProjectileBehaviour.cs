@@ -1,7 +1,7 @@
 using UnityEngine;
-using CRclone;
+using Pandora;
 
-namespace CRclone.Combat {
+namespace Pandora.Combat {
     public interface ProjectileBehaviour {
         Enemy target { get; set; }
         GameObject parent { get; set; }

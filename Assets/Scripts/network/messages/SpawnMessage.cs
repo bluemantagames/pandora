@@ -1,7 +1,7 @@
 using Pandora.Messages;
 using Google.Protobuf;
 
-namespace CRclone.Network.Messages {
+namespace Pandora.Network.Messages {
     public class SpawnMessage: Message {
         public string unitName;
         public int cellX;

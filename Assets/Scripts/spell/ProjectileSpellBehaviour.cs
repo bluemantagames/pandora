@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRclone.Spell
+namespace Pandora.Spell
 {
     public class ProjectileSpellBehaviour : MonoBehaviour
     {

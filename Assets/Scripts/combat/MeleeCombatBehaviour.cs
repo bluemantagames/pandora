@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRclone.Combat
+namespace Pandora.Combat
 {
 
     public class MeleeCombatBehaviour : MonoBehaviour, CombatBehaviour

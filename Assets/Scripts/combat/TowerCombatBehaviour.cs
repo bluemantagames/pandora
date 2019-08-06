@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CRclone;
+using Pandora;
 
-namespace CRclone.Combat
+namespace Pandora.Combat
 {
     public class TowerCombatBehaviour : MonoBehaviour, CombatBehaviour
     {

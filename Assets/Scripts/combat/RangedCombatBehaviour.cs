@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CRclone;
-using CRclone.Movement;
+using Pandora;
+using Pandora.Movement;
 
-namespace CRclone.Combat
+namespace Pandora.Combat
 {
 
     public class RangedCombatBehaviour : MonoBehaviour, CombatBehaviour

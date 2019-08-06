@@ -1,7 +1,7 @@
-using CRclone;
+using Pandora;
 using UnityEngine;
 
-namespace CRclone.Spell {
+namespace Pandora.Spell {
     public interface ProjectileSpell {
         MapComponent map { get; set; }
 

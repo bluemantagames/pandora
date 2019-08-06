@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-namespace CRclone
+namespace Pandora
 {
     public struct GridCell : IEquatable<GridCell>
     {

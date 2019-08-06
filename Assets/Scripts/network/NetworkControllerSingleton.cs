@@ -7,10 +7,10 @@ using System.Net.Sockets;
 using System.Threading;
 using Pandora.Messages;
 using Google.Protobuf;
-using CRclone.Network.Messages;
+using Pandora.Network.Messages;
 using System.Collections.Concurrent;
 
-namespace CRclone.Network
+namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {

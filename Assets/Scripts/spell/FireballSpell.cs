@@ -1,7 +1,7 @@
-using CRclone;
+using Pandora;
 using UnityEngine;
 
-namespace CRclone.Spell {
+namespace Pandora.Spell {
     public class FireballSpell : MonoBehaviour, ProjectileSpell {
         public MapComponent map { get; set; }
         public float damage = 20f;

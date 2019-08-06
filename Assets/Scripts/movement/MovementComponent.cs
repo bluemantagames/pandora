@@ -4,11 +4,11 @@ using System;
 using UnityEngine;
 using System.Linq;
 using Priority_Queue;
-using CRclone;
-using CRclone.Combat;
+using Pandora;
+using Pandora.Combat;
 using UnityEngine.Profiling;
 
-namespace CRclone.Movement
+namespace Pandora.Movement
 {
     public class MovementComponent : MonoBehaviour
     {

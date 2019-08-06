@@ -1,5 +1,5 @@
-namespace CRclone {
-    using CRclone.Combat;
+namespace Pandora {
+    using Pandora.Combat;
 
     public class TowerTeamComponent: TeamComponent {
         public override int team { 

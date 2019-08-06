@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace CRclone.Pool
+namespace Pandora.Pool
 {
     public class PoolProfiling
     {

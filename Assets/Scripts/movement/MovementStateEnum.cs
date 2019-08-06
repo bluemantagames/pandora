@@ -1,4 +1,4 @@
-namespace CRclone.Movement
+namespace Pandora.Movement
 {
     public enum MovementStateEnum { Moving, MovingTowardsEnemy, EnemyApproached }
 }

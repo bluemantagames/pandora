@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CRclone.Network
+namespace Pandora.Network
 {
     public class TeamTextBehaviour : MonoBehaviour
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRclone
+namespace Pandora
 {
 
     // Bottom left grid cell

@@ -1,4 +1,4 @@
-namespace CRclone.Combat
+namespace Pandora.Combat
 {
     public enum CombatType { Melee, Ranged }
 }

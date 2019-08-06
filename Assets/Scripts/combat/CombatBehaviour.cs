@@ -1,7 +1,7 @@
-using CRclone;
+using Pandora;
 using UnityEngine;
 
-namespace CRclone.Combat {
+namespace Pandora.Combat {
     interface CombatBehaviour {
         /** True if the unit is currently in combat */
         bool isAttacking { get; }

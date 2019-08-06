@@ -1,4 +1,4 @@
-﻿namespace CRclone
+﻿namespace Pandora
 {
     using System;
     using System.Collections.Generic;

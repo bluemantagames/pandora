@@ -4,13 +4,13 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
-using CRclone.Movement;
-using CRclone.Spell;
-using CRclone.Combat;
-using CRclone.Network;
-using CRclone.Network.Messages;
+using Pandora.Movement;
+using Pandora.Spell;
+using Pandora.Combat;
+using Pandora.Network;
+using Pandora.Network.Messages;
 
-namespace CRclone
+namespace Pandora
 {
     public class MapComponent : MonoBehaviour
     {

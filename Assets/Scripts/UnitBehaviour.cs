@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CRclone.Movement;
-using CRclone.Combat;
+using Pandora.Movement;
+using Pandora.Combat;
 
-namespace CRclone
+namespace Pandora
 {
     public class UnitBehaviour : MonoBehaviour
     {

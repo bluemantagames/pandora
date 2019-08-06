@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using CRclone;
+using Pandora;
 
-namespace CRclone.Combat
+namespace Pandora.Combat
 {
     public class SimpleProjectileBehaviour : MonoBehaviour, ProjectileBehaviour
     {

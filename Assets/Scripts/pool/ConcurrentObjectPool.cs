@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace CRclone.Pool
+namespace Pandora.Pool
 {
     /// <summary>
     /// Object Pool constants.

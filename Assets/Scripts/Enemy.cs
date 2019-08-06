@@ -1,7 +1,7 @@
 using UnityEngine;
-using CRclone.Movement;
+using Pandora.Movement;
 
-namespace CRclone
+namespace Pandora
 {
     public class Enemy
     {

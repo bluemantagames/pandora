@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using CRclone.Combat;
+using Pandora.Combat;
 
-namespace CRclone
+namespace Pandora
 {
 
     public class LifeComponent : MonoBehaviour

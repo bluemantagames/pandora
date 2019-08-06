@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using CRclone.Movement;
-using CRclone.Spell;
-using CRclone.Network;
+using Pandora.Movement;
+using Pandora.Spell;
+using Pandora.Network;
 
-namespace CRclone
+namespace Pandora
 {
     public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
     {
