@@ -9,6 +9,11 @@ namespace CRclone
     public class TowerPositionComponent : MonoBehaviour
     {
         public Vector2 position;
+        public GridCell towerCell;
         public TowerPosition towerPosition = TowerPosition.TopLeft; 
+
+        void Start() {
+            towerCell = new GridCell(position);
+        }
     }
 }

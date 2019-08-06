@@ -12,7 +12,7 @@ namespace CRclone.Combat {
         /** Stops attacking an enemy */
         void StopAttacking();
         /** Checks whether a position is in attack range */
-        bool IsInRange(Vector2 currentPosition, Vector2 targetPosition);
+        bool IsInRange(GridCell currentPosition, GridCell targetPosition);
 
         /** Called if a launched projectile collided */
         void ProjectileCollided();

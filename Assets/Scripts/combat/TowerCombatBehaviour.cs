@@ -31,7 +31,7 @@ namespace CRclone.Combat
         {
             get
             {
-                return map.GridCellToWorldPosition(GetComponent<TowerPositionComponent>().position);
+                return map.GridCellToWorldPosition(GetComponent<TowerPositionComponent>().towerCell);
             }
         }
 
@@ -136,7 +136,7 @@ namespace CRclone.Combat
         }
 
         /** Checks whether a position is in attack range, not used */
-        public bool IsInRange(Vector2 currentPosition, Vector2 targetPosition)
+        public bool IsInRange(GridCell currentPosition, GridCell targetPosition)
         {
             return false;
         }

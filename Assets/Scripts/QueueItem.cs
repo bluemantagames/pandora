@@ -6,10 +6,10 @@
 
     struct QueueItem
     {
-        public List<Vector2> points;
-        public HashSet<Vector2> pointsSet;
+        public List<GridCell> points;
+        public HashSet<GridCell> pointsSet;
 
-        public QueueItem(List<Vector2> _points, HashSet<Vector2> _pointsSet)
+        public QueueItem(List<GridCell> _points, HashSet<GridCell> _pointsSet)
         {
             points = _points;
             pointsSet = _pointsSet;

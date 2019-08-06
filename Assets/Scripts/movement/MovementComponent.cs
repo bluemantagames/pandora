@@ -13,10 +13,10 @@ namespace CRclone.Movement
     public class MovementComponent : MonoBehaviour
     {
         Rigidbody2D body;
-        Vector2 currentTarget;
+        GridCell currentTarget;
         Vector2 worldCurrentTarget;
         Vector2 direction;
-        List<Vector2> currentPath;
+        List<GridCell> currentPath;
         TeamComponent team;
         Enemy targetEnemy;
         CombatBehaviour combatBehaviour;
@@ -107,7 +107,7 @@ namespace CRclone.Movement
          * This sets the new grid cell target for the pathing and removes the current from the queue, effectively
          * "advancing" pathing forward
          */
-        private void AdvancePosition(Vector2 currentPosition)
+        private void AdvancePosition(GridCell currentPosition)
         {
             if (currentPath.Count() > 1) // if path still has elements after we remove the current target
             {
@@ -117,7 +117,7 @@ namespace CRclone.Movement
 
                 currentTarget = currentPath.First();
                 worldCurrentTarget = map.GridCellToWorldPosition(currentTarget);
-                direction = (currentTarget - currentPosition).normalized;
+                direction = (currentTarget.vector - currentPosition.vector).normalized;
             }
             else
             {
@@ -130,7 +130,7 @@ namespace CRclone.Movement
         /**
          * Very simple and probably shitty and not at all optimized A* implementation
          */
-        List<Vector2> FindPath(Vector2 end)
+        List<GridCell> FindPath(GridCell end)
         {
             Profiler.BeginSample("FindPath");
 
@@ -144,11 +144,11 @@ namespace CRclone.Movement
 
             var evaluatingPosition =
                 new QueueItem(
-                    new List<Vector2> { map.WorldPositionToGridCell(transform.position) },
-                    new HashSet<Vector2>()
+                    new List<GridCell> { map.WorldPositionToGridCell(transform.position) },
+                    new HashSet<GridCell>()
                 );
 
-            Vector2 item;
+            GridCell item;
 
             // get the last item in the queue
             while ((item = evaluatingPosition.points.Last()) != end)
@@ -162,21 +162,21 @@ namespace CRclone.Movement
                 {
                     for (var y = -1f; y <= 1; y++)
                     {
-                        var advance = new Vector2(item.x + x, item.y + y);
+                        var advance = new GridCell(item.vector.x + x, item.vector.y + y);
 
                         var isAdvanceRedundant = evaluatingPosition.pointsSet.Contains(advance);
 
                         if (advance != item && !map.IsObstacle(advance) && !isAdvanceRedundant) // except the current positions, obstacles or going back
                         {
-                            var distanceToEnd = Vector2.Distance(advance, end); // use the distance between this point and the end as h(n)
-                            var distanceFromStart = Vector2.Distance(currentPosition, advance); // use the distance between this point and the start as g(n)
+                            var distanceToEnd = Vector2.Distance(advance.vector, end.vector); // use the distance between this point and the end as h(n)
+                            var distanceFromStart = Vector2.Distance(currentPosition.vector, advance.vector); // use the distance between this point and the start as g(n)
                             var priority = distanceFromStart + distanceToEnd; // priority is h(n) ++ g(n)
-                            var currentPositions = new List<Vector2>(evaluatingPosition.points) { advance };
+                            var currentPositions = new List<GridCell>(evaluatingPosition.points) { advance };
 
                             Debug.Log("Enqueuing " + string.Join(",", currentPositions) + "with priority " + priority);
 
                             priorityQueue.Enqueue(
-                                new QueueItem(currentPositions, new HashSet<Vector2>(currentPositions)),
+                                new QueueItem(currentPositions, new HashSet<GridCell>(currentPositions)),
                                 priority
                             );
                         }
@@ -200,7 +200,7 @@ namespace CRclone.Movement
             return evaluatingPosition.points;
         }
 
-        private Vector2 CurrentCellPosition()
+        private GridCell CurrentCellPosition()
         {
             return map.WorldPositionToGridCell(transform.position);
         }

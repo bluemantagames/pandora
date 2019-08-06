@@ -20,7 +20,7 @@ namespace CRclone
         int mapSizeY;
         Vector2 bottomMapSize;
         GameObject lastPuppet;
-        HashSet<Vector2> obstaclePositions;
+        HashSet<GridCell> obstaclePositions;
         float firstLaneX = 2, secondLaneX = 13;
 
         float cellHeight;
@@ -48,10 +48,10 @@ namespace CRclone
             cellWidth = topArenaSize.x / mapSizeX;
             cellHeight = ((topArenaPosition.y + topArenaSize.y) - transform.position.y) / mapSizeY;
 
-            var firstTowerPosition = new Vector2(1, 3);
-            var secondTowerPosition = new Vector2(12, 3);
-            var thirdTowerPosition = new Vector2(1, 21);
-            var fourthTowerPosition = new Vector2(12, 21);
+            var firstTowerPosition = new GridCell(new Vector2(1, 3));
+            var secondTowerPosition = new GridCell(new Vector2(12, 3));
+            var thirdTowerPosition = new GridCell(new Vector2(1, 21));
+            var fourthTowerPosition = new GridCell(new Vector2(12, 21));
 
             obstaclePositions =
                 GetTowerPositions(firstTowerPosition);
@@ -70,7 +70,7 @@ namespace CRclone
 
             for (var x = 0; x < mapSizeX; x++)
             {
-                var gridPosition = GridCellToWorldPosition(new Vector2(x, mapSizeY + 1));
+                var gridPosition = GridCellToWorldPosition(new GridCell(new Vector2(x, mapSizeY + 1)));
 
                 SpawnText(gridPosition, x.ToString());
             }
@@ -78,7 +78,7 @@ namespace CRclone
 
             for (var y = 0; y < mapSizeY; y++)
             {
-                var gridPosition = GridCellToWorldPosition(new Vector2(-1, y));
+                var gridPosition = GridCellToWorldPosition(new GridCell(new Vector2(-1, y)));
 
                 SpawnText(gridPosition, y.ToString());
             }
@@ -87,27 +87,28 @@ namespace CRclone
         /**
          * Returns whether the position is uncrossable 
          */
-        public bool IsObstacle(Vector2 position)
+        public bool IsObstacle(GridCell cell)
         {
             var riverY = 13f;
-            var riverPositions = new List<Vector2>();
+            var riverPositions = new List<GridCell>();
+            var cellVector = cell.vector;
 
             for (var x = 0; x < bottomMapSize.x; x++)
             {
                 if (x != firstLaneX && x != secondLaneX)
                 {
-                    riverPositions.Add(new Vector2(x, riverY));
+                    riverPositions.Add(new GridCell(x, riverY));
                 }
             }
 
-            var isOutOfBounds = (position.x < 0 && position.y < 0 && position.x >= bottomMapSize.x && position.y >= mapSizeY);
-            var isTower = obstaclePositions.Contains(position);
-            var isRiver = riverPositions.Contains(position);
+            var isOutOfBounds = (cellVector.x < 0 && cellVector.y < 0 && cellVector.x >= bottomMapSize.x && cellVector.y >= mapSizeY);
+            var isTower = obstaclePositions.Contains(cell);
+            var isRiver = riverPositions.Contains(cell);
 
             return isRiver || isTower || isOutOfBounds;
         }
 
-        public Vector2 WorldPositionToGridCell(Vector2 position)
+        public GridCell WorldPositionToGridCell(Vector2 position)
         {
 
             Vector2 gridPosition =
@@ -121,14 +122,14 @@ namespace CRclone
                 Mathf.Floor(gridPosition.y / cellHeight)
             );
 
-            return cellPosition;
+            return new GridCell(cellPosition);
         }
 
-        public Vector2 GridCellToWorldPosition(Vector2 cell)
+        public Vector2 GridCellToWorldPosition(GridCell cell)
         {
             Vector2 worldPosition = new Vector2(
-                transform.position.x + (cell.x * cellWidth) + cellWidth / 2,
-                transform.position.y + (cell.y * cellHeight) + cellHeight / 2
+                transform.position.x + (cell.vector.x * cellWidth) + cellWidth / 2,
+                transform.position.y + (cell.vector.y * cellHeight) + cellHeight / 2
             );
 
             Debug.Log($"Spawning in cell {cell}");
@@ -186,7 +187,7 @@ namespace CRclone
                 cellY = mapSizeY - 1 - cellY;
             }
 
-            var cardPosition = GridCellToWorldPosition(new Vector2(cellX, cellY));
+            var cardPosition = GridCellToWorldPosition(new GridCell(cellX, cellY));
 
             var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
 
@@ -199,7 +200,7 @@ namespace CRclone
             if (projectileSpell != null) projectileSpell.map = this;
         }
 
-        public Enemy GetNearestEnemy(GameObject unit, Vector2 position, int team, float range)
+        public Enemy GetNearestEnemy(GameObject unit, GridCell position, int team, float range)
         {
             float? minDistance = null;
             GameObject enemy = null;
@@ -215,10 +216,10 @@ namespace CRclone
 
                 if (towerPositionComponent != null)
                 {
-                    gameObjectPosition = towerPositionComponent.position;
+                    gameObjectPosition = towerPositionComponent.towerCell;
                 }
 
-                var distance = Vector2.Distance(gameObjectPosition, position);
+                var distance = Vector2.Distance(gameObjectPosition.vector, position.vector);
                 var lifeComponent = targetGameObject.GetComponent<LifeComponent>();
 
                 if (lifeComponent == null || lifeComponent.isDead) continue; // skip spells
@@ -263,18 +264,18 @@ namespace CRclone
 
             foreach (var component in GetComponentsInChildren<UnitBehaviour>())
             {
-                var cell = WorldPositionToGridCell(component.gameObject.transform.position);
+                var cellVector = WorldPositionToGridCell(component.gameObject.transform.position).vector;
 
-                Debug.Log($"Checking {cell} in {origin.x} / {origin.x + widthCells}");
-                Debug.Log($"Checking {cell} in {origin.y} / {origin.y + heightCells}");
+                Debug.Log($"Checking {cellVector} in {origin.x} / {origin.x + widthCells}");
+                Debug.Log($"Checking {cellVector} in {origin.y} / {origin.y + heightCells}");
 
                 var isDead = component.gameObject.GetComponent<LifeComponent>()?.isDead ?? true;
 
                 if (
-                    cell.x >= origin.x &&
-                    cell.x <= origin.x + widthCells &&
-                    cell.y >= lowerRange &&
-                    cell.y <= higherRange &&
+                    cellVector.x >= origin.x &&
+                    cellVector.x <= origin.x + widthCells &&
+                    cellVector.y >= lowerRange &&
+                    cellVector.y <= higherRange &&
                     !isDead
                 )
                 {
@@ -285,11 +286,13 @@ namespace CRclone
             return units;
         }
 
-        public Vector2 GetTarget(GameObject unit, Vector2 position, int team, float aggroRange)
+        public GridCell GetTarget(GameObject unit, GridCell cell, int team, float aggroRange)
         {
-            Vector2? lanePosition = null;
+            GridCell? lanePosition = null;
 
-            var enemyPosition = GetNearestEnemy(unit, position, team, aggroRange)?.enemyCell;
+            var cellVector = cell.vector;
+
+            var enemyPosition = GetNearestEnemy(unit, cell, team, aggroRange)?.enemyCell;
 
             var towerY = 20;
 
@@ -300,30 +303,30 @@ namespace CRclone
 
             TowerPosition targetTowerPosition;
 
-            if (position.x < bottomMapSizeX / 2) {
+            if (cellVector.x < bottomMapSizeX / 2) {
                 targetTowerPosition = isOpponent ? TowerPosition.BottomLeft : TowerPosition.TopLeft;
             } else {
                 targetTowerPosition = isOpponent ? TowerPosition.BottomRight : TowerPosition.BottomLeft;
             }
 
             // if no enemies found and not on a lane, go back on a lane
-            if (enemyPosition == null && position.x != firstLaneX && position.x != secondLaneX)
+            if (enemyPosition == null && cellVector.x != firstLaneX && cellVector.x != secondLaneX)
             {
                 float xTarget, increment;
 
-                Vector2 targetLanePosition = position;
+                Vector2 targetLanePosition = cellVector;
 
-                if (position.x <= bottomMapSize.x / 2 && position.x >= firstLaneX) // if in the middle and near the first lane
+                if (cellVector.x <= bottomMapSize.x / 2 && cellVector.x >= firstLaneX) // if in the middle and near the first lane
                 {
                     xTarget = firstLaneX;
                     increment = -1f;
                 }
-                else if (position.x < firstLaneX) // if on the left
+                else if (cellVector.x < firstLaneX) // if on the left
                 {
                     xTarget = firstLaneX;
                     increment = 1f;
                 }
-                else if (position.x > bottomMapSize.x / 2 && position.x > secondLaneX) // if on the right
+                else if (cellVector.x > bottomMapSize.x / 2 && cellVector.x > secondLaneX) // if on the right
                 {
                     xTarget = secondLaneX;
                     increment = -1f;
@@ -342,7 +345,7 @@ namespace CRclone
                     targetLanePosition.x += increment;
                 }
 
-                lanePosition = targetLanePosition;
+                lanePosition = new GridCell(targetLanePosition);
             }
 
             if (isOpponent)
@@ -364,7 +367,7 @@ namespace CRclone
             }
 
             var towerPosition = (isFrontTowerPresent) ?
-             new Vector2(position.x, towerY) : new Vector2(middleTowerX, middleTowerY);
+             new GridCell(cellVector.x, towerY) : new GridCell(middleTowerX, middleTowerY);
 
             var endPosition = enemyPosition ?? lanePosition ?? towerPosition;
 
@@ -383,15 +386,15 @@ namespace CRclone
             lastPuppet = Instantiate(puppet, cell, Quaternion.identity);
         }
 
-        private HashSet<Vector2> GetTowerPositions(Vector2 towerPosition, float towerSize = 3f)
+        private HashSet<GridCell> GetTowerPositions(GridCell towerCell, float towerSize = 3f)
         {
-            var set = new HashSet<Vector2>();
+            var set = new HashSet<GridCell>();
 
             for (var x = 0f; x < towerSize; x++)
             {
                 for (var y = 0f; y < towerSize; y++)
                 {
-                    set.Add(new Vector2(towerPosition.x + x, towerPosition.y + y));
+                    set.Add(new GridCell(towerCell.vector.x + x, towerCell.vector.y + y));
                 }
             }
 

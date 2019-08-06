@@ -6,7 +6,7 @@ namespace CRclone
     public class Enemy
     {
         public GameObject enemy;
-        public Vector2 enemyCell
+        public GridCell enemyCell
         {
             get
             {
@@ -14,7 +14,7 @@ namespace CRclone
 
                 if (towerPosition != null)
                 {
-                    return towerPosition.position;
+                    return towerPosition.towerCell;
                 }
                 else
                 {

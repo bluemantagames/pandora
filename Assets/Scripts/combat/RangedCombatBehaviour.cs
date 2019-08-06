@@ -22,9 +22,9 @@ namespace CRclone.Combat
             }
         }
 
-        public bool IsInRange(Vector2 currentPosition, Vector2 targetPosition)
+        public bool IsInRange(GridCell currentPosition, GridCell targetPosition)
         {
-            return Vector2.Distance(currentPosition, targetPosition) <= 11f;
+            return Vector2.Distance(currentPosition.vector, targetPosition.vector) <= 11f;
         }
 
         /** Returns true if enemy has died */

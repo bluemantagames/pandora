@@ -11,7 +11,7 @@ namespace CRclone.Spell
         public ProjectileSpell spell;
 
         Vector2 spawnPosition;
-        Vector2 startCell = new Vector2(6, 0);
+        GridCell startCell = new GridCell(6, 0);
         Vector2 direction;
 
         void Awake()

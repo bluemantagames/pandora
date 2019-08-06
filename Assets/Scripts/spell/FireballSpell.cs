@@ -7,20 +7,22 @@ namespace CRclone.Spell {
         public float damage = 20f;
         public float radius = 3;
 
-        public void SpellCollided(Vector2 cell) {
+        public void SpellCollided(GridCell cell) {
             foreach (var lifeComponent in map.gameObject.GetComponentsInChildren<LifeComponent>()) {
-                var cellPosition =
+                var targetPosition =
                     map.WorldPositionToGridCell(
                         lifeComponent.gameObject.transform.position
-                    );
+                    ).vector;
 
-                Debug.Log($"Spell evaluating {cellPosition}");
+                var cellPosition = cell.vector;
+
+                Debug.Log($"Spell evaluating {targetPosition}");
 
                 if (
-                    cellPosition.x >= cell.x - radius &&
-                    cellPosition.x <= cell.x + radius &&
-                    cellPosition.y >= cell.y - radius &&
-                    cellPosition.y <= cell.y + radius
+                    targetPosition.x >= cellPosition.x - radius &&
+                    targetPosition.x <= cellPosition.x + radius &&
+                    targetPosition.y >= cellPosition.y - radius &&
+                    targetPosition.y <= cellPosition.y + radius
                 ) {
                     Debug.Log($"Hitting {lifeComponent.gameObject}");
 
