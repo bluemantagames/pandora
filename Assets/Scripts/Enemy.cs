@@ -18,7 +18,7 @@ namespace CRclone
                 }
                 else
                 {
-                    return GameObject.Find("Arena").GetComponent<MapListener>().WorldPositionToGridCell(enemy.transform.position);
+                    return GameObject.Find("Arena").GetComponent<MapComponent>().WorldPositionToGridCell(enemy.transform.position);
                 }
             }
         }

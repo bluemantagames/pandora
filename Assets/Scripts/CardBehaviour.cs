@@ -12,7 +12,7 @@ namespace CRclone
     public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         Vector3 originalPosition;
-        MapListener mapListener;
+        MapComponent map;
 
         public GameObject puppet;
         public GameObject card;
@@ -21,10 +21,10 @@ namespace CRclone
 
         private void CleanUpDrag(bool returnToPosition)
         {
-            if (mapListener != null)
+            if (map != null)
             {
-                mapListener.DestroyPuppet();
-                mapListener = null;
+                map.DestroyPuppet();
+                map = null;
             }
 
             GetComponent<Image>().enabled = true;
@@ -42,13 +42,13 @@ namespace CRclone
                 LayerMask.GetMask("Map")
             );
 
-            if (hit.collider != null && hit.collider.gameObject.GetComponent<MapListener>() != null)
+            if (hit.collider != null && hit.collider.gameObject.GetComponent<MapComponent>() != null)
             {
                 Debug.Log("Calling OnUICardCollision");
 
-                mapListener = hit.collider.gameObject.GetComponent<MapListener>();
+                map = hit.collider.gameObject.GetComponent<MapComponent>();
 
-                mapListener.OnUICardCollision(puppet);
+                map.OnUICardCollision(puppet);
 
                 GetComponent<Image>().enabled = false;
             }
@@ -63,12 +63,12 @@ namespace CRclone
             var movement = card.GetComponent<MovementComponent>();
             var projectileSpell = card.GetComponent<ProjectileSpellBehaviour>();
 
-            if (mapListener != null)
+            if (map != null)
             {
-                if (movement != null) movement.map = mapListener;
-                if (projectileSpell != null) projectileSpell.map = mapListener;
+                if (movement != null) movement.map = map;
+                if (projectileSpell != null) projectileSpell.map = map;
 
-                mapListener.SpawnCard(cardName, team);
+                map.SpawnCard(cardName, team);
             }
 
             CleanUpDrag(true);

@@ -7,7 +7,7 @@ namespace CRclone.Combat
 {
     public class TowerCombatBehaviour : MonoBehaviour, CombatBehaviour
     {
-        public MapListener map;
+        public MapComponent map;
         public GameObject projectile;
         public Vector2 aggroBoxOrigin, aggroBoxEnd; // bottom left corner
 

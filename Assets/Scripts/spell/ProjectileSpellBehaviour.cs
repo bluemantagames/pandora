@@ -6,7 +6,7 @@ namespace CRclone.Spell
 {
     public class ProjectileSpellBehaviour : MonoBehaviour
     {
-        public MapListener map;
+        public MapComponent map;
         public float speed = 3f;
         public ProjectileSpell spell;
 

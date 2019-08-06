@@ -23,7 +23,7 @@ namespace CRclone.Movement
         public float aggroRange = 10;
 
         public float speed = 1f;
-        public MapListener map;
+        public MapComponent map;
         float unitsPerSecond = 0f;
         float seconds = 0f;
         private SimplePriorityQueue<QueueItem> priorityQueue;

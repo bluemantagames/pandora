@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CRclone.Spell {
     public class FireballSpell : MonoBehaviour, ProjectileSpell {
-        public MapListener map { get; set; }
+        public MapComponent map { get; set; }
         public float damage = 20f;
         public float radius = 3;
 

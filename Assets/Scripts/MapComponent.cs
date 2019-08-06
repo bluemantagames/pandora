@@ -12,7 +12,7 @@ using CRclone.Network.Messages;
 
 namespace CRclone
 {
-    public class MapListener : MonoBehaviour
+    public class MapComponent : MonoBehaviour
     {
         int bottomMapSizeX = 16;
         int bottomMapSizeY = 13;
