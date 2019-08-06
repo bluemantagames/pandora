@@ -37,10 +37,15 @@ namespace CRclone
         {
             transform.position = Input.mousePosition;
 
-            var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(transform.position), Vector2.up, 0f, LayerMask.GetMask("Map"));
+            var hit = Physics2D.Raycast(
+                Camera.main.ScreenToWorldPoint(transform.position), Vector2.up, 0f,
+                LayerMask.GetMask("Map")
+            );
 
-            if (hit.collider != null)
+            if (hit.collider != null && hit.collider.gameObject.GetComponent<MapListener>() != null)
             {
+                Debug.Log("Calling OnUICardCollision");
+
                 mapListener = hit.collider.gameObject.GetComponent<MapListener>();
 
                 mapListener.OnUICardCollision(puppet);

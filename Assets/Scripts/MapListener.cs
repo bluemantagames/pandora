@@ -19,10 +19,12 @@ namespace CRclone
         int mapSizeX;
         int mapSizeY;
         Vector2 bottomMapSize;
-        Sprite sprite;
         GameObject lastPuppet;
         HashSet<Vector2> obstaclePositions;
         float firstLaneX = 2, secondLaneX = 13;
+
+        float cellHeight;
+        float cellWidth;
 
         public GameObject textObject;
 
@@ -36,7 +38,15 @@ namespace CRclone
             Screen.fullScreen = false;
             Screen.SetResolution(1080, 1920, false);
 
-            sprite = GetComponent<SpriteRenderer>().sprite;
+            var topArena = GameObject.Find("top_arena");
+            var topArenaPosition = topArena.transform.position;
+            var topArenaSize = topArena.GetComponent<SpriteRenderer>().bounds.size;
+
+            Debug.Log($"Top arena position y {topArenaPosition.y}");
+            Debug.Log($"Top arena position {(topArenaPosition.y + topArenaSize.y)}");
+
+            cellWidth = topArenaSize.x / mapSizeX;
+            cellHeight = ((topArenaPosition.y + topArenaSize.y) - transform.position.y) / mapSizeY;
 
             var firstTowerPosition = new Vector2(1, 3);
             var secondTowerPosition = new Vector2(12, 3);
@@ -90,7 +100,7 @@ namespace CRclone
                 }
             }
 
-            var isOutOfBounds = (position.x < 0 && position.y < 0 && position.x >= bottomMapSize.x && position.y >= bottomMapSize.y);
+            var isOutOfBounds = (position.x < 0 && position.y < 0 && position.x >= bottomMapSize.x && position.y >= mapSizeY);
             var isTower = obstaclePositions.Contains(position);
             var isRiver = riverPositions.Contains(position);
 
@@ -99,9 +109,6 @@ namespace CRclone
 
         public Vector2 WorldPositionToGridCell(Vector2 position)
         {
-
-            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / bottomMapSize.y;
-            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / bottomMapSize.x;
 
             Vector2 gridPosition =
                 new Vector2(
@@ -119,9 +126,6 @@ namespace CRclone
 
         public Vector2 GridCellToWorldPosition(Vector2 cell)
         {
-            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / bottomMapSize.y;
-            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / bottomMapSize.x;
-
             Vector2 worldPosition = new Vector2(
                 transform.position.x + (cell.x * cellWidth) + cellWidth / 2,
                 transform.position.y + (cell.y * cellHeight) + cellHeight / 2
@@ -184,7 +188,7 @@ namespace CRclone
 
             var cardPosition = GridCellToWorldPosition(new Vector2(cellX, cellY));
 
-            var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform.parent);
+            var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
 
             cardObject.GetComponent<TeamComponent>().team = team;
 
@@ -200,7 +204,7 @@ namespace CRclone
             float? minDistance = null;
             GameObject enemy = null;
 
-            foreach (TeamComponent component in transform.parent.GetComponentsInChildren<TeamComponent>())
+            foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
             {
                 Debug.Log($"Checking {component}");
 
@@ -257,7 +261,7 @@ namespace CRclone
             var lowerRange = Math.Min(origin.y, origin.y + heightCells);
             var higherRange = Math.Max(origin.y, origin.y + heightCells);
 
-            foreach (var component in transform.parent.GetComponentsInChildren<UnitBehaviour>())
+            foreach (var component in GetComponentsInChildren<UnitBehaviour>())
             {
                 var cell = WorldPositionToGridCell(component.gameObject.transform.position);
 
@@ -349,7 +353,7 @@ namespace CRclone
 
             var isFrontTowerPresent = false;
 
-            foreach (var component in transform.parent.GetComponentsInChildren<TowerPositionComponent>())
+            foreach (var component in GetComponentsInChildren<TowerPositionComponent>())
             {
                 if (component.towerPosition == targetTowerPosition && !component.gameObject.GetComponent<LifeComponent>().isDead)
                 {
@@ -412,15 +416,11 @@ namespace CRclone
 
 
             Debug.Log(
-                "Cell Mouse " + Input.mousePosition
+                "Cell Mouse " + worldMouse
             );
 
-            Debug.Log($"Cell X bounds {GetComponent<SpriteRenderer>().bounds.size.x}");
-
-            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / bottomMapSize.y;
-            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / bottomMapSize.x;
-
             Debug.Log($"Cell width {cellWidth}");
+            Debug.Log($"Cell height {cellHeight}");
             Debug.Log($"Cell mouse position {mousePosition.x}");
             Debug.Log($"Cell position {mousePosition.x / cellWidth}");
 
@@ -437,9 +437,6 @@ namespace CRclone
             var cell = GetPointedCell();
 
             Debug.Log($"Pointed cell {cell}");
-
-            float cellHeight = GetComponent<SpriteRenderer>().bounds.size.y / bottomMapSize.y;
-            float cellWidth = GetComponent<SpriteRenderer>().bounds.size.x / bottomMapSize.x;
 
             var worldCellPoint = transform.position;
 
