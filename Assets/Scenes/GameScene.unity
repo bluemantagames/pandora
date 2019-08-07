@@ -564,6 +564,11 @@ PrefabInstance:
       propertyPath: position.y
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: towerPosition
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: m_Sprite
@@ -707,6 +712,11 @@ PrefabInstance:
       propertyPath: position.y
       value: 24
       objectReference: {fileID: 0}
+    - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: towerPosition
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3866240382306625144, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: m_SortingOrder
@@ -734,6 +744,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8711906038010557429, guid: d7cbd7ac00c28404eb32731954660f1b,
         type: 3}
+    - target: {fileID: 3866240382924425445, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ae196b7cda494c4b8d0457362c166ec, type: 3}
 --- !u!4 &819278250 stripped
@@ -1360,6 +1375,11 @@ PrefabInstance:
         type: 3}
       propertyPath: position.x
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: towerPosition
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1e52bdc3ec5dd6449d8749a2604c5a3, type: 3}
@@ -2147,6 +2167,11 @@ PrefabInstance:
     - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: position.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: towerPosition
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,

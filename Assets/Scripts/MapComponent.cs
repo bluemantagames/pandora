@@ -216,7 +216,7 @@ namespace Pandora
 
                 if (towerPositionComponent != null)
                 {
-                    gameObjectPosition = towerPositionComponent.towerCell;
+                    gameObjectPosition = towerPositionComponent.GetMapTarget();
                 }
 
                 var distance = Vector2.Distance(gameObjectPosition.vector, position.vector);
@@ -294,18 +294,16 @@ namespace Pandora
 
             var enemyPosition = GetNearestEnemy(unit, cell, team, aggroRange)?.enemyCell;
 
-            var towerY = 20;
-
-            var middleTowerY = 24;
-            var middleTowerX = 6;
-
             var isOpponent = unit.GetComponent<TeamComponent>().IsOpponent();
 
             TowerPosition targetTowerPosition;
 
-            if (cellVector.x < bottomMapSizeX / 2) {
+            if (cellVector.x < bottomMapSizeX / 2)
+            {
                 targetTowerPosition = isOpponent ? TowerPosition.BottomLeft : TowerPosition.TopLeft;
-            } else {
+            }
+            else
+            {
                 targetTowerPosition = isOpponent ? TowerPosition.BottomRight : TowerPosition.BottomLeft;
             }
 
@@ -348,30 +346,28 @@ namespace Pandora
                 lanePosition = new GridCell(targetLanePosition);
             }
 
-            if (isOpponent)
-            { // flip the tower Y objective if opponent
-                towerY = mapSizeY - 1 - towerY;
-                middleTowerY = mapSizeY - 1 - middleTowerY;
-            }
-
-            var isFrontTowerPresent = false;
+            TowerPositionComponent towerPositionComponent = null, middleTowerPositionComponent = null;
 
             foreach (var component in GetComponentsInChildren<TowerPositionComponent>())
             {
+                var combatBehaviour = component.gameObject.GetComponent<TowerCombatBehaviour>();
+
+                if (combatBehaviour.isMiddle && combatBehaviour.isOpponent != isOpponent)
+                {
+                    middleTowerPositionComponent = component;
+                }
+
                 if (component.towerPosition == targetTowerPosition && !component.gameObject.GetComponent<LifeComponent>().isDead)
                 {
-
-                    Debug.Log($"Going to {component.gameObject.GetComponent<LifeComponent>().isDead} {component.gameObject.GetComponent<LifeComponent>().lifeValue}");
-                    isFrontTowerPresent = true;
+                    towerPositionComponent = component;
                 }
             }
 
-            var towerPosition = (isFrontTowerPresent) ?
-             new GridCell(cellVector.x, towerY) : new GridCell(middleTowerX, middleTowerY);
+            var towerPosition = towerPositionComponent?.GetMapTarget() ?? middleTowerPositionComponent.GetMapTarget();
 
             var endPosition = enemyPosition ?? lanePosition ?? towerPosition;
 
-            Debug.Log($"Going to {endPosition} (target is {targetTowerPosition}) ({isFrontTowerPresent})");
+            Debug.Log($"Going to {endPosition} (target is {targetTowerPosition}) ({towerPositionComponent})");
 
             // go to enemy position, or a lane, or to the end of the world
             return endPosition;

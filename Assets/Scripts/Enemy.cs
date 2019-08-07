@@ -14,7 +14,7 @@ namespace Pandora
 
                 if (towerPosition != null)
                 {
-                    return towerPosition.towerCell;
+                    return towerPosition.GetMapTarget();
                 }
                 else
                 {

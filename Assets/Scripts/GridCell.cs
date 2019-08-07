@@ -36,6 +36,10 @@ namespace Pandora
             return this.vector.GetHashCode();
         }
 
+        override public string ToString() {
+            return $"GridCell({this.vector.ToString()})";
+        }
+
         override public bool Equals(object obj)
         {
             if (obj is GridCell)
