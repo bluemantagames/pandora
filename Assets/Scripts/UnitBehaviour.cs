@@ -11,6 +11,7 @@ namespace Pandora
         MovementComponent movementComponent;
         CombatBehaviour combatBehaviour;
         LifeComponent lifeComponent;
+        public Bounds hitbox;
 
         // Start is called before the first frame update
         void Start()

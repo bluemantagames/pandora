@@ -16,15 +16,15 @@ namespace Pandora
     {
         int bottomMapSizeX = 16;
         int bottomMapSizeY = 13;
-        int mapSizeX;
-        int mapSizeY;
+        public int mapSizeX;
+        public int mapSizeY;
         Vector2 bottomMapSize;
         GameObject lastPuppet;
         HashSet<GridCell> obstaclePositions;
         float firstLaneX = 2, secondLaneX = 13;
 
-        float cellHeight;
-        float cellWidth;
+        public float cellHeight;
+        public float cellWidth;
 
         public GameObject textObject;
 
