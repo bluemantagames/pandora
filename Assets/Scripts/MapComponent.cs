@@ -9,6 +9,7 @@ using Pandora.Spell;
 using Pandora.Combat;
 using Pandora.Network;
 using Pandora.Network.Messages;
+using Pandora.Engine;
 
 namespace Pandora
 {
@@ -25,6 +26,8 @@ namespace Pandora
 
         public float cellHeight;
         public float cellWidth;
+
+        PandoraEngine engine;
 
         public GameObject textObject;
 
@@ -82,6 +85,8 @@ namespace Pandora
 
                 SpawnText(gridPosition, y.ToString());
             }
+
+            engine = new PandoraEngine(this);
         }
 
         /**
@@ -198,6 +203,11 @@ namespace Pandora
 
             if (movement != null) movement.map = this;
             if (projectileSpell != null) projectileSpell.map = this;
+
+            var engineEntity = engine.AddEntity(cardObject, movement.speed, new GridCell(cellX, cellY), true);
+
+            movement.engineEntity = engineEntity;
+            movement.engine = engine;
         }
 
         public Enemy GetNearestEnemy(GameObject unit, GridCell position, int team, float range)

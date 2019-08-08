@@ -5,39 +5,96 @@ namespace Pandora.Engine
 {
     public class PandoraEngine
     {
-        int tick = 10; // milliseconds, minimum tick
-        int unitsPerCell = 100; // physics engine units per grid cell
-        List<EngineEntity> entities;
+        int minTick = 10; // milliseconds, minimum tick
+        public int UnitsPerCell = 100; // physics engine units per grid cell
+        List<EngineEntity> entities = new List<EngineEntity> { };
         public MapComponent Map;
 
-        // Start with a reasonable capacity already
-        Dictionary<Vector2Int, List<EngineEntity>> positions =
-            new Dictionary<Vector2Int, List<EngineEntity>>(1000);
+        public PandoraEngine(MapComponent map) {
+            this.Map = map;
+        }
 
-        void NextTick()
+        public void Process(int msLapsed) {
+            var ticksNum = msLapsed / minTick;
+
+            Debug.Log($"Advancing {ticksNum} ticks {msLapsed}");
+
+            for (var tick = 0; tick < ticksNum; tick++)
+            {
+                NextTick();
+            }
+        }
+
+        public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, GridCell position, bool isRigid) {
+            var speed = Mathf.FloorToInt((cellPerSecond * UnitsPerCell) / (1000 / minTick));
+
+            var physicsPosition = GridCellToPhysics(position);
+
+            var entity = new EngineEntity {
+                Speed = speed,
+                Position = physicsPosition,
+                GameObject = gameObject,
+                Direction = new Vector2Int(0, 0)
+            };
+
+            entities.Add(entity);
+
+            return entity;
+        }
+
+        // Start with a reasonable capacity already
+        public void NextTick()
         {
+            // Move units
             foreach (var entity in entities)
             {
-                var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed * (tick / 1000f)));
+                var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed));
 
                 entity.Position += entity.Direction * unitsMoved;
-
-                IndexPositions(entity);
             }
 
-            positions.Clear();
+            // Check for collisions
+            foreach (var first in entities)
+            {
+                foreach (var second in entities)
+                {
+                    var firstBox = GetEntityBounds(first);
+                    var secondBox = GetEntityBounds(second);
+
+                    if (first == second || !firstBox.Collides(secondBox)) continue; // continue if they don't collide
+
+                    Vector2Int direction;
+                    EngineEntity moved;
+
+                    if (first.Speed >= second.Speed)
+                    {
+                        direction = second.Position - first.Position;
+                        moved = second;
+                    }
+                    else
+                    {
+                        direction = first.Position - second.Position;
+                        moved = first;
+                    }
+
+                    while (firstBox.Collides(secondBox)) // there probably is a math way to do this without a loop
+                    {
+                        moved.Position = moved.Position + direction; // move the entity away
+                    }
+                }
+            }
         }
 
         // converts a world point to a physics engine point using linear interpolation 
-        // TODO: this is done only to let people use the collider tool to define boundaries
+        // TODO: this is only used on BoxCollider2D to let people use the collider tool to define boundaries
         // if this turns up to create problems we have to define int boundaries in EngineEntity
         Vector2Int WorldToPhysics(Vector2 world)
         {
             var xWorldBounds = Map.cellWidth * Map.mapSizeX;
             var yWorldBounds = Map.cellHeight * Map.mapSizeY;
 
-            var xPhysicsBounds = unitsPerCell * Map.mapSizeX;
-            var yPhysicsBounds = unitsPerCell * Map.mapSizeY;
+            var xPhysicsBounds = UnitsPerCell * Map.mapSizeX;
+            var yPhysicsBounds = UnitsPerCell * Map.mapSizeY;
 
             return new Vector2Int(
                 Mathf.RoundToInt((xPhysicsBounds * world.x) / xWorldBounds),
@@ -45,40 +102,59 @@ namespace Pandora.Engine
             );
         }
 
-        void IndexPositions(EngineEntity entity)
+        public Vector2 PhysicsToWorld(Vector2Int physics) {
+            var xWorldBounds = Map.cellWidth * Map.mapSizeX;
+            var yWorldBounds = Map.cellHeight * Map.mapSizeY;
+
+            var xPhysicsBounds = UnitsPerCell * Map.mapSizeX;
+            var yPhysicsBounds = UnitsPerCell * Map.mapSizeY;
+
+            return new Vector2(
+                Map.transform.position.x + (xWorldBounds * physics.x) / xPhysicsBounds,
+                Map.transform.position.y + (yWorldBounds * physics.y) / yPhysicsBounds
+            );
+        }
+
+        public Vector2Int GridCellToPhysics(GridCell cell)
+        {
+            return new Vector2Int(
+                Mathf.RoundToInt(cell.vector.x * UnitsPerCell),
+                Mathf.RoundToInt(cell.vector.y * UnitsPerCell)
+            );
+        }
+
+        BoxBounds GetEntityBounds(EngineEntity entity)
         {
             var worldBounds = entity.GameObject.GetComponent<BoxCollider2D>().bounds;
+            var physicsExtents = WorldToPhysics(worldBounds.extents);
 
-            var worldUpperLeftBounds = worldBounds.center;
+            var physicsUpperLeftBounds = entity.Position;
 
-            worldUpperLeftBounds.x -= worldBounds.extents.x / 2;
-            worldUpperLeftBounds.y += worldBounds.extents.y / 2;
+            physicsUpperLeftBounds.x -= Mathf.FloorToInt(physicsExtents.x / 2);
+            physicsUpperLeftBounds.y += Mathf.FloorToInt(physicsExtents.y / 2);
 
-            var worldLowerRightBounds = worldBounds.center;
+            var physicsUpperRightBounds = entity.Position;
 
-            worldLowerRightBounds.x += worldBounds.extents.x / 2;
-            worldLowerRightBounds.y -= worldBounds.extents.y / 2;
+            physicsUpperRightBounds.x += Mathf.FloorToInt(physicsExtents.x / 2);
+            physicsUpperRightBounds.y += Mathf.FloorToInt(physicsExtents.y / 2);
 
-            var physicsUpperLeftBounds = WorldToPhysics(worldUpperLeftBounds);
-            var physicsLowerRightBounds = WorldToPhysics(worldLowerRightBounds);
+            var physicsLowerRightBounds = entity.Position;
 
-            for (var x = physicsUpperLeftBounds.x; x <= physicsLowerRightBounds.x; x++)
+            physicsLowerRightBounds.x += Mathf.FloorToInt(physicsExtents.x) / 2;
+            physicsLowerRightBounds.y -= Mathf.FloorToInt(physicsExtents.y) / 2;
+
+            var physicsLowerLeftBounds = entity.Position;
+
+            physicsLowerLeftBounds.x -= Mathf.FloorToInt(physicsExtents.x) / 2;
+            physicsLowerLeftBounds.y -= Mathf.FloorToInt(physicsExtents.y) / 2;
+
+            return new BoxBounds
             {
-                for (var y = physicsUpperLeftBounds.y; y >= physicsUpperLeftBounds.y; y--)
-                {
-                    var position = new Vector2Int(x, y);
-
-                    if (positions.ContainsKey(position))
-                    {
-                        positions[position].Add(entity);
-                    }
-                    else
-                    {
-                        positions.Add(position, new List<EngineEntity> { entity });
-                    }
-                }
-            }
-
+                UpperLeft = physicsUpperLeftBounds,
+                UpperRight = physicsUpperRightBounds,
+                LowerLeft = physicsLowerLeftBounds,
+                LowerRight = physicsLowerRightBounds
+            };
         }
     }
 

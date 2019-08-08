@@ -7,6 +7,7 @@ using Priority_Queue;
 using Pandora;
 using Pandora.Combat;
 using UnityEngine.Profiling;
+using Pandora.Engine;
 
 namespace Pandora.Movement
 {
@@ -21,6 +22,8 @@ namespace Pandora.Movement
         Enemy targetEnemy;
         CombatBehaviour combatBehaviour;
         public float aggroRange = 10;
+        public PandoraEngine engine;
+        public EngineEntity engineEntity;
 
         public float speed = 1f;
         public MapComponent map;
@@ -98,7 +101,20 @@ namespace Pandora.Movement
 
             position += direction * (Time.fixedDeltaTime * speed);
 
-            body.MovePosition(position);
+            var worldPosition = engine.PhysicsToWorld(engineEntity.Position);
+            var physicsDirection = engine.GridCellToPhysics(new GridCell(direction));
+
+            engineEntity.Direction = physicsDirection;
+
+            engine.Process(Mathf.RoundToInt(Time.deltaTime * 1000));
+            //engine.NextTick();
+
+            Debug.Log($"World position calculated from engine {worldPosition}");
+            Debug.Log($"Direction calculated from engine {physicsDirection}");
+            Debug.Log($"Position calculated from engine {engineEntity.Position}");
+            Debug.Log($"Speed calculated from engine {engineEntity.Speed}");
+
+            body.MovePosition(worldPosition);
 
             return new MovementState(null, MovementStateEnum.Moving);
         }
@@ -116,7 +132,6 @@ namespace Pandora.Movement
                 currentPath.Remove(currentPosition);
 
                 currentTarget = currentPath.First();
-                worldCurrentTarget = map.GridCellToWorldPosition(currentTarget);
                 direction = (currentTarget.vector - currentPosition.vector).normalized;
             }
             else
