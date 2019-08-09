@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Pandora.Engine
 {
@@ -10,6 +11,7 @@ namespace Pandora.Engine
         public int UnitsPerCell = 400; // physics engine units per grid cell
         List<EngineEntity> entities = new List<EngineEntity> { };
         public MapComponent Map;
+        int totalElapsed = 0;
 
         public PandoraEngine(MapComponent map)
         {
@@ -19,6 +21,10 @@ namespace Pandora.Engine
         public void Process(int msLapsed)
         {
             var ticksNum = msLapsed / minTick;
+
+            totalElapsed += msLapsed;
+
+            GameObject.Find("MsElapsedText").GetComponent<Text>().text = $"Elapsed: {totalElapsed}";
 
             Debug.Log($"Advancing {ticksNum} ticks {msLapsed}");
 
