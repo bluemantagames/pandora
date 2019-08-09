@@ -110,7 +110,8 @@ namespace Pandora.Movement
             Debug.Log($"Position calculated from engine {engineEntity.Position}");
             Debug.Log($"Speed calculated from engine {engineEntity.Speed}");
 
-            body.MovePosition(worldPosition);
+            //body.MovePosition(worldPosition);
+            transform.position = worldPosition;
 
             return new MovementState(null, MovementStateEnum.Moving);
         }

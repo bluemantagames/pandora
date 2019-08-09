@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -82,9 +83,20 @@ namespace Pandora.Engine
                         moved = first;
                     }
 
+                    direction.x = (int) Mathf.Clamp(-1f, (float) direction.x, 1f);
+                    direction.y = (int) Mathf.Clamp(-1f, (float) direction.y, 1f);
+
+                    if (direction.x == 0 && direction.y == 0) {
+                        direction.x = 1;
+                        direction.y = 1;
+                    }
+
                     while (firstBox.Collides(secondBox)) // there probably is a math way to do this without a loop
                     {
                         moved.Position = moved.Position + direction; // move the entity away
+
+                        firstBox = GetEntityBounds(first);
+                        secondBox = GetEntityBounds(second);
                     }
                 }
             }
@@ -144,23 +156,18 @@ namespace Pandora.Engine
 
             var physicsUpperLeftBounds = entity.Position;
 
-            physicsUpperLeftBounds.x -= Mathf.FloorToInt(physicsExtents.x / 2);
-            physicsUpperLeftBounds.y += Mathf.FloorToInt(physicsExtents.y / 2);
+            physicsUpperLeftBounds.y += Mathf.FloorToInt(physicsExtents.y);
 
             var physicsUpperRightBounds = entity.Position;
 
-            physicsUpperRightBounds.x += Mathf.FloorToInt(physicsExtents.x / 2);
-            physicsUpperRightBounds.y += Mathf.FloorToInt(physicsExtents.y / 2);
+            physicsUpperRightBounds.x += Mathf.FloorToInt(physicsExtents.x);
+            physicsUpperRightBounds.y += Mathf.FloorToInt(physicsExtents.y);
 
             var physicsLowerRightBounds = entity.Position;
 
-            physicsLowerRightBounds.x += Mathf.FloorToInt(physicsExtents.x) / 2;
-            physicsLowerRightBounds.y -= Mathf.FloorToInt(physicsExtents.y) / 2;
+            physicsLowerRightBounds.x += Mathf.FloorToInt(physicsExtents.x);
 
             var physicsLowerLeftBounds = entity.Position;
-
-            physicsLowerLeftBounds.x -= Mathf.FloorToInt(physicsExtents.x) / 2;
-            physicsLowerLeftBounds.y -= Mathf.FloorToInt(physicsExtents.y) / 2;
 
             return new BoxBounds
             {

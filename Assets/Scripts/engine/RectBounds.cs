@@ -12,9 +12,9 @@ namespace Pandora.Engine
         public bool IsContained(Vector2Int point)
         {
             return
-                (point.x >= UpperLeft.x && point.y <= UpperLeft.y) ||
-                (point.x <= UpperRight.x && point.y <= UpperRight.y) ||
-                (point.x <= LowerRight.x && point.y >= LowerRight.y) ||
+                (point.x >= UpperLeft.x && point.y <= UpperLeft.y) &&
+                (point.x <= UpperRight.x && point.y <= UpperRight.y) &&
+                (point.x <= LowerRight.x && point.y >= LowerRight.y) &&
                 (point.x >= LowerLeft.x && point.y >= LowerLeft.y);
         }
 
@@ -29,6 +29,10 @@ namespace Pandora.Engine
                 box.IsContained(UpperRight) ||
                 box.IsContained(LowerLeft)  ||
                 box.IsContained(LowerRight);
+        }
+
+        override public string ToString() {
+            return $"UpperLeft({UpperLeft}), UpperRight({UpperRight}), LowerLeft({LowerLeft}), LowerRight({LowerRight})";
         }
     }
 }
