@@ -28,13 +28,14 @@ namespace Pandora.Engine
         public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, GridCell position, bool isRigid) {
             var speed = Mathf.FloorToInt((cellPerSecond * UnitsPerCell) / (1000 / minTick));
 
-            var physicsPosition = GridCellToPhysics(position);
+            var physicsPosition = GridCellToPhysics(position) + (new Vector2Int(UnitsPerCell / 2, UnitsPerCell / 2));
 
             var entity = new EngineEntity {
                 Speed = speed,
                 Position = physicsPosition,
                 GameObject = gameObject,
-                Direction = new Vector2Int(0, 0)
+                Direction = new Vector2Int(0, 0),
+                Engine = this
             };
 
             entities.Add(entity);
@@ -50,7 +51,11 @@ namespace Pandora.Engine
             {
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed));
 
-                entity.Position += entity.Direction * unitsMoved;
+                for (var i = 0; i < unitsMoved; i++) {
+                    entity.Path?.MoveNext();
+                }
+
+                entity.Position = entity.Path.Current;
             }
 
             // Check for collisions
@@ -121,6 +126,15 @@ namespace Pandora.Engine
                 Mathf.RoundToInt(cell.vector.x * UnitsPerCell),
                 Mathf.RoundToInt(cell.vector.y * UnitsPerCell)
             );
+        }
+
+
+        public GridCell PhysicsToGridCell(Vector2Int physics)
+        {
+            var xCell = physics.x / UnitsPerCell;
+            var yCell = physics.y / UnitsPerCell;
+
+            return new GridCell(xCell, yCell);
         }
 
         BoxBounds GetEntityBounds(EngineEntity entity)

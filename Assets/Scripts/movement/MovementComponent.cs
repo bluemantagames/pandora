@@ -101,16 +101,12 @@ namespace Pandora.Movement
 
             position += direction * (Time.fixedDeltaTime * speed);
 
-            var worldPosition = engine.PhysicsToWorld(engineEntity.Position);
-            var physicsDirection = engine.GridCellToPhysics(new GridCell(direction));
-
-            engineEntity.Direction = physicsDirection;
-
             engine.Process(Mathf.RoundToInt(Time.deltaTime * 1000));
             //engine.NextTick();
 
+            var worldPosition = engine.PhysicsToWorld(engineEntity.Position);
+
             Debug.Log($"World position calculated from engine {worldPosition}");
-            Debug.Log($"Direction calculated from engine {physicsDirection}");
             Debug.Log($"Position calculated from engine {engineEntity.Position}");
             Debug.Log($"Speed calculated from engine {engineEntity.Speed}");
 
@@ -132,6 +128,9 @@ namespace Pandora.Movement
                 currentPath.Remove(currentPosition);
 
                 currentTarget = currentPath.First();
+
+                engineEntity.SetTarget(currentTarget);
+
                 direction = (currentTarget.vector - currentPosition.vector).normalized;
             }
             else
@@ -217,7 +216,8 @@ namespace Pandora.Movement
 
         private GridCell CurrentCellPosition()
         {
-            return map.WorldPositionToGridCell(transform.position);
+            //return map.WorldPositionToGridCell(transform.position);
+            return engineEntity.GetCurrentCell();
         }
     }
 }
