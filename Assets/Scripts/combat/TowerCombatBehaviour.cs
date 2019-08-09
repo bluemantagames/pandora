@@ -122,9 +122,11 @@ namespace Pandora.Combat
             isAttacking = true;
 
             var projectileObject = Instantiate(projectile, worldTowerPosition, Quaternion.identity);
+            var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
             projectileObject.GetComponent<ProjectileBehaviour>().target = target;
             projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;
+            projectileObject.GetComponent<ProjectileBehaviour>().map = map;
         }
 
         /** Stops attacking an enemy */
@@ -144,6 +146,8 @@ namespace Pandora.Combat
         /** Called if a launched projectile collided */
         public void ProjectileCollided()
         {
+            Debug.Log("Assigning damage");
+
             targetLifeComponent.AssignDamage(damage);
         }
 

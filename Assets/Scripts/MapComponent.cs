@@ -27,7 +27,7 @@ namespace Pandora
         public float cellHeight;
         public float cellWidth;
 
-        PandoraEngine engine;
+        public PandoraEngine engine;
 
         public GameObject textObject;
 
@@ -153,6 +153,8 @@ namespace Pandora
 
                 SpawnUnit(spawn.unitName, spawn.cellX, spawn.cellY, spawn.team);
             }
+
+            engine.Process(Mathf.RoundToInt(Time.deltaTime * 1000));
         }
 
         public void DestroyPuppet()
@@ -314,7 +316,7 @@ namespace Pandora
             }
             else
             {
-                targetTowerPosition = isOpponent ? TowerPosition.BottomRight : TowerPosition.BottomLeft;
+                targetTowerPosition = isOpponent ? TowerPosition.BottomRight : TowerPosition.TopRight;
             }
 
             // if no enemies found and not on a lane, go back on a lane

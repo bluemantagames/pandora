@@ -42,7 +42,6 @@ namespace Pandora.Movement
 
         public MovementState Move()
         {
-            Vector2 position = transform.position;
             var currentPosition = CurrentCellPosition();
 
             var enemy = map.GetNearestEnemy(gameObject, currentPosition, team.team, aggroRange);
@@ -99,18 +98,8 @@ namespace Pandora.Movement
                 unitsPerSecond = 0;
             }
 
-            position += direction * (Time.fixedDeltaTime * speed);
-
-            engine.Process(Mathf.RoundToInt(Time.deltaTime * 1000));
-            //engine.NextTick();
-
             var worldPosition = engine.PhysicsToWorld(engineEntity.Position);
 
-            Debug.Log($"World position calculated from engine {worldPosition}");
-            Debug.Log($"Position calculated from engine {engineEntity.Position}");
-            Debug.Log($"Speed calculated from engine {engineEntity.Speed}");
-
-            //body.MovePosition(worldPosition);
             transform.position = worldPosition;
 
             return new MovementState(null, MovementStateEnum.Moving);

@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Pandora;
+using Pandora.Engine;
+using Pandora.Movement;
 
 namespace Pandora.Combat
 {
-    public class SimpleProjectileBehaviour : MonoBehaviour, ProjectileBehaviour
+    public class SimpleProjectileBehaviour : MonoBehaviour, ProjectileBehaviour, CollisionCallback
     {
         Rigidbody2D body;
 
         public GameObject parent { get; set; }
         public float speed = 1f;
         public Enemy target { get; set; }
+        public MapComponent map { private get; set; }
+        private EngineEntity engineEntity;
 
-        private void OnTriggerEnter2D(Collider2D other)
+        public void Collided(EngineEntity other)
         {
             Debug.Log("Collided with " + other);
 
-            if (other.gameObject == target.enemy)
+            if (other.GameObject == target.enemy)
             {
                 Debug.Log("Collided with target " + other);
 
@@ -31,14 +35,18 @@ namespace Pandora.Combat
                 }
 
                 gameObject.SetActive(false);
-
+                map.engine.RemoveEntity(engineEntity);
                 Destroy(this);
             }
         }
 
         // Start is called before the first frame update
-        void Awake()
+        void Start()
         {
+            engineEntity = map.engine.AddEntity(gameObject, speed, map.WorldPositionToGridCell(transform.position), false);
+
+            engineEntity.CollisionCallback = this;
+
             body = GetComponent<Rigidbody2D>();
         }
 
@@ -52,10 +60,12 @@ namespace Pandora.Combat
             Debug.Log($"Angling projectiles at {angle}");
 
             // rotate the projectile towards the target
-            body.SetRotation(angle);
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
             // Move the projectile forward
-            body.MovePosition(transform.position + direction * (Time.deltaTime * speed));
+            transform.position = engineEntity.GetWorldPosition();
+
+            engineEntity.SetTarget(target.enemy.GetComponent<MovementComponent>().engineEntity);
         }
     }
 }

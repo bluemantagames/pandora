@@ -7,15 +7,17 @@ namespace Pandora.Engine
     public class PandoraEngine
     {
         int minTick = 10; // milliseconds, minimum tick
-        public int UnitsPerCell = 100; // physics engine units per grid cell
+        public int UnitsPerCell = 400; // physics engine units per grid cell
         List<EngineEntity> entities = new List<EngineEntity> { };
         public MapComponent Map;
 
-        public PandoraEngine(MapComponent map) {
+        public PandoraEngine(MapComponent map)
+        {
             this.Map = map;
         }
 
-        public void Process(int msLapsed) {
+        public void Process(int msLapsed)
+        {
             var ticksNum = msLapsed / minTick;
 
             Debug.Log($"Advancing {ticksNum} ticks {msLapsed}");
@@ -26,17 +28,22 @@ namespace Pandora.Engine
             }
         }
 
-        public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, GridCell position, bool isRigid) {
-            var speed = Mathf.FloorToInt((cellPerSecond * UnitsPerCell) / (1000 / minTick));
+        public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, GridCell position, bool isRigid)
+        {
+            var speed = Mathf.FloorToInt((cellPerSecond * UnitsPerCell / 1000) * minTick);
+
+            Debug.Log($"Assigning speed {speed}");
 
             var physicsPosition = GridCellToPhysics(position) + (new Vector2Int(UnitsPerCell / 2, UnitsPerCell / 2));
 
-            var entity = new EngineEntity {
+            var entity = new EngineEntity
+            {
                 Speed = speed,
                 Position = physicsPosition,
                 GameObject = gameObject,
                 Direction = new Vector2Int(0, 0),
-                Engine = this
+                Engine = this,
+                IsRigid = isRigid
             };
 
             entities.Add(entity);
@@ -44,7 +51,6 @@ namespace Pandora.Engine
             return entity;
         }
 
-        // Start with a reasonable capacity already
         public void NextTick()
         {
             // Move units
@@ -52,7 +58,8 @@ namespace Pandora.Engine
             {
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed));
 
-                for (var i = 0; i < unitsMoved; i++) {
+                for (var i = 0; i < unitsMoved; i++)
+                {
                     entity.Path?.MoveNext();
                 }
 
@@ -67,11 +74,26 @@ namespace Pandora.Engine
                     var firstBox = GetEntityBounds(first);
                     var secondBox = GetEntityBounds(second);
 
-                    if (first == second || !firstBox.Collides(secondBox)) continue; // continue if they don't collide
+                    // continue if they don't collide
+                    if (first == second || !firstBox.Collides(secondBox))
+                    {
+                        continue;
+                    }
+
+                    if (first.CollisionCallback != null)
+                    {
+                        first.CollisionCallback.Collided(second);
+                    }
+
+                    if (second.CollisionCallback != null)
+                    {
+                        second.CollisionCallback.Collided(first);
+                    }
 
                     Vector2Int direction;
                     EngineEntity moved;
 
+                    // move away the entity with less speed
                     if (first.Speed >= second.Speed)
                     {
                         direction = second.Position - first.Position;
@@ -83,23 +105,31 @@ namespace Pandora.Engine
                         moved = first;
                     }
 
-                    direction.x = (int) Mathf.Clamp(-1f, (float) direction.x, 1f);
-                    direction.y = (int) Mathf.Clamp(-1f, (float) direction.y, 1f);
+                    direction.x = (int)Mathf.Clamp(-1f, (float)direction.x, 1f);
+                    direction.y = (int)Mathf.Clamp(-1f, (float)direction.y, 1f);
 
-                    if (direction.x == 0 && direction.y == 0) {
+                    if (direction.x == 0 && direction.y == 0)
+                    {
                         direction.x = 1;
                         direction.y = 1;
                     }
 
-                    while (firstBox.Collides(secondBox)) // there probably is a math way to do this without a loop
+                    if (first.IsRigid && second.IsRigid) // resolve collision if both objects are rigid
                     {
-                        moved.Position = moved.Position + direction; // move the entity away
+                        while (firstBox.Collides(secondBox)) // there probably is a math way to do this without a loop
+                        {
+                            moved.Position = moved.Position + direction; // move the entity away
 
-                        firstBox = GetEntityBounds(first);
-                        secondBox = GetEntityBounds(second);
+                            firstBox = GetEntityBounds(first);
+                            secondBox = GetEntityBounds(second);
+                        }
                     }
                 }
             }
+        }
+
+        public void RemoveEntity(EngineEntity entity) {
+            entities.Remove(entity);
         }
 
         // converts a world point to a physics engine point using linear interpolation 
@@ -119,7 +149,8 @@ namespace Pandora.Engine
             );
         }
 
-        public Vector2 PhysicsToWorld(Vector2Int physics) {
+        public Vector2 PhysicsToWorld(Vector2Int physics)
+        {
             var xWorldBounds = Map.cellWidth * Map.mapSizeX;
             var yWorldBounds = Map.cellHeight * Map.mapSizeY;
 
