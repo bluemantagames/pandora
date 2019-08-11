@@ -7,7 +7,7 @@ namespace Pandora.Combat
 
     public class MeleeCombatBehaviour : MonoBehaviour, CombatBehaviour
     {
-        float damage = 10f;
+        public float damage = 10f;
         GameObject target = null;
         public bool isAttacking { get; private set; } = false;
 

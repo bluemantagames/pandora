@@ -69,7 +69,10 @@ namespace Pandora.Engine
                     entity.Path?.MoveNext();
                 }
 
-                entity.Position = entity.Path.Current;
+                if (entity.Path.Current != null)
+                {
+                    entity.Position = entity.Path.Current;
+                }
             }
 
             // Check for collisions
@@ -134,7 +137,8 @@ namespace Pandora.Engine
             }
         }
 
-        public void RemoveEntity(EngineEntity entity) {
+        public void RemoveEntity(EngineEntity entity)
+        {
             entities.Remove(entity);
         }
 

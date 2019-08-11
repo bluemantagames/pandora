@@ -171,6 +171,8 @@ namespace Pandora.Network
                         }
                     }
 
+                    Debug.Log("Enqueuing Step");
+
                     stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands));
                 }
             }

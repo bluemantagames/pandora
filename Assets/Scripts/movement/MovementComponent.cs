@@ -206,7 +206,6 @@ namespace Pandora.Movement
 
         private GridCell CurrentCellPosition()
         {
-            //return map.WorldPositionToGridCell(transform.position);
             return engineEntity.GetCurrentCell();
         }
     }

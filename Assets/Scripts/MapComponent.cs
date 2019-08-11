@@ -41,8 +41,7 @@ namespace Pandora
             Screen.fullScreen = false;
             Screen.SetResolution(1080, 1920, false);
 
-            Application.targetFrameRate = 30;
-            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = -1;
 
             var topArena = GameObject.Find("top_arena");
             var topArenaPosition = topArena.transform.position;
@@ -152,16 +151,21 @@ namespace Pandora
 
             if (NetworkControllerSingleton.instance.stepsQueue.TryDequeue(out step))
             {
-                if (remainingStep > 0) {
+                Debug.Log($"Dequeued Step {step}");
+
+                if (remainingStep > 0)
+                {
                     Debug.LogWarning("We're being too slow, we might possibly desync");
 
                     engine.Process(remainingStep);
-
-                    remainingStep = step.StepTimeMs;
                 }
 
-                foreach (var command in step.Commands) {
-                    if (command is SpawnMessage) {
+                remainingStep = step.StepTimeMs;
+
+                foreach (var command in step.Commands)
+                {
+                    if (command is SpawnMessage)
+                    {
                         var spawn = command as SpawnMessage;
 
                         Debug.Log($"Received {spawn} - spawning unit");
@@ -171,14 +175,22 @@ namespace Pandora
                 }
             }
 
-            if (!NetworkControllerSingleton.instance.matchStarted) {
-                engine.Process((uint) Mathf.RoundToInt(Time.deltaTime * 1000));
-            } else {
+            if (!NetworkControllerSingleton.instance.matchStarted)
+            {
+                engine.Process((uint)Mathf.RoundToInt(Time.deltaTime * 1000));
+            }
+            else
+            {
                 var processTime = Math.Min(frameStep, remainingStep);
 
-                engine.Process(processTime);
+                Debug.Log($"Advancing {processTime}ms");
 
-                remainingStep -= processTime;
+                if (remainingStep != 0 && processTime != 0)
+                {
+                    engine.Process(processTime);
+
+                    remainingStep -= processTime;
+                }
             }
         }
 

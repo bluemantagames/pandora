@@ -89,7 +89,7 @@ namespace Pandora.Combat
 
                 if (closestUnit != null)
                 {
-                    Debug.Log($"Attacking {closestUnit}");
+                    Debug.Log($"Attacking {closestUnit} - {closestUnit.GetComponent<LifeComponent>()}");
 
                     currentTarget = closestUnit;
                     targetLifeComponent = currentTarget.GetComponent<LifeComponent>();
@@ -99,8 +99,7 @@ namespace Pandora.Combat
             }
             else if (targetLifeComponent != null && targetLifeComponent.isDead)
             {
-                currentTarget = null;
-                targetLifeComponent = null;
+                StopAttacking();
             }
             else if (targetLifeComponent != null)
             { // if not dead, attack once cooldown is over
@@ -119,6 +118,8 @@ namespace Pandora.Combat
         {
             if (currentTarget == null) return;
 
+            Debug.Log($"Attacking {target} - {isMiddle} - {targetLifeComponent}");
+
             isAttacking = true;
 
             var projectileObject = Instantiate(projectile, worldTowerPosition, Quaternion.identity);
@@ -132,6 +133,8 @@ namespace Pandora.Combat
         /** Stops attacking an enemy */
         public void StopAttacking()
         {
+            Debug.Log($"Attacking must stop - {isMiddle}");
+
             currentTarget = null;
             targetLifeComponent = null;
             isAttacking = false;
@@ -146,9 +149,10 @@ namespace Pandora.Combat
         /** Called if a launched projectile collided */
         public void ProjectileCollided()
         {
-            Debug.Log("Assigning damage");
+            Debug.Log($"Assigning damage {targetLifeComponent} {currentTarget}");
 
-            targetLifeComponent.AssignDamage(damage);
+            if (targetLifeComponent != null)
+                targetLifeComponent.AssignDamage(damage);
         }
 
         public void OnDead()
