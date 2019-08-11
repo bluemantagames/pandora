@@ -1,6 +1,6 @@
 using RestSharp;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
@@ -21,7 +21,7 @@ namespace Pandora.Network
         private Thread networkThread = null;
         private Thread receiveThread = null;
         private ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
-        public ConcurrentQueue<SpawnMessage> spawnQueue = new ConcurrentQueue<SpawnMessage>();
+        public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
 
         private static NetworkControllerSingleton privateInstance = null;
@@ -150,15 +150,28 @@ namespace Pandora.Network
                     Debug.Log($"We're team {TeamComponent.assignedTeam}");
                 }
 
-                if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Spawn)
+                if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
                 { // enqueue spawns and let the main thread handle it
-                    spawnQueue.Enqueue(new SpawnMessage
+                    var commands = new List<Message> { };
+
+                    foreach (var command in envelope.Step.Commands)
                     {
-                        unitName = envelope.Spawn.UnitName,
-                        cellX = envelope.Spawn.X,
-                        cellY = envelope.Spawn.Y,
-                        team = envelope.Spawn.Team
-                    });
+                        if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
+                        {
+                            var spawnMessage =
+                                new SpawnMessage
+                                {
+                                    unitName = command.Spawn.UnitName,
+                                    cellX = command.Spawn.X,
+                                    cellY = command.Spawn.Y,
+                                    team = command.Spawn.Team
+                                };
+
+                            commands.Add(spawnMessage);
+                        }
+                    }
+
+                    stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands));
                 }
             }
         }

@@ -11,14 +11,14 @@ namespace Pandora.Engine
         public int UnitsPerCell = 400; // physics engine units per grid cell
         List<EngineEntity> entities = new List<EngineEntity> { };
         public MapComponent Map;
-        int totalElapsed = 0;
+        uint totalElapsed = 0;
 
         public PandoraEngine(MapComponent map)
         {
             this.Map = map;
         }
 
-        public void Process(int msLapsed)
+        public void Process(uint msLapsed)
         {
             var ticksNum = msLapsed / minTick;
 
