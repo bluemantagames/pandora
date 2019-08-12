@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 namespace Pandora.Engine
 {
@@ -8,6 +9,23 @@ namespace Pandora.Engine
         public Vector2Int UpperRight;
         public Vector2Int LowerLeft;
         public Vector2Int LowerRight;
+        public Vector2Int Center {
+            get {
+                return Vector2Int.RoundToInt((Vector2) UpperRight / 2);
+            }
+        }
+
+        public int Width {
+            get {
+                return Math.Abs(LowerRight.x - LowerLeft.x);
+            }
+        }
+
+        public int Height {
+            get {
+                return Math.Abs(UpperRight.y - LowerRight.y);
+            }
+        }
 
         public bool IsContained(Vector2Int point)
         {

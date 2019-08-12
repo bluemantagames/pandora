@@ -161,18 +161,18 @@ namespace Pandora.Engine
 
         public bool IsInRange(EngineEntity entity1, EngineEntity entity2, int gridCellRange)
         {
-            var unitsRange = gridCellRange * UnitsPerCell;
+            var entity1Bounds = GetEntityBounds(entity1);
+            var entity2Bounds = GetEntityBounds(entity2);
 
-            var originBounds =
-                new BoxBounds
-                {
-                    UpperLeft = entity1.Position + new Vector2Int(-unitsRange, unitsRange),
-                    UpperRight = entity1.Position + new Vector2Int(unitsRange, unitsRange),
-                    LowerLeft = entity1.Position + new Vector2Int(-unitsRange, -unitsRange),
-                    LowerRight = entity1.Position + new Vector2Int(unitsRange, -unitsRange)
-                };
+            var distance =  Math.Max(
+                Math.Abs(entity1Bounds.Center.x - entity2Bounds.Center.x) - ((entity1Bounds.Width + entity2Bounds.Width) / 2),
+                Math.Abs(entity1Bounds.Center.y - entity2Bounds.Center.y) - ((entity1Bounds.Height + entity2Bounds.Height) / 2)
+            );
 
-            return originBounds.Collides(GetEntityBounds(entity2));
+            return Math.Max(
+                Math.Abs(entity1Bounds.Center.x - entity2Bounds.Center.x) - (entity1Bounds.Width + entity2Bounds.Width) / 2,
+                Math.Abs(entity1Bounds.Center.y - entity2Bounds.Center.y) - (entity1Bounds.Height + entity2Bounds.Height) / 2
+            ) <= (gridCellRange * UnitsPerCell);
         }
 
         // converts a world point to a physics engine point using linear interpolation 
