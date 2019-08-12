@@ -26,7 +26,7 @@ namespace Pandora
 
         public float cellHeight;
         public float cellWidth;
-        uint frameStep = 10, remainingStep = 0; // milliseconds
+        uint frameStep = 20, remainingStep = 0, timeSinceLastStep; // milliseconds
         public PandoraEngine engine;
 
         public GameObject textObject;
@@ -37,6 +37,8 @@ namespace Pandora
             mapSizeY = (bottomMapSizeY * 2) + 1;
 
             bottomMapSize = new Vector2(bottomMapSizeX, bottomMapSizeY);
+
+            timeSinceLastStep = frameStep; // initialize time since last step so we don't skip frames
 
             Screen.fullScreen = false;
             Screen.SetResolution(1080, 1920, false);
@@ -149,6 +151,8 @@ namespace Pandora
         {
             StepMessage step = null;
 
+            timeSinceLastStep += (uint) Mathf.FloorToInt(Time.deltaTime * 1000);
+
             if (NetworkControllerSingleton.instance.stepsQueue.TryDequeue(out step))
             {
                 if (remainingStep > 0)
@@ -183,11 +187,13 @@ namespace Pandora
 
                 Debug.Log($"Advancing {processTime}ms");
 
-                if (remainingStep != 0 && processTime != 0)
+                if (remainingStep != 0 && processTime != 0 && timeSinceLastStep >= frameStep)
                 {
                     engine.Process(processTime);
 
                     remainingStep -= processTime;
+
+                    timeSinceLastStep = 0;
                 }
             }
         }
