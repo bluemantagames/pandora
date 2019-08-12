@@ -256,6 +256,8 @@ namespace Pandora
             {
                 var targetGameObject = component.gameObject;
                 var gameObjectPosition = GetCell(targetGameObject);
+                var engineEntity = GetEngineEntity(unit);
+                var targetEngineEntity = GetEngineEntity(targetGameObject);
                 var distance = Vector2.Distance(gameObjectPosition.vector, position.vector);
                 var lifeComponent = targetGameObject.GetComponent<LifeComponent>();
 
@@ -266,8 +268,10 @@ namespace Pandora
                     (targetGameObject.layer == Constants.FLYING_LAYER && unit.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying and we are ranged
                     (unit.layer == Constants.FLYING_LAYER); // we're flying
 
+                var isInRange = engine.IsInRange(engineEntity, targetEngineEntity, Mathf.RoundToInt(range));
+
                 var isTargetValid =
-                    (minDistance == null || minDistance > distance) && (distance <= range) && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.isDead && canUnitsFight;
+                    (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.isDead && canUnitsFight;
 
                 if (isTargetValid)
                 {
@@ -476,6 +480,23 @@ namespace Pandora
             var canvas = Instantiate(textObject, position, Quaternion.identity, transform);
 
             canvas.GetComponentInChildren<Text>().text = text;
+        }
+
+        private EngineEntity GetEngineEntity(GameObject gameObject) {
+            EngineEntity entity;
+
+            var towerComponent = gameObject.GetComponent<TowerPositionComponent>();
+
+            if (towerComponent != null)
+            {
+                entity = towerComponent.towerEntity;
+            }
+            else
+            {
+                entity = gameObject.GetComponent<MovementComponent>().engineEntity;
+            }
+
+            return entity;
         }
 
         public GridCell GetCell(GameObject gameObject)

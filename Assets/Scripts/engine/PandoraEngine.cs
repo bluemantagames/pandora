@@ -143,10 +143,12 @@ namespace Pandora.Engine
                 }
             }
 
-            foreach (var entity in clonedEntities) {
+            foreach (var entity in clonedEntities)
+            {
                 var unitBehaviour = entity.GameObject.GetComponent<UnitBehaviour>();
 
-                if (unitBehaviour != null) {
+                if (unitBehaviour != null)
+                {
                     unitBehaviour.UnitUpdate();
                 }
             }
@@ -155,6 +157,22 @@ namespace Pandora.Engine
         public void RemoveEntity(EngineEntity entity)
         {
             entities.Remove(entity);
+        }
+
+        public bool IsInRange(EngineEntity entity1, EngineEntity entity2, int gridCellRange)
+        {
+            var unitsRange = gridCellRange * UnitsPerCell;
+
+            var originBounds =
+                new BoxBounds
+                {
+                    UpperLeft = entity1.Position + new Vector2Int(-unitsRange, unitsRange),
+                    UpperRight = entity1.Position + new Vector2Int(unitsRange, unitsRange),
+                    LowerLeft = entity1.Position + new Vector2Int(-unitsRange, -unitsRange),
+                    LowerRight = entity1.Position + new Vector2Int(unitsRange, -unitsRange)
+                };
+
+            return originBounds.Collides(GetEntityBounds(entity2));
         }
 
         // converts a world point to a physics engine point using linear interpolation 
