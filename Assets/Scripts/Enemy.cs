@@ -18,7 +18,7 @@ namespace Pandora
                 }
                 else
                 {
-                    return GameObject.Find("Arena").GetComponent<MapComponent>().WorldPositionToGridCell(enemy.transform.position);
+                    return GameObject.Find("Arena").GetComponent<MapComponent>().GetCell(enemy);
                 }
             }
         }

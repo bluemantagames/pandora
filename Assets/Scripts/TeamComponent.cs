@@ -10,7 +10,7 @@
         static public int assignedTeam = 1;
         public virtual int team { get; set; }
 
-        public bool IsOpponent() {
+        public virtual bool IsOpponent() {
             return team != assignedTeam;
         }
     }

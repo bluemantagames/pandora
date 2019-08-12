@@ -26,7 +26,7 @@ namespace Pandora
 
         public float cellHeight;
         public float cellWidth;
-        uint frameStep = 20, remainingStep = 0; // milliseconds
+        uint frameStep = 10, remainingStep = 0; // milliseconds
         public PandoraEngine engine;
 
         public GameObject textObject;
@@ -151,11 +151,9 @@ namespace Pandora
 
             if (NetworkControllerSingleton.instance.stepsQueue.TryDequeue(out step))
             {
-                Debug.Log($"Dequeued Step {step}");
-
                 if (remainingStep > 0)
                 {
-                    Debug.LogWarning("We're being too slow, we might possibly desync");
+                    Debug.LogWarning($"We're being too slow, we might possibly desync (we are {remainingStep}ms behind)");
 
                     engine.Process(remainingStep);
                 }
@@ -177,7 +175,7 @@ namespace Pandora
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
-                engine.Process((uint)Mathf.RoundToInt(Time.deltaTime * 1000));
+                engine.Process(Math.Max((uint)Mathf.RoundToInt(Time.deltaTime * 1000), 10));
             }
             else
             {
@@ -249,7 +247,7 @@ namespace Pandora
             movement.engineEntity = engineEntity;
         }
 
-        public Enemy GetNearestEnemy(GameObject unit, GridCell position, int team, float range)
+        public Enemy GetEnemyInRange(GameObject unit, GridCell position, int team, float range)
         {
             float? minDistance = null;
             GameObject enemy = null;
@@ -257,15 +255,7 @@ namespace Pandora
             foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
             {
                 var targetGameObject = component.gameObject;
-                var gameObjectPosition = WorldPositionToGridCell(targetGameObject.transform.position);
-
-                var towerPositionComponent = targetGameObject.GetComponent<TowerPositionComponent>();
-
-                if (towerPositionComponent != null)
-                {
-                    gameObjectPosition = towerPositionComponent.GetMapTarget();
-                }
-
+                var gameObjectPosition = GetCell(targetGameObject);
                 var distance = Vector2.Distance(gameObjectPosition.vector, position.vector);
                 var lifeComponent = targetGameObject.GetComponent<LifeComponent>();
 
@@ -277,7 +267,7 @@ namespace Pandora
                     (unit.layer == Constants.FLYING_LAYER); // we're flying
 
                 var isTargetValid =
-                    (minDistance == null || minDistance > distance) && (distance <= range) && component.team != team && !lifeComponent.isDead && canUnitsFight;
+                    (minDistance == null || minDistance > distance) && (distance <= range) && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.isDead && canUnitsFight;
 
                 if (isTargetValid)
                 {
@@ -305,10 +295,7 @@ namespace Pandora
 
             foreach (var component in GetComponentsInChildren<UnitBehaviour>())
             {
-                var cellVector = WorldPositionToGridCell(component.gameObject.transform.position).vector;
-
-                Debug.Log($"Checking {cellVector} in {origin.x} / {origin.x + widthCells}");
-                Debug.Log($"Checking {cellVector} in {origin.y} / {origin.y + heightCells}");
+                var cellVector = GetCell(component.gameObject).vector;
 
                 var isDead = component.gameObject.GetComponent<LifeComponent>()?.isDead ?? true;
 
@@ -333,7 +320,7 @@ namespace Pandora
 
             var cellVector = cell.vector;
 
-            var enemyPosition = GetNearestEnemy(unit, cell, team, aggroRange)?.enemyCell;
+            var enemyPosition = GetEnemyInRange(unit, cell, team, aggroRange)?.enemyCell;
 
             var isOpponent = unit.GetComponent<TeamComponent>().IsOpponent();
 
@@ -489,6 +476,24 @@ namespace Pandora
             var canvas = Instantiate(textObject, position, Quaternion.identity, transform);
 
             canvas.GetComponentInChildren<Text>().text = text;
+        }
+
+        public GridCell GetCell(GameObject gameObject)
+        {
+            GridCell position;
+
+            var towerComponent = gameObject.GetComponent<TowerPositionComponent>();
+
+            if (towerComponent != null)
+            {
+                position = towerComponent.GetMapTarget();
+            }
+            else
+            {
+                position = gameObject.GetComponent<MovementComponent>().engineEntity.GetCurrentCell();
+            }
+
+            return position;
         }
     }
 }

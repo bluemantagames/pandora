@@ -10,9 +10,7 @@ namespace Pandora.Spell {
         public void SpellCollided(GridCell cell) {
             foreach (var lifeComponent in map.gameObject.GetComponentsInChildren<LifeComponent>()) {
                 var targetPosition =
-                    map.WorldPositionToGridCell(
-                        lifeComponent.gameObject.transform.position
-                    ).vector;
+                    map.GetCell(lifeComponent.gameObject).vector;
 
                 var cellPosition = cell.vector;
 

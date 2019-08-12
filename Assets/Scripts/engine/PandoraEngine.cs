@@ -7,7 +7,7 @@ namespace Pandora.Engine
 {
     public class PandoraEngine
     {
-        int minTick = 10; // milliseconds, minimum tick
+        int minTick = 5; // milliseconds, minimum tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         List<EngineEntity> entities = new List<EngineEntity> { };
 

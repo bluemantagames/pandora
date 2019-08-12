@@ -27,8 +27,6 @@ namespace Pandora.Movement
 
         public float speed = 1f;
         public MapComponent map;
-        float unitsPerSecond = 0f;
-        float seconds = 0f;
         private SimplePriorityQueue<QueueItem> priorityQueue;
 
         // Start is called before the first frame update
@@ -44,7 +42,7 @@ namespace Pandora.Movement
         {
             var currentPosition = CurrentCellPosition();
 
-            var enemy = map.GetNearestEnemy(gameObject, currentPosition, team.team, aggroRange);
+            var enemy = map.GetEnemyInRange(gameObject, currentPosition, team.team, aggroRange);
 
             // first and foremost, if an enemy is in range: attack them
             if (enemy != null && targetEnemy == null)
@@ -128,13 +126,13 @@ namespace Pandora.Movement
 
             priorityQueue.Clear();
 
-            var currentPosition = map.WorldPositionToGridCell(transform.position);
+            var currentPosition = engineEntity.GetCurrentCell();
 
             int pass = 0;
 
             var evaluatingPosition =
                 new QueueItem(
-                    new List<GridCell> { map.WorldPositionToGridCell(transform.position) },
+                    new List<GridCell> { currentPosition },
                     new HashSet<GridCell>()
                 );
 
@@ -144,8 +142,6 @@ namespace Pandora.Movement
             while ((item = evaluatingPosition.points.Last()) != end)
             {
                 var positionsCount = evaluatingPosition.points.Count();
-
-                Debug.Log("Evaluating " + string.Join(",", evaluatingPosition));
 
                 // check all surrounding positions
                 for (var x = -1f; x <= 1f; x++)
