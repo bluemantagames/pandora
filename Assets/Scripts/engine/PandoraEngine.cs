@@ -64,6 +64,8 @@ namespace Pandora.Engine
             {
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed));
 
+                if (entity.Path == null) continue;
+
                 for (var i = 0; i < unitsMoved; i++)
                 {
                     entity.Path?.MoveNext();

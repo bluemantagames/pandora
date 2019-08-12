@@ -57,14 +57,16 @@ namespace Pandora.Combat
         {
             if (target == null) return;
 
-            Debug.Log("Spawning projectile");
 
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
 
+            var map = GetComponent<MovementComponent>().map;
+
+            Debug.Log($"Spawning projectile - Setting map {map}");
+
             projectileObject.GetComponent<ProjectileBehaviour>().target = target;
             projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;
-
-            var map = GetComponent<MovementComponent>().map;
+            projectileObject.GetComponent<ProjectileBehaviour>().map = map;
 
             var lifeComponent = target.enemy.GetComponent<LifeComponent>();
 

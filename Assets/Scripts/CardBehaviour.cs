@@ -84,10 +84,6 @@ namespace Pandora
 
         void OnApplicationQuit()
         {
-            PlayerPrefs.SetInt("Screenmanager Resolution Width", 800);
-            PlayerPrefs.SetInt("Screenmanager Resolution Height", 600);
-            PlayerPrefs.SetInt("Screenmanager Is Fullscreen mode", 0);
-
             NetworkControllerSingleton.instance.Stop();
         }
     }

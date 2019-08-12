@@ -28,9 +28,12 @@ namespace Pandora.Combat
 
                 var behaviour = parent.GetComponent<CombatBehaviour>();
 
-                if (behaviour != null) {
+                if (behaviour != null)
+                {
                     behaviour.ProjectileCollided();
-                } else {
+                }
+                else
+                {
                     Debug.LogWarning("Could not find ProjectileCollided in parent");
                 }
 
@@ -43,6 +46,8 @@ namespace Pandora.Combat
         // Start is called before the first frame update
         void Start()
         {
+            Debug.Log($"NULL Map {map}");
+            Debug.Log($"NULL Engine {map.engine}");
             engineEntity = map.engine.AddEntity(gameObject, speed, map.WorldPositionToGridCell(transform.position), false);
 
             engineEntity.CollisionCallback = this;
@@ -65,7 +70,21 @@ namespace Pandora.Combat
             // Move the projectile forward
             transform.position = engineEntity.GetWorldPosition();
 
-            engineEntity.SetTarget(target.enemy.GetComponent<MovementComponent>().engineEntity);
+            EngineEntity targetEntity;
+
+            var towerComponent = target.enemy.GetComponent<TowerPositionComponent>();
+
+            if (towerComponent != null)
+            {
+                targetEntity = towerComponent.towerEntity;
+            }
+            else
+            {
+                targetEntity = target.enemy.GetComponent<MovementComponent>().engineEntity;
+            }
+
+
+            engineEntity.SetTarget(targetEntity);
         }
     }
 }

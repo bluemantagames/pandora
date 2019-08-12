@@ -245,8 +245,8 @@ namespace Pandora
 
             var engineEntity = engine.AddEntity(cardObject, movement.speed, new GridCell(cellX, cellY), true);
 
-            movement.engineEntity = engineEntity;
             movement.engine = engine;
+            movement.engineEntity = engineEntity;
         }
 
         public Enemy GetNearestEnemy(GameObject unit, GridCell position, int team, float range)
@@ -285,7 +285,7 @@ namespace Pandora
                 var isTargetValid =
                     (minDistance == null || minDistance > distance) && (distance <= range) && component.team != team && !lifeComponent.isDead && canUnitsFight;
 
-                Debug.Log($"Distance {distance} Target valid {isTargetValid} units can fight {canUnitsFight}");
+                Debug.Log($"Unit {targetGameObject} Distance {distance} Target valid {isTargetValid} units can fight {canUnitsFight}");
 
                 if (isTargetValid)
                 {
@@ -418,7 +418,6 @@ namespace Pandora
 
             Debug.Log($"Going to {endPosition} (target is {targetTowerPosition}) ({towerPositionComponent})");
 
-            // go to enemy position, or a lane, or to the end of the world
             return endPosition;
         }
 

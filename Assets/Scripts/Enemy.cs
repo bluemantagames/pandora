@@ -23,6 +23,10 @@ namespace Pandora
             }
         }
 
+        public override string ToString() {
+            return $"Enemy(GameObject: {enemy}, GridCell: {enemyCell})";
+        }
+
         public Enemy(GameObject enemy)
         {
             this.enemy = enemy;
