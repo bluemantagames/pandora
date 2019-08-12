@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Pandora.Messages;
+using UnityEngine.UI;
 using Google.Protobuf;
 using Pandora.Network.Messages;
 using System.Collections.Concurrent;
@@ -47,6 +48,8 @@ namespace Pandora.Network
             var request = new RestRequest(matchmakingUrl, Method.GET);
 
             client.Timeout = int.MaxValue; // request is long-polling - do not timeout
+
+            GameObject.Find("MatchmakingButton").GetComponent<Button>().interactable = false;
 
             client.ExecuteAsync<MatchmakingResponse>(request, response =>
             {

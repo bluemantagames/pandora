@@ -10,6 +10,7 @@ namespace Pandora.Engine
         int minTick = 10; // milliseconds, minimum tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         List<EngineEntity> entities = new List<EngineEntity> { };
+
         public MapComponent Map;
         uint totalElapsed = 0;
 
@@ -25,8 +26,6 @@ namespace Pandora.Engine
             totalElapsed += msLapsed;
 
             GameObject.Find("MsElapsedText").GetComponent<Text>().text = $"Elapsed: {totalElapsed}";
-
-            Debug.Log($"Advancing {ticksNum} ticks {msLapsed}");
 
             for (var tick = 0; tick < ticksNum; tick++)
             {
@@ -77,10 +76,16 @@ namespace Pandora.Engine
                 }
             }
 
+            // We clone the entities list while we iterate because the collision callbacks
+            // might want to modify the entity list somehow (e.g. remove a projectile on collision)
+            // TODO: A more efficient way to do this is to have a flag be true while we are checking collisions,
+            // cache away all the removals/adds and execute them later
+            var clonedEntities = new List<EngineEntity>(entities);
+
             // Check for collisions
-            foreach (var first in entities)
+            foreach (var first in clonedEntities)
             {
-                foreach (var second in entities)
+                foreach (var second in clonedEntities)
                 {
                     var firstBox = GetEntityBounds(first);
                     var secondBox = GetEntityBounds(second);
@@ -135,6 +140,14 @@ namespace Pandora.Engine
                             secondBox = GetEntityBounds(second);
                         }
                     }
+                }
+            }
+
+            foreach (var entity in clonedEntities) {
+                var unitBehaviour = entity.GameObject.GetComponent<UnitBehaviour>();
+
+                if (unitBehaviour != null) {
+                    unitBehaviour.UnitUpdate();
                 }
             }
         }

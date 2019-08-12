@@ -46,8 +46,6 @@ namespace Pandora.Movement
 
             var enemy = map.GetNearestEnemy(gameObject, currentPosition, team.team, aggroRange);
 
-            Debug.Log($"Enemy {enemy}");
-
             // first and foremost, if an enemy is in range: attack them
             if (enemy != null && targetEnemy == null)
             {
@@ -88,16 +86,6 @@ namespace Pandora.Movement
                 AdvancePosition(currentPosition);
             }
 
-            seconds += Time.deltaTime;
-            unitsPerSecond += Time.deltaTime * speed;
-
-            if (seconds >= 1) {
-                Debug.Log($"Units per second: {unitsPerSecond}");
-
-                seconds = 0;
-                unitsPerSecond = 0;
-            }
-
             var worldPosition = engine.PhysicsToWorld(engineEntity.Position);
 
             transform.position = worldPosition;
@@ -113,8 +101,6 @@ namespace Pandora.Movement
         {
             if (currentPath.Count() > 1) // if path still has elements after we remove the current target
             {
-                Debug.Log("Advancing from " + currentPosition);
-
                 currentPath.Remove(currentPosition);
 
                 currentTarget = currentPath.First();
@@ -176,8 +162,6 @@ namespace Pandora.Movement
                             var distanceFromStart = Vector2.Distance(currentPosition.vector, advance.vector); // use the distance between this point and the start as g(n)
                             var priority = distanceFromStart + distanceToEnd; // priority is h(n) ++ g(n)
                             var currentPositions = new List<GridCell>(evaluatingPosition.points) { advance };
-
-                            Debug.Log("Enqueuing " + string.Join(",", currentPositions) + "with priority " + priority);
 
                             priorityQueue.Enqueue(
                                 new QueueItem(currentPositions, new HashSet<GridCell>(currentPositions)),

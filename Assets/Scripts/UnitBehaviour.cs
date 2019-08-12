@@ -14,7 +14,7 @@ namespace Pandora
         public Bounds hitbox;
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             movementComponent = GetComponent<MovementComponent>();
             combatBehaviour = GetComponent<CombatBehaviour>();
@@ -23,8 +23,8 @@ namespace Pandora
             Debug.Log($"CombatBehaviour is {combatBehaviour}");
         }
 
-        // Update is called once per frame
-        void Update()
+        // This is called from PandoraEngine every tick
+        public void UnitUpdate()
         {
             if (lifeComponent.isDead) return; // Do nothing if dead
 

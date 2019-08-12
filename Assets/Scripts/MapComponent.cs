@@ -256,8 +256,6 @@ namespace Pandora
 
             foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
             {
-                Debug.Log($"Checking {component}");
-
                 var targetGameObject = component.gameObject;
                 var gameObjectPosition = WorldPositionToGridCell(targetGameObject.transform.position);
 
@@ -273,10 +271,6 @@ namespace Pandora
 
                 if (lifeComponent == null || lifeComponent.isDead) continue; // skip spells
 
-                Debug.Log($"Our layer {unit.layer}");
-                Debug.Log($"Target layer {targetGameObject.layer}");
-                Debug.Log($"CombatBehaviour from nearest enemy {unit.GetComponent<CombatBehaviour>()}");
-
                 var canUnitsFight = // Units can fight if:
                     (targetGameObject.layer == unit.layer) || // same layer (ground & ground, flying & flying)
                     (targetGameObject.layer == Constants.FLYING_LAYER && unit.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying and we are ranged
@@ -284,8 +278,6 @@ namespace Pandora
 
                 var isTargetValid =
                     (minDistance == null || minDistance > distance) && (distance <= range) && component.team != team && !lifeComponent.isDead && canUnitsFight;
-
-                Debug.Log($"Unit {targetGameObject} Distance {distance} Target valid {isTargetValid} units can fight {canUnitsFight}");
 
                 if (isTargetValid)
                 {
@@ -415,8 +407,6 @@ namespace Pandora
             var towerPosition = towerPositionComponent?.GetMapTarget() ?? middleTowerPositionComponent.GetMapTarget();
 
             var endPosition = enemyPosition ?? lanePosition ?? towerPosition;
-
-            Debug.Log($"Going to {endPosition} (target is {targetTowerPosition}) ({towerPositionComponent})");
 
             return endPosition;
         }
