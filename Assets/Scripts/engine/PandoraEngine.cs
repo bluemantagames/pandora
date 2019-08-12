@@ -48,7 +48,8 @@ namespace Pandora.Engine
                 GameObject = gameObject,
                 Direction = new Vector2Int(0, 0),
                 Engine = this,
-                IsRigid = isRigid
+                IsRigid = isRigid,
+                Layer = gameObject.layer
             };
 
             entities.Add(entity);
@@ -91,7 +92,7 @@ namespace Pandora.Engine
                     var secondBox = GetEntityBounds(second);
 
                     // continue if they don't collide
-                    if (first == second || !firstBox.Collides(secondBox))
+                    if (first == second || !firstBox.Collides(secondBox) || first.Layer != second.Layer)
                     {
                         continue;
                     }

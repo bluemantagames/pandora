@@ -168,8 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bec2558bfc2eb34da9f6172d2b0f664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aggroRange: 10
-  speed: 1
+  aggroRange: 3
+  speed: 10
   map: {fileID: 0}
 --- !u!114 &3519887656195453972
 MonoBehaviour:

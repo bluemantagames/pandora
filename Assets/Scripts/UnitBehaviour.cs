@@ -40,8 +40,6 @@ namespace Pandora
             {
                 combatBehaviour.StopAttacking();
             }
-
-            Debug.Log("Movement state " + state);
         }
     }
 }
