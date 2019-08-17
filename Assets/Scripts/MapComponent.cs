@@ -35,7 +35,7 @@ namespace Pandora
         List<GameObject> debug = new List<GameObject> {};
 
         void OnGUI() {
-            if (debugHitboxes) engine.DrawDebugGUI();
+            if (debugHitboxes) engine?.DrawDebugGUI();
         }
 
         public void Awake()
@@ -203,29 +203,6 @@ namespace Pandora
                     timeSinceLastStep = 0;
                 }
             }
-
-
-            /*foreach (var bounds in engine?.DrawDebugGUI()) {
-                var canvasObject = new GameObject();
-                var canvas = canvasObject.AddComponent<Canvas>();
-
-                canvas.renderMode = RenderMode.WorldSpace;
-
-                var image = new GameObject();
-                
-                image.transform.parent = canvasObject.transform;
-
-                image.AddComponent<Image>();
-
-                var imageComponent = image.GetComponent<Image>();
-
-                var size = engine.PhysicsToWorld(new Vector2Int(bounds.Width, bounds.Height));
-
-                image.transform.position = engine.PhysicsToWorld(bounds.LowerLeft);
-                imageComponent.rectTransform.sizeDelta = new Vector2(size.x, size.y);
-
-                image.AddComponent<Outline>();
-            }*/
         }
 
         public void DestroyPuppet()

@@ -104,7 +104,6 @@ namespace Pandora.Engine
                         continue;
                     }
 
-
                     if (first.CollisionCallback != null)
                     {
                         first.CollisionCallback.Collided(second);
@@ -168,8 +167,6 @@ namespace Pandora.Engine
             foreach (var entity in entities)
             {
                 var boxBounds = GetEntityBounds(entity);
-
-                Debug.Log($"PhysicsToWorld {PhysicsToWorld(new Vector2Int(boxBounds.Width, boxBounds.Height))}");
 
                 var rect = Rect.zero;
 
@@ -284,12 +281,12 @@ namespace Pandora.Engine
 
             var physicsLowerRightBounds = entity.Position;
 
-            physicsLowerRightBounds.x -= Mathf.FloorToInt(physicsExtents.x / 2);
+            physicsLowerRightBounds.x += Mathf.FloorToInt(physicsExtents.x / 2);
             physicsLowerRightBounds.y -= Mathf.FloorToInt(physicsExtents.y / 2);
 
             var physicsLowerLeftBounds = entity.Position;
 
-            physicsLowerLeftBounds.x += Mathf.FloorToInt(physicsExtents.x / 2);
+            physicsLowerLeftBounds.x -= Mathf.FloorToInt(physicsExtents.x / 2);
             physicsLowerLeftBounds.y -= Mathf.FloorToInt(physicsExtents.y / 2);
 
             return new BoxBounds
