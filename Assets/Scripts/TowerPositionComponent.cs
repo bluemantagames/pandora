@@ -30,10 +30,24 @@ namespace Pandora
             }
         }
 
+        public GridCell GetTowerCenter() {
+            if (towerPosition == TowerPosition.TopLeft || towerPosition == TowerPosition.TopRight) {
+                return new GridCell(position.x + 1, position.y + 1);
+            } else if (towerPosition == TowerPosition.BottomLeft || towerPosition == TowerPosition.BottomRight) {
+                return new GridCell(position.x + 1, position.y + 1);
+            } else if (towerPosition == TowerPosition.BottomMiddle) {
+                return new GridCell(position.x + 2, position.y + 2);
+            } else if (towerPosition == TowerPosition.TopMiddle) {
+                return new GridCell(position.x + 2, position.y + 2);
+            } else {
+                return towerCell;
+            }
+        }
+
         void Start() {
             towerCell = new GridCell(position);
 
-            towerEntity = GetComponent<TowerCombatBehaviour>().map.engine.AddEntity(gameObject, 0f, towerCell, true);
+            towerEntity = GetComponent<TowerCombatBehaviour>().map.engine.AddEntity(gameObject, 0f, GetTowerCenter(), true);
 
             towerEntity.IsStructure = true;
         }

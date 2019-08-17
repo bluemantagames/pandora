@@ -274,18 +274,23 @@ namespace Pandora.Engine
 
             var physicsUpperLeftBounds = entity.Position;
 
-            physicsUpperLeftBounds.y += Mathf.FloorToInt(physicsExtents.y);
+            physicsUpperLeftBounds.x -= Mathf.FloorToInt(physicsExtents.x / 2);
+            physicsUpperLeftBounds.y += Mathf.FloorToInt(physicsExtents.y / 2);
 
             var physicsUpperRightBounds = entity.Position;
 
-            physicsUpperRightBounds.x += Mathf.FloorToInt(physicsExtents.x);
-            physicsUpperRightBounds.y += Mathf.FloorToInt(physicsExtents.y);
+            physicsUpperRightBounds.y += Mathf.FloorToInt(physicsExtents.y / 2);
+            physicsUpperRightBounds.x += Mathf.FloorToInt(physicsExtents.x / 2);
 
             var physicsLowerRightBounds = entity.Position;
 
-            physicsLowerRightBounds.x += Mathf.FloorToInt(physicsExtents.x);
+            physicsLowerRightBounds.x -= Mathf.FloorToInt(physicsExtents.x / 2);
+            physicsLowerRightBounds.y -= Mathf.FloorToInt(physicsExtents.y / 2);
 
             var physicsLowerLeftBounds = entity.Position;
+
+            physicsLowerLeftBounds.x += Mathf.FloorToInt(physicsExtents.x / 2);
+            physicsLowerLeftBounds.y -= Mathf.FloorToInt(physicsExtents.y / 2);
 
             return new BoxBounds
             {
