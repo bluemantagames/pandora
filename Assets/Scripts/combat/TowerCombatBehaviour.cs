@@ -94,7 +94,7 @@ namespace Pandora.Combat
                     currentTarget = closestUnit;
                     targetLifeComponent = currentTarget.GetComponent<LifeComponent>();
 
-                    AttackEnemy(new Enemy(currentTarget));
+                    AttackEnemy(new Enemy(currentTarget), 0);
                 }
             }
             else if (targetLifeComponent != null && targetLifeComponent.isDead)
@@ -109,12 +109,12 @@ namespace Pandora.Combat
                 {
                     lastAttackTimeLapse = 0f;
 
-                    AttackEnemy(new Enemy(currentTarget));
+                    AttackEnemy(new Enemy(currentTarget), 0);
                 }
             }
         }
 
-        public void AttackEnemy(Enemy target)
+        public void AttackEnemy(Enemy target, int timeLapse)
         {
             if (currentTarget == null) return;
 

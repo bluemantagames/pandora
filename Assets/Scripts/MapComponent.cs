@@ -186,7 +186,7 @@ namespace Pandora
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
-                engine.Process(Math.Max((uint)Mathf.RoundToInt(Time.deltaTime * 1000), 10));
+                engine.Process(Math.Max((uint)Mathf.RoundToInt(Time.deltaTime * 1000), 5));
             }
             else
             {

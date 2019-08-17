@@ -8,7 +8,7 @@ namespace Pandora.Engine
 {
     public class PandoraEngine
     {
-        int minTick = 5; // milliseconds, minimum tick
+        int tickTime = 5; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         List<EngineEntity> entities = new List<EngineEntity> { };
 
@@ -22,7 +22,7 @@ namespace Pandora.Engine
 
         public void Process(uint msLapsed)
         {
-            var ticksNum = msLapsed / minTick;
+            var ticksNum = msLapsed / tickTime;
 
             totalElapsed += msLapsed;
 
@@ -36,7 +36,7 @@ namespace Pandora.Engine
 
         public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, GridCell position, bool isRigid)
         {
-            var speed = Mathf.FloorToInt((cellPerSecond * UnitsPerCell / 1000) * minTick);
+            var speed = Mathf.FloorToInt((cellPerSecond * UnitsPerCell / 1000) * tickTime);
 
             Debug.Log($"Assigning speed {speed}");
 
@@ -157,7 +157,7 @@ namespace Pandora.Engine
 
                 if (unitBehaviour != null)
                 {
-                    unitBehaviour.UnitUpdate();
+                    unitBehaviour.UnitUpdate(tickTime);
                 }
             }
         }

@@ -9,7 +9,11 @@ namespace Pandora.Combat
     {
         public float damage = 10f;
         GameObject target = null;
+        int timeSinceLastDamage = 0; // ms
+        bool isBackswinging = true;
+        public int attackCooldownMs = 500, backswingMs = 400;
         public bool isAttacking { get; private set; } = false;
+        public string animationStateName;
 
         public CombatType combatType
         {
@@ -20,17 +24,34 @@ namespace Pandora.Combat
         }
 
         /** Returns true if enemy has died */
-        public void AttackEnemy(Enemy target)
+        public void AttackEnemy(Enemy target, int timeLapse)
         {
+
+            var animator = GetComponent<Animator>();
+
             if (!isAttacking)
             {
                 this.target = target.enemy;
 
-                var animator = GetComponent<Animator>();
-
                 animator.SetBool("Attacking", true);
+                animator.speed = 0;
 
                 isAttacking = true;
+            }
+
+            animator.Play(animationStateName, 0, timeSinceLastDamage / 1000f);
+
+            timeSinceLastDamage += timeLapse;
+
+            if (timeSinceLastDamage >= attackCooldownMs && !isBackswinging) {
+                MeleeAssignDamage();
+
+                isBackswinging = true;
+            }
+
+            if (timeSinceLastDamage >= attackCooldownMs + backswingMs) {
+                timeSinceLastDamage = 0;
+                isBackswinging = false;
             }
         }
 

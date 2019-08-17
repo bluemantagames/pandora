@@ -24,17 +24,15 @@ namespace Pandora
         }
 
         // This is called from PandoraEngine every tick
-        public void UnitUpdate()
+        public void UnitUpdate(int timeLapsed)
         {
             if (lifeComponent.isDead) return; // Do nothing if dead
 
             var state = movementComponent.Move();
 
-            if (state.state == MovementStateEnum.EnemyApproached && !combatBehaviour.isAttacking)
+            if (state.state == MovementStateEnum.EnemyApproached)
             {
-                Debug.Log("Unit is now attacking");
-
-                combatBehaviour.AttackEnemy(state.enemy);
+                combatBehaviour.AttackEnemy(state.enemy, timeLapsed);
             }
             else if (state.state != MovementStateEnum.EnemyApproached && combatBehaviour.isAttacking)
             {

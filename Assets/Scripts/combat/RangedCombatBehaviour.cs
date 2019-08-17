@@ -12,7 +12,11 @@ namespace Pandora.Combat
         float damage = 10f;
         Enemy target = null;
         public bool isAttacking { get; private set; } = false;
+        public int attackCooldownMs = 600, backswingMs = 200;
         public GameObject projectile;
+        public string animationStateName;
+        int timeSinceLastProjectile = 0; // ms
+        bool isBackswinging = true;
 
         public CombatType combatType
         {
@@ -23,17 +27,34 @@ namespace Pandora.Combat
         }
 
         /** Returns true if enemy has died */
-        public void AttackEnemy(Enemy target)
+        public void AttackEnemy(Enemy target, int timeLapse)
         {
+            var animator = GetComponent<Animator>();
+
             if (!isAttacking)
             {
                 this.target = target;
 
-                var animator = GetComponent<Animator>();
-
                 animator.SetBool("Attacking", true);
+                animator.speed = 0;
 
                 isAttacking = true;
+            }
+
+
+            animator.Play(animationStateName, 0, timeSinceLastProjectile / 1000f);
+
+            timeSinceLastProjectile += timeLapse;
+
+            if (timeSinceLastProjectile >= attackCooldownMs && !isBackswinging) {
+                SpawnProjectile();
+
+                isBackswinging = true;
+            }
+
+            if (timeSinceLastProjectile >= attackCooldownMs + backswingMs) {
+                timeSinceLastProjectile = 0;
+                isBackswinging = false;
             }
         }
 
@@ -47,11 +68,9 @@ namespace Pandora.Combat
             animator.SetBool("Attacking", false);
         }
 
-        /** This method is called by an animation event */
         public void SpawnProjectile()
         {
             if (target == null) return;
-
 
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
 

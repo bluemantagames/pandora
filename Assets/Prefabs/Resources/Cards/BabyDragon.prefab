@@ -198,8 +198,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a9892cbc13c6c4ca1446776a4deac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackCooldownMs: 500
+  backswingMs: 400
   projectile: {fileID: 5687362912629012028, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
     type: 3}
+  animationStateName: AttackingDragon
 --- !u!61 &4143209966792787441
 BoxCollider2D:
   m_ObjectHideFlags: 0
