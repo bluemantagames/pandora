@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aggroRange: 3
-  speed: 10
+  speed: 1
   map: {fileID: 0}
 --- !u!114 &3519887656195453972
 MonoBehaviour:
@@ -213,7 +213,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.02475059, y: 0.058783054}
+  m_Offset: {x: 0.0160954, y: 0.06794882}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -224,7 +224,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.67184234, y: 0.79389095}
+  m_Size: {x: 0.63180685, y: 0.6871309}
   m_EdgeRadius: 0
 --- !u!1 &1545008801043616799
 GameObject:
@@ -284,7 +284,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1000
   m_TargetDisplay: 0
 --- !u!114 &8719008568835716305
 MonoBehaviour:
@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 8990846617986895606}
   - component: {fileID: 6092933367350342116}
   - component: {fileID: 8837844330471432971}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Healthbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,7 +413,7 @@ GameObject:
   - component: {fileID: 322036106186310117}
   - component: {fileID: 9015842578933355138}
   - component: {fileID: 4075700918850063051}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Healthbar mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}

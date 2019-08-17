@@ -20,7 +20,7 @@ namespace Pandora.Combat
 
         public void Collided(EngineEntity other)
         {
-            Debug.Log("Collided with " + other);
+            Debug.Log("Collided with " + other.GameObject);
 
             if (other.GameObject == target.enemy)
             {

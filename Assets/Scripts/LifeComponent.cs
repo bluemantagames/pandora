@@ -22,12 +22,6 @@ namespace Pandora
             maxLife = lifeValue;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         public void AssignDamage(float value)
         {
             lifeValue -= value;

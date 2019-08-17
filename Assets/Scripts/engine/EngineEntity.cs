@@ -10,6 +10,7 @@ namespace Pandora.Engine {
         public IEnumerator<Vector2Int> Path;
         public GameObject GameObject;
         public bool IsRigid = true; // whether the entity should move on collisions
+        public bool IsStructure = false;
         public CollisionCallback CollisionCallback;
         public PandoraEngine Engine;
         public int Layer = 1;
@@ -34,7 +35,7 @@ namespace Pandora.Engine {
         }
 
         public Vector2 GetWorldPosition() {
-            return Engine.PhysicsToWorld(Position);
+            return Engine.PhysicsToMap(Position);
         }
     }
 }

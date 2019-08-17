@@ -84,9 +84,7 @@ namespace Pandora.Movement
                 AdvancePosition(currentPosition);
             }
 
-            var worldPosition = engine.PhysicsToWorld(engineEntity.Position);
-
-            transform.position = worldPosition;
+            transform.position = engineEntity.GetWorldPosition();
 
             return new MovementState(null, MovementStateEnum.Moving);
         }

@@ -77,9 +77,9 @@ namespace Pandora.Combat
         }
 
         public void ProjectileCollided() {
-            var lifeComponent = target.enemy.GetComponent<LifeComponent>();
+            var lifeComponent = target?.enemy.GetComponent<LifeComponent>();
 
-            lifeComponent.AssignDamage(damage);
+            lifeComponent?.AssignDamage(damage);
         }
 
         public void OnDead() {}

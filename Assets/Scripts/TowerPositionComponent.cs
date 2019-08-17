@@ -34,6 +34,8 @@ namespace Pandora
             towerCell = new GridCell(position);
 
             towerEntity = GetComponent<TowerCombatBehaviour>().map.engine.AddEntity(gameObject, 0f, towerCell, true);
+
+            towerEntity.IsStructure = true;
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Pandora;
 
 namespace Pandora.Engine
 {
@@ -92,10 +93,17 @@ namespace Pandora.Engine
                     var secondBox = GetEntityBounds(second);
 
                     // continue if they don't collide
-                    if (first == second || !firstBox.Collides(secondBox) || first.Layer != second.Layer)
+                    var notCollision =
+                        (!first.IsRigid && !second.IsRigid) || // there must be one rigid object
+                        first == second || // entity can't collide with itself
+                        !firstBox.Collides(secondBox) || // boxes must collide
+                        !CheckLayerCollision(first.Layer, second.Layer); // layer must be compatible for collisions
+
+                    if (notCollision)
                     {
                         continue;
                     }
+
 
                     if (first.CollisionCallback != null)
                     {
@@ -131,7 +139,7 @@ namespace Pandora.Engine
                         direction.y = 1;
                     }
 
-                    if (first.IsRigid && second.IsRigid) // resolve collision if both objects are rigid
+                    if (first.IsRigid && second.IsRigid && !moved.IsStructure) // resolve collision if both objects are rigid and we don't move a structure hitbox
                     {
                         while (firstBox.Collides(secondBox)) // there probably is a math way to do this without a loop
                         {
@@ -155,6 +163,25 @@ namespace Pandora.Engine
             }
         }
 
+        public void DrawDebugGUI()
+        {
+            foreach (var entity in entities)
+            {
+                var boxBounds = GetEntityBounds(entity);
+
+                Debug.Log($"PhysicsToWorld {PhysicsToWorld(new Vector2Int(boxBounds.Width, boxBounds.Height))}");
+
+                var rect = Rect.zero;
+
+                rect.xMin = Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.UpperLeft)).x;
+                rect.yMin = ScreenToGUISpace(Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.UpperLeft))).y;
+                rect.xMax = Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.UpperRight)).x;
+                rect.yMax = ScreenToGUISpace(Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.LowerLeft))).y;
+
+                GUI.Box(rect, GUIContent.none);
+            }
+        }
+
         public void RemoveEntity(EngineEntity entity)
         {
             entities.Remove(entity);
@@ -165,7 +192,7 @@ namespace Pandora.Engine
             var entity1Bounds = GetEntityBounds(entity1);
             var entity2Bounds = GetEntityBounds(entity2);
 
-            var distance =  Math.Max(
+            var distance = Math.Max(
                 Math.Abs(entity1Bounds.Center.x - entity2Bounds.Center.x) - ((entity1Bounds.Width + entity2Bounds.Width) / 2),
                 Math.Abs(entity1Bounds.Center.y - entity2Bounds.Center.y) - ((entity1Bounds.Height + entity2Bounds.Height) / 2)
             );
@@ -193,6 +220,22 @@ namespace Pandora.Engine
             );
         }
 
+        Vector2 ScreenToGUISpace(Vector2 screen)
+        {
+            return new Vector2(screen.x, Screen.height - screen.y);
+        }
+
+        Rect ScreenToGUIRect(Rect rect)
+        {
+            return new Rect(ScreenToGUISpace(rect.position), rect.size);
+        }
+
+        public Vector2 PhysicsToMap(Vector2Int physics)
+        {
+            return PhysicsToWorld(physics) + (Vector2)Map.transform.position;
+        }
+
+
         public Vector2 PhysicsToWorld(Vector2Int physics)
         {
             var xWorldBounds = Map.cellWidth * Map.mapSizeX;
@@ -202,8 +245,8 @@ namespace Pandora.Engine
             var yPhysicsBounds = UnitsPerCell * Map.mapSizeY;
 
             return new Vector2(
-                Map.transform.position.x + (xWorldBounds * physics.x) / xPhysicsBounds,
-                Map.transform.position.y + (yWorldBounds * physics.y) / yPhysicsBounds
+                (xWorldBounds * physics.x) / xPhysicsBounds,
+                (yWorldBounds * physics.y) / yPhysicsBounds
             );
         }
 
@@ -227,7 +270,7 @@ namespace Pandora.Engine
         BoxBounds GetEntityBounds(EngineEntity entity)
         {
             var worldBounds = entity.GameObject.GetComponent<BoxCollider2D>().bounds;
-            var physicsExtents = WorldToPhysics(worldBounds.extents);
+            var physicsExtents = WorldToPhysics(worldBounds.size);
 
             var physicsUpperLeftBounds = entity.Position;
 
@@ -251,6 +294,13 @@ namespace Pandora.Engine
                 LowerLeft = physicsLowerLeftBounds,
                 LowerRight = physicsLowerRightBounds
             };
+        }
+
+        bool CheckLayerCollision(int layer1, int layer2)
+        {
+            return
+                layer1 == layer2 ||
+                (layer1 == Constants.PROJECTILES_LAYER || layer2 == Constants.PROJECTILES_LAYER);
         }
     }
 
