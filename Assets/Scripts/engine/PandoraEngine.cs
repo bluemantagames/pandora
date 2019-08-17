@@ -194,10 +194,7 @@ namespace Pandora.Engine
                 Math.Abs(entity1Bounds.Center.y - entity2Bounds.Center.y) - ((entity1Bounds.Height + entity2Bounds.Height) / 2)
             );
 
-            return Math.Max(
-                Math.Abs(entity1Bounds.Center.x - entity2Bounds.Center.x) - (entity1Bounds.Width + entity2Bounds.Width) / 2,
-                Math.Abs(entity1Bounds.Center.y - entity2Bounds.Center.y) - (entity1Bounds.Height + entity2Bounds.Height) / 2
-            ) <= (gridCellRange * UnitsPerCell);
+            return distance <= (gridCellRange * UnitsPerCell);
         }
 
         // converts a world point to a physics engine point using linear interpolation 
@@ -294,7 +291,8 @@ namespace Pandora.Engine
                 UpperLeft = physicsUpperLeftBounds,
                 UpperRight = physicsUpperRightBounds,
                 LowerLeft = physicsLowerLeftBounds,
-                LowerRight = physicsLowerRightBounds
+                LowerRight = physicsLowerRightBounds,
+                Center = entity.Position
             };
         }
 

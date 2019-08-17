@@ -24,6 +24,10 @@ namespace Pandora.Engine {
             Path = Bresenham.GetEnumerator(Position, physicsTarget);
         }
 
+        public void SetEmptyPath() {
+            Path = null;
+        }
+
         // This method actually sets the target at the _current_ entity position,
         // it doesn't follow. TODO: Make it follow
         public void SetTarget(EngineEntity entity) {

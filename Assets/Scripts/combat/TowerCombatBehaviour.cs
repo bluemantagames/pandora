@@ -140,12 +140,6 @@ namespace Pandora.Combat
             isAttacking = false;
         }
 
-        /** Checks whether a position is in attack range, not used */
-        public bool IsInRange(GridCell currentPosition, GridCell targetPosition)
-        {
-            return false;
-        }
-
         /** Called if a launched projectile collided */
         public void ProjectileCollided()
         {

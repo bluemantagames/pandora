@@ -22,11 +22,6 @@ namespace Pandora.Combat
             }
         }
 
-        public bool IsInRange(GridCell currentPosition, GridCell targetPosition)
-        {
-            return Vector2.Distance(currentPosition.vector, targetPosition.vector) <= 11f;
-        }
-
         /** Returns true if enemy has died */
         public void AttackEnemy(Enemy target)
         {

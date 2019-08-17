@@ -64,7 +64,9 @@ namespace Pandora.Movement
             }
 
             // if you're attacking an enemy: keep attacking
-            if (targetEnemy != null && combatBehaviour.IsInRange(currentPosition, targetEnemy.enemyCell)) {
+            if (targetEnemy != null && engine.IsInRange(engineEntity, targetEnemy.enemyEntity, Mathf.RoundToInt(aggroRange))) {
+                engineEntity.SetEmptyPath();
+
                 return new MovementState(enemy, MovementStateEnum.EnemyApproached);
             }
 

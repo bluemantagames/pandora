@@ -1,5 +1,6 @@
 using UnityEngine;
 using Pandora.Movement;
+using Pandora.Engine;
 
 namespace Pandora
 {
@@ -20,6 +21,22 @@ namespace Pandora
                 {
                     return GameObject.Find("Arena").GetComponent<MapComponent>().GetCell(enemy);
                 }
+            }
+        }
+
+        public EngineEntity enemyEntity {
+            get {
+                var towerPosition = enemy.GetComponent<TowerPositionComponent>();
+
+                if (towerPosition != null)
+                {
+                    return towerPosition.towerEntity;
+                }
+                else
+                {
+                    return enemy.GetComponent<MovementComponent>().engineEntity;;
+                }
+
             }
         }
 
