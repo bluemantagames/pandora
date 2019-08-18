@@ -141,8 +141,6 @@ namespace Pandora.Movement
             // get the last item in the queue
             while ((item = evaluatingPosition.points.Last()) != end)
             {
-                var positionsCount = evaluatingPosition.points.Count();
-
                 // check all surrounding positions
                 for (var x = -1f; x <= 1f; x++)
                 {

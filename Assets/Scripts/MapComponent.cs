@@ -239,7 +239,7 @@ namespace Pandora
 
             if (team != TeamComponent.assignedTeam)
             { // flip Y if opponent
-                cellY = mapSizeY - 1 - cellY;
+                cellY = mapSizeY - cellY;
             }
 
             var cardPosition = GridCellToWorldPosition(new GridCell(cellX, cellY));
@@ -254,7 +254,7 @@ namespace Pandora
             if (movement != null) movement.map = this;
             if (projectileSpell != null) projectileSpell.map = this;
 
-            var engineEntity = engine.AddEntity(cardObject, movement.speed, new GridCell(cellX, cellY), true, null);
+            var engineEntity = engine.AddEntity(cardObject, movement.speed, new GridCell(cellX, cellY), true, timestamp);
 
             movement.engine = engine;
             movement.engineEntity = engineEntity;

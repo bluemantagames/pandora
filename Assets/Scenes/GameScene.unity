@@ -789,7 +789,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.7068766, y: 1.1487417}
+  m_Size: {x: 0.7390544, y: 1.288695}
   m_EdgeRadius: 0
 --- !u!50 &738133529
 Rigidbody2D:
@@ -1058,7 +1058,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapSizeX: 0
   mapSizeY: 0
-  debugHitboxes: 0
+  debugHitboxes: 1
   cellHeight: 0
   cellWidth: 0
   textObject: {fileID: 8625465531379632721, guid: c4b37cb968ea549479f17adeeb8d6051,
@@ -1868,7 +1868,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.6708121, y: 1.1715286}
+  m_Size: {x: 0.7390544, y: 1.288695}
   m_EdgeRadius: 0
 --- !u!1 &1604946658
 GameObject:
@@ -2756,7 +2756,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.7132162, y: 1.0887538}
+  m_Size: {x: 0.7390544, y: 1.288695}
   m_EdgeRadius: 0
 --- !u!1 &1899033999
 GameObject:
