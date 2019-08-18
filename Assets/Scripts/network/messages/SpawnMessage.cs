@@ -1,5 +1,6 @@
 using Pandora.Messages;
 using Google.Protobuf;
+using System;
 
 namespace Pandora.Network.Messages {
     public class SpawnMessage: Message {
@@ -7,6 +8,7 @@ namespace Pandora.Network.Messages {
         public int cellX;
         public int cellY;
         public int team;
+        public DateTime timestamp;
 
         public byte[] ToBytes(string matchToken) {
             var spawn = new Spawn {

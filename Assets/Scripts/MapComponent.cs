@@ -179,7 +179,7 @@ namespace Pandora
 
                         Debug.Log($"Received {spawn} - spawning unit");
 
-                        SpawnUnit(spawn.unitName, spawn.cellX, spawn.cellY, spawn.team);
+                        SpawnUnit(spawn.unitName, spawn.cellX, spawn.cellY, spawn.team, spawn.timestamp);
                     }
                 }
             }
@@ -227,11 +227,11 @@ namespace Pandora
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
-                SpawnUnit(cardName, (int)Math.Floor(mapCell.x), (int)Math.Floor(mapCell.y), team);
+                SpawnUnit(cardName, (int)Math.Floor(mapCell.x), (int)Math.Floor(mapCell.y), team, null);
             }
         }
 
-        public void SpawnUnit(string unitName, int cellX, int cellY, int team)
+        public void SpawnUnit(string unitName, int cellX, int cellY, int team, DateTime? timestamp)
         {
             Debug.Log($"Spawning {unitName} in {cellX}, {cellY}");
 
@@ -254,7 +254,7 @@ namespace Pandora
             if (movement != null) movement.map = this;
             if (projectileSpell != null) projectileSpell.map = this;
 
-            var engineEntity = engine.AddEntity(cardObject, movement.speed, new GridCell(cellX, cellY), true);
+            var engineEntity = engine.AddEntity(cardObject, movement.speed, new GridCell(cellX, cellY), true, null);
 
             movement.engine = engine;
             movement.engineEntity = engineEntity;

@@ -162,12 +162,12 @@ namespace Pandora.Network
                         if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
                         {
                             var spawnMessage =
-                                new SpawnMessage
-                                {
+                                new SpawnMessage {
                                     unitName = command.Spawn.UnitName,
                                     cellX = command.Spawn.X,
                                     cellY = command.Spawn.Y,
-                                    team = command.Spawn.Team
+                                    team = command.Spawn.Team,
+                                    timestamp = DateTimeOffset.FromUnixTimeSeconds((long) command.Timestamp).UtcDateTime
                                 };
 
                             commands.Add(spawnMessage);

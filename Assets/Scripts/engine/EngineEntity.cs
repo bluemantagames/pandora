@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace Pandora.Engine {
     // An entity inside the engine
@@ -14,6 +15,7 @@ namespace Pandora.Engine {
         public CollisionCallback CollisionCallback;
         public PandoraEngine Engine;
         public int Layer = 1;
+        public DateTime Timestamp;
 
         public void SetTarget(GridCell cell) {
             var physicsTarget = Engine.GridCellToPhysics(cell);

@@ -46,7 +46,7 @@ namespace Pandora.Combat
         // Start is called before the first frame update
         void Start()
         {
-            engineEntity = map.engine.AddEntity(gameObject, speed, map.WorldPositionToGridCell(transform.position), false);
+            engineEntity = map.engine.AddEntity(gameObject, speed, map.WorldPositionToGridCell(transform.position), false, null);
 
             engineEntity.CollisionCallback = this;
 

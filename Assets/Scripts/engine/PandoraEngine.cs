@@ -34,7 +34,7 @@ namespace Pandora.Engine
             }
         }
 
-        public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, GridCell position, bool isRigid)
+        public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, GridCell position, bool isRigid, DateTime? timestamp)
         {
             var speed = Mathf.FloorToInt((cellPerSecond * UnitsPerCell / 1000) * tickTime);
 
@@ -50,7 +50,8 @@ namespace Pandora.Engine
                 Direction = new Vector2Int(0, 0),
                 Engine = this,
                 IsRigid = isRigid,
-                Layer = gameObject.layer
+                Layer = gameObject.layer,
+                Timestamp = timestamp ?? DateTime.Now
             };
 
             entities.Add(entity);
@@ -118,10 +119,17 @@ namespace Pandora.Engine
                     EngineEntity moved;
 
                     // move away the entity with less speed
-                    if (first.Speed >= second.Speed)
+                    if (first.Speed > second.Speed)
                     {
                         direction = second.Position - first.Position;
                         moved = second;
+                    }
+                    else if (first.Speed == second.Speed) { // if speeds are equal, use server-generated timestamps to avoid non-deterministic behaviour
+                        moved = (first.Timestamp > second.Timestamp) ? first : second;
+
+                        var unmoved = (first.Timestamp > second.Timestamp) ? second : first;
+
+                        direction = moved.Position - unmoved.Position;
                     }
                     else
                     {

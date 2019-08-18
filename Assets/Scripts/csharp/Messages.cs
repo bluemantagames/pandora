@@ -27,24 +27,23 @@ namespace Pandora.Messages {
             "YW0YBCABKAUiFQoESm9pbhINCgV0b2tlbhgBIAEoCSJ8Cg5DbGllbnRFbnZl",
             "bG9wZRINCgV0b2tlbhgDIAEoCRIoCgVzcGF3bhgBIAEoCzIXLnBhbmRvcmEu",
             "bWVzc2FnZXMuU3Bhd25IABImCgRqb2luGAIgASgLMhYucGFuZG9yYS5tZXNz",
-            "YWdlcy5Kb2luSABCCQoHbWVzc2FnZSKXAQoOU2VydmVyRW52ZWxvcGUSKAoF",
-            "c3RhcnQYASABKAsyFy5wYW5kb3JhLm1lc3NhZ2VzLlN0YXJ0SAASKAoFc3Bh",
-            "d24YAiABKAsyFy5wYW5kb3JhLm1lc3NhZ2VzLlNwYXduSAASJgoEc3RlcBgD",
-            "IAEoCzIWLnBhbmRvcmEubWVzc2FnZXMuU3RlcEgAQgkKB21lc3NhZ2UiTwoE",
-            "U3RlcBIWCg50aW1lX3Bhc3NlZF9tcxgBIAEoDRIvCghjb21tYW5kcxgCIAMo",
-            "CzIdLnBhbmRvcmEubWVzc2FnZXMuU3RlcENvbW1hbmQiQgoLU3RlcENvbW1h",
-            "bmQSKAoFc3Bhd24YASABKAsyFy5wYW5kb3JhLm1lc3NhZ2VzLlNwYXduSABC",
-            "CQoHY29tbWFuZCIoCgVTdGFydBIMCgR0ZWFtGAEgASgFEhEKCXRpbWVzdGFt",
-            "cBgCIAEoBGIGcHJvdG8z"));
+            "YWdlcy5Kb2luSABCCQoHbWVzc2FnZSJtCg5TZXJ2ZXJFbnZlbG9wZRIoCgVz",
+            "dGFydBgBIAEoCzIXLnBhbmRvcmEubWVzc2FnZXMuU3RhcnRIABImCgRzdGVw",
+            "GAMgASgLMhYucGFuZG9yYS5tZXNzYWdlcy5TdGVwSABCCQoHbWVzc2FnZSJP",
+            "CgRTdGVwEhYKDnRpbWVfcGFzc2VkX21zGAEgASgNEi8KCGNvbW1hbmRzGAIg",
+            "AygLMh0ucGFuZG9yYS5tZXNzYWdlcy5TdGVwQ29tbWFuZCJVCgtTdGVwQ29t",
+            "bWFuZBIRCgl0aW1lc3RhbXAYAiABKAQSKAoFc3Bhd24YASABKAsyFy5wYW5k",
+            "b3JhLm1lc3NhZ2VzLlNwYXduSABCCQoHY29tbWFuZCIoCgVTdGFydBIMCgR0",
+            "ZWFtGAEgASgFEhEKCXRpbWVzdGFtcBgCIAEoBGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Spawn), global::Pandora.Messages.Spawn.Parser, new[]{ "UnitName", "X", "Y", "Team" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Join), global::Pandora.Messages.Join.Parser, new[]{ "Token" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.ClientEnvelope), global::Pandora.Messages.ClientEnvelope.Parser, new[]{ "Token", "Spawn", "Join" }, new[]{ "Message" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.ServerEnvelope), global::Pandora.Messages.ServerEnvelope.Parser, new[]{ "Start", "Spawn", "Step" }, new[]{ "Message" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.ServerEnvelope), global::Pandora.Messages.ServerEnvelope.Parser, new[]{ "Start", "Step" }, new[]{ "Message" }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Step), global::Pandora.Messages.Step.Parser, new[]{ "TimePassedMs", "Commands" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.StepCommand), global::Pandora.Messages.StepCommand.Parser, new[]{ "Spawn" }, new[]{ "Command" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.StepCommand), global::Pandora.Messages.StepCommand.Parser, new[]{ "Timestamp", "Spawn" }, new[]{ "Command" }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Start), global::Pandora.Messages.Start.Parser, new[]{ "Team", "Timestamp" }, null, null, null)
           }));
     }
@@ -618,9 +617,6 @@ namespace Pandora.Messages {
         case MessageOneofCase.Start:
           Start = other.Start.Clone();
           break;
-        case MessageOneofCase.Spawn:
-          Spawn = other.Spawn.Clone();
-          break;
         case MessageOneofCase.Step:
           Step = other.Step.Clone();
           break;
@@ -644,17 +640,6 @@ namespace Pandora.Messages {
       }
     }
 
-    /// <summary>Field number for the "spawn" field.</summary>
-    public const int SpawnFieldNumber = 2;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Pandora.Messages.Spawn Spawn {
-      get { return messageCase_ == MessageOneofCase.Spawn ? (global::Pandora.Messages.Spawn) message_ : null; }
-      set {
-        message_ = value;
-        messageCase_ = value == null ? MessageOneofCase.None : MessageOneofCase.Spawn;
-      }
-    }
-
     /// <summary>Field number for the "step" field.</summary>
     public const int StepFieldNumber = 3;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -671,7 +656,6 @@ namespace Pandora.Messages {
     public enum MessageOneofCase {
       None = 0,
       Start = 1,
-      Spawn = 2,
       Step = 3,
     }
     private MessageOneofCase messageCase_ = MessageOneofCase.None;
@@ -700,7 +684,6 @@ namespace Pandora.Messages {
         return true;
       }
       if (!object.Equals(Start, other.Start)) return false;
-      if (!object.Equals(Spawn, other.Spawn)) return false;
       if (!object.Equals(Step, other.Step)) return false;
       if (MessageCase != other.MessageCase) return false;
       return true;
@@ -710,7 +693,6 @@ namespace Pandora.Messages {
     public override int GetHashCode() {
       int hash = 1;
       if (messageCase_ == MessageOneofCase.Start) hash ^= Start.GetHashCode();
-      if (messageCase_ == MessageOneofCase.Spawn) hash ^= Spawn.GetHashCode();
       if (messageCase_ == MessageOneofCase.Step) hash ^= Step.GetHashCode();
       hash ^= (int) messageCase_;
       return hash;
@@ -727,10 +709,6 @@ namespace Pandora.Messages {
         output.WriteRawTag(10);
         output.WriteMessage(Start);
       }
-      if (messageCase_ == MessageOneofCase.Spawn) {
-        output.WriteRawTag(18);
-        output.WriteMessage(Spawn);
-      }
       if (messageCase_ == MessageOneofCase.Step) {
         output.WriteRawTag(26);
         output.WriteMessage(Step);
@@ -742,9 +720,6 @@ namespace Pandora.Messages {
       int size = 0;
       if (messageCase_ == MessageOneofCase.Start) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Start);
-      }
-      if (messageCase_ == MessageOneofCase.Spawn) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Spawn);
       }
       if (messageCase_ == MessageOneofCase.Step) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Step);
@@ -760,9 +735,6 @@ namespace Pandora.Messages {
       switch (other.MessageCase) {
         case MessageOneofCase.Start:
           Start = other.Start;
-          break;
-        case MessageOneofCase.Spawn:
-          Spawn = other.Spawn;
           break;
         case MessageOneofCase.Step:
           Step = other.Step;
@@ -786,15 +758,6 @@ namespace Pandora.Messages {
             }
             input.ReadMessage(subBuilder);
             Start = subBuilder;
-            break;
-          }
-          case 18: {
-            global::Pandora.Messages.Spawn subBuilder = new global::Pandora.Messages.Spawn();
-            if (messageCase_ == MessageOneofCase.Spawn) {
-              subBuilder.MergeFrom(Spawn);
-            }
-            input.ReadMessage(subBuilder);
-            Spawn = subBuilder;
             break;
           }
           case 26: {
@@ -982,6 +945,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public StepCommand(StepCommand other) : this() {
+      timestamp_ = other.timestamp_;
       switch (other.CommandCase) {
         case CommandOneofCase.Spawn:
           Spawn = other.Spawn.Clone();
@@ -993,6 +957,17 @@ namespace Pandora.Messages {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public StepCommand Clone() {
       return new StepCommand(this);
+    }
+
+    /// <summary>Field number for the "timestamp" field.</summary>
+    public const int TimestampFieldNumber = 2;
+    private ulong timestamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong Timestamp {
+      get { return timestamp_; }
+      set {
+        timestamp_ = value;
+      }
     }
 
     /// <summary>Field number for the "spawn" field.</summary>
@@ -1037,6 +1012,7 @@ namespace Pandora.Messages {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (Timestamp != other.Timestamp) return false;
       if (!object.Equals(Spawn, other.Spawn)) return false;
       if (CommandCase != other.CommandCase) return false;
       return true;
@@ -1045,6 +1021,7 @@ namespace Pandora.Messages {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (Timestamp != 0UL) hash ^= Timestamp.GetHashCode();
       if (commandCase_ == CommandOneofCase.Spawn) hash ^= Spawn.GetHashCode();
       hash ^= (int) commandCase_;
       return hash;
@@ -1061,11 +1038,18 @@ namespace Pandora.Messages {
         output.WriteRawTag(10);
         output.WriteMessage(Spawn);
       }
+      if (Timestamp != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(Timestamp);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (Timestamp != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(Timestamp);
+      }
       if (commandCase_ == CommandOneofCase.Spawn) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Spawn);
       }
@@ -1076,6 +1060,9 @@ namespace Pandora.Messages {
     public void MergeFrom(StepCommand other) {
       if (other == null) {
         return;
+      }
+      if (other.Timestamp != 0UL) {
+        Timestamp = other.Timestamp;
       }
       switch (other.CommandCase) {
         case CommandOneofCase.Spawn:
@@ -1100,6 +1087,10 @@ namespace Pandora.Messages {
             }
             input.ReadMessage(subBuilder);
             Spawn = subBuilder;
+            break;
+          }
+          case 16: {
+            Timestamp = input.ReadUInt64();
             break;
           }
         }
