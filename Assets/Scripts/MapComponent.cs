@@ -19,6 +19,7 @@ namespace Pandora
         int bottomMapSizeY = 13;
         public int mapSizeX;
         public int mapSizeY;
+        public Vector2 worldMapSize;
         public bool debugHitboxes = false;
         Vector2 bottomMapSize;
         GameObject lastPuppet;
@@ -32,9 +33,10 @@ namespace Pandora
 
         public GameObject textObject;
 
-        List<GameObject> debug = new List<GameObject> {};
+        List<GameObject> debug = new List<GameObject> { };
 
-        void OnGUI() {
+        void OnGUI()
+        {
             if (debugHitboxes) engine?.DrawDebugGUI();
         }
 
@@ -42,6 +44,8 @@ namespace Pandora
         {
             mapSizeX = bottomMapSizeX;
             mapSizeY = (bottomMapSizeY * 2) + 1;
+
+            worldMapSize = new Vector2(mapSizeX * cellWidth, mapSizeY * cellHeight);
 
             bottomMapSize = new Vector2(bottomMapSizeX, bottomMapSizeY);
 
@@ -158,7 +162,7 @@ namespace Pandora
         {
             StepMessage step = null;
 
-            timeSinceLastStep += (uint) Mathf.FloorToInt(Time.deltaTime * 1000);
+            timeSinceLastStep += (uint)Mathf.FloorToInt(Time.deltaTime * 1000);
 
             if (NetworkControllerSingleton.instance.stepsQueue.TryDequeue(out step))
             {
@@ -237,13 +241,12 @@ namespace Pandora
 
             var card = Resources.Load($"Cards/{unitName}") as GameObject;
 
-            if (team != TeamComponent.assignedTeam)
-            { // flip Y if opponent
+            if (team == TeamComponent.topTeam)
+            { // flip Y if top team
                 cellY = mapSizeY - cellY;
             }
 
             var cardPosition = GridCellToWorldPosition(new GridCell(cellX, cellY));
-
             var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
 
             cardObject.GetComponent<TeamComponent>().team = team;
@@ -339,17 +342,18 @@ namespace Pandora
 
             var enemyPosition = GetEnemyInRange(unit, cell, team, aggroRange)?.enemyCell;
 
-            var isOpponent = unit.GetComponent<TeamComponent>().IsOpponent();
+            var teamComponent = unit.GetComponent<TeamComponent>();
+            var isOpponent = teamComponent.IsOpponent();
 
             TowerPosition targetTowerPosition;
 
             if (cellVector.x < bottomMapSizeX / 2)
             {
-                targetTowerPosition = isOpponent ? TowerPosition.BottomLeft : TowerPosition.TopLeft;
+                targetTowerPosition = teamComponent.IsTop() ? TowerPosition.BottomLeft : TowerPosition.TopLeft;
             }
             else
             {
-                targetTowerPosition = isOpponent ? TowerPosition.BottomRight : TowerPosition.TopRight;
+                targetTowerPosition = teamComponent.IsTop() ? TowerPosition.BottomRight : TowerPosition.TopRight;
             }
 
             // if no enemies found and not on a lane, go back on a lane
@@ -380,7 +384,7 @@ namespace Pandora
                     increment = 1f;
                 }
 
-                var yIncrement = isOpponent ? -1 : 1;
+                var yIncrement = (teamComponent.team == TeamComponent.topTeam) ? -1 : 1;
 
                 while (targetLanePosition.x != xTarget)
                 {
@@ -396,8 +400,9 @@ namespace Pandora
             foreach (var component in GetComponentsInChildren<TowerPositionComponent>())
             {
                 var combatBehaviour = component.gameObject.GetComponent<TowerCombatBehaviour>();
+                var towerTeamComponent = component.gameObject.GetComponent<TowerTeamComponent>();
 
-                if (combatBehaviour.isMiddle && combatBehaviour.isOpponent != isOpponent)
+                if (combatBehaviour.isMiddle && towerTeamComponent.engineTeam != teamComponent.team)
                 {
                     middleTowerPositionComponent = component;
                 }
@@ -495,14 +500,15 @@ namespace Pandora
             canvas.GetComponentInChildren<Text>().text = text;
         }
 
-        private EngineEntity GetEngineEntity(GameObject gameObject) {
+        private EngineEntity GetEngineEntity(GameObject gameObject)
+        {
             EngineEntity entity;
 
             var towerComponent = gameObject.GetComponent<TowerPositionComponent>();
 
             if (towerComponent != null)
             {
-                entity = towerComponent.towerEntity;
+                entity = towerComponent.TowerEntity;
             }
             else
             {
