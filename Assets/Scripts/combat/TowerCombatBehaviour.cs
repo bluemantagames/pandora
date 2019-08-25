@@ -71,8 +71,9 @@ namespace Pandora.Combat
                 {
                     var team = unit.GetComponent<TeamComponent>().team;
 
-                    if (isOpponent && team != TeamComponent.assignedTeam) continue;
-                    if (!isOpponent && team == TeamComponent.assignedTeam) continue;
+                    var shouldAttack = teamComponent.engineTeam != team;
+
+                    if (!shouldAttack) continue;
 
                     var distance = Vector2.Distance(
                         worldTowerPosition, unit.transform.position

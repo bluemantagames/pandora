@@ -60,13 +60,15 @@ namespace Pandora.Combat
             var direction = (target.enemy.transform.position - transform.position).normalized;
             var angle = Vector2.SignedAngle(Vector2.up, direction);
 
+            var shouldBeFlipped = TeamComponent.assignedTeam == TeamComponent.topTeam;
+
             Debug.Log($"Angling projectiles at {angle}");
 
             // rotate the projectile towards the target
             transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
             // Move the projectile forward
-            transform.position = engineEntity.GetWorldPosition();
+            transform.position = shouldBeFlipped ? engineEntity.GetFlippedWorldPosition() : engineEntity.GetWorldPosition();
 
             EngineEntity targetEntity;
 
@@ -74,7 +76,7 @@ namespace Pandora.Combat
 
             if (towerComponent != null)
             {
-                targetEntity = towerComponent.towerEntity;
+                targetEntity = towerComponent.TowerEntity;
             }
             else
             {

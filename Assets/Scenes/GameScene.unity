@@ -1058,7 +1058,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapSizeX: 0
   mapSizeY: 0
-  debugHitboxes: 1
+  worldMapSize: {x: 0, y: 0}
+  debugHitboxes: 0
   cellHeight: 0
   cellWidth: 0
   textObject: {fileID: 8625465531379632721, guid: c4b37cb968ea549479f17adeeb8d6051,

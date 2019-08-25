@@ -43,5 +43,9 @@ namespace Pandora.Engine {
         public Vector2 GetWorldPosition() {
             return Engine.PhysicsToMap(Position);
         }
+
+        public Vector2 GetFlippedWorldPosition() {
+            return Engine.FlippedPhysicsToMap(Position);
+        }
     }
 }

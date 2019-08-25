@@ -4,22 +4,44 @@ namespace Pandora
 
     public class TowerTeamComponent : TeamComponent
     {
-        public override int team
+        public int engineTeam // this represents the engine entity team
         {
             get
             {
-                var currentTeam = TeamComponent.assignedTeam;
+                var positionComponent = GetComponent<TowerPositionComponent>().towerPosition;
+                var opposingTeam = (assignedTeam == topTeam) ? bottomTeam : topTeam;
 
-                return GetComponent<TowerCombatBehaviour>().isOpponent ? currentTeam + 1 : currentTeam;
+                int team = assignedTeam;
+
+                if ((team == topTeam && positionComponent.IsBottom()) || (team == bottomTeam && positionComponent.IsTop()))
+                {
+                    team = opposingTeam;
+                }
+
+                return team;
             }
 
             set { }
         }
 
-        public override bool IsOpponent()
+        public override int team // this represents the rendered-world tower team
         {
-            return GetComponent<TowerCombatBehaviour>().isOpponent;
-        }
+            get
+            {
+                var positionComponent = GetComponent<TowerPositionComponent>().towerPosition;
+                var opposingTeam = (assignedTeam == topTeam) ? bottomTeam : topTeam;
 
+                int team = assignedTeam;
+
+                if (positionComponent.IsTop())
+                {
+                    team = opposingTeam;
+                }
+
+                return team;
+            }
+
+            set { }
+        }
     }
 }

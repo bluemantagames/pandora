@@ -55,7 +55,8 @@ namespace Pandora.Movement
             }
 
             // remove targeted enemy if they are dead and recalculate pathing
-            if (targetEnemy != null && targetEnemy.enemy.GetComponent<LifeComponent>().isDead) {
+            if (targetEnemy != null && targetEnemy.enemy.GetComponent<LifeComponent>().isDead)
+            {
                 Debug.Log("Target down");
 
                 targetEnemy = null;
@@ -64,7 +65,8 @@ namespace Pandora.Movement
             }
 
             // if you're attacking an enemy: keep attacking
-            if (targetEnemy != null && engine.IsInRange(engineEntity, targetEnemy.enemyEntity, Mathf.RoundToInt(aggroRange))) {
+            if (targetEnemy != null && engine.IsInRange(engineEntity, targetEnemy.enemyEntity, Mathf.RoundToInt(aggroRange)))
+            {
                 engineEntity.SetEmptyPath();
 
                 return new MovementState(enemy, MovementStateEnum.EnemyApproached);
@@ -86,7 +88,12 @@ namespace Pandora.Movement
                 AdvancePosition(currentPosition);
             }
 
-            transform.position = engineEntity.GetWorldPosition();
+            var worldPosition = 
+                (TeamComponent.assignedTeam == TeamComponent.bottomTeam) ?
+                    engineEntity.GetWorldPosition() :
+                    engineEntity.GetFlippedWorldPosition();
+
+            transform.position = worldPosition;
 
             return new MovementState(null, MovementStateEnum.Moving);
         }

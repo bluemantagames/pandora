@@ -30,7 +30,7 @@ namespace Pandora
 
                 if (towerPosition != null)
                 {
-                    return towerPosition.towerEntity;
+                    return towerPosition.TowerEntity;
                 }
                 else
                 {

@@ -238,6 +238,19 @@ namespace Pandora.Engine
         }
 
 
+        /// <summary>Flips the position around the map, used for e.g. render units when top team</summary>
+        public Vector2 FlippedPhysicsToMap(Vector2Int physics)
+        {
+            var yPhysicsBounds = UnitsPerCell * Map.mapSizeY;
+
+            var flippedPhysics = physics;
+
+            flippedPhysics.y = yPhysicsBounds - flippedPhysics.y;
+
+            return PhysicsToMap(flippedPhysics);
+        }
+
+
         public Vector2 PhysicsToWorld(Vector2Int physics)
         {
             var xWorldBounds = Map.cellWidth * Map.mapSizeX;
