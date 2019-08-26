@@ -38,7 +38,7 @@ namespace Pandora.Engine
         {
             var speed = Mathf.FloorToInt((cellPerSecond * UnitsPerCell / 1000) * tickTime);
 
-            Debug.Log($"Assigning speed {speed}");
+            Debug.Log($"Assigning speed {speed} in {position}");
 
             var physicsPosition = GridCellToPhysics(position) + (new Vector2Int(UnitsPerCell / 2, UnitsPerCell / 2));
 

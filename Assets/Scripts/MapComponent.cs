@@ -30,10 +30,24 @@ namespace Pandora
         public float cellWidth;
         uint frameStep = 20, remainingStep = 0, timeSinceLastStep; // milliseconds
         public PandoraEngine engine;
-
         public GameObject textObject;
-
         List<GameObject> debug = new List<GameObject> { };
+        public Vector2 TopLeftTowerPosition, TopRightTowerPosition, TopMiddleTowerPosition,
+            BottomLeftTowerPosition, BottomRightTowerPosition, BottomMiddleTowerPosition,
+            TopLeftAggroOrigin, TopLeftAggroEnd,
+            TopMiddleAggroOrigin, TopMiddleAggroEnd,
+            TopRightAggroOrigin, TopRightAggroEnd,
+            BottomLeftAggroOrigin, BottomLeftAggroEnd,
+            BottomMiddleAggroOrigin, BottomMiddleAggroEnd,
+            BottomRightAggroOrigin, BottomRightAggroEnd;
+
+        public static MapComponent Instance
+        {
+            get
+            {
+                return GameObject.Find("Arena").GetComponent<MapComponent>();
+            }
+        }
 
         void OnGUI()
         {
@@ -395,6 +409,7 @@ namespace Pandora
                 lanePosition = new GridCell(targetLanePosition);
             }
 
+
             TowerPositionComponent towerPositionComponent = null, middleTowerPositionComponent = null;
 
             foreach (var component in GetComponentsInChildren<TowerPositionComponent>())
@@ -407,7 +422,7 @@ namespace Pandora
                     middleTowerPositionComponent = component;
                 }
 
-                if (component.towerPosition == targetTowerPosition && !component.gameObject.GetComponent<LifeComponent>().isDead)
+                if (component.EngineTowerPosition == targetTowerPosition && !component.gameObject.GetComponent<LifeComponent>().isDead)
                 {
                     towerPositionComponent = component;
                 }
@@ -534,6 +549,50 @@ namespace Pandora
             }
 
             return position;
+        }
+
+        public GridCell Flip(GridCell cell)
+        {
+            var flipped = new GridCell(cell.vector.x, cell.vector.y);
+
+            flipped.vector.y = mapSizeY - flipped.vector.y;
+
+            return flipped;
+        }
+
+        public Vector2? GetTowerPosition(TowerPosition position)
+        {
+            return
+                (position == TowerPosition.TopLeft) ? TopLeftTowerPosition :
+                (position == TowerPosition.TopRight) ? TopRightTowerPosition :
+                (position == TowerPosition.TopMiddle) ? TopMiddleTowerPosition :
+                (position == TowerPosition.BottomLeft) ? BottomLeftTowerPosition :
+                (position == TowerPosition.BottomRight) ? BottomRightTowerPosition :
+                (position == TowerPosition.BottomMiddle) ? BottomMiddleTowerPosition : (Vector2?)null;
+        }
+
+
+        public Vector2? GetTowerAggroBoxOrigin(TowerPosition position)
+        {
+            return
+                (position == TowerPosition.TopLeft) ? TopLeftAggroOrigin :
+                (position == TowerPosition.TopRight) ? TopRightAggroOrigin :
+                (position == TowerPosition.TopMiddle) ? TopMiddleAggroOrigin :
+                (position == TowerPosition.BottomLeft) ? BottomLeftAggroOrigin :
+                (position == TowerPosition.BottomRight) ? BottomRightAggroOrigin :
+                (position == TowerPosition.BottomMiddle) ? BottomMiddleAggroOrigin : (Vector2?)null;
+        }
+
+
+        public Vector2? GetTowerAggroBoxEnd(TowerPosition position)
+        {
+            return
+                (position == TowerPosition.TopLeft) ? TopLeftAggroEnd :
+                (position == TowerPosition.TopRight) ? TopRightAggroEnd :
+                (position == TowerPosition.TopMiddle) ? TopMiddleAggroEnd :
+                (position == TowerPosition.BottomLeft) ? BottomLeftAggroEnd :
+                (position == TowerPosition.BottomRight) ? BottomRightAggroEnd :
+                (position == TowerPosition.BottomMiddle) ? BottomMiddleAggroEnd : (Vector2?)null;
         }
     }
 }

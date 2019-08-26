@@ -8,6 +8,7 @@ using System.Threading;
 using Pandora.Messages;
 using UnityEngine.UI;
 using Google.Protobuf;
+using UnityEngine.Events;
 using Pandora.Network.Messages;
 using System.Collections.Concurrent;
 
@@ -24,6 +25,7 @@ namespace Pandora.Network
         private ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
+        public UnityEvent matchStartEvent = new UnityEvent();
 
         private static NetworkControllerSingleton privateInstance = null;
 
@@ -151,6 +153,8 @@ namespace Pandora.Network
                     TeamComponent.assignedTeam = envelope.Start.Team;
 
                     Debug.Log($"We're team {TeamComponent.assignedTeam}");
+
+                    matchStartEvent.Invoke();
                 }
 
                 if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)

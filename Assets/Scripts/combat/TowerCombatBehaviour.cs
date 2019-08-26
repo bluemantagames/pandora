@@ -9,7 +9,18 @@ namespace Pandora.Combat
     {
         public MapComponent map;
         public GameObject projectile;
-        public Vector2 aggroBoxOrigin, aggroBoxEnd; // bottom left corner
+
+        public Vector2 aggroBoxOrigin {
+            get {
+                return MapComponent.Instance.GetTowerAggroBoxOrigin(towerPosition.EngineTowerPosition).Value;
+            }
+        }
+
+        public Vector2 aggroBoxEnd {
+            get {
+                return MapComponent.Instance.GetTowerAggroBoxEnd(towerPosition.EngineTowerPosition).Value;
+            }
+        }
 
         public bool isAttacking { get; private set; }
         public bool isMiddle = false;
@@ -31,7 +42,7 @@ namespace Pandora.Combat
         {
             get
             {
-                return map.GridCellToWorldPosition(GetComponent<TowerPositionComponent>().towerCell);
+                return map.GridCellToWorldPosition(GetComponent<TowerPositionComponent>().TowerCell);
             }
         }
 
@@ -40,17 +51,28 @@ namespace Pandora.Combat
 
         GameObject currentTarget;
         LifeComponent targetLifeComponent;
-        int aggroBoxHeight, aggroBoxWidth;
+        int aggroBoxHeight {
+            get {
+                return (int)(aggroBoxEnd.y - aggroBoxOrigin.y);
+            }
+        }
+
+        int aggroBoxWidth {
+            get {
+                return (int)(aggroBoxEnd.x - aggroBoxOrigin.x);
+            }
+        }
+
         float lastAttackTimeLapse = 0f;
+        TowerPositionComponent towerPosition;
 
 
         /** Begins attacking an enemy */
         void Awake()
         {
-            aggroBoxHeight = (int)(aggroBoxEnd.y - aggroBoxOrigin.y);
-            aggroBoxWidth = (int)(aggroBoxEnd.x - aggroBoxOrigin.x);
-
             teamComponent = GetComponent<TowerTeamComponent>();
+
+            towerPosition = GetComponent<TowerPositionComponent>();
         }
 
         // Update is called once per frame

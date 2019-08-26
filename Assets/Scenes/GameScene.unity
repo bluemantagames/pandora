@@ -709,6 +709,21 @@ PrefabInstance:
       propertyPath: towerPosition
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: WorldTowerPosition
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: Position.x
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: Position.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: m_Sprite
@@ -918,7 +933,7 @@ PrefabInstance:
     - target: {fileID: 3866240383038811766, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: aggroBoxEnd.x
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3866240383038811766, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
@@ -939,6 +954,21 @@ PrefabInstance:
         type: 3}
       propertyPath: towerPosition
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: WorldTowerPosition
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: Position.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: Position.y
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 3866240382306625144, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
@@ -1059,11 +1089,29 @@ MonoBehaviour:
   mapSizeX: 0
   mapSizeY: 0
   worldMapSize: {x: 0, y: 0}
-  debugHitboxes: 0
+  debugHitboxes: 1
   cellHeight: 0
   cellWidth: 0
   textObject: {fileID: 8625465531379632721, guid: c4b37cb968ea549479f17adeeb8d6051,
     type: 3}
+  TopLeftTowerPosition: {x: 1, y: 21}
+  TopRightTowerPosition: {x: 12, y: 21}
+  TopMiddleTowerPosition: {x: 6, y: 24}
+  BottomLeftTowerPosition: {x: 1, y: 3}
+  BottomRightTowerPosition: {x: 12, y: 3}
+  BottomMiddleTowerPosition: {x: 6, y: 2}
+  TopLeftAggroOrigin: {x: 0, y: 15}
+  TopLeftAggroEnd: {x: 7, y: 20}
+  TopMiddleAggroOrigin: {x: 0, y: 15}
+  TopMiddleAggroEnd: {x: 15, y: 26}
+  TopRightAggroOrigin: {x: 8, y: 15}
+  TopRightAggroEnd: {x: 15, y: 20}
+  BottomLeftAggroOrigin: {x: 0, y: 6}
+  BottomLeftAggroEnd: {x: 7, y: 11}
+  BottomMiddleAggroOrigin: {x: 0, y: 0}
+  BottomMiddleAggroEnd: {x: 15, y: 11}
+  BottomRightAggroOrigin: {x: 8, y: 6}
+  BottomRightAggroEnd: {x: 15, y: 11}
 --- !u!61 &996488290
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1779,6 +1827,16 @@ PrefabInstance:
         type: 3}
       propertyPath: towerPosition
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: Position.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: Position.y
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 2693967323959284762, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
@@ -2656,6 +2714,21 @@ PrefabInstance:
       propertyPath: towerPosition
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: WorldTowerPosition
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: Position.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: Position.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: m_Sprite
@@ -2986,6 +3059,21 @@ PrefabInstance:
       propertyPath: damage
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: WorldTowerPosition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: Position.x
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: Position.y
+      value: 21
+      objectReference: {fileID: 0}
     - target: {fileID: 2693967323959284762, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3148,6 +3236,21 @@ PrefabInstance:
       propertyPath: map
       value: 
       objectReference: {fileID: 996488289}
+    - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: WorldTowerPosition
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: Position.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: Position.y
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3866240382924425442, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: m_LocalPosition.y
