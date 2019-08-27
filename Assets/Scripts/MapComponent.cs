@@ -269,9 +269,28 @@ namespace Pandora
             var projectileSpell = cardObject.GetComponent<ProjectileSpellBehaviour>();
 
             if (movement != null) movement.map = this;
-            if (projectileSpell != null) projectileSpell.map = this;
 
-            var engineEntity = engine.AddEntity(cardObject, movement.speed, new GridCell(cellX, cellY), true, timestamp);
+            var gridCell = new GridCell(cellX, cellY);
+
+            if (projectileSpell != null)
+            {
+                var towerPosition = GetTowerPositionComponent(TowerPosition.BottomMiddle);
+
+                gridCell = towerPosition.GetTowerCenter();
+
+                projectileSpell.map = this;
+            }
+
+            var engineEntity = engine.AddEntity(cardObject, movement?.speed ?? projectileSpell.speed, gridCell, projectileSpell == null, timestamp);
+
+            if (projectileSpell != null)
+            {
+                var target = new GridCell(cellX, cellY);
+
+                engineEntity.SetTarget(target);
+
+                projectileSpell.Target = target;
+            }
 
             cardObject.GetComponent<EngineComponent>().Entity = engineEntity;
         }
@@ -566,6 +585,21 @@ namespace Pandora
                 (position == TowerPosition.BottomLeft) ? BottomLeftAggroEnd :
                 (position == TowerPosition.BottomRight) ? BottomRightAggroEnd :
                 (position == TowerPosition.BottomMiddle) ? BottomMiddleAggroEnd : (Vector2?)null;
+        }
+
+        public TowerPositionComponent GetTowerPositionComponent(TowerPosition worldPosition)
+        {
+            TowerPositionComponent position = null;
+
+            foreach (var component in GetComponentsInChildren<TowerPositionComponent>())
+            {
+                if (component.WorldTowerPosition == worldPosition)
+                {
+                    position = component;
+                }
+            }
+
+            return position;
         }
     }
 }

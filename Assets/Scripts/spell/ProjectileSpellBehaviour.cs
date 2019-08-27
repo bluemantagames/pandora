@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pandora.Engine;
 
 namespace Pandora.Spell
 {
@@ -10,38 +11,31 @@ namespace Pandora.Spell
         public float speed = 3f;
         public ProjectileSpell spell;
 
-        Vector2 spawnPosition;
+        public GridCell Target;
+        EngineComponent entityComponent;
         GridCell startCell = new GridCell(6, 0);
-        Vector2 direction;
 
-        void Awake()
-        {
-            spawnPosition = transform.position;
-
-            transform.position = map.GridCellToWorldPosition(startCell);
-
-            Vector2 position = transform.position;
-
-            direction = (spawnPosition - position).normalized;
+        void Awake() {
+            entityComponent = GetComponent<EngineComponent>();
         }
 
         // Update is called once per frame
         void Update()
         {
-            Vector3 position = direction * speed * Time.deltaTime;
-            Vector3 spawnPosition = this.spawnPosition;
+            if (TeamComponent.assignedTeam == TeamComponent.topTeam) {
+                transform.position = entityComponent.Entity.GetFlippedWorldPosition();
+            } else {
+                transform.position = entityComponent.Entity.GetWorldPosition();
+            }
 
-            transform.position += position;
-
-            var orderedCurrentX = transform.position.x / direction.x;
-            var orderedTargetX = spawnPosition.x / direction.x;
-
-            if (orderedCurrentX >= orderedTargetX) {
-                spell.SpellCollided(map.WorldPositionToGridCell(spawnPosition));
+            if (entityComponent.Entity.GetCurrentCell() == Target) {
+                spell.SpellCollided(Target);
 
                 Destroy(this);
 
                 gameObject.SetActive(false);
+
+                entityComponent.Remove();
             }
         }
     }
