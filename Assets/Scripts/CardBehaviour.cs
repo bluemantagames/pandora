@@ -11,7 +11,7 @@ namespace Pandora
 {
     public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
     {
-        Vector3 originalPosition;
+        Vector3? originalPosition = null;
         MapComponent map;
 
         public GameObject puppet;
@@ -30,7 +30,7 @@ namespace Pandora
             GetComponent<Image>().enabled = true;
 
             if (returnToPosition)
-                transform.position = originalPosition;
+                transform.position = originalPosition.Value;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -75,10 +75,12 @@ namespace Pandora
         }
 
 
-        void Awake()
+        void Update()
         {
-            if (originalPosition == null)
+            if (!originalPosition.HasValue)
+            {
                 originalPosition = transform.position;
+            }
         }
 
         void OnApplicationQuit()
