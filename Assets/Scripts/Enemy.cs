@@ -26,17 +26,7 @@ namespace Pandora
 
         public EngineEntity enemyEntity {
             get {
-                var towerPosition = enemy.GetComponent<TowerPositionComponent>();
-
-                if (towerPosition != null)
-                {
-                    return towerPosition.TowerEntity;
-                }
-                else
-                {
-                    return enemy.GetComponent<MovementComponent>().engineEntity;;
-                }
-
+                return enemy.GetComponent<EngineComponent>().Entity;
             }
         }
 

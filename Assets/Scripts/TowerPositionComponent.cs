@@ -119,8 +119,9 @@ namespace Pandora
         public void SpawnTower()
         {
             TowerEntity = MapComponent.Instance.engine.AddEntity(gameObject, 0f, GetTowerCenter(), true, null);
-
             TowerEntity.IsStructure = true;
+
+            GetComponent<EngineComponent>().Entity = TowerEntity;
         }
 
         public void RemoveTower() {

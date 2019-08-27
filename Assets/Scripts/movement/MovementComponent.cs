@@ -22,8 +22,17 @@ namespace Pandora.Movement
         Enemy targetEnemy;
         CombatBehaviour combatBehaviour;
         public float aggroRange = 10;
-        public PandoraEngine engine;
-        public EngineEntity engineEntity;
+        PandoraEngine engine {
+            get {
+                return GetComponent<EngineComponent>().Engine;
+            }
+        }
+
+        EngineEntity engineEntity {
+            get {
+                return GetComponent<EngineComponent>().Entity;
+            }
+        }
 
         public float speed = 1f;
         public MapComponent map;

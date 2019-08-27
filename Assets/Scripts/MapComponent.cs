@@ -273,8 +273,7 @@ namespace Pandora
 
             var engineEntity = engine.AddEntity(cardObject, movement.speed, new GridCell(cellX, cellY), true, timestamp);
 
-            movement.engine = engine;
-            movement.engineEntity = engineEntity;
+            cardObject.GetComponent<EngineComponent>().Entity = engineEntity;
         }
 
         public Enemy GetEnemyInRange(GameObject unit, GridCell position, int team, float range)
@@ -517,38 +516,12 @@ namespace Pandora
 
         private EngineEntity GetEngineEntity(GameObject gameObject)
         {
-            EngineEntity entity;
-
-            var towerComponent = gameObject.GetComponent<TowerPositionComponent>();
-
-            if (towerComponent != null)
-            {
-                entity = towerComponent.TowerEntity;
-            }
-            else
-            {
-                entity = gameObject.GetComponent<MovementComponent>().engineEntity;
-            }
-
-            return entity;
+            return gameObject.GetComponent<EngineComponent>().Entity;
         }
 
         public GridCell GetCell(GameObject gameObject)
         {
-            GridCell position;
-
-            var towerComponent = gameObject.GetComponent<TowerPositionComponent>();
-
-            if (towerComponent != null)
-            {
-                position = towerComponent.GetMapTarget();
-            }
-            else
-            {
-                position = gameObject.GetComponent<MovementComponent>().engineEntity.GetCurrentCell();
-            }
-
-            return position;
+            return GetEngineEntity(gameObject).GetCurrentCell();
         }
 
         public GridCell Flip(GridCell cell)

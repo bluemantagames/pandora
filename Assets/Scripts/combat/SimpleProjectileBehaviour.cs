@@ -70,21 +70,7 @@ namespace Pandora.Combat
             // Move the projectile forward
             transform.position = shouldBeFlipped ? engineEntity.GetFlippedWorldPosition() : engineEntity.GetWorldPosition();
 
-            EngineEntity targetEntity;
-
-            var towerComponent = target.enemy.GetComponent<TowerPositionComponent>();
-
-            if (towerComponent != null)
-            {
-                targetEntity = towerComponent.TowerEntity;
-            }
-            else
-            {
-                targetEntity = target.enemy.GetComponent<MovementComponent>().engineEntity;
-            }
-
-
-            engineEntity.SetTarget(targetEntity);
+            engineEntity.SetTarget(target.enemyEntity);
         }
     }
 }

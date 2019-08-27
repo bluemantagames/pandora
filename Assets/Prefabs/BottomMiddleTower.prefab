@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 3866240383038811721}
   - component: {fileID: 3866240383038811720}
   - component: {fileID: 3866240383038811767}
+  - component: {fileID: -8013977402954657483}
   m_Layer: 0
   m_Name: BottomMiddleTower
   m_TagString: Untagged
@@ -214,8 +215,6 @@ MonoBehaviour:
   map: {fileID: 0}
   projectile: {fileID: 5687362912629012028, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
     type: 3}
-  aggroBoxOrigin: {x: 0, y: 0}
-  aggroBoxEnd: {x: 15, y: 11}
   isMiddle: 1
   range: 5
   damage: 0
@@ -235,8 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2ed2f1cdbd60d45922e93321311966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 6, y: 0}
-  towerPosition: 5
+  WorldTowerPosition: 0
 --- !u!114 &3866240383038811720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,6 +260,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92d97e031da3793438b657c8e9dc46da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-8013977402954657483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866240383038811722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &3866240382906036081

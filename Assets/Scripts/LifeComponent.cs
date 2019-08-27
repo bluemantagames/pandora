@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Pandora.Engine;
 using Pandora.Combat;
 
 namespace Pandora
@@ -49,6 +50,14 @@ namespace Pandora
 
                     renderer.enabled = false;
                 }
+
+                var engineComponent = GetComponent<EngineComponent>();
+
+                if (engineComponent == null) {
+                    Debug.LogWarning("Could not find engine component");
+                }
+
+                engineComponent?.Remove();
 
                 // TODO: Play "die" animation
             }
