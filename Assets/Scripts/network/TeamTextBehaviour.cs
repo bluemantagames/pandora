@@ -7,16 +7,17 @@ namespace Pandora.Network
 {
     public class TeamTextBehaviour : MonoBehaviour
     {
-        private int team;
-        Button matchmakingButton;
+        int team;
+        bool matchStarted = false, textMatchUpdated = false;
+
 
         void Awake()
         {
             team = TeamComponent.assignedTeam;
 
-            matchmakingButton = GameObject.Find("MatchmakingButton").GetComponent<Button>();
-
             UpdateText();
+
+            NetworkControllerSingleton.instance.matchStartEvent.AddListener(MatchStarted);
         }
 
         void Update()
@@ -25,18 +26,26 @@ namespace Pandora.Network
             {
                 team = TeamComponent.assignedTeam;
 
-                if (!matchmakingButton.interactable)
-                {
-                    matchmakingButton.interactable = true;
-                }
-
                 UpdateText();
+            }
+
+            if (matchStarted && !textMatchUpdated) {
+                UpdateText();
+
+                textMatchUpdated = true;
             }
         }
 
-        private void UpdateText()
+        void MatchStarted() {
+            matchStarted = true;
+        }
+
+        void UpdateText()
         {
             GetComponent<Text>().text = $"Team: {team}";
+
+            if (matchStarted)
+            GetComponent<Text>().text += " - MATCH STARTED";
         }
     }
 }
