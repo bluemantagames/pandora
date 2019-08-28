@@ -8,7 +8,7 @@ namespace Pandora.Engine
 {
     public class PandoraEngine
     {
-        int tickTime = 5; // milliseconds in a tick
+        uint tickTime = 5; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         List<EngineEntity> entities = new List<EngineEntity> { };
 
@@ -161,11 +161,12 @@ namespace Pandora.Engine
 
             foreach (var entity in clonedEntities)
             {
-                var unitBehaviour = entity.GameObject.GetComponent<UnitBehaviour>();
+                var engineComponent = entity.GameObject.GetComponent<EngineComponent>();
 
-                if (unitBehaviour != null)
-                {
-                    unitBehaviour.UnitUpdate(tickTime);
+                if (engineComponent == null) continue;
+
+                foreach (var component in entity.GameObject.GetComponent<EngineComponent>().Components) {
+                    component.TickUpdate(tickTime);
                 }
             }
         }

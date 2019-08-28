@@ -9,7 +9,7 @@ namespace Pandora.Combat
     {
         public float damage = 10f;
         GameObject target = null;
-        int timeSinceLastDamage = 0; // ms
+        uint timeSinceLastDamage = 0; // ms
         bool isBackswinging = true;
         public int attackCooldownMs = 500, backswingMs = 400;
         public bool isAttacking { get; private set; } = false;
@@ -24,7 +24,7 @@ namespace Pandora.Combat
         }
 
         /** Returns true if enemy has died */
-        public void AttackEnemy(Enemy target, int timeLapse)
+        public void AttackEnemy(Enemy target, uint timeLapse)
         {
 
             var animator = GetComponent<Animator>();

@@ -8,7 +8,7 @@ namespace Pandora.Combat {
         CombatType combatType { get; }
 
         /** Begins attacking an enemy */
-        void AttackEnemy(Enemy target, int timeLapse);
+        void AttackEnemy(Enemy target, uint timeLapse);
 
         /** Stops attacking an enemy */
         void StopAttacking();

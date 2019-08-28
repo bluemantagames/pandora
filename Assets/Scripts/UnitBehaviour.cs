@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pandora.Movement;
 using Pandora.Combat;
+using Pandora.Engine;
 
 namespace Pandora
 {
-    public class UnitBehaviour : MonoBehaviour
+    public class UnitBehaviour : MonoBehaviour, EngineBehaviour
     {
         MovementComponent movementComponent;
         CombatBehaviour combatBehaviour;
         LifeComponent lifeComponent;
         public Bounds hitbox;
+        public string ComponentName {
+            get {
+                return "UnitBehaviour";
+            }
+        } 
 
         // Start is called before the first frame update
         void Awake()
@@ -24,7 +30,7 @@ namespace Pandora
         }
 
         // This is called from PandoraEngine every tick
-        public void UnitUpdate(int timeLapsed)
+        public void TickUpdate(uint timeLapsed)
         {
             if (lifeComponent.isDead) return; // Do nothing if dead
 

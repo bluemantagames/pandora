@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Pandora;
+using Pandora.Engine;
 
 namespace Pandora.Combat
 {
-    public class TowerCombatBehaviour : MonoBehaviour, CombatBehaviour
+    public class TowerCombatBehaviour : MonoBehaviour, CombatBehaviour, EngineBehaviour
     {
         public MapComponent map;
         public GameObject projectile;
+        public string ComponentName {
+            get {
+                return "TowerCombatBehaviour";
+            }
+        }
 
         public Vector2 aggroBoxOrigin {
             get {
@@ -76,7 +82,7 @@ namespace Pandora.Combat
         }
 
         // Update is called once per frame
-        void Update()
+        public void TickUpdate(uint lapsed)
         {
             if (GetComponent<LifeComponent>().isDead) return; // you dead man
 
@@ -137,7 +143,7 @@ namespace Pandora.Combat
             }
         }
 
-        public void AttackEnemy(Enemy target, int timeLapse)
+        public void AttackEnemy(Enemy target, uint timeLapse)
         {
             if (currentTarget == null) return;
 

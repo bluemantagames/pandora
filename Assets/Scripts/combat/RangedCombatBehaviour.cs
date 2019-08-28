@@ -15,7 +15,7 @@ namespace Pandora.Combat
         public int attackCooldownMs = 600, backswingMs = 200;
         public GameObject projectile;
         public string animationStateName;
-        int timeSinceLastProjectile = 0; // ms
+        uint timeSinceLastProjectile = 0; // ms
         bool isBackswinging = true;
 
         public CombatType combatType
@@ -27,7 +27,7 @@ namespace Pandora.Combat
         }
 
         /** Returns true if enemy has died */
-        public void AttackEnemy(Enemy target, int timeLapse)
+        public void AttackEnemy(Enemy target, uint timeLapse)
         {
             var animator = GetComponent<Animator>();
 
