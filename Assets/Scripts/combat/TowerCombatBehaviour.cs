@@ -40,7 +40,7 @@ namespace Pandora.Combat
         }
         public int range = 5;
         public float damage = 3f;
-        public float cooldown = 0.3f;
+        public uint cooldownMs = 300;
         public bool isOpponent = false;
 
         TowerTeamComponent teamComponent;
@@ -69,7 +69,7 @@ namespace Pandora.Combat
             }
         }
 
-        float lastAttackTimeLapse = 0f;
+        uint lastAttackTimeLapse = 0;
         TowerPositionComponent towerPosition;
 
 
@@ -132,11 +132,11 @@ namespace Pandora.Combat
             }
             else if (targetLifeComponent != null)
             { // if not dead, attack once cooldown is over
-                lastAttackTimeLapse += Time.deltaTime;
+                lastAttackTimeLapse += lapsed;
 
-                if (lastAttackTimeLapse >= cooldown)
+                if (lastAttackTimeLapse >= cooldownMs)
                 {
-                    lastAttackTimeLapse = 0f;
+                    lastAttackTimeLapse = 0;
 
                     AttackEnemy(new Enemy(currentTarget), 0);
                 }
