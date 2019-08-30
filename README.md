@@ -1,4 +1,5 @@
 # Pandora
+[![Build Status](https://dev.azure.com/pandoragame/Pandora/_apis/build/status/SirStoke.pandora?branchName=master)](https://dev.azure.com/pandoragame/Pandora/_build/latest?definitionId=1&branchName=master)
 
 This is a [Unity](https://unity.com) project
 
