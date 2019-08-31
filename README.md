@@ -1,4 +1,5 @@
 # Pandora
+[![Build Status](https://dev.azure.com/pandoragame/Pandora/_apis/build/status/SirStoke.pandora?branchName=master)](https://dev.azure.com/pandoragame/Pandora/_build/latest?definitionId=1&branchName=master)
 
 This is a [Unity](https://unity.com) project
 
@@ -11,7 +12,3 @@ Example installing google protobuf library:
 ```
 
 Then go to `packages\<package_name>\lib` and delete every folder except `net45`
-
-## CI
-
-Image: registry.pocket-adventures.com:5001/unity-android
