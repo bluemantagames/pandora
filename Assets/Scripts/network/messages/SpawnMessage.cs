@@ -15,7 +15,8 @@ namespace Pandora.Network.Messages {
                 UnitName = unitName,
                 X = cellX,
                 Y = cellY,
-                Team = team
+                Team = team,
+                PlayerId = NetworkControllerSingleton.instance.PlayerId ?? throw new Exception("Could not find player id")
             };
 
             var envelope = new ClientEnvelope {

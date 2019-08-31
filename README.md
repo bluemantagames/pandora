@@ -11,3 +11,7 @@ Example installing google protobuf library:
 ```
 
 Then go to `packages\<package_name>\lib` and delete every folder except `net45`
+
+## CI
+
+Image: registry.pocket-adventures.com:5001/unity-android

@@ -26,6 +26,7 @@ namespace Pandora.Network
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
+        public int? PlayerId = null;
 
         private static NetworkControllerSingleton privateInstance = null;
 
@@ -151,6 +152,7 @@ namespace Pandora.Network
                     matchStarted = true;
 
                     TeamComponent.assignedTeam = envelope.Start.Team;
+                    PlayerId = envelope.Start.Id;
 
                     Debug.Log($"We're team {TeamComponent.assignedTeam}");
 
