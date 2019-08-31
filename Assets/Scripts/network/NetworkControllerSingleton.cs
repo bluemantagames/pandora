@@ -16,13 +16,25 @@ namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {
-        private string matchmakingHost = "http://localhost:8080";
-        private string matchmakingUrl = "/matchmaking";
-        private string matchToken = null;
-        private Socket matchSocket = null;
-        private Thread networkThread = null;
-        private Thread receiveThread = null;
-        private ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
+        bool isDebugBuild = Debug.isDebugBuild;
+
+        string matchmakingHost
+        {
+            get
+            {
+                if (isDebugBuild)
+                    return "http://localhost:8080";
+                else 
+                    return "http://pocket-adventures.com:8080";
+            }
+        }
+
+        string matchmakingUrl = "/matchmaking";
+        string matchToken = null;
+        Socket matchSocket = null;
+        Thread networkThread = null;
+        Thread receiveThread = null;
+        ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
@@ -71,7 +83,7 @@ namespace Pandora.Network
 
         public void StartMatch()
         {
-            var matchHost = "127.0.0.1";
+            var matchHost = (isDebugBuild) ? "127.0.0.1" : "pocket-adventures.com";
             var matchPort = 9090;
             var dns = Dns.GetHostEntry(matchHost);
 
@@ -168,12 +180,13 @@ namespace Pandora.Network
                         if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
                         {
                             var spawnMessage =
-                                new SpawnMessage {
+                                new SpawnMessage
+                                {
                                     unitName = command.Spawn.UnitName,
                                     cellX = command.Spawn.X,
                                     cellY = command.Spawn.Y,
                                     team = command.Spawn.Team,
-                                    timestamp = DateTimeOffset.FromUnixTimeSeconds((long) command.Timestamp).UtcDateTime
+                                    timestamp = DateTimeOffset.FromUnixTimeSeconds((long)command.Timestamp).UtcDateTime
                                 };
 
                             commands.Add(spawnMessage);

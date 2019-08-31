@@ -109,7 +109,7 @@ static class BuildCommand
 		string java_home = "/usr/lib/jvm/java-8-openjdk-amd64/" + "bin";
 		Console.WriteLine(":: JavaHome: {0}", java_home);
 		EditorPrefs.SetString("JdkPath", java_home);
-	        EditorPrefs.SetString("AndroidNdkRoot", getEnv("ANDROID_NDK_HOME"));
+		EditorPrefs.SetString("AndroidNdkRoot", getEnv("ANDROID_NDK_HOME"));
 
 		//PlayerSettings.keystorePass = getEnv ("KEYSTORE_PASS", true);
 		//PlayerSettings.keyaliasPass = getEnv ("KEY_ALIAS_PASS", true);
