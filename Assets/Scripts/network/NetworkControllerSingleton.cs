@@ -186,10 +186,19 @@ namespace Pandora.Network
                                     cellX = command.Spawn.X,
                                     cellY = command.Spawn.Y,
                                     team = command.Spawn.Team,
-                                    timestamp = DateTimeOffset.FromUnixTimeSeconds((long)command.Timestamp).UtcDateTime
+                                    timestamp = DateTimeOffset.FromUnixTimeSeconds((long)command.Timestamp).UtcDateTime,
+                                    unitId = command.Spawn.UnitId
                                 };
 
                             commands.Add(spawnMessage);
+                        } else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand) {
+                            var commandMessage =
+                                new CommandMessage {
+                                    team = command.UnitCommand.Team,
+                                    unitId = command.UnitCommand.UnitId
+                                };
+
+                            commands.Add(commandMessage);
                         }
                     }
 

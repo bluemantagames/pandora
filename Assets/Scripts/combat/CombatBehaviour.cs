@@ -3,20 +3,21 @@ using UnityEngine;
 
 namespace Pandora.Combat {
     interface CombatBehaviour {
-        /** True if the unit is currently in combat */
+        /// <summary>True if the unit is currently in combat</summary>
         bool isAttacking { get; }
+        /// <summary>Combat type of this behaviour</summary>
         CombatType combatType { get; }
 
-        /** Begins attacking an enemy */
+        /// <summary>Begins attacking an enemy</summary>
         void AttackEnemy(Enemy target, uint timeLapse);
 
-        /** Stops attacking an enemy */
+        /// <summary>Stops attacking an enemy</summary>
         void StopAttacking();
 
-        /** Called if a launched projectile collided */
+        /// <summary>Called if a launched projectile collided</summary>
         void ProjectileCollided();
 
+        /// <summary>Called on unit death</summary>
         void OnDead();
-
     }
 }

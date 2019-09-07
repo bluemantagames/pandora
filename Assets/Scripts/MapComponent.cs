@@ -10,6 +10,7 @@ using Pandora.Combat;
 using Pandora.Network;
 using Pandora.Network.Messages;
 using Pandora.Engine;
+using Pandora.Command;
 
 namespace Pandora
 {
@@ -24,6 +25,7 @@ namespace Pandora
         Vector2 bottomMapSize;
         GameObject lastPuppet;
         HashSet<GridCell> obstaclePositions;
+        public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> {};
         float firstLaneX = 2, secondLaneX = 13;
 
         public float cellHeight;
@@ -197,7 +199,14 @@ namespace Pandora
 
                         Debug.Log($"Received {spawn} - spawning unit");
 
-                        SpawnUnit(spawn.unitName, spawn.cellX, spawn.cellY, spawn.team, spawn.timestamp);
+                        SpawnUnit(spawn.unitName, spawn.cellX, spawn.cellY, spawn.team, spawn.unitId, spawn.timestamp);
+                    }
+
+                    if (command is CommandMessage) {
+                        var commandMessage = command as CommandMessage;
+                        var unit = Units[commandMessage.unitId];
+
+                        unit?.GetComponent<CommandBehaviour>()?.InvokeCommand();
                     }
                 }
             }
@@ -233,23 +242,26 @@ namespace Pandora
         {
             var mapCell = GetPointedCell();
 
+            var id = System.Guid.NewGuid().ToString();
+
             NetworkControllerSingleton.instance.EnqueueMessage(
                 new SpawnMessage
                 {
                     unitName = cardName,
                     cellX = (int)Math.Floor(mapCell.x),
                     cellY = (int)Math.Floor(mapCell.y),
-                    team = TeamComponent.assignedTeam
+                    team = TeamComponent.assignedTeam,
+                    unitId = id
                 }
             );
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
-                SpawnUnit(cardName, (int)Math.Floor(mapCell.x), (int)Math.Floor(mapCell.y), team, null);
+                SpawnUnit(cardName, (int)Math.Floor(mapCell.x), (int)Math.Floor(mapCell.y), team, id, null);
             }
         }
 
-        public void SpawnUnit(string unitName, int cellX, int cellY, int team, DateTime? timestamp)
+        public void SpawnUnit(string unitName, int cellX, int cellY, int team, string id, DateTime? timestamp)
         {
             Debug.Log($"Spawning {unitName} in {cellX}, {cellY}");
 
@@ -293,6 +305,9 @@ namespace Pandora
             }
 
             cardObject.GetComponent<EngineComponent>().Entity = engineEntity;
+            cardObject.AddComponent<UnitIdComponent>().Id = id;
+
+            Units.Add(id, cardObject);
         }
 
         public Enemy GetEnemyInRange(GameObject unit, GridCell position, int team, float range)
