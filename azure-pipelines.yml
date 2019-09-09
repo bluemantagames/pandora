@@ -15,7 +15,7 @@ steps:
 - checkout: self
   lfs: true
 - script: ./ci/start-build.sh
-  displayName: 'Run a one-line script'
+  displayName: 'Compile Pandora (Android)'
 
 - task: PublishBuildArtifacts@1
   inputs:
