@@ -25,7 +25,7 @@ namespace Pandora
         Vector2 bottomMapSize;
         GameObject lastPuppet;
         HashSet<GridCell> obstaclePositions;
-        public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> {};
+        public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         float firstLaneX = 2, secondLaneX = 13;
 
         public float cellHeight;
@@ -193,17 +193,15 @@ namespace Pandora
 
                 foreach (var command in step.Commands)
                 {
-                    if (command is SpawnMessage)
+                    if (command is SpawnMessage spawn)
                     {
-                        var spawn = command as SpawnMessage;
-
                         Debug.Log($"Received {spawn} - spawning unit");
 
-                        SpawnUnit(spawn.unitName, spawn.cellX, spawn.cellY, spawn.team, spawn.unitId, spawn.timestamp);
+                        SpawnUnit(new UnitSpawn(spawn));
                     }
 
-                    if (command is CommandMessage) {
-                        var commandMessage = command as CommandMessage;
+                    if (command is CommandMessage commandMessage)
+                    {
                         var unit = Units[commandMessage.unitId];
 
                         unit?.GetComponent<CommandBehaviour>()?.InvokeCommand();
@@ -244,7 +242,7 @@ namespace Pandora
 
             var id = System.Guid.NewGuid().ToString();
 
-            NetworkControllerSingleton.instance.EnqueueMessage(
+            var message =
                 new SpawnMessage
                 {
                     unitName = cardName,
@@ -252,62 +250,74 @@ namespace Pandora
                     cellY = (int)Math.Floor(mapCell.y),
                     team = TeamComponent.assignedTeam,
                     unitId = id
-                }
-            );
+                };
+
+            NetworkControllerSingleton.instance.EnqueueMessage(message);
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
-                SpawnUnit(cardName, (int)Math.Floor(mapCell.x), (int)Math.Floor(mapCell.y), team, id, null);
+                SpawnUnit(new UnitSpawn(message));
             }
         }
 
-        public void SpawnUnit(string unitName, int cellX, int cellY, int team, string id, DateTime? timestamp)
+        /// <summary>Spawns a unit</summary>
+        public void SpawnUnit(UnitSpawn spawn)
         {
-            Debug.Log($"Spawning {unitName} in {cellX}, {cellY}");
+            Debug.Log($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY}");
 
-            var card = Resources.Load($"Cards/{unitName}") as GameObject;
+            var card = Resources.Load($"Cards/{spawn.UnitName}") as GameObject;
 
-            if (team == TeamComponent.topTeam)
+            if (spawn.Team == TeamComponent.topTeam)
             { // flip Y if top team
-                cellY = mapSizeY - cellY;
+                spawn.CellY = mapSizeY - spawn.CellY;
             }
 
-            var cardPosition = GridCellToWorldPosition(new GridCell(cellX, cellY));
+            var unitGridCell = new GridCell(spawn.CellX, spawn.CellY);
+            var cardPosition = GridCellToWorldPosition(unitGridCell);
             var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
 
-            cardObject.GetComponent<TeamComponent>().team = team;
+            var spawner = cardObject.GetComponent<Spawner>();
 
-            var movement = cardObject.GetComponent<MovementComponent>();
-            var projectileSpell = cardObject.GetComponent<ProjectileSpellBehaviour>();
+            if (spawner != null)
+            {
+                spawner.Spawn(this, spawn);
+            }
+            else
+            {
+                InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp);
+            }
+        }
+
+        /// <summary>Initializes unit components, usually called on spawn</summary>
+        public void InitializeComponents(GameObject unit, GridCell cell, int team, string id, DateTime? timestamp)
+        {
+            unit.GetComponent<TeamComponent>().team = team;
+
+            var movement = unit.GetComponent<MovementComponent>();
+            var projectileSpell = unit.GetComponent<ProjectileSpellBehaviour>();
 
             if (movement != null) movement.map = this;
-
-            var gridCell = new GridCell(cellX, cellY);
 
             if (projectileSpell != null)
             {
                 var towerPosition = GetTowerPositionComponent(TowerPosition.BottomMiddle);
 
-                gridCell = towerPosition.GetTowerCenter();
-
                 projectileSpell.map = this;
             }
 
-            var engineEntity = engine.AddEntity(cardObject, movement?.speed ?? projectileSpell.speed, gridCell, projectileSpell == null, timestamp);
+            var engineEntity = engine.AddEntity(unit, movement?.speed ?? projectileSpell.speed, cell, projectileSpell == null, timestamp);
 
             if (projectileSpell != null)
             {
-                var target = new GridCell(cellX, cellY);
+                engineEntity.SetTarget(cell);
 
-                engineEntity.SetTarget(target);
-
-                projectileSpell.Target = target;
+                projectileSpell.Target = cell;
             }
 
-            cardObject.GetComponent<EngineComponent>().Entity = engineEntity;
-            cardObject.AddComponent<UnitIdComponent>().Id = id;
+            unit.GetComponent<EngineComponent>().Entity = engineEntity;
+            unit.AddComponent<UnitIdComponent>().Id = id;
 
-            Units.Add(id, cardObject);
+            Units.Add(id, unit);
         }
 
         public Enemy GetEnemyInRange(GameObject unit, GridCell position, int team, float range)
