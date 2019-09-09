@@ -124,20 +124,26 @@ namespace Pandora.Network
             Message message;
 
             while (true)
-            { // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+            {
+                // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+
                 var isMessageDequeued = queue.TryDequeue(out message);
 
                 if (isMessageDequeued)
                 {
                     SendMessage(message.ToBytes(matchToken));
                 }
+
+                Thread.Sleep(100);
             }
         }
 
         public void ReceiveLoop()
         {
             while (true)
-            { // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+            {
+                // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+
                 var sizeBytes = new Byte[4];
 
                 matchSocket.Receive(sizeBytes, sizeBytes.Length, 0);
@@ -149,7 +155,7 @@ namespace Pandora.Network
 
                 var size = BitConverter.ToInt32(sizeBytes, 0);
 
-                Debug.Log($"Asking for {size} bytes");
+                // Debug.Log($"Asking for {size} bytes");
 
                 var messageBytes = new Byte[size];
 
@@ -157,7 +163,7 @@ namespace Pandora.Network
 
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBytes);
 
-                Debug.Log($"Received {envelope}");
+                // Debug.Log($"Received {envelope}");
 
                 if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Start)
                 {
@@ -166,7 +172,7 @@ namespace Pandora.Network
                     TeamComponent.assignedTeam = envelope.Start.Team;
                     PlayerId = envelope.Start.Id;
 
-                    Debug.Log($"We're team {TeamComponent.assignedTeam}");
+                    // Debug.Log($"We're team {TeamComponent.assignedTeam}");
 
                     matchStartEvent.Invoke();
                 }
@@ -174,6 +180,7 @@ namespace Pandora.Network
                 if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
                 { // enqueue spawns and let the main thread handle it
                     var commands = new List<Message> { };
+                    int? mana = null;
 
                     foreach (var command in envelope.Step.Commands)
                     {
@@ -202,9 +209,19 @@ namespace Pandora.Network
                         }
                     }
 
-                    Debug.Log("Enqueuing Step");
+                    // (I don't really like the foreach here...)
+                    foreach (var playerInfo in envelope.Step.PlayerInfo)
+                    {
+                        if (playerInfo.Id == PlayerId)
+                        {
+                            mana = playerInfo.Mana;
+                            Debug.Log("Player (" + PlayerId + ") received mana: " + mana);
+                        }
+                    }
 
-                    stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands));
+                    // Debug.Log("Enqueuing Step");
+
+                    stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
                 }
             }
         }

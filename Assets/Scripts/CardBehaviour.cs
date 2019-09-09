@@ -18,6 +18,7 @@ namespace Pandora
         public GameObject card;
         public int team = 1;
         public string cardName;
+        public int requiredMana = 0;
 
         private void CleanUpDrag(bool returnToPosition)
         {
@@ -68,7 +69,7 @@ namespace Pandora
                 if (movement != null) movement.map = map;
                 if (projectileSpell != null) projectileSpell.map = map;
 
-                map.SpawnCard(cardName, team);
+                map.SpawnCard(cardName, team, requiredMana);
             }
 
             CleanUpDrag(true);
