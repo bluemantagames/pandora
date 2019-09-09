@@ -10,10 +10,13 @@ namespace Pandora.Combat
         public float damage = 10f;
         GameObject target = null;
         uint timeSinceLastDamage = 0; // ms
-        bool isBackswinging = true;
+        bool isBackswinging = false;
         public int attackCooldownMs = 500, backswingMs = 400;
         public bool isAttacking { get; private set; } = false;
         public string animationStateName;
+    
+        /// <summary>Multiplier applied for the next attack</summary>
+        public float? NextAttackMultiplier = null;
 
         public CombatType combatType
         {
@@ -67,7 +70,6 @@ namespace Pandora.Combat
             animator.SetBool("Attacking", false);
         }
 
-        /** This method is called by an animation event */
         public void MeleeAssignDamage()
         {
             if (target == null)
@@ -77,7 +79,11 @@ namespace Pandora.Combat
 
             var lifeComponent = target.GetComponent<LifeComponent>();
 
-            lifeComponent.AssignDamage(damage);
+            var assignedDamage = NextAttackMultiplier.HasValue ? damage * NextAttackMultiplier.Value : damage;
+
+            lifeComponent.AssignDamage(assignedDamage);
+
+            NextAttackMultiplier = null;
         }
 
         // Do nothing, we don't have projectiles
@@ -85,6 +91,5 @@ namespace Pandora.Combat
         }
 
         public void OnDead() {}
-
     }
 }
