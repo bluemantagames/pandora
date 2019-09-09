@@ -1,21 +1,15 @@
+
 using Pandora.Messages;
 using Google.Protobuf;
 using System;
 
 namespace Pandora.Network.Messages {
-    public class SpawnMessage: Message {
-        public string unitName;
-        public int cellX;
-        public int cellY;
+    public class CommandMessage: Message {
         public int team;
         public string unitId;
-        public DateTime timestamp;
 
         public byte[] ToBytes(string matchToken) {
-            var spawn = new Spawn {
-                UnitName = unitName,
-                X = cellX,
-                Y = cellY,
+            var command = new Pandora.Messages.Command {
                 Team = team,
                 PlayerId = NetworkControllerSingleton.instance.PlayerId ?? throw new Exception("Could not find player id"),
                 UnitId = unitId
@@ -23,7 +17,7 @@ namespace Pandora.Network.Messages {
 
             var envelope = new ClientEnvelope {
                 Token = matchToken,
-                Spawn = spawn
+                Command = command
             };
 
             return envelope.ToByteArray();
