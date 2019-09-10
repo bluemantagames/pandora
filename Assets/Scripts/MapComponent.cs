@@ -207,6 +207,11 @@ namespace Pandora
                         unit?.GetComponent<CommandBehaviour>()?.InvokeCommand();
                     }
                 }
+
+                if (step.mana != null)
+                {
+                    ManaSingleton.updateMana((int)step.mana);
+                }
             }
 
             if (!NetworkControllerSingleton.instance.matchStarted)
@@ -236,11 +241,17 @@ namespace Pandora
                 Destroy(lastPuppet);
         }
 
-        public void SpawnCard(string cardName, int team)
+        public void SpawnCard(string cardName, int team, int requiredMana = 0)
         {
             var mapCell = GetPointedCell();
-
             var id = System.Guid.NewGuid().ToString();
+               
+            // If your mana is not enough to spawn this card
+            // do nothing... (?)
+            if (ManaSingleton.manaValue < requiredMana)
+            {
+                return;
+            }
 
             var message =
                 new SpawnMessage
@@ -249,7 +260,8 @@ namespace Pandora
                     cellX = (int)Math.Floor(mapCell.x),
                     cellY = (int)Math.Floor(mapCell.y),
                     team = TeamComponent.assignedTeam,
-                    unitId = id
+                    unitId = id,
+                    manaUsed = requiredMana
                 };
 
             NetworkControllerSingleton.instance.EnqueueMessage(message);
