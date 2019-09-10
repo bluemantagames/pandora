@@ -256,6 +256,8 @@ namespace Pandora
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
+                message.team = team;
+
                 SpawnUnit(new UnitSpawn(message));
             }
         }
@@ -263,7 +265,7 @@ namespace Pandora
         /// <summary>Spawns a unit</summary>
         public void SpawnUnit(UnitSpawn spawn)
         {
-            Debug.Log($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY}");
+            Debug.Log($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY} Team {spawn.Team}");
 
             var card = Resources.Load($"Cards/{spawn.UnitName}") as GameObject;
 

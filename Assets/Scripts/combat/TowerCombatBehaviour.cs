@@ -81,7 +81,6 @@ namespace Pandora.Combat
             towerPosition = GetComponent<TowerPositionComponent>();
         }
 
-        // Update is called once per frame
         public void TickUpdate(uint lapsed)
         {
             if (GetComponent<LifeComponent>().isDead) return; // you dead man

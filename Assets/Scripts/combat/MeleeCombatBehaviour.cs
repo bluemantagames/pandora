@@ -42,7 +42,7 @@ namespace Pandora.Combat
                 isAttacking = true;
             }
 
-            animator.Play(animationStateName, 0, timeSinceLastDamage / 1000f);
+            animator.Play(animationStateName, 0, timeSinceLastDamage / (float) (attackCooldownMs + backswingMs));
 
             timeSinceLastDamage += timeLapse;
 
