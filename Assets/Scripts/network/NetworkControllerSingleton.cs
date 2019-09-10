@@ -155,7 +155,7 @@ namespace Pandora.Network
 
                 var size = BitConverter.ToInt32(sizeBytes, 0);
 
-                // Debug.Log($"Asking for {size} bytes");
+                Debug.Log($"Asking for {size} bytes");
 
                 var messageBytes = new Byte[size];
 
@@ -163,7 +163,7 @@ namespace Pandora.Network
 
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBytes);
 
-                // Debug.Log($"Received {envelope}");
+                Debug.Log($"Received {envelope}");
 
                 if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Start)
                 {
@@ -172,7 +172,7 @@ namespace Pandora.Network
                     TeamComponent.assignedTeam = envelope.Start.Team;
                     PlayerId = envelope.Start.Id;
 
-                    // Debug.Log($"We're team {TeamComponent.assignedTeam}");
+                    Debug.Log($"We're team {TeamComponent.assignedTeam}");
 
                     matchStartEvent.Invoke();
                 }
@@ -215,11 +215,11 @@ namespace Pandora.Network
                         if (playerInfo.Id == PlayerId)
                         {
                             mana = playerInfo.Mana;
-                            Debug.Log("Player (" + PlayerId + ") received mana: " + mana);
+                            Debug.Log($"Player ({PlayerId}) received mana: {mana}");
                         }
                     }
 
-                    // Debug.Log("Enqueuing Step");
+                    Debug.Log("Enqueuing Step");
 
                     stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
                 }

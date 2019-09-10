@@ -224,7 +224,7 @@ namespace Pandora
             {
                 var processTime = Math.Min(frameStep, remainingStep);
 
-                // Debug.Log($"Advancing {processTime}ms");
+                Debug.Log($"Advancing {processTime}ms");
 
                 if (remainingStep != 0 && processTime != 0 && timeSinceLastStep >= frameStep)
                 {
