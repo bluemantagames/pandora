@@ -10,6 +10,7 @@ namespace Pandora.Network.Messages {
         public int team;
         public string unitId;
         public DateTime timestamp;
+        public int manaUsed;
 
         public byte[] ToBytes(string matchToken) {
             var spawn = new Spawn {
@@ -18,7 +19,8 @@ namespace Pandora.Network.Messages {
                 Y = cellY,
                 Team = team,
                 PlayerId = NetworkControllerSingleton.instance.PlayerId ?? throw new Exception("Could not find player id"),
-                UnitId = unitId
+                UnitId = unitId,
+                ManaUsed = manaUsed
             };
 
             var envelope = new ClientEnvelope {

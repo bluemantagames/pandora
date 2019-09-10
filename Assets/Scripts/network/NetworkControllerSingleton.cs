@@ -124,20 +124,26 @@ namespace Pandora.Network
             Message message;
 
             while (true)
-            { // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+            {
+                // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+
                 var isMessageDequeued = queue.TryDequeue(out message);
 
                 if (isMessageDequeued)
                 {
                     SendMessage(message.ToBytes(matchToken));
                 }
+
+                Thread.Sleep(100);
             }
         }
 
         public void ReceiveLoop()
         {
             while (true)
-            { // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+            {
+                // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+
                 var sizeBytes = new Byte[4];
 
                 matchSocket.Receive(sizeBytes, sizeBytes.Length, 0);
@@ -174,6 +180,7 @@ namespace Pandora.Network
                 if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
                 { // enqueue spawns and let the main thread handle it
                     var commands = new List<Message> { };
+                    int? mana = null;
 
                     foreach (var command in envelope.Step.Commands)
                     {
@@ -202,9 +209,19 @@ namespace Pandora.Network
                         }
                     }
 
+                    // (I don't really like the foreach here...)
+                    foreach (var playerInfo in envelope.Step.PlayerInfo)
+                    {
+                        if (playerInfo.Id == PlayerId)
+                        {
+                            mana = playerInfo.Mana;
+                            Debug.Log($"Player ({PlayerId}) received mana: {mana}");
+                        }
+                    }
+
                     Debug.Log("Enqueuing Step");
 
-                    stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands));
+                    stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
                 }
             }
         }

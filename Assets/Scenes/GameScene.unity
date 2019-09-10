@@ -1215,6 +1215,7 @@ MonoBehaviour:
   card: {fileID: 1060352442105845753, guid: cd8bf7fbffc60904882d214fda34ea8c, type: 3}
   team: 2
   cardName: Barbarian
+  requiredMana: 20
 --- !u!114 &1075106908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1497,6 +1498,7 @@ MonoBehaviour:
   card: {fileID: 1060352442105845753, guid: a6124a5aa057b5c44b7db82ec82b8396, type: 3}
   team: 1
   cardName: Barbarian
+  requiredMana: 20
 --- !u!1 &1350310328
 GameObject:
   m_ObjectHideFlags: 0
@@ -2131,6 +2133,7 @@ MonoBehaviour:
   card: {fileID: 1060352442105845753, guid: cd8bf7fbffc60904882d214fda34ea8c, type: 3}
   team: 1
   cardName: BabyDragon
+  requiredMana: 30
 --- !u!114 &1619967851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2298,7 +2301,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1680853637}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9580598eea30deb4bba627ba0db5ca28, type: 3}
+  m_Script: {fileID: 11500000, guid: b6c7dfe355ca22e45bea227d4a08fc26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1680853640
@@ -2939,7 +2942,7 @@ GameObject:
   - component: {fileID: 1899034001}
   - component: {fileID: 1899034003}
   m_Layer: 5
-  m_Name: Text
+  m_Name: TeamText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3072,6 +3075,7 @@ MonoBehaviour:
   card: {fileID: 1851135866392614702, guid: 2396cc48b29664b4f97c5ed891f0a64d, type: 3}
   team: 1
   cardName: Fireball
+  requiredMana: 10
 --- !u!114 &1926222431
 MonoBehaviour:
   m_ObjectHideFlags: 0
