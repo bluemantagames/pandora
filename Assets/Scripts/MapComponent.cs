@@ -334,10 +334,12 @@ namespace Pandora
             Units.Add(id, unit);
         }
 
-        public Enemy GetEnemyInRange(GameObject unit, GridCell position, int team, float range)
+        public Enemy GetEnemyInRange(GameObject unit, GridCell position, int team)
         {
             float? minDistance = null;
             GameObject enemy = null;
+
+            var combatBehaviour = unit.GetComponent<CombatBehaviour>();
 
             foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
             {
@@ -355,7 +357,7 @@ namespace Pandora
                     (targetGameObject.layer == Constants.FLYING_LAYER && unit.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying and we are ranged
                     (unit.layer == Constants.FLYING_LAYER); // we're flying
 
-                var isInRange = engine.IsInRange(engineEntity, targetEngineEntity, Mathf.RoundToInt(range));
+                var isInRange = combatBehaviour.IsInAggroRange(new Enemy(targetGameObject));
 
                 var isTargetValid =
                     (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.isDead && canUnitsFight;
@@ -405,13 +407,13 @@ namespace Pandora
             return units;
         }
 
-        public GridCell GetTarget(GameObject unit, GridCell cell, int team, float aggroRange)
+        public GridCell GetTarget(GameObject unit, GridCell cell, int team)
         {
             GridCell? lanePosition = null;
 
             var cellVector = cell.vector;
 
-            var enemyPosition = GetEnemyInRange(unit, cell, team, aggroRange)?.enemyCell;
+            var enemyPosition = GetEnemyInRange(unit, cell, team)?.enemyCell;
 
             var teamComponent = unit.GetComponent<TeamComponent>();
             var isOpponent = teamComponent.IsOpponent();

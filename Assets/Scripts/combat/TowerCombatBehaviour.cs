@@ -186,5 +186,15 @@ namespace Pandora.Combat
                 middleTower.GetComponent<TowerCombatBehaviour>().isFrontTowerDestroyed = true;
             }
         }
+
+        public bool IsInAggroRange(Enemy enemy)
+        {
+            return false; // aggro is managed by TickUpdate
+        }
+
+        public bool IsInAttackRange(Enemy enemy)
+        {
+            return false; // attack is managed by TickUpdate
+        }
     }
 }

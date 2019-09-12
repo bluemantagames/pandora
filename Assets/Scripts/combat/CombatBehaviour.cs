@@ -19,5 +19,11 @@ namespace Pandora.Combat {
 
         /// <summary>Called on unit death</summary>
         void OnDead();
+
+        /// <summary>Returns whether the unit should aggro another unity</summary>
+        bool IsInAggroRange(Enemy enemy);
+
+        /// <summary>Returns whether the unit is in attack range</summary>
+        bool IsInAttackRange(Enemy enemy);
     }
 }

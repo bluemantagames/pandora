@@ -21,7 +21,6 @@ namespace Pandora.Movement
         TeamComponent team;
         Enemy targetEnemy;
         CombatBehaviour combatBehaviour;
-        public float aggroRange = 10;
         PandoraEngine engine {
             get {
                 return GetComponent<EngineComponent>().Engine;
@@ -51,7 +50,7 @@ namespace Pandora.Movement
         {
             var currentPosition = CurrentCellPosition();
 
-            var enemy = map.GetEnemyInRange(gameObject, currentPosition, team.team, aggroRange);
+            var enemy = map.GetEnemyInRange(gameObject, currentPosition, team.team);
 
             // first and foremost, if an enemy is in range: attack them
             if (enemy != null && targetEnemy == null)
@@ -74,17 +73,32 @@ namespace Pandora.Movement
             }
 
             // if you're attacking an enemy: keep attacking
-            if (targetEnemy != null && engine.IsInRange(engineEntity, targetEnemy.enemyEntity, Mathf.RoundToInt(aggroRange)))
+            if (targetEnemy != null && combatBehaviour.IsInAttackRange(targetEnemy))
             {
                 engineEntity.SetEmptyPath();
 
                 return new MovementState(enemy, MovementStateEnum.EnemyApproached);
             }
 
+            // if you were attacking an enemy, but they are now out of attack range but
+            // still in aggro range, move towards them
+            if (targetEnemy != null && combatBehaviour.IsInAggroRange(targetEnemy))
+            {
+                currentPath = null;
+            }
+
+            // if you were attacking an enemy, but they are now out of both attack range
+            // and aggro range, forget them
+            if (targetEnemy != null && combatBehaviour.IsInAggroRange(targetEnemy))
+            {
+                currentPath = null;
+                targetEnemy = null;
+            }
+
             // if no path has been calculated: calculate one and point the object to the first position in the queue
             if (currentPath == null)
             {
-                currentPath = FindPath(map.GetTarget(gameObject, currentPosition, team.team, aggroRange));
+                currentPath = FindPath(map.GetTarget(gameObject, currentPosition, team.team));
 
                 Debug.Log("Found path " + string.Join(",", currentPath));
 

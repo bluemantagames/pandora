@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pandora.Engine;
 
 namespace Pandora.Combat
 {
@@ -14,6 +15,7 @@ namespace Pandora.Combat
         public int attackCooldownMs = 500, backswingMs = 400;
         public bool isAttacking { get; private set; } = false;
         public string animationStateName;
+        public int AggroRangeCells = 3, AttackRangeEngineUnits = 200;
     
         /// <summary>Multiplier applied for the next attack</summary>
         public float? NextAttackMultiplier = null;
@@ -91,5 +93,21 @@ namespace Pandora.Combat
         }
 
         public void OnDead() {}
+
+        public bool IsInAggroRange(Enemy enemy)
+        {
+            var engineComponent = GetComponent<EngineComponent>();
+            var engine = engineComponent.Engine;
+
+            return engine.IsInRangeCells(engineComponent.Entity, enemy.enemyEntity, AggroRangeCells);
+        }
+
+        public bool IsInAttackRange(Enemy enemy)
+        {
+            var engineComponent = GetComponent<EngineComponent>();
+            var engine = engineComponent.Engine;
+
+            return engine.IsInRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
+        }
     }
 }
