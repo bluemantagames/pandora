@@ -14,13 +14,12 @@ namespace Pandora.Command
 
         /// <summary>The max radius in which to search for a target</summary>
         public int SearchRangeEngineUnits = 1200;
-
-        SpriteRenderer rangerRenderer;
-        MeleeCombatBehaviour combatBehaviour;
+        float? coloredTimePassed = null;
+        public float BlinkTime = 1f;
+        Enemy target = null;
 
         public void InvokeCommand()
         {
-            Enemy target = null;
             int? hp = null;
 
             var entities =
@@ -58,27 +57,30 @@ namespace Pandora.Command
                 foreach (var harpy in entities) {
                     harpy.GetComponent<MovementComponent>().Target = target;
                 }
+
+                originalColor = target.enemy.GetComponent<SpriteRenderer>().color;
+                target.enemy.GetComponent<SpriteRenderer>().color = SelectedColor;
+                coloredTimePassed = 0f;
             }
         }
 
         void Awake()
         {
-            combatBehaviour = GetComponentInParent<MeleeCombatBehaviour>();
-            rangerRenderer = GetComponentInParent<SpriteRenderer>();
-            originalColor = rangerRenderer.color;
         }
 
         void Update()
         {
-            if (rangerRenderer.color != SelectedColor && combatBehaviour.NextAttackMultiplier.HasValue)
-            {
-                rangerRenderer.color = SelectedColor;
+            if (coloredTimePassed.HasValue) {
+                coloredTimePassed += Time.deltaTime;
+
+                if (coloredTimePassed >= BlinkTime)  {
+                    target.enemy.GetComponent<SpriteRenderer>().color = originalColor;
+                    
+                    coloredTimePassed = null;
+                }
+
             }
 
-            if (rangerRenderer.color == SelectedColor && !combatBehaviour.NextAttackMultiplier.HasValue)
-            {
-                rangerRenderer.color = originalColor;
-            }
         }
 
     }
