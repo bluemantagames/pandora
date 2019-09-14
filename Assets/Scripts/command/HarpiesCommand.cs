@@ -27,7 +27,6 @@ namespace Pandora.Command
                 from harpy in transform.parent.GetComponent<GroupComponent>().Objects
                 select harpy;
 
-
             var positions = entities.Select(harpy => harpy.GetComponent<EngineComponent>());
 
             Debug.Log("harpy command invoked");
@@ -44,6 +43,7 @@ namespace Pandora.Command
 
                 if ((hp == null || hp.Value < lifeComponent.lifeValue) && teamComponent.team != targetTeamComponent.team) {
                     hp = Mathf.FloorToInt(lifeComponent.lifeValue);
+
                     target = new Enemy(lifeComponent.gameObject);
                 }
             }
@@ -53,7 +53,7 @@ namespace Pandora.Command
             if (target == null) {
                 Debug.LogWarning("Could not find a target for harpies command");
             } else {
-                Debug.Log($"Attacking {target}");
+                Debug.Log($"Harpies attacking {target}");
 
                 foreach (var harpy in entities) {
                     harpy.GetComponent<MovementComponent>().Target = target;

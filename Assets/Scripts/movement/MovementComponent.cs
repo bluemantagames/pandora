@@ -105,26 +105,18 @@ namespace Pandora.Movement
             }
 
             // if you were attacking an enemy, but they are now out of attack range, forget them
-            if (targetEnemy != null && !combatBehaviour.IsInAttackRange(targetEnemy) && LastState == MovementStateEnum.EnemyApproached)
+            if (targetEnemy != null && !combatBehaviour.IsInAttackRange(targetEnemy) && LastState == MovementStateEnum.EnemyApproached && !isTargetForced)
             {
                 currentPath = null;
                 targetEnemy = null;
             }
 
             // if no path has been calculated: calculate one and point the object to the first position in the queue
-            if (currentPath == null)
+            if (currentPath == null || currentPath.Contains(currentPosition))
             {
-                CalculatePath();
+                AdvancePosition(currentPosition);
 
                 Debug.Log($"Found path ({gameObject.name}): {string.Join(",", currentPath)}, am in {currentPosition}");
-
-                AdvancePosition(currentPosition);
-            }
-
-            // if current position is in the queue it means we need to advance target
-            if (currentPath.Contains(currentPosition))
-            {
-                AdvancePosition(currentPosition);
             }
 
             var worldPosition =
@@ -150,7 +142,6 @@ namespace Pandora.Movement
             engineEntity.SetTarget(currentTarget);
 
             direction = (currentTarget.vector - currentPosition.vector).normalized;
-
         }
 
 
@@ -216,7 +207,7 @@ namespace Pandora.Movement
 
                 pass += 1;
 
-                if (pass > 3000)
+                if (pass > 5000)
                 {
                     Debug.Log("Short circuiting after 1000 passes");
 
