@@ -212,7 +212,7 @@ namespace Pandora
 
                 if (step.mana != null)
                 {
-                    ManaSingleton.updateMana((int)step.mana);
+                    ManaSingleton.updateMana((float)step.mana);
                 }
             }
 

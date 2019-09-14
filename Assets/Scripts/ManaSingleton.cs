@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ManaSingleton
 {
-    public static int manaValue { get; private set; }
-    public static int maxMana = 100;
-    public static int minMana = 0;
+    public static float manaValue { get; private set; }
+    public static float maxMana = 100f;
+    public static float minMana = 0f;
 
-    public static void updateMana(int newValue)
+    public static void updateMana(float newValue)
     {
         if (newValue < minMana)
         {
