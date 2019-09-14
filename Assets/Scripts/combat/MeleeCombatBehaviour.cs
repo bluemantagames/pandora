@@ -70,6 +70,7 @@ namespace Pandora.Combat
             var animator = GetComponent<Animator>();
 
             animator.SetBool("Attacking", false);
+            animator.speed = 1;
         }
 
         public void MeleeAssignDamage()

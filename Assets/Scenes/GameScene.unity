@@ -382,6 +382,12 @@ PrefabInstance:
       propertyPath: cardName
       value: HarpiesSpawner
       objectReference: {fileID: 0}
+    - target: {fileID: 5968370716324617280, guid: 567f9dbe49b015b4388bffb0eb1cd17e,
+        type: 3}
+      propertyPath: puppet
+      value: 
+      objectReference: {fileID: 2912803032986980184, guid: db44486426ed37f43bb26cb303179f89,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 567f9dbe49b015b4388bffb0eb1cd17e, type: 3}
 --- !u!224 &250740831 stripped
@@ -1346,6 +1352,7 @@ MonoBehaviour:
   card: {fileID: 1060352442105845753, guid: cd8bf7fbffc60904882d214fda34ea8c, type: 3}
   team: 2
   cardName: Barbarian
+  requiredMana: 0
 --- !u!114 &1075106908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1628,6 +1635,7 @@ MonoBehaviour:
   card: {fileID: 1060352442105845753, guid: a6124a5aa057b5c44b7db82ec82b8396, type: 3}
   team: 1
   cardName: Barbarian
+  requiredMana: 0
 --- !u!1 &1350310328
 GameObject:
   m_ObjectHideFlags: 0
@@ -3116,6 +3124,7 @@ MonoBehaviour:
   card: {fileID: 1851135866392614702, guid: 2396cc48b29664b4f97c5ed891f0a64d, type: 3}
   team: 1
   cardName: Fireball
+  requiredMana: 0
 --- !u!114 &1926222431
 MonoBehaviour:
   m_ObjectHideFlags: 0
