@@ -20,12 +20,8 @@ namespace Pandora.Combat
 
         public void Collided(EngineEntity other)
         {
-            Debug.Log("Collided with " + other.GameObject);
-
             if (other.GameObject == target.enemy)
             {
-                Debug.Log("Collided with target " + other);
-
                 var behaviour = parent.GetComponent<CombatBehaviour>();
 
                 if (behaviour != null)

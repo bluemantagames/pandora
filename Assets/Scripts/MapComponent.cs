@@ -126,7 +126,7 @@ namespace Pandora
         public bool IsObstacle(GridCell cell)
         {
             var riverY = 13f;
-            var riverPositions = new List<GridCell>();
+            var riverPositions = new HashSet<GridCell>();
             var cellVector = cell.vector;
 
             for (var x = 0; x < bottomMapSize.x; x++)

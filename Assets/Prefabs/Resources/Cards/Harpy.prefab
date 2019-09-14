@@ -19,7 +19,6 @@ GameObject:
   - component: {fileID: 1881195754666818129}
   - component: {fileID: 9130794682398608112}
   - component: {fileID: 7539184034064533125}
-  - component: {fileID: 3810842992562522239}
   m_Layer: 10
   m_Name: Harpy
   m_TagString: Untagged
@@ -171,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bec2558bfc2eb34da9f6172d2b0f664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aggroRange: 1
+  DebugPathfinding: 0
   speed: 1
   map: {fileID: 0}
 --- !u!114 &3519887656195453972
@@ -205,6 +204,8 @@ MonoBehaviour:
   attackCooldownMs: 400
   backswingMs: 0
   animationStateName: AttackingHarpy
+  AggroRangeCells: 3
+  AttackRangeEngineUnits: 200
 --- !u!61 &9130794682398608112
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -243,20 +244,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3810842992562522239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060352442105845753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8846384b980c8d147a15a9168ee364b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnragedColor: {r: 1, g: 0, b: 0, a: 1}
-  AttackMultiplier: 7
 --- !u!1 &1545008801043616799
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,6 +521,7 @@ GameObject:
   - component: {fileID: 5228339457775071521}
   - component: {fileID: 3127115508753265743}
   - component: {fileID: 3429244827969936786}
+  - component: {fileID: 1012341054078696285}
   m_Layer: 12
   m_Name: HarpyCommand
   m_TagString: Untagged
@@ -615,3 +603,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DoubleTapMaxDelayMs: 200
+--- !u!114 &1012341054078696285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4421198389732778068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69092d4905592304aaab3ed9b54f434a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  SearchRangeEngineUnits: 1200

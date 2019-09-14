@@ -36,6 +36,8 @@ namespace Pandora
 
             var state = movementComponent.Move();
 
+            movementComponent.LastState = state.state;
+
             if (state.state == MovementStateEnum.EnemyApproached)
             {
                 combatBehaviour.AttackEnemy(state.enemy, timeLapsed);
