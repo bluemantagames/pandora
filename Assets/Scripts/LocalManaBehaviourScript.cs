@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pandora.Network;
 
 public class LocalManaBehaviourScript : MonoBehaviour
 {
@@ -22,6 +23,11 @@ public class LocalManaBehaviourScript : MonoBehaviour
 
     private void Update()
     {
+        if (NetworkControllerSingleton.instance.matchStarted)
+        {
+            return;
+        }
+
         roundingTimer -= Time.fixedDeltaTime;
         timer -= Time.fixedDeltaTime;
 
