@@ -9,18 +9,13 @@ namespace Pandora.Command
         public uint DoubleTapMaxDelayMs = 200;
 
         float? lastTapMs = null;
-        bool used = false;
-        GroupComponent groupComponent;
-
-        void Awake() {
-            groupComponent = GetComponentInParent<GroupComponent>();
-        }
+        public bool Used = false;
 
         void OnMouseDown()
         {
-            var usedCommand = groupComponent?.CommandInvoked ?? used;
+            if (Used) return;
 
-            if (usedCommand) return;
+            var groupComponent = GetComponentInParent<GroupComponent>();
 
             var tapTime = Time.time * 1000;
             var elapsed = tapTime - lastTapMs;
@@ -53,10 +48,14 @@ namespace Pandora.Command
                 Debug.LogWarning($"Could not find command behaviour for game object {gameObject.name}");
             }
 
-            used = true;
+            Used = true;
 
             if (groupComponent != null) {
-                groupComponent.CommandInvoked = true;
+                foreach (var gameObject in groupComponent.Objects) {
+                    Debug.Log($"Using {gameObject} {string.Join(", ", groupComponent.Objects)}");
+
+                    gameObject.GetComponentInChildren<CommandListener>().Used = true;
+                }
             }
         }
 
