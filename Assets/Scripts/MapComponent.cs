@@ -212,7 +212,7 @@ namespace Pandora
 
                 if (step.mana != null)
                 {
-                    ManaSingleton.updateMana((float)step.mana);
+                    ManaSingleton.UpdateMana((float)step.mana);
                 }
             }
 
@@ -270,6 +270,8 @@ namespace Pandora
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
                 SpawnUnit(cardName, (int)Math.Floor(mapCell.x), (int)Math.Floor(mapCell.y), team, id, null);
+                ManaSingleton.UpdateMana(ManaSingleton.manaValue - requiredMana);
+                ManaSingleton.manaUnit -= requiredMana;
             }
         }
 
