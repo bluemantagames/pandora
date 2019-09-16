@@ -194,10 +194,14 @@ namespace Pandora.Movement
 
                         var isAdvanceRedundant = evaluatingPosition.pointsSet.Contains(advance);
 
+                        if (advance == end) { // Stop the loop if we found the path
+                            Debug.Log("Found path!");
+                        }
+
                         if (advance != item && !map.IsObstacle(advance) && !isAdvanceRedundant) // except the current positions, obstacles or going back
                         {
                             var distanceToEnd = Vector2.Distance(advance.vector, end.vector); // use the distance between this point and the end as h(n)
-                            var distanceFromStart = Vector2.Distance(currentPosition.vector, advance.vector); // use the distance between this point and the start as g(n)
+                            var distanceFromStart = evaluatingPosition.points.Count + 1; // use the distance between this point and the start as g(n)
                             var priority = distanceFromStart + distanceToEnd; // priority is h(n) ++ g(n)
                             var currentPositions = new List<GridCell>(evaluatingPosition.points) { advance };
                             var queueItem = new QueueItem(currentPositions, new HashSet<GridCell>(currentPositions));
@@ -222,6 +226,10 @@ namespace Pandora.Movement
                 if (pass > 5000)
                 {
                     Debug.Log($"Short circuiting after 5000 passes started from {currentPosition} to {end}");
+                    Debug.Log("Best paths found are");
+                    Debug.Log($"{priorityQueue.Dequeue()}");
+                    Debug.Log($"{priorityQueue.Dequeue()}");
+                    Debug.Log($"{priorityQueue.Dequeue()}");
 
                     if (DebugPathfinding)
                     {
