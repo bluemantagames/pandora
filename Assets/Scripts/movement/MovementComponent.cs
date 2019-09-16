@@ -59,12 +59,10 @@ namespace Pandora.Movement
 
         public float speed = 1f;
         public MapComponent map;
-        private SimplePriorityQueue<QueueItem> priorityQueue;
 
         // Start is called before the first frame update
         void Awake()
         {
-            priorityQueue = new SimplePriorityQueue<QueueItem>();
             body = GetComponent<Rigidbody2D>();
             team = GetComponent<TeamComponent>();
             combatBehaviour = GetComponent<CombatBehaviour>();
@@ -137,6 +135,10 @@ namespace Pandora.Movement
         {
             CalculatePath();
 
+            if (currentPath.Count < 1) {
+                Debug.LogWarning($"Empty path for {targetEnemy?.enemyCell ?? map.GetTarget(gameObject, currentPosition, team.team)}");
+            }
+
             currentTarget = currentPath.First();
 
             engineEntity.SetTarget(currentTarget);
@@ -150,6 +152,7 @@ namespace Pandora.Movement
          */
         List<GridCell> FindPath(GridCell end)
         {
+            var priorityQueue = new SimplePriorityQueue<QueueItem>();
             //Debug.Log($"Searching path for {end}");
 
             priorityQueue.Clear();
@@ -166,13 +169,15 @@ namespace Pandora.Movement
 
             GridCell item;
 
+            var pathFound = false;
+
             if (currentPosition == end)
             {
                 return evaluatingPosition.points;
             }
 
             // get the last item in the queue
-            while ((item = evaluatingPosition.points.Last()) != end)
+            while ((item = evaluatingPosition.points.Last()) != end && !pathFound)
             {
 
                 if (DebugPathfinding)
@@ -183,7 +188,7 @@ namespace Pandora.Movement
                 // check all surrounding positions
                 for (var x = -1f; x <= 1f; x++)
                 {
-                    for (var y = -1f; y <= 1; y++)
+                    for (var y = -1f; y <= 1f; y++)
                     {
                         var advance = new GridCell(item.vector.x + x, item.vector.y + y);
 
@@ -195,7 +200,14 @@ namespace Pandora.Movement
                             var distanceFromStart = Vector2.Distance(currentPosition.vector, advance.vector); // use the distance between this point and the start as g(n)
                             var priority = distanceFromStart + distanceToEnd; // priority is h(n) ++ g(n)
                             var currentPositions = new List<GridCell>(evaluatingPosition.points) { advance };
+                            var queueItem = new QueueItem(currentPositions, new HashSet<GridCell>(currentPositions));
 
+                            if (advance == end) { // Stop the loop if we found the path
+                                evaluatingPosition = queueItem;
+                                pathFound = true;
+
+                                break;
+                            }
 
                             priorityQueue.Enqueue(
                                 new QueueItem(currentPositions, new HashSet<GridCell>(currentPositions)),
@@ -209,7 +221,7 @@ namespace Pandora.Movement
 
                 if (pass > 5000)
                 {
-                    Debug.Log("Short circuiting after 1000 passes");
+                    Debug.Log($"Short circuiting after 5000 passes started from {currentPosition} to {end}");
 
                     if (DebugPathfinding)
                     {
@@ -221,7 +233,7 @@ namespace Pandora.Movement
                     return evaluatingPosition.points;
                 }
 
-                evaluatingPosition = priorityQueue.Dequeue();
+                if (!pathFound) evaluatingPosition = priorityQueue.Dequeue();
             }
 
             if (DebugPathfinding)

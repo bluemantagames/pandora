@@ -10,10 +10,17 @@ namespace Pandora.Command
 
         float? lastTapMs = null;
         bool used = false;
+        GroupComponent groupComponent;
+
+        void Awake() {
+            groupComponent = GetComponentInParent<GroupComponent>();
+        }
 
         void OnMouseDown()
         {
-            if (used) return;
+            var usedCommand = groupComponent?.CommandInvoked ?? used;
+
+            if (usedCommand) return;
 
             var tapTime = Time.time * 1000;
             var elapsed = tapTime - lastTapMs;
@@ -47,6 +54,10 @@ namespace Pandora.Command
             }
 
             used = true;
+
+            if (groupComponent != null) {
+                groupComponent.CommandInvoked = true;
+            }
         }
 
     }

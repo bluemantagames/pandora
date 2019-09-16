@@ -24,7 +24,17 @@ namespace Pandora
         public bool debugHitboxes = false;
         Vector2 bottomMapSize;
         GameObject lastPuppet;
-        HashSet<GridCell> obstaclePositions;
+        HashSet<GridCell> obstaclePositions {
+            get {
+                var hashSet = new HashSet<GridCell> {};
+
+                foreach (var position in GetComponentsInChildren<TowerPositionComponent>()) {
+                    hashSet.UnionWith(position.GetTowerPositions());
+                }
+
+                return hashSet;
+            }
+        }
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         float firstLaneX = 2, secondLaneX = 13;
 
@@ -81,26 +91,6 @@ namespace Pandora
 
             cellWidth = topArenaSize.x / mapSizeX;
             cellHeight = ((topArenaPosition.y + topArenaSize.y) - transform.position.y) / mapSizeY;
-
-            var firstTowerPosition = new GridCell(new Vector2(1, 3));
-            var secondTowerPosition = new GridCell(new Vector2(12, 3));
-            var thirdTowerPosition = new GridCell(new Vector2(1, 21));
-            var fourthTowerPosition = new GridCell(new Vector2(12, 21));
-
-            obstaclePositions =
-                GetTowerPositions(firstTowerPosition);
-
-            obstaclePositions.UnionWith(
-                GetTowerPositions(secondTowerPosition)
-            );
-
-            obstaclePositions.UnionWith(
-                GetTowerPositions(thirdTowerPosition)
-            );
-
-            obstaclePositions.UnionWith(
-                GetTowerPositions(fourthTowerPosition)
-            );
 
             for (var x = 0; x < mapSizeX; x++)
             {
