@@ -31,7 +31,7 @@ namespace Pandora
         }
 
         public override string ToString() {
-            return $"Enemy(GameObject: {enemy}, GridCell: {enemyCell})";
+            return $"Enemy(GameObject: {enemy} ({enemy.name}), GridCell: {enemyCell})";
         }
 
         public Enemy(GameObject enemy)

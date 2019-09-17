@@ -81,7 +81,6 @@ namespace Pandora.Combat
             towerPosition = GetComponent<TowerPositionComponent>();
         }
 
-        // Update is called once per frame
         public void TickUpdate(uint lapsed)
         {
             if (GetComponent<LifeComponent>().isDead) return; // you dead man
@@ -186,6 +185,16 @@ namespace Pandora.Combat
 
                 middleTower.GetComponent<TowerCombatBehaviour>().isFrontTowerDestroyed = true;
             }
+        }
+
+        public bool IsInAggroRange(Enemy enemy)
+        {
+            return false; // aggro is managed by TickUpdate
+        }
+
+        public bool IsInAttackRange(Enemy enemy)
+        {
+            return false; // attack is managed by TickUpdate
         }
     }
 }

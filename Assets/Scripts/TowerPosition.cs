@@ -14,6 +14,10 @@ namespace Pandora
             return !position.IsTop();
         }
 
+        public static bool IsMiddle(this TowerPosition position) {
+            return position == TowerPosition.TopMiddle || position == TowerPosition.BottomMiddle;
+        }
+
         public static TowerPosition Flip(this TowerPosition position) {
             if (position == TowerPosition.TopLeft) {
                 return TowerPosition.BottomLeft;

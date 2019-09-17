@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pandora;
 using Pandora.Movement;
+using Pandora.Engine;
 
 namespace Pandora.Combat
 {
@@ -17,6 +18,7 @@ namespace Pandora.Combat
         public string animationStateName;
         uint timeSinceLastProjectile = 0; // ms
         bool isBackswinging = true;
+        public int AggroRangeCells = 3, AttackRangeEngineUnits = 2000;
 
         public CombatType combatType
         {
@@ -97,5 +99,21 @@ namespace Pandora.Combat
         }
 
         public void OnDead() {}
+
+        public bool IsInAggroRange(Enemy enemy)
+        {
+            var engineComponent = GetComponent<EngineComponent>();
+            var engine = engineComponent.Engine;
+
+            return engine.IsInRangeCells(engineComponent.Entity, enemy.enemyEntity, AggroRangeCells);
+        }
+
+        public bool IsInAttackRange(Enemy enemy)
+        {
+            var engineComponent = GetComponent<EngineComponent>();
+            var engine = engineComponent.Engine;
+
+            return engine.IsInRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
+        }
     }
 }

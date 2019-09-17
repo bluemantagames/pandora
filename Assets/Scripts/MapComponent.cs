@@ -24,8 +24,18 @@ namespace Pandora
         public bool debugHitboxes = false;
         Vector2 bottomMapSize;
         GameObject lastPuppet;
-        HashSet<GridCell> obstaclePositions;
-        public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> {};
+        HashSet<GridCell> obstaclePositions {
+            get {
+                var hashSet = new HashSet<GridCell> {};
+
+                foreach (var position in GetComponentsInChildren<TowerPositionComponent>()) {
+                    hashSet.UnionWith(position.GetTowerPositions());
+                }
+
+                return hashSet;
+            }
+        }
+        public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         float firstLaneX = 2, secondLaneX = 13;
 
         public float cellHeight;
@@ -82,26 +92,6 @@ namespace Pandora
             cellWidth = topArenaSize.x / mapSizeX;
             cellHeight = ((topArenaPosition.y + topArenaSize.y) - transform.position.y) / mapSizeY;
 
-            var firstTowerPosition = new GridCell(new Vector2(1, 3));
-            var secondTowerPosition = new GridCell(new Vector2(12, 3));
-            var thirdTowerPosition = new GridCell(new Vector2(1, 21));
-            var fourthTowerPosition = new GridCell(new Vector2(12, 21));
-
-            obstaclePositions =
-                GetTowerPositions(firstTowerPosition);
-
-            obstaclePositions.UnionWith(
-                GetTowerPositions(secondTowerPosition)
-            );
-
-            obstaclePositions.UnionWith(
-                GetTowerPositions(thirdTowerPosition)
-            );
-
-            obstaclePositions.UnionWith(
-                GetTowerPositions(fourthTowerPosition)
-            );
-
             for (var x = 0; x < mapSizeX; x++)
             {
                 var gridPosition = GridCellToWorldPosition(new GridCell(new Vector2(x, mapSizeY + 1)));
@@ -126,7 +116,7 @@ namespace Pandora
         public bool IsObstacle(GridCell cell)
         {
             var riverY = 13f;
-            var riverPositions = new List<GridCell>();
+            var riverPositions = new HashSet<GridCell>();
             var cellVector = cell.vector;
 
             for (var x = 0; x < bottomMapSize.x; x++)
@@ -193,17 +183,15 @@ namespace Pandora
 
                 foreach (var command in step.Commands)
                 {
-                    if (command is SpawnMessage)
+                    if (command is SpawnMessage spawn)
                     {
-                        var spawn = command as SpawnMessage;
-
                         Debug.Log($"Received {spawn} - spawning unit");
 
-                        SpawnUnit(spawn.unitName, spawn.cellX, spawn.cellY, spawn.team, spawn.unitId, spawn.timestamp);
+                        SpawnUnit(new UnitSpawn(spawn));
                     }
 
-                    if (command is CommandMessage) {
-                        var commandMessage = command as CommandMessage;
+                    if (command is CommandMessage commandMessage)
+                    {
                         var unit = Units[commandMessage.unitId];
 
                         unit?.GetComponent<CommandBehaviour>()?.InvokeCommand();
@@ -255,7 +243,7 @@ namespace Pandora
                 return;
             }
 
-            NetworkControllerSingleton.instance.EnqueueMessage(
+            var message =
                 new SpawnMessage
                 {
                     unitName = cardName,
@@ -264,70 +252,87 @@ namespace Pandora
                     team = TeamComponent.assignedTeam,
                     unitId = id,
                     manaUsed = requiredMana
-                }
-            );
+                };
+
+            NetworkControllerSingleton.instance.EnqueueMessage(message);
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
-                SpawnUnit(cardName, (int)Math.Floor(mapCell.x), (int)Math.Floor(mapCell.y), team, id, null);
+                message.team = team;
+
+                SpawnUnit(new UnitSpawn(message));
+
                 ManaSingleton.UpdateMana(ManaSingleton.manaValue - requiredMana);
                 ManaSingleton.manaUnit -= requiredMana;
             }
         }
 
-        public void SpawnUnit(string unitName, int cellX, int cellY, int team, string id, DateTime? timestamp)
+        /// <summary>Spawns a unit</summary>
+        public void SpawnUnit(UnitSpawn spawn)
         {
-            Debug.Log($"Spawning {unitName} in {cellX}, {cellY}");
+            Debug.Log($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY} Team {spawn.Team}");
 
-            var card = Resources.Load($"Cards/{unitName}") as GameObject;
+            var card = Resources.Load($"Cards/{spawn.UnitName}") as GameObject;
 
-            if (team == TeamComponent.topTeam)
+            if (spawn.Team == TeamComponent.topTeam)
             { // flip Y if top team
-                cellY = mapSizeY - cellY;
+                spawn.CellY = mapSizeY - spawn.CellY;
             }
 
-            var cardPosition = GridCellToWorldPosition(new GridCell(cellX, cellY));
+            var unitGridCell = new GridCell(spawn.CellX, spawn.CellY);
+            var cardPosition = GridCellToWorldPosition(unitGridCell);
             var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
 
-            cardObject.GetComponent<TeamComponent>().team = team;
+            var spawner = cardObject.GetComponent<Spawner>();
 
-            var movement = cardObject.GetComponent<MovementComponent>();
-            var projectileSpell = cardObject.GetComponent<ProjectileSpellBehaviour>();
+            if (spawner != null)
+            {
+                spawner.Spawn(this, spawn);
+            }
+            else
+            {
+                InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp);
+            }
+        }
+
+        /// <summary>Initializes unit components, usually called on spawn</summary>
+        public void InitializeComponents(GameObject unit, GridCell cell, int team, string id, DateTime? timestamp)
+        {
+            unit.GetComponent<TeamComponent>().team = team;
+
+            var movement = unit.GetComponent<MovementComponent>();
+            var projectileSpell = unit.GetComponent<ProjectileSpellBehaviour>();
 
             if (movement != null) movement.map = this;
-
-            var gridCell = new GridCell(cellX, cellY);
 
             if (projectileSpell != null)
             {
                 var towerPosition = GetTowerPositionComponent(TowerPosition.BottomMiddle);
 
-                gridCell = towerPosition.GetTowerCenter();
-
                 projectileSpell.map = this;
             }
 
-            var engineEntity = engine.AddEntity(cardObject, movement?.speed ?? projectileSpell.speed, gridCell, projectileSpell == null, timestamp);
+            var engineEntity = engine.AddEntity(unit, movement?.speed ?? projectileSpell.speed, cell, projectileSpell == null, timestamp);
 
             if (projectileSpell != null)
             {
-                var target = new GridCell(cellX, cellY);
+                engineEntity.SetTarget(cell);
 
-                engineEntity.SetTarget(target);
-
-                projectileSpell.Target = target;
+                projectileSpell.Target = cell;
             }
 
-            cardObject.GetComponent<EngineComponent>().Entity = engineEntity;
-            cardObject.AddComponent<UnitIdComponent>().Id = id;
+            unit.GetComponent<EngineComponent>().Entity = engineEntity;
+            unit.AddComponent<UnitIdComponent>().Id = id;
 
-            Units.Add(id, cardObject);
+            Units.Add(id, unit);
         }
 
-        public Enemy GetEnemyInRange(GameObject unit, GridCell position, int team, float range)
+        public Enemy GetEnemyInRange(GameObject unit, GridCell position, int team)
         {
             float? minDistance = null;
             GameObject enemy = null;
+
+            var combatBehaviour = unit.GetComponent<CombatBehaviour>();
 
             foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
             {
@@ -345,7 +350,7 @@ namespace Pandora
                     (targetGameObject.layer == Constants.FLYING_LAYER && unit.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying and we are ranged
                     (unit.layer == Constants.FLYING_LAYER); // we're flying
 
-                var isInRange = engine.IsInRange(engineEntity, targetEngineEntity, Mathf.RoundToInt(range));
+                var isInRange = combatBehaviour.IsInAggroRange(new Enemy(targetGameObject));
 
                 var isTargetValid =
                     (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.isDead && canUnitsFight;
@@ -395,13 +400,13 @@ namespace Pandora
             return units;
         }
 
-        public GridCell GetTarget(GameObject unit, GridCell cell, int team, float aggroRange)
+        public GridCell GetTarget(GameObject unit, GridCell cell, int team)
         {
             GridCell? lanePosition = null;
 
             var cellVector = cell.vector;
 
-            var enemyPosition = GetEnemyInRange(unit, cell, team, aggroRange)?.enemyCell;
+            var enemyPosition = GetEnemyInRange(unit, cell, team)?.enemyCell;
 
             var teamComponent = unit.GetComponent<TeamComponent>();
             var isOpponent = teamComponent.IsOpponent();

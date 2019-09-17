@@ -193,7 +193,13 @@ namespace Pandora.Engine
             entities.Remove(entity);
         }
 
-        public bool IsInRange(EngineEntity entity1, EngineEntity entity2, int gridCellRange)
+        public bool IsInRangeCells(EngineEntity entity1, EngineEntity entity2, int gridCellRange)
+        {
+            return IsInRange(entity1, entity2, gridCellRange * UnitsPerCell);
+        }
+
+
+        public bool IsInRange(EngineEntity entity1, EngineEntity entity2, int units)
         {
             var entity1Bounds = GetEntityBounds(entity1);
             var entity2Bounds = GetEntityBounds(entity2);
@@ -203,7 +209,7 @@ namespace Pandora.Engine
                 Math.Abs(entity1Bounds.Center.y - entity2Bounds.Center.y) - ((entity1Bounds.Height + entity2Bounds.Height) / 2)
             );
 
-            return distance <= (gridCellRange * UnitsPerCell);
+            return distance <= units;
         }
 
         // converts a world point to a physics engine point using linear interpolation 

@@ -45,6 +45,25 @@ namespace Pandora
         MapComponent mapComponent;
         bool shouldRefresh = false;
 
+        public List<GridCell> GetTowerPositions() {
+            var positions = new List<GridCell> {};
+
+            if (GetComponent<LifeComponent>().isDead) {
+                return positions;
+            }
+
+            var xLength = (EngineTowerPosition.IsMiddle()) ? 4 : 3;
+
+            for (var x = 0; x < xLength; x++) {
+                for (var y = 0; y < 3; y++) {
+
+                    positions.Add(new GridCell(Position.x + x, Position.y + y));
+                }
+            }
+
+            return positions;
+        }
+
         public GridCell GetMapTarget()
         {
             if (EngineTowerPosition == TowerPosition.TopLeft || EngineTowerPosition == TowerPosition.TopRight)

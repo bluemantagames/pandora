@@ -1,0 +1,1 @@
+docker run -ti --rm -v "$(pwd):/root" -w /root unity-android /opt/Unity/Editor/Unity -batchmode -nographics -logfile - -createManualActivationFile
