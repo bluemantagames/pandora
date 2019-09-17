@@ -28,8 +28,8 @@ public class LocalManaBehaviourScript : MonoBehaviour
             return;
         }
 
-        roundingTimer -= Time.fixedDeltaTime;
-        timer -= Time.fixedDeltaTime;
+        roundingTimer -= Time.deltaTime;
+        timer -= Time.deltaTime;
 
         if (Mathf.Approximately(ManaSingleton.manaValue, ManaSingleton.maxMana))
         {
