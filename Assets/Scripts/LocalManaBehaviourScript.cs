@@ -5,10 +5,10 @@ using Pandora.Network;
 
 public class LocalManaBehaviourScript : MonoBehaviour
 {
-    public bool enabled = true;
-    public int manaEveryTimelapse = 10;
-    public float stepAmount = 0.2f;
-    public float roundingTimelapse = 2.8f;
+    public bool Enabled = true;
+    public int ManaEveryTimelapse = 10;
+    public float StepAmount = 0.2f;
+    public float RoundingTimelapse = 2.8f;
 
     float manaPerStep;
     float timer;
@@ -16,9 +16,9 @@ public class LocalManaBehaviourScript : MonoBehaviour
 
     private void Start()
     {
-        manaPerStep = stepAmount * manaEveryTimelapse / roundingTimelapse;
-        timer = stepAmount;
-        roundingTimer = roundingTimelapse;
+        manaPerStep = StepAmount * ManaEveryTimelapse / RoundingTimelapse;
+        timer = StepAmount;
+        roundingTimer = RoundingTimelapse;
     }
 
     private void Update()
@@ -41,12 +41,12 @@ public class LocalManaBehaviourScript : MonoBehaviour
 
         if (isTimerEnd)
         {
-            timer = stepAmount;
+            timer = StepAmount;
 
             if (isRoundingTimerEnd)
             {
-                ManaSingleton.manaUnit += manaEveryTimelapse;
-                roundingTimer = roundingTimelapse;
+                ManaSingleton.manaUnit += ManaEveryTimelapse;
+                roundingTimer = RoundingTimelapse;
 
                 UpdateMana(ManaSingleton.manaUnit);
             }
