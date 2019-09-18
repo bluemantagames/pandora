@@ -200,7 +200,7 @@ namespace Pandora
 
                 if (step.mana != null)
                 {
-                    ManaSingleton.updateMana((int)step.mana);
+                    ManaSingleton.UpdateMana((float)step.mana);
                 }
             }
 
@@ -261,6 +261,9 @@ namespace Pandora
                 message.team = team;
 
                 SpawnUnit(new UnitSpawn(message));
+
+                ManaSingleton.UpdateMana(ManaSingleton.manaValue - requiredMana);
+                ManaSingleton.manaUnit -= requiredMana;
             }
         }
 

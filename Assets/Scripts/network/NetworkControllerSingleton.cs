@@ -180,7 +180,7 @@ namespace Pandora.Network
                 if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
                 { // enqueue spawns and let the main thread handle it
                     var commands = new List<Message> { };
-                    int? mana = null;
+                    float? mana = null;
 
                     foreach (var command in envelope.Step.Commands)
                     {
