@@ -14,11 +14,11 @@ namespace Pandora
         Vector3? originalPosition = null;
         MapComponent map;
 
-        public GameObject puppet;
-        public GameObject card;
-        public int team = 1;
-        public string cardName;
-        public int requiredMana = 0;
+        public GameObject Puppet;
+        public GameObject Card;
+        public int Team = 1;
+        public string CardName;
+        public int RequiredMana = 0;
 
         private void CleanUpDrag(bool returnToPosition)
         {
@@ -49,7 +49,7 @@ namespace Pandora
 
                 map = hit.collider.gameObject.GetComponent<MapComponent>();
 
-                map.OnUICardCollision(puppet);
+                map.OnUICardCollision(Puppet);
 
                 GetComponent<Image>().enabled = false;
             }
@@ -61,15 +61,15 @@ namespace Pandora
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            var movement = card.GetComponent<MovementComponent>();
-            var projectileSpell = card.GetComponent<ProjectileSpellBehaviour>();
+            var movement = Card.GetComponent<MovementComponent>();
+            var projectileSpell = Card.GetComponent<ProjectileSpellBehaviour>();
 
             if (map != null)
             {
                 if (movement != null) movement.map = map;
                 if (projectileSpell != null) projectileSpell.map = map;
 
-                map.SpawnCard(cardName, team, requiredMana);
+                map.SpawnCard(CardName, Team, RequiredMana);
             }
 
             CleanUpDrag(true);

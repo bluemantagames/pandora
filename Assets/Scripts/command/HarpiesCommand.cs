@@ -23,14 +23,14 @@ namespace Pandora.Command
             int? hp = null;
 
             var entities =
-                from harpy in transform.parent.GetComponent<GroupComponent>().Objects
+                from harpy in GetComponent<GroupComponent>().Objects
                 select harpy;
 
             var positions = entities.Select(harpy => harpy.GetComponent<EngineComponent>());
 
             Debug.Log("harpy command invoked");
 
-            var teamComponent = transform.parent.GetComponent<TeamComponent>();
+            var teamComponent = GetComponent<TeamComponent>();
 
             foreach (var lifeComponent in MapComponent.Instance.gameObject.GetComponentsInChildren<LifeComponent>())
             {

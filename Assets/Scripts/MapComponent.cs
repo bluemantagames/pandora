@@ -236,8 +236,7 @@ namespace Pandora
             var mapCell = GetPointedCell();
             var id = System.Guid.NewGuid().ToString();
                
-            // If your mana is not enough to spawn this card
-            // do nothing... (?)
+            // TODO: Notify player somehow if they lack mana
             if (ManaSingleton.manaValue < requiredMana)
             {
                 return;
@@ -456,6 +455,11 @@ namespace Pandora
                 {
                     targetLanePosition.y += yIncrement;
                     targetLanePosition.x += increment;
+                }
+
+                // If lane target is an obstacle (tower or river), target further into the lane
+                while (IsObstacle(new GridCell(targetLanePosition))) {
+                    targetLanePosition.y += yIncrement;
                 }
 
                 lanePosition = new GridCell(targetLanePosition);
