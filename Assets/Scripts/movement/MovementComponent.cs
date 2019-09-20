@@ -103,10 +103,13 @@ namespace Pandora.Movement
             }
 
             // if you were attacking an enemy, but they are now out of attack range, forget them
-            if (targetEnemy != null && !combatBehaviour.IsInAttackRange(targetEnemy) && LastState == MovementStateEnum.EnemyApproached && !isTargetForced)
+            if (targetEnemy != null && !combatBehaviour.IsInAttackRange(targetEnemy) && LastState == MovementStateEnum.EnemyApproached)
             {
                 currentPath = null;
-                targetEnemy = null;
+
+                if (!isTargetForced) {
+                    targetEnemy = null;
+                }
             }
 
             // if no path has been calculated: calculate one and point the object to the first position in the queue
