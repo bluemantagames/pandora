@@ -405,6 +405,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2912803032986980184, guid: db44486426ed37f43bb26cb303179f89,
         type: 3}
+    - target: {fileID: 5968370716324617280, guid: 567f9dbe49b015b4388bffb0eb1cd17e,
+        type: 3}
+      propertyPath: RequiredMana
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 567f9dbe49b015b4388bffb0eb1cd17e, type: 3}
 --- !u!224 &250740831 stripped
@@ -1669,7 +1674,7 @@ MonoBehaviour:
   Card: {fileID: 1060352442105845753, guid: a6124a5aa057b5c44b7db82ec82b8396, type: 3}
   Team: 1
   CardName: Barbarian
-  RequiredMana: 0
+  RequiredMana: 30
 --- !u!1 &1350310328
 GameObject:
   m_ObjectHideFlags: 0
@@ -3158,7 +3163,7 @@ MonoBehaviour:
   Card: {fileID: 1851135866392614702, guid: 2396cc48b29664b4f97c5ed891f0a64d, type: 3}
   Team: 1
   CardName: Fireball
-  RequiredMana: 0
+  RequiredMana: 30
 --- !u!114 &1926222431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3691,5 +3696,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1060352442105845753, guid: cd8bf7fbffc60904882d214fda34ea8c,
         type: 3}
+    - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
+        type: 3}
+      propertyPath: RequiredMana
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 27421fb6b693f7049b807a5040ece799, type: 3}
