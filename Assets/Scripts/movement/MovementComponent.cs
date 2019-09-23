@@ -174,6 +174,12 @@ namespace Pandora.Movement
 
             var pathFound = false;
 
+            if (map.IsObstacle(end)) {
+                Debug.LogWarning("Cannot find path towards an obstacle");
+
+                return evaluatingPosition.points;
+            }
+
             if (currentPosition == end)
             {
                 return evaluatingPosition.points;
