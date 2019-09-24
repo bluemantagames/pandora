@@ -87,6 +87,22 @@ namespace Pandora.Combat
 
             if (isMiddle && !isFrontTowerDestroyed) return;
 
+            var isTargetInAggroBox = false;
+            var isTargetDead = false;
+
+            if (targetLifeComponent != null) {
+                var targetCell = targetLifeComponent.GetComponent<EngineComponent>().Entity.GetCurrentCell();
+
+                isTargetInAggroBox =
+                    targetCell.vector.x >= aggroBoxOrigin.x &&
+                    targetCell.vector.x <= aggroBoxOrigin.x + aggroBoxWidth &&
+                    targetCell.vector.y >= aggroBoxOrigin.y &&
+                    targetCell.vector.y <= aggroBoxOrigin.y + aggroBoxHeight;
+
+                isTargetDead = targetLifeComponent.isDead;
+            }
+
+
             if (currentTarget == null)
             {
                 var units = map.GetUnitsInRect(aggroBoxOrigin, aggroBoxWidth, aggroBoxHeight);
@@ -125,7 +141,7 @@ namespace Pandora.Combat
                     AttackEnemy(new Enemy(currentTarget), 0);
                 }
             }
-            else if (targetLifeComponent != null && targetLifeComponent.isDead)
+            else if (isTargetDead || !isTargetInAggroBox)
             {
                 StopAttacking();
             }
