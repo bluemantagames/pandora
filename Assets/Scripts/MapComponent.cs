@@ -485,6 +485,12 @@ namespace Pandora
             }
 
             var towerPosition = towerPositionComponent?.GetMapTarget() ?? middleTowerPositionComponent.GetMapTarget();
+ 
+ 
+            // don't stay on lanes if front tower is down
+            if (towerPositionComponent == null) {
+                lanePosition = null;
+            }
 
             var endPosition = enemyPosition ?? lanePosition ?? towerPosition;
 

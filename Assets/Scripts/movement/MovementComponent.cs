@@ -191,7 +191,7 @@ namespace Pandora.Movement
 
                 if (DebugPathfinding)
                 {
-                    Debug.Log($"Positions {string.Join(", ", evaluatingPosition.points)} - searching for {end}");
+                    Debug.Log($"DebugPathfinding: Positions {string.Join(", ", evaluatingPosition.points)} - searching for {end}");
                 }
 
                 // check all surrounding positions
@@ -242,7 +242,7 @@ namespace Pandora.Movement
 
                     if (DebugPathfinding)
                     {
-                        Debug.Log("Pausing the editor");
+                        Debug.Log("DebugPathfinding: Pausing the editor");
 
                         Debug.Break();
                     }
@@ -255,7 +255,7 @@ namespace Pandora.Movement
 
             if (DebugPathfinding)
             {
-                Debug.Log($"Done, positions {string.Join(", ", evaluatingPosition.points)}");
+                Debug.Log($"DebugPathfinding: Done, positions {string.Join(", ", evaluatingPosition.points)}");
             }
 
             return evaluatingPosition.points;
@@ -264,8 +264,13 @@ namespace Pandora.Movement
         private void CalculatePath()
         {
             var currentPosition = CurrentCellPosition();
+            var target = targetEnemy?.enemyCell ?? map.GetTarget(gameObject, currentPosition, team.team);
 
-            currentPath = FindPath(targetEnemy?.enemyCell ?? map.GetTarget(gameObject, currentPosition, team.team)).Skip(1).ToList();
+            if (DebugPathfinding) {
+                Debug.Log($"DebugPathfinding: Current target is {target} ({targetEnemy})");
+            }
+
+            currentPath = FindPath(target).Skip(1).ToList();
         }
 
         private GridCell CurrentCellPosition()
