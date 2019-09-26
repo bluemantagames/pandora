@@ -75,6 +75,10 @@ namespace Pandora
             CleanUpDrag(true);
         }
 
+        void Start() {
+            GetComponentInChildren<Text>().text = (RequiredMana / 10).ToString();
+        }
+
 
         void Update()
         {

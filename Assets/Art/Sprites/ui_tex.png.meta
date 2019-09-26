@@ -8,6 +8,9 @@ TextureImporter:
   - first:
       213: 8027760352401318747
     second: ui_tex_1
+  - first:
+      213: -8472680557936086401
+    second: mana-label
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -133,7 +136,7 @@ TextureImporter:
         width: 52
         height: 50
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 5, y: 5, z: 5, w: 5}
       outline: []
       physicsShape: []
@@ -141,6 +144,27 @@ TextureImporter:
       bones: []
       spriteID: 19457aca049f05b4eb143d62b67251d1
       internalID: 8027760352401318747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mana-label
+      rect:
+        serializedVersion: 2
+        x: 2646
+        y: 126
+        width: 61
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b748f6e1cc273741bc0d02c17f4739a
+      internalID: -8472680557936086401
       vertices: []
       indices: 
       edges: []
