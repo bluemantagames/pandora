@@ -15,7 +15,7 @@ namespace Pandora.Combat
         public int attackCooldownMs = 500, backswingMs = 400;
         public bool isAttacking { get; private set; } = false;
         public string animationStateName;
-        public int AggroRangeCells = 3, AttackRangeEngineUnits = 200;
+        public int AggroRangeCells = 3, AttackRangeEngineUnits = 10;
     
         /// <summary>Multiplier applied for the next attack</summary>
         public float? NextAttackMultiplier = null;

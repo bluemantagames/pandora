@@ -59,6 +59,14 @@ namespace Pandora.Engine
             return entity;
         }
 
+        public void PrintDebugInfo(EngineEntity entity) {
+            var prefix = $"({entity.GameObject.name}) PrintDebugInfo:";
+
+            Debug.Log($"{prefix} Position {entity.Position}");
+            Debug.Log($"{prefix} Speed {entity.Speed}");
+            Debug.Log($"{prefix} Hitbox {GetEntityBounds(entity)}");
+        }
+
         public void NextTick()
         {
             // Move units
