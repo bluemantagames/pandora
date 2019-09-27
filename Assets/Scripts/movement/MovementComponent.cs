@@ -26,6 +26,12 @@ namespace Pandora.Movement
         bool isTargetForced = false;
         public MovementStateEnum LastState;
 
+        public bool IsFlying {
+            get {
+                return gameObject.layer == Constants.FLYING_LAYER;
+            }
+        }
+
         public Enemy Target
         {
             private get
@@ -174,7 +180,7 @@ namespace Pandora.Movement
 
             var pathFound = false;
 
-            if (map.IsObstacle(end)) {
+            if (map.IsObstacle(end, IsFlying)) {
                 Debug.LogWarning("Cannot find path towards an obstacle");
 
                 return evaluatingPosition.points;
@@ -207,7 +213,7 @@ namespace Pandora.Movement
                             Debug.Log("Found path!");
                         }
 
-                        if (advance != item && !map.IsObstacle(advance) && !isAdvanceRedundant) // except the current positions, obstacles or going back
+                        if (advance != item && !map.IsObstacle(advance, IsFlying) && !isAdvanceRedundant) // except the current positions, obstacles or going back
                         {
                             var distanceToEnd = Vector2.Distance(advance.vector, end.vector); // use the distance between this point and the end as h(n)
                             var distanceFromStart = evaluatingPosition.points.Count + 1; // use the distance between this point and the start as g(n)

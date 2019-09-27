@@ -24,11 +24,14 @@ namespace Pandora
         public bool debugHitboxes = false;
         Vector2 bottomMapSize;
         GameObject lastPuppet;
-        HashSet<GridCell> obstaclePositions {
-            get {
-                var hashSet = new HashSet<GridCell> {};
+        HashSet<GridCell> obstaclePositions
+        {
+            get
+            {
+                var hashSet = new HashSet<GridCell> { };
 
-                foreach (var position in GetComponentsInChildren<TowerPositionComponent>()) {
+                foreach (var position in GetComponentsInChildren<TowerPositionComponent>())
+                {
                     hashSet.UnionWith(position.GetTowerPositions());
                 }
 
@@ -113,7 +116,7 @@ namespace Pandora
         /**
          * Returns whether the position is uncrossable 
          */
-        public bool IsObstacle(GridCell cell)
+        public bool IsObstacle(GridCell cell, bool isFlying)
         {
             var riverY = 13f;
             var riverPositions = new HashSet<GridCell>();
@@ -130,6 +133,12 @@ namespace Pandora
             var isOutOfBounds = (cellVector.x < 0 && cellVector.y < 0 && cellVector.x >= bottomMapSize.x && cellVector.y >= mapSizeY);
             var isTower = obstaclePositions.Contains(cell);
             var isRiver = riverPositions.Contains(cell);
+
+            if (isFlying)
+            {
+                isRiver = false;
+                isTower = false;
+            }
 
             return isRiver || isTower || isOutOfBounds;
         }
@@ -235,7 +244,7 @@ namespace Pandora
         {
             var mapCell = GetPointedCell();
             var id = System.Guid.NewGuid().ToString();
-               
+
             // TODO: Notify player somehow if they lack mana
             if (ManaSingleton.manaValue < requiredMana)
             {
@@ -458,7 +467,8 @@ namespace Pandora
                 }
 
                 // If lane target is an obstacle (tower or river), target further into the lane
-                while (IsObstacle(new GridCell(targetLanePosition))) {
+                while (IsObstacle(new GridCell(targetLanePosition), false))
+                {
                     targetLanePosition.y += yIncrement;
                 }
 
@@ -485,10 +495,11 @@ namespace Pandora
             }
 
             var towerPosition = towerPositionComponent?.GetMapTarget() ?? middleTowerPositionComponent.GetMapTarget();
- 
- 
+
+
             // don't stay on lanes if front tower is down
-            if (towerPositionComponent == null) {
+            if (towerPositionComponent == null)
+            {
                 lanePosition = null;
             }
 
