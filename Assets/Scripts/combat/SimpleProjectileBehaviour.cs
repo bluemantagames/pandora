@@ -67,6 +67,13 @@ namespace Pandora.Combat
             transform.position = shouldBeFlipped ? engineEntity.GetFlippedWorldPosition() : engineEntity.GetWorldPosition();
 
             engineEntity.SetTarget(target.enemyEntity);
+
+            // TODO: Play "miss" animation, and then remove the entity
+            if (target.enemyEntity.GameObject.GetComponent<LifeComponent>().isDead) {
+                gameObject.SetActive(false);
+
+                Destroy(this);
+            }
         }
     }
 }
