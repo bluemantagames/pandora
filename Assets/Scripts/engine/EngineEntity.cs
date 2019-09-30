@@ -16,14 +16,28 @@ namespace Pandora.Engine {
         public PandoraEngine Engine;
         public int Layer = 1;
         public DateTime Timestamp;
+        public Vector2Int Target;
 
         public void SetTarget(GridCell cell) {
-            var physicsTarget = Engine.GridCellToPhysics(cell);
+            Target = Engine.GridCellToPhysics(cell);
 
-            physicsTarget.x += Engine.UnitsPerCell / 2;
-            physicsTarget.y += Engine.UnitsPerCell / 2;
+            Target.x += Engine.UnitsPerCell / 2;
+            Target.y += Engine.UnitsPerCell / 2;
 
-            Path = Bresenham.GetEnumerator(Position, physicsTarget);
+            Path = Bresenham.GetEnumerator(Position, Target);
+        }
+
+        public void ResetTarget() {
+            Path = Bresenham.GetEnumerator(Position, Target);
+        }
+
+        public void SetTarget(Vector2Int target) {
+            Target = target;
+
+            Target.x += Engine.UnitsPerCell / 2;
+            Target.y += Engine.UnitsPerCell / 2;
+
+            Path = Bresenham.GetEnumerator(Position, Target);
         }
 
         public void SetEmptyPath() {
@@ -31,7 +45,7 @@ namespace Pandora.Engine {
         }
 
         // This method actually sets the target at the _current_ entity position,
-        // it doesn't follow. TODO: Make it follow
+        // it doesn't follow. TODO: Maybe make it follow?
         public void SetTarget(EngineEntity entity) {
             Path = Bresenham.GetEnumerator(Position, entity.Position);
         }

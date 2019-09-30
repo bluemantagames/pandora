@@ -145,8 +145,10 @@ namespace Pandora.Engine
                         moved = first;
                     }
 
-                    direction.x = (int)Mathf.Clamp(-1f, (float)direction.x, 1f);
-                    direction.y = (int)Mathf.Clamp(-1f, (float)direction.y, 1f);
+                    direction = new Vector2Int(
+                        Clamp(-1, direction.x, 1),
+                        Clamp(-1, direction.y, 1)
+                    );
 
                     if (direction.x == 0 && direction.y == 0)
                     {
@@ -156,6 +158,8 @@ namespace Pandora.Engine
 
                     if (first.IsRigid && second.IsRigid && !moved.IsStructure) // resolve collision if both objects are rigid and we don't move a structure hitbox
                     {
+                        Debug.Log("Colliding");
+
                         while (firstBox.Collides(secondBox)) // there probably is a math way to do this without a loop
                         {
                             moved.Position = moved.Position + direction; // move the entity away
@@ -163,6 +167,8 @@ namespace Pandora.Engine
                             firstBox = GetEntityBounds(first);
                             secondBox = GetEntityBounds(second);
                         }
+
+                        moved.ResetTarget(); // Reset engine-side pathing
                     }
                 }
             }
@@ -330,6 +336,13 @@ namespace Pandora.Engine
                 LowerRight = physicsLowerRightBounds,
                 Center = entity.Position
             };
+        }
+
+        int Clamp(int min, int input, int max) {
+            if (input < min) return min;
+            if (input > max) return max;
+
+            return input;
         }
 
         bool CheckLayerCollision(int layer1, int layer2)
