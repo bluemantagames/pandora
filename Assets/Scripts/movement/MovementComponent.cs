@@ -11,7 +11,7 @@ using Pandora.Engine;
 
 namespace Pandora.Movement
 {
-    public class MovementComponent : MonoBehaviour
+    public class MovementComponent : MonoBehaviour, CollisionCallback
     {
         Rigidbody2D body;
         GridCell currentTarget;
@@ -23,11 +23,14 @@ namespace Pandora.Movement
         CombatBehaviour combatBehaviour;
         /// <summary>Enables log on the A* implementation</summary>
         public bool DebugPathfinding;
-        bool isTargetForced = false;
+        bool isTargetForced = false, evadeUnits = false;
+        Vector2Int? lastCollisionPosition;
         public MovementStateEnum LastState;
 
-        public bool IsFlying {
-            get {
+        public bool IsFlying
+        {
+            get
+            {
                 return gameObject.layer == Constants.FLYING_LAYER;
             }
         }
@@ -80,6 +83,11 @@ namespace Pandora.Movement
 
             var enemy = map.GetEnemyInRange(gameObject, currentPosition, team.team);
 
+            transform.position =
+                (TeamComponent.assignedTeam == TeamComponent.bottomTeam) ?
+                    engineEntity.GetWorldPosition() :
+                    engineEntity.GetFlippedWorldPosition();
+
             // first and foremost, if an enemy is in range: attack them
             if (enemy != null && targetEnemy == null)
             {
@@ -113,7 +121,8 @@ namespace Pandora.Movement
             {
                 currentPath = null;
 
-                if (!isTargetForced) {
+                if (!isTargetForced)
+                {
                     targetEnemy = null;
                 }
             }
@@ -126,13 +135,6 @@ namespace Pandora.Movement
                 Debug.Log($"Found path ({gameObject.name}): {string.Join(",", currentPath)}, am in {currentPosition}");
             }
 
-            var worldPosition =
-                (TeamComponent.assignedTeam == TeamComponent.bottomTeam) ?
-                    engineEntity.GetWorldPosition() :
-                    engineEntity.GetFlippedWorldPosition();
-
-            transform.position = worldPosition;
-
             return new MovementState(null, MovementStateEnum.Moving);
         }
 
@@ -144,7 +146,8 @@ namespace Pandora.Movement
         {
             CalculatePath();
 
-            if (currentPath.Count < 1) {
+            if (currentPath.Count < 1)
+            {
                 Debug.LogWarning($"Empty path for {targetEnemy?.enemyCell ?? map.GetTarget(gameObject, currentPosition, team.team)}");
             }
 
@@ -157,9 +160,11 @@ namespace Pandora.Movement
 
 
         /**
-         * Very simple and probably shitty and not at all optimized A* implementation
+         * Very simple and probably shitty and not at all optimized A* implementation.
+         * 
+         * If evadeUnits is true, it also counts units-occupied gridcells as obstacles
          */
-        List<GridCell> FindPath(GridCell end)
+        List<GridCell> FindPath(GridCell end, bool evadeUnits)
         {
             var priorityQueue = new SimplePriorityQueue<QueueItem>();
             //Debug.Log($"Searching path for {end}");
@@ -180,7 +185,8 @@ namespace Pandora.Movement
 
             var pathFound = false;
 
-            if (map.IsObstacle(end, IsFlying)) {
+            if (map.IsObstacle(end, IsFlying))
+            {
                 Debug.LogWarning("Cannot find path towards an obstacle");
 
                 return evaluatingPosition.points;
@@ -209,11 +215,9 @@ namespace Pandora.Movement
 
                         var isAdvanceRedundant = evaluatingPosition.pointsSet.Contains(advance);
 
-                        if (advance == end) { // Stop the loop if we found the path
-                            Debug.Log("Found path!");
-                        }
+                        var containsUnit = (evadeUnits) ? engine.FindInGridCell(advance).Count > 0 : false;
 
-                        if (advance != item && !map.IsObstacle(advance, IsFlying) && !isAdvanceRedundant) // except the current positions, obstacles or going back
+                        if (advance != item && !map.IsObstacle(advance, IsFlying) && !isAdvanceRedundant && !containsUnit) // except the current positions, obstacles or going back
                         {
                             var distanceToEnd = Vector2.Distance(advance.vector, end.vector); // use the distance between this point and the end as h(n)
                             var distanceFromStart = evaluatingPosition.points.Count + 1; // use the distance between this point and the start as g(n)
@@ -221,7 +225,8 @@ namespace Pandora.Movement
                             var currentPositions = new List<GridCell>(evaluatingPosition.points) { advance };
                             var queueItem = new QueueItem(currentPositions, new HashSet<GridCell>(currentPositions));
 
-                            if (advance == end) { // Stop the loop if we found the path
+                            if (advance == end)
+                            { // Stop the loop if we found the path
                                 evaluatingPosition = queueItem;
                                 pathFound = true;
 
@@ -269,19 +274,49 @@ namespace Pandora.Movement
 
         private void CalculatePath()
         {
+            engineEntity.SetSpeed(speed);
+
             var currentPosition = CurrentCellPosition();
             var target = targetEnemy?.enemyCell ?? map.GetTarget(gameObject, currentPosition, team.team);
 
-            if (DebugPathfinding) {
+            if (DebugPathfinding)
+            {
                 Debug.Log($"DebugPathfinding: Current target is {target} ({targetEnemy})");
             }
 
-            currentPath = FindPath(target).Skip(1).ToList();
+            currentPath = FindPath(target, evadeUnits).Skip(1).ToList();
+
+            evadeUnits = false; // try not evading next time
         }
 
         private GridCell CurrentCellPosition()
         {
             return engineEntity.GetCurrentCell();
+        }
+
+        public void Collided(EngineEntity entity)
+        {
+            Debug.Log("Collided, checking if Evading");
+
+            if (GetComponent<CombatBehaviour>().isAttacking) return;
+
+            if (lastCollisionPosition == null)
+            {
+                lastCollisionPosition = engineEntity.Position;
+
+                return;
+            }
+
+            if (lastCollisionPosition == engineEntity.Position)
+            {
+                Debug.Log("Evading");
+
+                evadeUnits = true;
+            }
+            else
+            {
+                lastCollisionPosition = null;
+            }
         }
     }
 }

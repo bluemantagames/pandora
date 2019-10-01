@@ -1075,12 +1075,12 @@ PrefabInstance:
     - target: {fileID: 3866240383038811723, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.65
+      value: 2.57
       objectReference: {fileID: 0}
     - target: {fileID: 3866240383038811723, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.57
+      value: 8.14
       objectReference: {fileID: 0}
     - target: {fileID: 3866240383038811723, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
@@ -1206,12 +1206,12 @@ PrefabInstance:
     - target: {fileID: 3866240382924425442, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.39
+      value: 0.752
       objectReference: {fileID: 0}
     - target: {fileID: 3866240382924425442, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.03
+      value: 0.082
       objectReference: {fileID: 0}
     - target: {fileID: 3866240382924425445, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
@@ -1227,22 +1227,22 @@ PrefabInstance:
     - target: {fileID: 3866240382306625145, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.059
       objectReference: {fileID: 0}
     - target: {fileID: 3866240382306625145, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.347
       objectReference: {fileID: 0}
     - target: {fileID: 3713132170838193506, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.062
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: 3713132170838193506, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.084
+      value: 0.18
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ae196b7cda494c4b8d0457362c166ec, type: 3}
@@ -1465,7 +1465,7 @@ MonoBehaviour:
   mapSizeX: 0
   mapSizeY: 0
   worldMapSize: {x: 0, y: 0}
-  debugHitboxes: 0
+  debugHitboxes: 1
   cellHeight: 0
   cellWidth: 0
   textObject: {fileID: 8625465531379632721, guid: c4b37cb968ea549479f17adeeb8d6051,
@@ -1547,7 +1547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66b989dc42c8bba4093530c600b3fa07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Enabled: 1
+  Enabled: 0
   ManaEveryTimelapse: 10
   StepAmount: 0.2
   RoundingTimelapse: 2.8
@@ -3626,7 +3626,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0040490627, y: -0.26728305}
+  m_Offset: {x: 0.08715147, y: -0.17949373}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -3637,7 +3637,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9954524, y: 0.797875}
+  m_Size: {x: 1.087737, y: 1.5275387}
   m_EdgeRadius: 0
 --- !u!1001 &2693967325521330708
 PrefabInstance:

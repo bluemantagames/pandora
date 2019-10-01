@@ -34,9 +34,13 @@ namespace Pandora.Engine
             }
         }
 
+        public int GetSpeed(float cellPerSecond) {
+            return Mathf.FloorToInt((cellPerSecond * UnitsPerCell / 1000) * tickTime);
+        }
+
         public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, GridCell position, bool isRigid, DateTime? timestamp)
         {
-            var speed = Mathf.FloorToInt((cellPerSecond * UnitsPerCell / 1000) * tickTime);
+            var speed = GetSpeed(cellPerSecond);
 
             Debug.Log($"Assigning speed {speed} in {position}");
 
@@ -59,7 +63,8 @@ namespace Pandora.Engine
             return entity;
         }
 
-        public void PrintDebugInfo(EngineEntity entity) {
+        public void PrintDebugInfo(EngineEntity entity)
+        {
             var prefix = $"({entity.GameObject.name}) PrintDebugInfo:";
 
             Debug.Log($"{prefix} Position {entity.Position}");
@@ -92,22 +97,33 @@ namespace Pandora.Engine
             // TODO: A more efficient way to do this is to have a flag be true while we are checking collisions,
             // cache away all the removals/adds and execute them later
             var clonedEntities = new List<EngineEntity>(entities);
+            var passes = 0;
 
             // Check for collisions
-            foreach (var first in clonedEntities)
+            for (var i1 = 0; i1 < clonedEntities.Count; i1++)
             {
-                foreach (var second in clonedEntities)
+                for (var i2 = 0; i2 < clonedEntities.Count; i2++)
                 {
+                    passes++;
+
+                    if (passes > 5000)
+                    {
+                        throw new Exception("Cutting collision solving");
+                    }
+
+                    var first = clonedEntities[i1];
+                    var second = clonedEntities[i2];
+
                     var firstBox = GetEntityBounds(first);
                     var secondBox = GetEntityBounds(second);
 
-                    // continue if they don't collide
                     var notCollision =
                         (!first.IsRigid && !second.IsRigid) || // there must be one rigid object
                         first == second || // entity can't collide with itself
                         !firstBox.Collides(secondBox) || // boxes must collide
                         !CheckLayerCollision(first.Layer, second.Layer); // layer must be compatible for collisions
 
+                    // continue if they don't collide
                     if (notCollision)
                     {
                         continue;
@@ -125,24 +141,40 @@ namespace Pandora.Engine
 
                     Vector2Int direction;
                     EngineEntity moved;
+                    EngineEntity unmoved;
+
+                    var isFirstFaster = false;
+
+                    if (first.CollisionSpeed > 0 || second.CollisionSpeed > 0)
+                    {
+                        isFirstFaster = first.CollisionSpeed > second.CollisionSpeed;
+                    }
+                    else
+                    {
+                        isFirstFaster = first.Speed > second.Speed;
+                    }
+
+                    var isSecondMoving =
+                        (isFirstFaster || first.IsStructure) && !second.IsStructure;
 
                     // move away the entity with less speed
-                    if (first.Speed > second.Speed)
+                    if (isSecondMoving)
                     {
                         direction = second.Position - first.Position;
                         moved = second;
+                        unmoved = first;
                     }
-                    else if (first.Speed == second.Speed) { // if speeds are equal, use server-generated timestamps to avoid non-deterministic behaviour
+                    else if (first.Speed == second.Speed && !first.IsStructure && !second.IsStructure)
+                    { // if speeds are equal, use server-generated timestamps to avoid non-deterministic behaviour
                         moved = (first.Timestamp > second.Timestamp) ? first : second;
-
-                        var unmoved = (first.Timestamp > second.Timestamp) ? second : first;
-
+                        unmoved = (first.Timestamp > second.Timestamp) ? second : first;
                         direction = moved.Position - unmoved.Position;
                     }
                     else
                     {
                         direction = first.Position - second.Position;
                         moved = first;
+                        unmoved = second;
                     }
 
                     direction = new Vector2Int(
@@ -156,9 +188,13 @@ namespace Pandora.Engine
                         direction.y = 1;
                     }
 
-                    if (first.IsRigid && second.IsRigid && !moved.IsStructure) // resolve collision if both objects are rigid and we don't move a structure hitbox
+                    if (moved.IsRigid && unmoved.IsRigid)
                     {
-                        Debug.Log("Colliding");
+                        // recheck for collisions once solved
+                        i1 = 0;
+                        i2 = 0;
+
+                        Debug.Log($"Colliding {moved.GameObject.name} with {unmoved.GameObject.name}");
 
                         while (firstBox.Collides(secondBox)) // there probably is a math way to do this without a loop
                         {
@@ -169,17 +205,25 @@ namespace Pandora.Engine
                         }
 
                         moved.ResetTarget(); // Reset engine-side pathing
+                        moved.CollisionSpeed++; // Give the moved entity some speed
+
+                        if (unmoved.IsStructure) { // Give the moved entity even more speed if pushed by a structure (to avoid nasty loops)
+                            moved.CollisionSpeed++;
+                        }
                     }
                 }
             }
 
             foreach (var entity in clonedEntities)
             {
+                entity.CollisionSpeed = 0; // Once collisions are solved, remove collision speed
+
                 var engineComponent = entity.GameObject.GetComponent<EngineComponent>();
 
                 if (engineComponent == null) continue;
 
-                foreach (var component in entity.GameObject.GetComponent<EngineComponent>().Components) {
+                foreach (var component in entity.GameObject.GetComponent<EngineComponent>().Components)
+                {
                     component.TickUpdate(tickTime);
                 }
             }
@@ -303,6 +347,23 @@ namespace Pandora.Engine
             return new GridCell(xCell, yCell);
         }
 
+        public List<EngineEntity> FindInGridCell(GridCell gridCell)
+        { // TODO: Maybe use a quad tree for < O(n) search
+            var physics = GridCellToPhysics(gridCell);
+
+            List<EngineEntity> targetEntities = new List<EngineEntity> { };
+
+            foreach (var entity in entities)
+            {
+                if (GetEntityBounds(entity).Contains(physics))
+                {
+                    targetEntities.Add(entity);
+                }
+            }
+
+            return targetEntities;
+        }
+
         BoxBounds GetEntityBounds(EngineEntity entity)
         {
             var worldBounds = entity.GameObject.GetComponent<BoxCollider2D>().bounds;
@@ -338,7 +399,8 @@ namespace Pandora.Engine
             };
         }
 
-        int Clamp(int min, int input, int max) {
+        int Clamp(int min, int input, int max)
+        {
             if (input < min) return min;
             if (input > max) return max;
 

@@ -244,9 +244,10 @@ namespace Pandora
         {
             var mapCell = GetPointedCell();
             var id = System.Guid.NewGuid().ToString();
+            var manaComponent = GetComponent<LocalManaBehaviourScript>();
 
             // TODO: Notify player somehow if they lack mana
-            if (ManaSingleton.manaValue < requiredMana)
+            if (manaComponent.Enabled && ManaSingleton.manaValue < requiredMana)
             {
                 return;
             }
@@ -321,6 +322,8 @@ namespace Pandora
             }
 
             var engineEntity = engine.AddEntity(unit, movement?.speed ?? projectileSpell.speed, cell, projectileSpell == null, timestamp);
+
+            if (movement != null) engineEntity.CollisionCallback = movement;
 
             if (projectileSpell != null)
             {
