@@ -100,11 +100,11 @@ namespace Pandora
             }
             else if (EngineTowerPosition == TowerPosition.BottomMiddle)
             {
-                return new GridCell(Position.x + 2, Position.y + 2);
+                return new GridCell(Position.x + 2, Position.y + 1);
             }
             else if (EngineTowerPosition == TowerPosition.TopMiddle)
             {
-                return new GridCell(Position.x + 2, Position.y + 2);
+                return new GridCell(Position.x + 2, Position.y + 1);
             }
             else
             {
@@ -137,7 +137,15 @@ namespace Pandora
 
         public void SpawnTower()
         {
-            TowerEntity = MapComponent.Instance.engine.AddEntity(gameObject, 0f, GetTowerCenter(), true, null);
+            var center = MapComponent.Instance.engine.GridCellToPhysics(GetTowerCenter());
+
+            center.y += MapComponent.Instance.engine.UnitsPerCell / 2;
+
+            if (!EngineTowerPosition.IsMiddle()) {
+                center.x += MapComponent.Instance.engine.UnitsPerCell / 2;
+            }
+
+            TowerEntity = MapComponent.Instance.engine.AddEntity(gameObject, 0f, center, true, null);
             TowerEntity.IsStructure = true;
 
             GetComponent<EngineComponent>().Entity = TowerEntity;

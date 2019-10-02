@@ -11,7 +11,7 @@ using Pandora.Engine;
 
 namespace Pandora.Movement
 {
-    public class MovementComponent : MonoBehaviour
+    public class MovementComponent : MonoBehaviour, CollisionCallback
     {
         Rigidbody2D body;
         GridCell currentTarget;
@@ -23,11 +23,15 @@ namespace Pandora.Movement
         CombatBehaviour combatBehaviour;
         /// <summary>Enables log on the A* implementation</summary>
         public bool DebugPathfinding;
-        bool isTargetForced = false;
+        bool isTargetForced = false; 
+        bool evadeUnits = false;
+        Vector2Int? lastCollisionPosition;
         public MovementStateEnum LastState;
 
-        public bool IsFlying {
-            get {
+        public bool IsFlying
+        {
+            get
+            {
                 return gameObject.layer == Constants.FLYING_LAYER;
             }
         }
@@ -78,34 +82,21 @@ namespace Pandora.Movement
         {
             var currentPosition = CurrentCellPosition();
 
-            var enemy = map.GetEnemyInRange(gameObject, currentPosition, team.team);
+            var enemy = map.GetEnemy(gameObject, currentPosition, team);
 
-            // first and foremost, if an enemy is in range: attack them
-            if (enemy != null && targetEnemy == null)
-            {
-                targetEnemy = enemy;
+            var isTargetDead = targetEnemy?.enemy.GetComponent<LifeComponent>().isDead ?? true;
 
-                currentPath = null;
-
-                return new MovementState(enemy, MovementStateEnum.TargetAcquired);
-            }
-
-            // remove targeted enemy if they are dead and recalculate pathing
-            if (targetEnemy != null && targetEnemy.enemy.GetComponent<LifeComponent>().isDead)
-            {
-                Debug.Log("Target down");
-
-                targetEnemy = null;
-
-                currentPath = null;
-            }
+            transform.position =
+                (TeamComponent.assignedTeam == TeamComponent.bottomTeam) ?
+                    engineEntity.GetWorldPosition() :
+                    engineEntity.GetFlippedWorldPosition();
 
             // if you're attacking an enemy: keep attacking
-            if (targetEnemy != null && combatBehaviour.IsInAttackRange(targetEnemy))
+            if (targetEnemy != null && combatBehaviour.IsInAttackRange(targetEnemy) && !isTargetDead)
             {
                 engineEntity.SetEmptyPath();
 
-                return new MovementState(enemy, MovementStateEnum.EnemyApproached);
+                return new MovementState(targetEnemy, MovementStateEnum.EnemyApproached);
             }
 
             // if you were attacking an enemy, but they are now out of attack range, forget them
@@ -113,9 +104,20 @@ namespace Pandora.Movement
             {
                 currentPath = null;
 
-                if (!isTargetForced) {
-                    targetEnemy = null;
+                if (!isTargetForced)
+                {
+                    targetEnemy = enemy;
                 }
+            }
+
+            // Otherwise, pick a target
+            if (enemy.enemy != targetEnemy?.enemy && (!combatBehaviour.isAttacking || isTargetDead) && !isTargetForced)
+            {
+                targetEnemy = enemy;
+
+                currentPath = null;
+
+                return new MovementState(enemy, MovementStateEnum.TargetAcquired);
             }
 
             // if no path has been calculated: calculate one and point the object to the first position in the queue
@@ -125,13 +127,6 @@ namespace Pandora.Movement
 
                 Debug.Log($"Found path ({gameObject.name}): {string.Join(",", currentPath)}, am in {currentPosition}");
             }
-
-            var worldPosition =
-                (TeamComponent.assignedTeam == TeamComponent.bottomTeam) ?
-                    engineEntity.GetWorldPosition() :
-                    engineEntity.GetFlippedWorldPosition();
-
-            transform.position = worldPosition;
 
             return new MovementState(null, MovementStateEnum.Moving);
         }
@@ -144,8 +139,9 @@ namespace Pandora.Movement
         {
             CalculatePath();
 
-            if (currentPath.Count < 1) {
-                Debug.LogWarning($"Empty path for {targetEnemy?.enemyCell ?? map.GetTarget(gameObject, currentPosition, team.team)}");
+            if (currentPath.Count < 1)
+            {
+                Debug.LogWarning($"Empty path for {targetEnemy.enemyCell}");
             }
 
             currentTarget = currentPath.First();
@@ -157,7 +153,9 @@ namespace Pandora.Movement
 
 
         /**
-         * Very simple and probably shitty and not at all optimized A* implementation
+         * Very simple and probably shitty and not at all optimized A* implementation.
+         * 
+         * If evadeUnits is true, it also counts units-occupied gridcells as obstacles
          */
         List<GridCell> FindPath(GridCell end)
         {
@@ -180,7 +178,8 @@ namespace Pandora.Movement
 
             var pathFound = false;
 
-            if (map.IsObstacle(end, IsFlying)) {
+            if (map.IsObstacle(end, IsFlying, team))
+            {
                 Debug.LogWarning("Cannot find path towards an obstacle");
 
                 return evaluatingPosition.points;
@@ -209,11 +208,9 @@ namespace Pandora.Movement
 
                         var isAdvanceRedundant = evaluatingPosition.pointsSet.Contains(advance);
 
-                        if (advance == end) { // Stop the loop if we found the path
-                            Debug.Log("Found path!");
-                        }
+                        var containsUnit = (evadeUnits) ? engine.FindInGridCell(advance, false).Count > 0 : false;
 
-                        if (advance != item && !map.IsObstacle(advance, IsFlying) && !isAdvanceRedundant) // except the current positions, obstacles or going back
+                        if (advance != item && !map.IsObstacle(advance, IsFlying, team) && !isAdvanceRedundant && !containsUnit) // except the current positions, obstacles or going back
                         {
                             var distanceToEnd = Vector2.Distance(advance.vector, end.vector); // use the distance between this point and the end as h(n)
                             var distanceFromStart = evaluatingPosition.points.Count + 1; // use the distance between this point and the start as g(n)
@@ -221,7 +218,8 @@ namespace Pandora.Movement
                             var currentPositions = new List<GridCell>(evaluatingPosition.points) { advance };
                             var queueItem = new QueueItem(currentPositions, new HashSet<GridCell>(currentPositions));
 
-                            if (advance == end) { // Stop the loop if we found the path
+                            if (advance == end)
+                            { // Stop the loop if we found the path
                                 evaluatingPosition = queueItem;
                                 pathFound = true;
 
@@ -240,11 +238,11 @@ namespace Pandora.Movement
 
                 if (pass > 5000)
                 {
-                    Debug.Log($"Short circuiting after 5000 passes started from {currentPosition} to {end}");
-                    Debug.Log("Best paths found are");
-                    Debug.Log($"{priorityQueue.Dequeue()}");
-                    Debug.Log($"{priorityQueue.Dequeue()}");
-                    Debug.Log($"{priorityQueue.Dequeue()}");
+                    Debug.LogWarning($"Short circuiting after 5000 passes started from {currentPosition} to {end} - {team.team} {gameObject.name}");
+                    Debug.LogWarning("Best paths found are");
+                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
+                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
+                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
 
                     if (DebugPathfinding)
                     {
@@ -259,6 +257,8 @@ namespace Pandora.Movement
                 if (!pathFound) evaluatingPosition = priorityQueue.Dequeue();
             }
 
+            evadeUnits = false;
+
             if (DebugPathfinding)
             {
                 Debug.Log($"DebugPathfinding: Done, positions {string.Join(", ", evaluatingPosition.points)}");
@@ -269,19 +269,58 @@ namespace Pandora.Movement
 
         private void CalculatePath()
         {
-            var currentPosition = CurrentCellPosition();
-            var target = targetEnemy?.enemyCell ?? map.GetTarget(gameObject, currentPosition, team.team);
+            engineEntity.SetSpeed(speed);
 
-            if (DebugPathfinding) {
+            var currentPosition = CurrentCellPosition();
+            var target = targetEnemy.enemyCell;
+
+            if (DebugPathfinding)
+            {
                 Debug.Log($"DebugPathfinding: Current target is {target} ({targetEnemy})");
             }
 
+            var wereUnitEvaded = evadeUnits;
+
             currentPath = FindPath(target).Skip(1).ToList();
+
+            if (wereUnitEvaded) {
+                Debug.Log($"Evaded units with {string.Join(",", currentPath)}");
+            }
         }
 
         private GridCell CurrentCellPosition()
         {
             return engineEntity.GetCurrentCell();
+        }
+
+        public void Collided(EngineEntity entity)
+        {
+            // Disabling this for flying units - harpies do this way too much making the game lag
+            // also, do not count collisions with projectiles
+            if (gameObject.layer == Constants.FLYING_LAYER || !entity.IsRigid) return;
+
+            Debug.Log("Collided, checking if Evading");
+
+            if (GetComponent<CombatBehaviour>().isAttacking) return;
+
+            if (lastCollisionPosition == null)
+            {
+                lastCollisionPosition = engineEntity.Position;
+
+                return;
+            }
+
+            if (lastCollisionPosition == engineEntity.Position)
+            {
+                Debug.Log("Evading");
+
+                evadeUnits = true;
+                currentPath = null;
+            }
+            else
+            {
+                lastCollisionPosition = null;
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Pandora.Pool
     {
         #region Variables and Properties
         private int poolResizeCASFlag = 0;
-        private int maximumPoolSize = 0;
+        private int maximumPoolSize = 10;
 
         public int MaximumPoolSize
         {
