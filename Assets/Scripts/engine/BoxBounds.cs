@@ -45,6 +45,10 @@ namespace Pandora.Engine
                 box.Contains(LowerRight);
         }
 
+        public BoxBounds Clear() {
+            return this;
+        }
+
         override public string ToString() {
             return $"UpperLeft({UpperLeft}), UpperRight({UpperRight}), LowerLeft({LowerLeft}), LowerRight({LowerRight})";
         }

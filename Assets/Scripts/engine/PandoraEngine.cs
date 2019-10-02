@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Pandora;
+using Pandora.Pool;
 
 namespace Pandora.Engine
 {
@@ -34,7 +35,8 @@ namespace Pandora.Engine
             }
         }
 
-        public int GetSpeed(float cellPerSecond) {
+        public int GetSpeed(float cellPerSecond)
+        {
             return Mathf.FloorToInt((cellPerSecond * UnitsPerCell / 1000) * tickTime);
         }
 
@@ -66,10 +68,13 @@ namespace Pandora.Engine
         public void PrintDebugInfo(EngineEntity entity)
         {
             var prefix = $"({entity.GameObject.name}) PrintDebugInfo:";
+            var bounds = GetPooledEntityBounds(entity);
 
             Debug.Log($"{prefix} Position {entity.Position}");
             Debug.Log($"{prefix} Speed {entity.Speed}");
-            Debug.Log($"{prefix} Hitbox {GetEntityBounds(entity)}");
+            Debug.Log($"{prefix} Hitbox {bounds}");
+
+            ReturnBounds(bounds);
         }
 
         public void NextTick()
@@ -114,8 +119,8 @@ namespace Pandora.Engine
                     var first = clonedEntities[i1];
                     var second = clonedEntities[i2];
 
-                    var firstBox = GetEntityBounds(first);
-                    var secondBox = GetEntityBounds(second);
+                    var firstBox = GetPooledEntityBounds(first);
+                    var secondBox = GetPooledEntityBounds(second);
 
                     var notCollision =
                         (!first.IsRigid && !second.IsRigid) || // there must be one rigid object
@@ -145,11 +150,12 @@ namespace Pandora.Engine
 
                     var isFirstFaster = false;
 
+                    // Use "bounce" from collision to determine which object will move, if present
                     if (first.CollisionSpeed > 0 || second.CollisionSpeed > 0)
                     {
                         isFirstFaster = first.CollisionSpeed > second.CollisionSpeed;
                     }
-                    else
+                    else // use normal speed otherwise
                     {
                         isFirstFaster = first.Speed > second.Speed;
                     }
@@ -200,17 +206,24 @@ namespace Pandora.Engine
                         {
                             moved.Position = moved.Position + direction; // move the entity away
 
-                            firstBox = GetEntityBounds(first);
-                            secondBox = GetEntityBounds(second);
+                            ReturnBounds(firstBox);
+                            ReturnBounds(secondBox);
+
+                            firstBox = GetPooledEntityBounds(first);
+                            secondBox = GetPooledEntityBounds(second);
                         }
 
                         moved.ResetTarget(); // Reset engine-side pathing
                         moved.CollisionSpeed++; // Give the moved entity some speed
 
-                        if (unmoved.IsStructure) { // Give the moved entity even more speed if pushed by a structure (to avoid nasty loops)
+                        if (unmoved.IsStructure)
+                        { // Give the moved entity even more speed if pushed by a structure (to avoid nasty loops)
                             moved.CollisionSpeed++;
                         }
                     }
+
+                    ReturnBounds(firstBox);
+                    ReturnBounds(secondBox);
                 }
             }
 
@@ -233,7 +246,7 @@ namespace Pandora.Engine
         {
             foreach (var entity in entities)
             {
-                var boxBounds = GetEntityBounds(entity);
+                var boxBounds = GetPooledEntityBounds(entity);
 
                 var rect = Rect.zero;
 
@@ -243,6 +256,8 @@ namespace Pandora.Engine
                 rect.yMax = ScreenToGUISpace(Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.LowerLeft))).y;
 
                 GUI.Box(rect, GUIContent.none);
+
+                ReturnBounds(boxBounds);
             }
         }
 
@@ -259,13 +274,16 @@ namespace Pandora.Engine
 
         public bool IsInRange(EngineEntity entity1, EngineEntity entity2, int units)
         {
-            var entity1Bounds = GetEntityBounds(entity1);
-            var entity2Bounds = GetEntityBounds(entity2);
+            var entity1Bounds = GetPooledEntityBounds(entity1);
+            var entity2Bounds = GetPooledEntityBounds(entity2);
 
             var distance = Math.Max(
                 Math.Abs(entity1Bounds.Center.x - entity2Bounds.Center.x) - ((entity1Bounds.Width + entity2Bounds.Width) / 2),
                 Math.Abs(entity1Bounds.Center.y - entity2Bounds.Center.y) - ((entity1Bounds.Height + entity2Bounds.Height) / 2)
             );
+
+            ReturnBounds(entity1Bounds);
+            ReturnBounds(entity2Bounds);
 
             return distance <= units;
         }
@@ -355,17 +373,26 @@ namespace Pandora.Engine
 
             foreach (var entity in entities)
             {
-                if (GetEntityBounds(entity).Contains(physics))
+                var bounds = GetPooledEntityBounds(entity);
+
+                if (bounds.Contains(physics))
                 {
                     targetEntities.Add(entity);
                 }
+
+                ReturnBounds(bounds);
             }
 
             return targetEntities;
         }
 
-        BoxBounds GetEntityBounds(EngineEntity entity)
+        void ReturnBounds(BoxBounds bounds) {
+            PoolInstances.BoxBoundsPool.ReturnObject(bounds);
+        }
+
+        BoxBounds GetPooledEntityBounds(EngineEntity entity)
         {
+            var bounds = PoolInstances.BoxBoundsPool.GetObject();
             var worldBounds = entity.GameObject.GetComponent<BoxCollider2D>().bounds;
             var physicsExtents = WorldToPhysics(worldBounds.size);
 
@@ -389,14 +416,13 @@ namespace Pandora.Engine
             physicsLowerLeftBounds.x -= Mathf.FloorToInt(physicsExtents.x / 2);
             physicsLowerLeftBounds.y -= Mathf.FloorToInt(physicsExtents.y / 2);
 
-            return new BoxBounds
-            {
-                UpperLeft = physicsUpperLeftBounds,
-                UpperRight = physicsUpperRightBounds,
-                LowerLeft = physicsLowerLeftBounds,
-                LowerRight = physicsLowerRightBounds,
-                Center = entity.Position
-            };
+            bounds.UpperLeft = physicsUpperLeftBounds;
+            bounds.UpperRight = physicsUpperRightBounds;
+            bounds.LowerLeft = physicsLowerLeftBounds;
+            bounds.LowerRight = physicsLowerRightBounds;
+            bounds.Center = entity.Position;
+
+            return bounds;
         }
 
         int Clamp(int min, int input, int max)

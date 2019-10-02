@@ -6,6 +6,7 @@ namespace Pandora
 {
     public class Enemy
     {
+        public bool IsTower = false;
         public GameObject enemy;
         public GridCell enemyCell
         {
@@ -15,7 +16,7 @@ namespace Pandora
 
                 if (towerPosition != null)
                 {
-                    return towerPosition.GetMapTarget();
+                    return towerPosition.GetTowerCenter();
                 }
                 else
                 {
@@ -37,6 +38,8 @@ namespace Pandora
         public Enemy(GameObject enemy)
         {
             this.enemy = enemy;
+
+            IsTower = enemy.GetComponent<TowerPositionComponent>() != null;
         }
     }
 
