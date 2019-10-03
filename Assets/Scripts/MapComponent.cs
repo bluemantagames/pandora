@@ -20,6 +20,7 @@ namespace Pandora
         int bottomMapSizeY = 13;
         public int mapSizeX;
         public int mapSizeY;
+        bool isLockedOnMiddle = false;
         public Vector2 worldMapSize;
         public bool debugHitboxes = false;
         Vector2 bottomMapSize;
@@ -100,7 +101,8 @@ namespace Pandora
             engine = new PandoraEngine(this);
         }
 
-        void RefreshTowerHash(TeamComponent team) {
+        void RefreshTowerHash(TeamComponent team)
+        {
             var hashSet = new HashSet<GridCell>();
 
             foreach (var position in GetComponentsInChildren<TowerPositionComponent>())
@@ -132,7 +134,8 @@ namespace Pandora
 
             var isOutOfBounds = (cellVector.x < 0 && cellVector.y < 0 && cellVector.x >= bottomMapSize.x && cellVector.y >= mapSizeY);
 
-            if (!TowerPositionsDictionary.ContainsKey(team.team)) {
+            if (!TowerPositionsDictionary.ContainsKey(team.team))
+            {
                 RefreshTowerHash(team);
             }
 
@@ -373,7 +376,9 @@ namespace Pandora
                 var isInRange = combatBehaviour.IsInAggroRange(new Enemy(targetGameObject));
 
                 var isTargetValid =
-                    (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.isDead && canUnitsFight;
+                    (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.isDead && canUnitsFight && (
+                        (isLockedOnMiddle && targetEngineEntity.IsStructure) ? targetGameObject.GetComponent<TowerPositionComponent>().EngineTowerPosition.IsMiddle() : true
+                    );
 
                 if (isTargetValid)
                 {
@@ -384,6 +389,8 @@ namespace Pandora
 
             if (inRangeEnemy != null)
             {
+                isLockedOnMiddle = false; // reset lock if engaging an enemy
+
                 return new Enemy(inRangeEnemy);
             }
 
@@ -416,7 +423,17 @@ namespace Pandora
                 }
             }
 
+            if (towerPositionComponent == null)
+            {
+                isLockedOnMiddle = true;
+            }
+
             var towerObject = towerPositionComponent?.gameObject ?? middleTowerPositionComponent?.gameObject;
+
+            if (isLockedOnMiddle)
+            {
+                towerObject = middleTowerPositionComponent.gameObject;
+            }
 
             return new Enemy(towerObject);
         }
