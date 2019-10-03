@@ -18,7 +18,7 @@ namespace Pandora.Combat
         public MapComponent map { private get; set; }
         private EngineEntity engineEntity;
 
-        public void Collided(EngineEntity other)
+        public void Collided(EngineEntity other, uint passed)
         {
             if (other.GameObject == target.enemy)
             {

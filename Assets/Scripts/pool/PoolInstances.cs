@@ -20,6 +20,11 @@ namespace Pandora.Pool
             profilingEnabled: false
         );
 
+        public static ConcurrentObjectPool<GridCell> GridCellPool = new ConcurrentObjectPool<GridCell>(
+            createFunction: () => new GridCell(new Vector2(0, 0)),
+            resetFunction: v => v.vector.Set(0, 0),
+            profilingEnabled: false
+        );
 
         public static ConcurrentObjectPool<Vector2Int> Vector2IntPool = new ConcurrentObjectPool<Vector2Int>(
             createFunction: () => new Vector2Int(),

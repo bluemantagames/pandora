@@ -146,12 +146,12 @@ namespace Pandora.Engine
 
                     if (first.CollisionCallback != null)
                     {
-                        first.CollisionCallback.Collided(second);
+                        first.CollisionCallback.Collided(second, totalElapsed);
                     }
 
                     if (second.CollisionCallback != null)
                     {
-                        second.CollisionCallback.Collided(first);
+                        second.CollisionCallback.Collided(first, totalElapsed);
                     }
 
                     Vector2Int direction;
@@ -180,7 +180,7 @@ namespace Pandora.Engine
                         moved = second;
                         unmoved = first;
                     }
-                    else if (first.Speed == second.Speed && !first.IsStructure && !second.IsStructure)
+                    else if (first.Speed == second.Speed && first.CollisionSpeed == second.CollisionSpeed && !first.IsStructure && !second.IsStructure)
                     { // if speeds are equal, use server-generated timestamps to avoid non-deterministic behaviour
                         moved = (first.Timestamp > second.Timestamp) ? first : second;
                         unmoved = (first.Timestamp > second.Timestamp) ? second : first;
@@ -383,14 +383,19 @@ namespace Pandora.Engine
             {
                 if (entity.IsStructure && !countStructures) continue;
 
-                var bounds = GetPooledEntityBounds(entity);
+                /*var bounds = GetPooledEntityBounds(entity);
 
                 if (bounds.Contains(physics))
                 {
                     targetEntities.Add(entity);
                 }
 
-                ReturnBounds(bounds);
+                ReturnBounds(bounds);*/
+
+                if (entity.GetCurrentCell() == gridCell)
+                {
+                    targetEntities.Add(entity);
+                }
             }
 
             return targetEntities;

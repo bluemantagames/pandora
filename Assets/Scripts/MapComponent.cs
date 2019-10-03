@@ -30,7 +30,7 @@ namespace Pandora
 
         public float cellHeight;
         public float cellWidth;
-        uint frameStep = 20, remainingStep = 0, timeSinceLastStep; // milliseconds
+        uint frameStep = 40, remainingStep = 0, timeSinceLastStep; // milliseconds
         public PandoraEngine engine;
         public GameObject textObject;
         List<GameObject> debug = new List<GameObject> { };
@@ -297,6 +297,8 @@ namespace Pandora
             var unitGridCell = new GridCell(spawn.CellX, spawn.CellY);
             var cardPosition = GridCellToWorldPosition(unitGridCell);
             var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
+
+            cardObject.name += $"-{spawn.Id}";
 
             var spawner = cardObject.GetComponent<Spawner>();
 

@@ -8,6 +8,7 @@ using Pandora;
 using Pandora.Combat;
 using UnityEngine.Profiling;
 using Pandora.Engine;
+using Pandora.Pool;
 
 namespace Pandora.Movement
 {
@@ -21,9 +22,10 @@ namespace Pandora.Movement
         TeamComponent team;
         Enemy targetEnemy;
         CombatBehaviour combatBehaviour;
+        uint? collisionTotalElapsed = null;
         /// <summary>Enables log on the A* implementation</summary>
         public bool DebugPathfinding;
-        bool isTargetForced = false; 
+        bool isTargetForced = false;
         bool evadeUnits = false;
         Vector2Int? lastCollisionPosition;
         public MovementStateEnum LastState;
@@ -160,7 +162,6 @@ namespace Pandora.Movement
         List<GridCell> FindPath(GridCell end)
         {
             var priorityQueue = new SimplePriorityQueue<QueueItem>();
-            //Debug.Log($"Searching path for {end}");
 
             priorityQueue.Clear();
 
@@ -204,7 +205,10 @@ namespace Pandora.Movement
                 {
                     for (var y = -1f; y <= 1f; y++)
                     {
-                        var advance = new GridCell(item.vector.x + x, item.vector.y + y);
+                        var advance = PoolInstances.GridCellPool.GetObject();
+
+                        advance.vector.x = item.vector.x + x;
+                        advance.vector.y = item.vector.y + y;
 
                         var isAdvanceRedundant = evaluatingPosition.pointsSet.Contains(advance);
 
@@ -227,9 +231,11 @@ namespace Pandora.Movement
                             }
 
                             priorityQueue.Enqueue(
-                                new QueueItem(currentPositions, new HashSet<GridCell>(currentPositions)),
+                                queueItem,
                                 priority
                             );
+                        } else {
+                            PoolInstances.GridCellPool.ReturnObject(advance);
                         }
                     }
                 }
@@ -283,7 +289,8 @@ namespace Pandora.Movement
 
             currentPath = FindPath(target).Skip(1).ToList();
 
-            if (wereUnitEvaded) {
+            if (wereUnitEvaded)
+            {
                 Debug.Log($"Evaded units with {string.Join(",", currentPath)}");
             }
         }
@@ -293,34 +300,33 @@ namespace Pandora.Movement
             return engineEntity.GetCurrentCell();
         }
 
-        public void Collided(EngineEntity entity)
+        public void Collided(EngineEntity entity, uint totalElapsed)
         {
             // Disabling this for flying units - harpies do this way too much making the game lag
-            // also, do not count collisions with projectiles
-            if (gameObject.layer == Constants.FLYING_LAYER || !entity.IsRigid) return;
-
-            Debug.Log("Collided, checking if Evading");
+            // do not count collisions with projectiles
+            // do not check if we are already evading
+            if (gameObject.layer == Constants.FLYING_LAYER || !entity.IsRigid || evadeUnits) return;
 
             if (GetComponent<CombatBehaviour>().isAttacking) return;
 
-            if (lastCollisionPosition == null)
+            if (!collisionTotalElapsed.HasValue)
             {
-                lastCollisionPosition = engineEntity.Position;
-
-                return;
+                collisionTotalElapsed = totalElapsed;
             }
 
-            if (lastCollisionPosition == engineEntity.Position)
+            lastCollisionPosition = engineEntity.Position;
+
+            if (lastCollisionPosition == engineEntity.Position && totalElapsed - (collisionTotalElapsed ?? 0) >= 20)
             {
-                Debug.Log("Evading");
+                Debug.Log("Finally evading");
 
                 evadeUnits = true;
                 currentPath = null;
-            }
-            else
-            {
+
                 lastCollisionPosition = null;
+                collisionTotalElapsed = null;
             }
+
         }
     }
 }
