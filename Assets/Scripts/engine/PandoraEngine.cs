@@ -383,15 +383,6 @@ namespace Pandora.Engine
             {
                 if (entity.IsStructure && !countStructures) continue;
 
-                /*var bounds = GetPooledEntityBounds(entity);
-
-                if (bounds.Contains(physics))
-                {
-                    targetEntities.Add(entity);
-                }
-
-                ReturnBounds(bounds);*/
-
                 if (entity.GetCurrentCell() == gridCell)
                 {
                     targetEntities.Add(entity);
