@@ -22,6 +22,7 @@ namespace Pandora.Engine
         }
 
         public EngineEntity Entity;
+        public bool DebugEntity = false;
 
         public PandoraEngine Engine
         {

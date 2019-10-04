@@ -60,7 +60,7 @@ public class LocalManaBehaviourScript : MonoBehaviour
 
     void UpdateMana(float value)
     {
-        if (!enabled)
+        if (!Enabled)
         {
             return;
         }

@@ -20,27 +20,18 @@ namespace Pandora
         int bottomMapSizeY = 13;
         public int mapSizeX;
         public int mapSizeY;
+        bool isLockedOnMiddle = false;
         public Vector2 worldMapSize;
         public bool debugHitboxes = false;
         Vector2 bottomMapSize;
         GameObject lastPuppet;
-        HashSet<GridCell> obstaclePositions {
-            get {
-                var hashSet = new HashSet<GridCell> {};
-
-                foreach (var position in GetComponentsInChildren<TowerPositionComponent>()) {
-                    hashSet.UnionWith(position.GetTowerPositions());
-                }
-
-                return hashSet;
-            }
-        }
+        public Dictionary<int, HashSet<GridCell>> TowerPositionsDictionary = new Dictionary<int, HashSet<GridCell>>();
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         float firstLaneX = 2, secondLaneX = 13;
 
         public float cellHeight;
         public float cellWidth;
-        uint frameStep = 20, remainingStep = 0, timeSinceLastStep; // milliseconds
+        uint frameStep = 40, remainingStep = 0, timeSinceLastStep; // milliseconds
         public PandoraEngine engine;
         public GameObject textObject;
         List<GameObject> debug = new List<GameObject> { };
@@ -110,10 +101,24 @@ namespace Pandora
             engine = new PandoraEngine(this);
         }
 
+        void RefreshTowerHash(TeamComponent team)
+        {
+            var hashSet = new HashSet<GridCell>();
+
+            foreach (var position in GetComponentsInChildren<TowerPositionComponent>())
+            {
+                // Count them as obstacles only for allied structures
+                if (position.gameObject.GetComponent<TeamComponent>().team == team.team)
+                    hashSet.UnionWith(position.GetTowerPositions());
+            }
+
+            TowerPositionsDictionary[team.team] = hashSet;
+        }
+
         /**
          * Returns whether the position is uncrossable 
          */
-        public bool IsObstacle(GridCell cell)
+        public bool IsObstacle(GridCell cell, bool isFlying, TeamComponent team)
         {
             var riverY = 13f;
             var riverPositions = new HashSet<GridCell>();
@@ -128,8 +133,21 @@ namespace Pandora
             }
 
             var isOutOfBounds = (cellVector.x < 0 && cellVector.y < 0 && cellVector.x >= bottomMapSize.x && cellVector.y >= mapSizeY);
-            var isTower = obstaclePositions.Contains(cell);
+
+            if (!TowerPositionsDictionary.ContainsKey(team.team))
+            {
+                RefreshTowerHash(team);
+            }
+
+            var isTower = TowerPositionsDictionary[team.team].Contains(cell);
+
             var isRiver = riverPositions.Contains(cell);
+
+            if (isFlying)
+            {
+                isRiver = false;
+                isTower = false;
+            }
 
             return isRiver || isTower || isOutOfBounds;
         }
@@ -212,7 +230,7 @@ namespace Pandora
             {
                 var processTime = Math.Min(frameStep, remainingStep);
 
-                Debug.Log($"Advancing {processTime}ms");
+                //Debug.Log($"Advancing {processTime}ms");
 
                 if (remainingStep != 0 && processTime != 0 && timeSinceLastStep >= frameStep)
                 {
@@ -235,9 +253,10 @@ namespace Pandora
         {
             var mapCell = GetPointedCell();
             var id = System.Guid.NewGuid().ToString();
-               
+            var manaEnabled = GetComponent<LocalManaBehaviourScript>()?.Enabled ?? true;
+
             // TODO: Notify player somehow if they lack mana
-            if (ManaSingleton.manaValue < requiredMana)
+            if (manaEnabled && ManaSingleton.manaValue < requiredMana)
             {
                 return;
             }
@@ -282,6 +301,8 @@ namespace Pandora
             var cardPosition = GridCellToWorldPosition(unitGridCell);
             var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
 
+            cardObject.name += $"-{spawn.Id}";
+
             var spawner = cardObject.GetComponent<Spawner>();
 
             if (spawner != null)
@@ -313,6 +334,8 @@ namespace Pandora
 
             var engineEntity = engine.AddEntity(unit, movement?.speed ?? projectileSpell.speed, cell, projectileSpell == null, timestamp);
 
+            if (movement != null) engineEntity.CollisionCallback = movement;
+
             if (projectileSpell != null)
             {
                 engineEntity.SetTarget(cell);
@@ -326,10 +349,11 @@ namespace Pandora
             Units.Add(id, unit);
         }
 
-        public Enemy GetEnemyInRange(GameObject unit, GridCell position, int team)
+        public Enemy GetEnemy(GameObject unit, GridCell position, TeamComponent team)
         {
             float? minDistance = null;
-            GameObject enemy = null;
+            GameObject inRangeEnemy = null;
+            var cellVector = position.vector;
 
             var combatBehaviour = unit.GetComponent<CombatBehaviour>();
 
@@ -352,23 +376,66 @@ namespace Pandora
                 var isInRange = combatBehaviour.IsInAggroRange(new Enemy(targetGameObject));
 
                 var isTargetValid =
-                    (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.isDead && canUnitsFight;
+                    (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.isDead && canUnitsFight && (
+                        (isLockedOnMiddle && targetEngineEntity.IsStructure) ? targetGameObject.GetComponent<TowerPositionComponent>().EngineTowerPosition.IsMiddle() : true
+                    );
 
                 if (isTargetValid)
                 {
                     minDistance = distance;
-                    enemy = targetGameObject;
+                    inRangeEnemy = targetGameObject;
                 }
             }
 
-            if (enemy != null)
+            if (inRangeEnemy != null)
             {
-                return new Enemy(enemy);
+                isLockedOnMiddle = false; // reset lock if engaging an enemy
+
+                return new Enemy(inRangeEnemy);
+            }
+
+            TowerPosition targetTowerPosition;
+
+            if (cellVector.x < bottomMapSizeX / 2)
+            {
+                targetTowerPosition = team.IsTop() ? TowerPosition.BottomLeft : TowerPosition.TopLeft;
             }
             else
             {
-                return null;
+                targetTowerPosition = team.IsTop() ? TowerPosition.BottomRight : TowerPosition.TopRight;
             }
+
+            TowerPositionComponent towerPositionComponent = null, middleTowerPositionComponent = null;
+
+            foreach (var component in GetComponentsInChildren<TowerPositionComponent>())
+            {
+                var towerCombatBehaviour = component.gameObject.GetComponent<TowerCombatBehaviour>();
+                var towerTeamComponent = component.gameObject.GetComponent<TowerTeamComponent>();
+
+                if (towerCombatBehaviour.isMiddle && towerTeamComponent.engineTeam != team.team)
+                {
+                    middleTowerPositionComponent = component;
+                }
+
+                if (component.EngineTowerPosition == targetTowerPosition && !component.gameObject.GetComponent<LifeComponent>().isDead)
+                {
+                    towerPositionComponent = component;
+                }
+            }
+
+            if (towerPositionComponent == null)
+            {
+                isLockedOnMiddle = true;
+            }
+
+            var towerObject = towerPositionComponent?.gameObject ?? middleTowerPositionComponent?.gameObject;
+
+            if (isLockedOnMiddle)
+            {
+                towerObject = middleTowerPositionComponent.gameObject;
+            }
+
+            return new Enemy(towerObject);
         }
 
         // Finds units in a gridcell-space rectangle
@@ -397,104 +464,6 @@ namespace Pandora
             }
 
             return units;
-        }
-
-        public GridCell GetTarget(GameObject unit, GridCell cell, int team)
-        {
-            GridCell? lanePosition = null;
-
-            var cellVector = cell.vector;
-
-            var enemyPosition = GetEnemyInRange(unit, cell, team)?.enemyCell;
-
-            var teamComponent = unit.GetComponent<TeamComponent>();
-            var isOpponent = teamComponent.IsOpponent();
-
-            TowerPosition targetTowerPosition;
-
-            if (cellVector.x < bottomMapSizeX / 2)
-            {
-                targetTowerPosition = teamComponent.IsTop() ? TowerPosition.BottomLeft : TowerPosition.TopLeft;
-            }
-            else
-            {
-                targetTowerPosition = teamComponent.IsTop() ? TowerPosition.BottomRight : TowerPosition.TopRight;
-            }
-
-            // if no enemies found and not on a lane, go back on a lane
-            if (enemyPosition == null && cellVector.x != firstLaneX && cellVector.x != secondLaneX)
-            {
-                float xTarget, increment;
-
-                Vector2 targetLanePosition = cellVector;
-
-                if (cellVector.x <= bottomMapSize.x / 2 && cellVector.x >= firstLaneX) // if in the middle and near the first lane
-                {
-                    xTarget = firstLaneX;
-                    increment = -1f;
-                }
-                else if (cellVector.x < firstLaneX) // if on the left
-                {
-                    xTarget = firstLaneX;
-                    increment = 1f;
-                }
-                else if (cellVector.x > bottomMapSize.x / 2 && cellVector.x > secondLaneX) // if on the right
-                {
-                    xTarget = secondLaneX;
-                    increment = -1f;
-                }
-                else // if in the middle and near the second lane 
-                {
-                    xTarget = secondLaneX;
-                    increment = 1f;
-                }
-
-                var yIncrement = (teamComponent.team == TeamComponent.topTeam) ? -1 : 1;
-
-                while (targetLanePosition.x != xTarget)
-                {
-                    targetLanePosition.y += yIncrement;
-                    targetLanePosition.x += increment;
-                }
-
-                // If lane target is an obstacle (tower or river), target further into the lane
-                while (IsObstacle(new GridCell(targetLanePosition))) {
-                    targetLanePosition.y += yIncrement;
-                }
-
-                lanePosition = new GridCell(targetLanePosition);
-            }
-
-
-            TowerPositionComponent towerPositionComponent = null, middleTowerPositionComponent = null;
-
-            foreach (var component in GetComponentsInChildren<TowerPositionComponent>())
-            {
-                var combatBehaviour = component.gameObject.GetComponent<TowerCombatBehaviour>();
-                var towerTeamComponent = component.gameObject.GetComponent<TowerTeamComponent>();
-
-                if (combatBehaviour.isMiddle && towerTeamComponent.engineTeam != teamComponent.team)
-                {
-                    middleTowerPositionComponent = component;
-                }
-
-                if (component.EngineTowerPosition == targetTowerPosition && !component.gameObject.GetComponent<LifeComponent>().isDead)
-                {
-                    towerPositionComponent = component;
-                }
-            }
-
-            var towerPosition = towerPositionComponent?.GetMapTarget() ?? middleTowerPositionComponent.GetMapTarget();
- 
- 
-            // don't stay on lanes if front tower is down
-            if (towerPositionComponent == null) {
-                lanePosition = null;
-            }
-
-            var endPosition = enemyPosition ?? lanePosition ?? towerPosition;
-
-            return endPosition;
         }
 
         public void OnUICardCollision(GameObject puppet)

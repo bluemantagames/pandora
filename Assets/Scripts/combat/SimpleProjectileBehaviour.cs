@@ -18,7 +18,7 @@ namespace Pandora.Combat
         public MapComponent map { private get; set; }
         private EngineEntity engineEntity;
 
-        public void Collided(EngineEntity other)
+        public void Collided(EngineEntity other, uint passed)
         {
             if (other.GameObject == target.enemy)
             {
@@ -67,6 +67,13 @@ namespace Pandora.Combat
             transform.position = shouldBeFlipped ? engineEntity.GetFlippedWorldPosition() : engineEntity.GetWorldPosition();
 
             engineEntity.SetTarget(target.enemyEntity);
+
+            // TODO: Play "miss" animation, and then remove the entity
+            if (target.enemyEntity.GameObject.GetComponent<LifeComponent>().isDead) {
+                gameObject.SetActive(false);
+
+                Destroy(this);
+            }
         }
     }
 }

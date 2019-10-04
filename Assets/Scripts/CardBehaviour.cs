@@ -30,13 +30,18 @@ namespace Pandora
 
             GetComponent<Image>().enabled = true;
 
-            if (returnToPosition)
+            if (returnToPosition) {
                 transform.position = originalPosition.Value;
+
+                SetChildrenActive(true);
+            }
         }
 
         public void OnDrag(PointerEventData eventData)
         {
             transform.position = Input.mousePosition;
+
+            SetChildrenActive(false);
 
             var hit = Physics2D.Raycast(
                 Camera.main.ScreenToWorldPoint(transform.position), Vector2.up, 0f,
@@ -75,6 +80,10 @@ namespace Pandora
             CleanUpDrag(true);
         }
 
+        void Start() {
+            GetComponentInChildren<Text>().text = (RequiredMana / 10).ToString();
+        }
+
 
         void Update()
         {
@@ -87,6 +96,12 @@ namespace Pandora
         void OnApplicationQuit()
         {
             NetworkControllerSingleton.instance.Stop();
+        }
+
+        void SetChildrenActive(bool active) {
+            foreach (Transform child in transform) {
+                child.gameObject.SetActive(active);
+            }
         }
     }
 }

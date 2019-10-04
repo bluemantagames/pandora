@@ -23,7 +23,7 @@ namespace Pandora.Engine
             }
         }
 
-        public bool IsContained(Vector2Int point)
+        public bool Contains(Vector2Int point)
         {
             return
                 (point.x >= UpperLeft.x && point.y <= UpperLeft.y) &&
@@ -35,14 +35,18 @@ namespace Pandora.Engine
         public bool Collides(BoxBounds box)
         {
             return
-                IsContained(box.UpperLeft)  ||
-                IsContained(box.UpperRight) ||
-                IsContained(box.LowerLeft)  ||
-                IsContained(box.LowerRight) ||
-                box.IsContained(UpperLeft)  ||
-                box.IsContained(UpperRight) ||
-                box.IsContained(LowerLeft)  ||
-                box.IsContained(LowerRight);
+                Contains(box.UpperLeft)  ||
+                Contains(box.UpperRight) ||
+                Contains(box.LowerLeft)  ||
+                Contains(box.LowerRight) ||
+                box.Contains(UpperLeft)  ||
+                box.Contains(UpperRight) ||
+                box.Contains(LowerLeft)  ||
+                box.Contains(LowerRight);
+        }
+
+        public BoxBounds Clear() {
+            return this;
         }
 
         override public string ToString() {
