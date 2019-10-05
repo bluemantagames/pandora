@@ -6,9 +6,9 @@ namespace Pandora.Command
     /// <summary>On double tap, the Troll will damage all the units in a "triangle" area</summary>
     public class TrollCommand : MonoBehaviour, CommandBehaviour
     {
-        public int width = 4000;
-        public int height = 3000;
-        public int damage = 50;
+        public int Width = 4000;
+        public int Height = 3000;
+        public int Damage = 50;
 
         public void InvokeCommand()
         {
@@ -28,10 +28,10 @@ namespace Pandora.Command
 
                 if (sourceTeam == targetTeam) continue;
 
-                if (source.Engine.IsInTriangularRange(source, target, width, height))
+                if (source.Engine.IsInTriangularRange(source, target, Width, Height))
                 {
                     Debug.Log("[Troll] Unit damaged");
-                    targetLifeComponent.AssignDamage(damage);
+                    targetLifeComponent.AssignDamage(Damage);
                 }
             }
         }
