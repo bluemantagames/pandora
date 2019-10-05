@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 4747532239520629978}
   - component: {fileID: 4747532239520629979}
   m_Layer: 5
-  m_Name: GiantCard
+  m_Name: TrollCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,7 +166,7 @@ MonoBehaviour:
   Puppet: {fileID: 2103948611786811515, guid: a7ff30ab552991847bdceb2b7f1e6c8d, type: 3}
   Card: {fileID: 8076880815249732036, guid: cbd2acd6812f90e45aa0f9b348f67ac6, type: 3}
   Team: 1
-  CardName: Giant
+  CardName: Troll
   RequiredMana: 30
 --- !u!1 &5633480552817504608
 GameObject:
