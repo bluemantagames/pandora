@@ -16,6 +16,10 @@ namespace Pandora.Command
 
             var source = GetComponent<EngineComponent>().Entity;
             var sourceTeam = GetComponent<TeamComponent>().team;
+            var sourceAnimator = GetComponent<Animator>();
+
+            // Execute the attack animation
+            sourceAnimator.Play("GiantAttack");
 
             foreach (var targetLifeComponent in MapComponent.Instance.gameObject.GetComponentsInChildren<LifeComponent>())
             {
