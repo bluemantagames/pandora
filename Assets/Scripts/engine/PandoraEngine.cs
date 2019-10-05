@@ -308,6 +308,7 @@ namespace Pandora.Engine
         {
             // Using barycentric coordinate system
             // (http://totologic.blogspot.com/2014/01/accurate-point-in-triangle-test.html)
+            // This is NOT the most precise way.
 
             var sourceEntityBound = GetPooledEntityBounds(sourceEntity);
             var targetEntityBound = GetPooledEntityBounds(targetEntity);
