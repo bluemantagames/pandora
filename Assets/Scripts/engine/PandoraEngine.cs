@@ -334,6 +334,36 @@ namespace Pandora.Engine
             return distance <= units;
         }
 
+        /// <summary>
+        /// Check if the target entity is inside a 2D triangle with the
+        /// source entity as one of the vertex
+        /// </summary>
+        /// <param name="sourceEntity">The source entity</param>
+        /// <param name="targetEntity">The target entity</param>
+        /// <param name="width">The triangle's width (as the "base")</param>
+        /// <param name="height">The triangle's height (distance from the source entity)</param>
+        /// <returns>A boolean describing if the target entity is inside the triangle</returns>
+        public bool IsInTriangularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height)
+        {
+            // Using barycentric coordinate system
+            // (http://totologic.blogspot.com/2014/01/accurate-point-in-triangle-test.html)
+
+            var sourceEntityBound = GetPooledEntityBounds(sourceEntity);
+            var targetEntityBound = GetPooledEntityBounds(targetEntity);
+
+            var v1 = new Vector2(sourceEntityBound.Center.x - (width / 2), sourceEntityBound.Center.y + height);
+            var v2 = new Vector2(sourceEntityBound.Center.x + (width / 2), sourceEntityBound.Center.y + height);
+            var v3 = new Vector2(sourceEntityBound.Center.x, sourceEntityBound.Center.y);
+            var target = new Vector2(targetEntityBound.Center.x, targetEntityBound.Center.y);
+
+            var denominator = ((v2.y - v3.y) * (v1.x - v3.x) + (v3.x - v2.x) * (v1.y - v3.y));
+            var a = ((v2.y - v3.y) * (target.x - v3.x) + (v3.x - v2.x) * (target.y - v3.y)) / denominator;
+            var b = ((v3.y - v1.y) * (target.x - v3.x) + (v1.x - v3.x) * (target.y - v3.y)) / denominator;
+            var c = 1 - a - b;
+
+            return 0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1;
+        }
+
         // converts a world point to a physics engine point using linear interpolation 
         // TODO: this is only used on BoxCollider2D to let people use the collider tool to define boundaries
         // if this turns up to create problems we have to define int boundaries in EngineEntity
