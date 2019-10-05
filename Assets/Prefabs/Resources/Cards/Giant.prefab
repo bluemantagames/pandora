@@ -159,8 +159,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
@@ -248,8 +246,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: -1797416285764677584, guid: 4e7c48f98dae35d4da42f7dd77180d13,
     type: 3}
   m_Type: 1
@@ -392,7 +388,7 @@ GameObject:
   - component: {fileID: 7258290981616491628}
   - component: {fileID: 6440670934494413}
   - component: {fileID: 1585679712934027448}
-  - component: {fileID: 5351170404758498882}
+  - component: {fileID: 8066852147643236097}
   m_Layer: 9
   m_Name: Giant
   m_TagString: Untagged
@@ -619,7 +615,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5351170404758498882
+  DebugEntity: 0
+--- !u!114 &8066852147643236097
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -628,8 +625,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8076880815249732036}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8846384b980c8d147a15a9168ee364b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 6921e4cb386f70348afbb9da4e4b0008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnragedColor: {r: 1, g: 0, b: 0, a: 1}
-  AttackMultiplier: 7
+  width: 4000
+  height: 3000
+  damage: 50
