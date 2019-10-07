@@ -19,6 +19,7 @@ namespace Pandora.Combat
         uint timeSinceLastProjectile = 0; // ms
         bool isBackswinging = true;
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 2000;
+        public CombatEffect[] Effects;
 
         public CombatType combatType
         {
@@ -42,7 +43,6 @@ namespace Pandora.Combat
 
                 isAttacking = true;
             }
-
 
             animator.Play(animationStateName, 0, timeSinceLastProjectile / 1000f);
 
@@ -96,6 +96,10 @@ namespace Pandora.Combat
             var lifeComponent = target?.enemy.GetComponent<LifeComponent>();
 
             lifeComponent?.AssignDamage(damage);
+
+            foreach (var effect in Effects) {
+                effect.Apply(gameObject, target.enemy);
+            }
         }
 
         public void OnDead() {}

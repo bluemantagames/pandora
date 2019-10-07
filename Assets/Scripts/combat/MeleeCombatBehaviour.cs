@@ -16,6 +16,7 @@ namespace Pandora.Combat
         public bool isAttacking { get; private set; } = false;
         public string animationStateName;
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 0;
+        public CombatEffect[] Effects;
     
         /// <summary>Multiplier applied for the next attack</summary>
         public float? NextAttackMultiplier = null;
@@ -31,7 +32,6 @@ namespace Pandora.Combat
         /** Returns true if enemy has died */
         public void AttackEnemy(Enemy target, uint timeLapse)
         {
-
             var animator = GetComponent<Animator>();
 
             if (!isAttacking)
@@ -87,6 +87,10 @@ namespace Pandora.Combat
             lifeComponent.AssignDamage(assignedDamage);
 
             NextAttackMultiplier = null;
+
+            foreach (var effect in Effects) {
+                effect.Apply(gameObject, target);
+            }
         }
 
         // Do nothing, we don't have projectiles
