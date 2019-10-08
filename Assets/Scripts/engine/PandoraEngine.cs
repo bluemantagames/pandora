@@ -15,6 +15,10 @@ namespace Pandora.Engine
         public MapComponent Map;
         uint totalElapsed = 0;
 
+        // Debug settings
+        bool debugLines = true;
+        float debugLinesDuration = 2f;
+
         public PandoraEngine(MapComponent map)
         {
             this.Map = map;
@@ -355,6 +359,20 @@ namespace Pandora.Engine
                 ((p1.x - p2.x) * (p1.x - p2.x)) + ((p1.y - p2.y) * (p1.y - p2.y))
             );
 
+            if (Debug.isDebugBuild && debugLines)
+            {
+                var source = PhysicsToWorldArena(p1);
+                var north = PhysicsToWorldArena(new Vector2Int(p1.x, p1.y + radius));
+                var south = PhysicsToWorldArena(new Vector2Int(p1.x, p1.y - radius));
+                var east = PhysicsToWorldArena(new Vector2Int(p1.x + radius, p1.y));
+                var west = PhysicsToWorldArena(new Vector2Int(p1.x - radius, p1.y));
+
+                Debug.DrawLine(new Vector3(source.x, source.y, 0f), new Vector3(north.x, north.y, 0f), Color.blue, debugLinesDuration, false);
+                Debug.DrawLine(new Vector3(source.x, source.y, 0f), new Vector3(south.x, south.y, 0f), Color.blue, debugLinesDuration, false);
+                Debug.DrawLine(new Vector3(source.x, source.y, 0f), new Vector3(east.x, east.y, 0f), Color.blue, debugLinesDuration, false);
+                Debug.DrawLine(new Vector3(source.x, source.y, 0f), new Vector3(west.x, west.y, 0f), Color.blue, debugLinesDuration, false);
+            }
+
             return distance <= radius;
         }
 
@@ -386,6 +404,18 @@ namespace Pandora.Engine
             var a = ((v2.y - v3.y) * (target.x - v3.x) + (v3.x - v2.x) * (target.y - v3.y)) / denominator;
             var b = ((v3.y - v1.y) * (target.x - v3.x) + (v1.x - v3.x) * (target.y - v3.y)) / denominator;
             var c = 1 - a - b;
+
+            // Debug the triangle
+            if (Debug.isDebugBuild && debugLines)
+            {
+                var wv1 = PhysicsToWorldArena(v1);
+                var wv2 = PhysicsToWorldArena(v2);
+                var wv3 = PhysicsToWorldArena(v3);
+
+                Debug.DrawLine(new Vector3(wv1.x, wv1.y, 0f), new Vector3(wv2.x, wv2.y, 0f), Color.red, debugLinesDuration, false);
+                Debug.DrawLine(new Vector3(wv2.x, wv2.y, 0f), new Vector3(wv3.x, wv3.y, 0f), Color.red, debugLinesDuration, false);
+                Debug.DrawLine(new Vector3(wv3.x, wv3.y, 0f), new Vector3(wv1.x, wv1.y, 0f), Color.red, debugLinesDuration, false);
+            }
 
             return 0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1;
         }
@@ -465,6 +495,30 @@ namespace Pandora.Engine
             return new Vector2(
                 (xWorldBounds * physics.x) / xPhysicsBounds,
                 (yWorldBounds * physics.y) / yPhysicsBounds
+            );
+        }
+
+        /// <summary>
+        /// [DEBUG FUNCTION] Transform physics coordinates to world coordinates
+        /// with (0, 0) as the botton-left corner of the arena (I set them by hand
+        /// so IT WILL BREAK)
+        /// </summary>
+        /// <param name="physics">The physics coordinates</param>
+        /// <returns></returns>
+        public Vector2 PhysicsToWorldArena(Vector2Int physics)
+        {
+            var xFix = Map.transform.position.x;
+            var yFix = Map.transform.position.y;
+
+            var xWorldBounds = Map.cellWidth * Map.mapSizeX;
+            var yWorldBounds = Map.cellHeight * Map.mapSizeY;
+
+            var xPhysicsBounds = UnitsPerCell * Map.mapSizeX;
+            var yPhysicsBounds = UnitsPerCell * Map.mapSizeY;
+
+            return new Vector2(
+                (xWorldBounds * physics.x) / xPhysicsBounds + xFix,
+                (yWorldBounds * physics.y) / yPhysicsBounds + yFix
             );
         }
 
