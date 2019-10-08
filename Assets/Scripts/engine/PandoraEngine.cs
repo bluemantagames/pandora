@@ -296,15 +296,41 @@ namespace Pandora.Engine
         }
 
         /// <summary>
+        /// Check if the target entity is inside a circular area with the
+        /// source entity as its center
+        /// </summary>
+        /// <param name="sourceEntity">The source entity</param>
+        /// <param name="targetEntity">The target entity</param>
+        /// <param name="radius">The circle's radius</param>
+        /// <returns>A boolean describing if the target entity is inside the circle</returns>
+        public bool IsInCircularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int radius)
+        {
+            // Here we are using the simple Euclidean Distance
+
+            var sourceEntityBound = GetPooledEntityBounds(sourceEntity);
+            var targetEntityBound = GetPooledEntityBounds(targetEntity);
+
+            var p1 = new Vector2Int(sourceEntityBound.Center.x, sourceEntityBound.Center.y);
+            var p2 = new Vector2Int(targetEntityBound.Center.x, targetEntityBound.Center.y);
+
+            var distance = Isqrt(
+                ((p1.x - p2.x) * (p1.x - p2.x)) + ((p1.y - p2.y) * (p1.y - p2.y))
+            );
+
+            return distance <= radius;
+        }
+
+        /// <summary>
         /// Check if the target entity is inside a 2D triangle with the
-        /// source entity as one of the vertex
+        /// source entity as the main vertex
         /// </summary>
         /// <param name="sourceEntity">The source entity</param>
         /// <param name="targetEntity">The target entity</param>
         /// <param name="width">The triangle's width (as the "base")</param>
         /// <param name="height">The triangle's height (distance from the source entity)</param>
+        /// <param name="unitsLeniency">Fix distance of the source entity from the main vertex</param>
         /// <returns>A boolean describing if the target entity is inside the triangle</returns>
-        public bool IsInTriangularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height)
+        public bool IsInTriangularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height, int unitsLeniency)
         {
             // Using barycentric coordinate system
             // (http://totologic.blogspot.com/2014/01/accurate-point-in-triangle-test.html)
@@ -313,10 +339,10 @@ namespace Pandora.Engine
             var sourceEntityBound = GetPooledEntityBounds(sourceEntity);
             var targetEntityBound = GetPooledEntityBounds(targetEntity);
 
-            var v1 = new Vector2(sourceEntityBound.Center.x - (width / 2), sourceEntityBound.Center.y + height);
-            var v2 = new Vector2(sourceEntityBound.Center.x + (width / 2), sourceEntityBound.Center.y + height);
-            var v3 = new Vector2(sourceEntityBound.Center.x, sourceEntityBound.Center.y);
-            var target = new Vector2(targetEntityBound.Center.x, targetEntityBound.Center.y);
+            var v1 = new Vector2Int(sourceEntityBound.Center.x - (width / 2), sourceEntityBound.Center.y + height - unitsLeniency);
+            var v2 = new Vector2Int(sourceEntityBound.Center.x + (width / 2), sourceEntityBound.Center.y + height - unitsLeniency);
+            var v3 = new Vector2Int(sourceEntityBound.Center.x, sourceEntityBound.Center.y - unitsLeniency);
+            var target = new Vector2Int(targetEntityBound.Center.x, targetEntityBound.Center.y);
 
             var denominator = ((v2.y - v3.y) * (v1.x - v3.x) + (v3.x - v2.x) * (v1.y - v3.y));
             var a = ((v2.y - v3.y) * (target.x - v3.x) + (v3.x - v2.x) * (target.y - v3.y)) / denominator;
@@ -324,6 +350,24 @@ namespace Pandora.Engine
             var c = 1 - a - b;
 
             return 0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1;
+        }
+
+        /// <summary>
+        /// Check if the target entity is inside a "triangle with a rounded base"
+        /// area with the source entity as the main vertex
+        /// </summary>
+        /// <param name="sourceEntity">The source entity</param>
+        /// <param name="targetEntity">The target entity</param>
+        /// <param name="width">The base of the triangle (not considering the rounded part)</param>
+        /// <param name="height">The height of the triangle</param>
+        /// <param name="unitsLeniency">Fix distance of the source entity from the main vertex</param>
+        /// <returns></returns>
+        public bool IsInConicRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height, int unitsLeniency)
+        {
+            var isInTriangularRange = IsInTriangularRange(sourceEntity, targetEntity, width, height, unitsLeniency);
+            var isInCircularRange = IsInCircularRange(sourceEntity, targetEntity, height - unitsLeniency);
+
+            return isInTriangularRange && isInCircularRange;
         }
 
         // converts a world point to a physics engine point using linear interpolation 
@@ -475,6 +519,27 @@ namespace Pandora.Engine
             return
                 layer1 == layer2 ||
                 (layer1 == Constants.PROJECTILES_LAYER || layer2 == Constants.PROJECTILES_LAYER);
+        }
+
+        /// <summary>
+        /// Integer square root of a positive number
+        /// </summary>
+        /// <param name="num">The target number</param>
+        /// <returns>The square root of the target number</returns>
+        int Isqrt(int num)
+        {
+            if (num == 0) return 0;
+
+            int n = (num / 2) + 1;  
+            int n1 = (n + (num / n)) / 2;
+
+            while (n1 < n)
+            {
+                n = n1;
+                n1 = (n + (num / n)) / 2;
+            }
+
+            return n;
         }
     }
 
