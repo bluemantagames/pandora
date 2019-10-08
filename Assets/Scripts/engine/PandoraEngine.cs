@@ -35,25 +35,24 @@ namespace Pandora.Engine
             }
         }
 
-        public int GetSpeed(float cellPerSecond)
+        public int GetSpeed(int engineUnitsPerSecond)
         {
-            return Mathf.FloorToInt((cellPerSecond * UnitsPerCell / 1000) * tickTime);
+            return Mathf.FloorToInt((engineUnitsPerSecond / 1000) * tickTime);
         }
 
 
-        public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, GridCell position, bool isRigid, DateTime? timestamp)
+        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, GridCell position, bool isRigid, DateTime? timestamp)
         {
             var physicsPosition = GridCellToPhysics(position) + (new Vector2Int(UnitsPerCell / 2, UnitsPerCell / 2));
 
-            return AddEntity(gameObject, cellPerSecond, physicsPosition, isRigid, timestamp);
+            return AddEntity(gameObject, engineUnitsPerSecond, physicsPosition, isRigid, timestamp);
         }
 
-        public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, Vector2Int position, bool isRigid, DateTime? timestamp)
+        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, Vector2Int position, bool isRigid, DateTime? timestamp)
         {
-            var speed = GetSpeed(cellPerSecond);
+            var speed = GetSpeed(engineUnitsPerSecond);
 
             Debug.Log($"Assigning speed {speed} in {position}");
-
 
             var entity = new EngineEntity
             {
@@ -90,6 +89,8 @@ namespace Pandora.Engine
             foreach (var entity in entities)
             {
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed));
+
+                
 
                 if (entity.Path == null) continue;
 
@@ -274,13 +275,15 @@ namespace Pandora.Engine
             entities.Remove(entity);
         }
 
-        public bool IsInRangeCells(EngineEntity entity1, EngineEntity entity2, int gridCellRange)
+        public bool IsInHitboxRangeCells(EngineEntity entity1, EngineEntity entity2, int gridCellRange)
         {
-            return IsInRange(entity1, entity2, gridCellRange * UnitsPerCell);
+            return IsInHitboxRange(entity1, entity2, gridCellRange * UnitsPerCell);
         }
 
+        int Square(int a) => a * a;
+        public int SquaredDistance(Vector2Int first, Vector2Int second) => Square(first.x - second.x) + Square(first.y - second.y);
 
-        public bool IsInRange(EngineEntity entity1, EngineEntity entity2, int units)
+        public bool IsInHitboxRange(EngineEntity entity1, EngineEntity entity2, int units)
         {
             var entity1Bounds = GetPooledEntityBounds(entity1);
             var entity2Bounds = GetPooledEntityBounds(entity2);
@@ -384,6 +387,22 @@ namespace Pandora.Engine
                 if (entity.IsStructure && !countStructures) continue;
 
                 if (entity.GetCurrentCell() == gridCell)
+                {
+                    targetEntities.Add(entity);
+                }
+            }
+
+            return targetEntities;
+        }
+
+        public List<EngineEntity> FindInHitboxRange(EngineEntity origin, int range, bool countStructures) {
+            List<EngineEntity> targetEntities = new List<EngineEntity> { };
+
+            foreach (var entity in entities)
+            {
+                if (entity.IsStructure && !countStructures) continue;
+
+                if (IsInHitboxRange(origin, entity, range))
                 {
                     targetEntities.Add(entity);
                 }

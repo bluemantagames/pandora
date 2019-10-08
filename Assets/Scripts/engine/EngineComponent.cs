@@ -37,6 +37,10 @@ namespace Pandora.Engine
             Engine.RemoveEntity(Entity);
         }
 
+        public void RemoveComponent(EngineBehaviour component) {
+            Components.Remove(component);
+        }
+
         /// <summary>For perf reasons, this method must be called every time an EngineBehaviour component is added</summary>
         public void RefreshComponents()
         {

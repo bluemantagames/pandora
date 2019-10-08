@@ -35,7 +35,7 @@ namespace Pandora.Command
             foreach (var lifeComponent in MapComponent.Instance.gameObject.GetComponentsInChildren<LifeComponent>())
             {
                 var targetEntity = lifeComponent.gameObject.GetComponent<EngineComponent>().Entity;
-                var isInRange = positions.Any(harpyCell => harpyCell.Engine.IsInRange(harpyCell.Entity, targetEntity, SearchRangeEngineUnits));
+                var isInRange = positions.Any(harpyCell => harpyCell.Engine.IsInHitboxRange(harpyCell.Entity, targetEntity, SearchRangeEngineUnits));
                 var targetTeamComponent = lifeComponent.gameObject.GetComponent<TeamComponent>();
 
                 if (!isInRange) continue;

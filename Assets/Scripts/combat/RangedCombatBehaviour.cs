@@ -10,7 +10,7 @@ namespace Pandora.Combat
 
     public class RangedCombatBehaviour : MonoBehaviour, CombatBehaviour
     {
-        float damage = 10f;
+        public float Damage = 10f;
         Enemy target = null;
         public bool isAttacking { get; private set; } = false;
         public int attackCooldownMs = 600, backswingMs = 200;
@@ -19,6 +19,7 @@ namespace Pandora.Combat
         uint timeSinceLastProjectile = 0; // ms
         bool isBackswinging = true;
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 2000;
+        public GameObject[] EffectObjects;
 
         public CombatType combatType
         {
@@ -43,18 +44,19 @@ namespace Pandora.Combat
                 isAttacking = true;
             }
 
-
-            animator.Play(animationStateName, 0, timeSinceLastProjectile / 1000f);
+            animator.Play(animationStateName, 0, timeSinceLastProjectile / (float)(attackCooldownMs + backswingMs));
 
             timeSinceLastProjectile += timeLapse;
 
-            if (timeSinceLastProjectile >= attackCooldownMs && !isBackswinging) {
+            if (timeSinceLastProjectile >= attackCooldownMs && !isBackswinging)
+            {
                 SpawnProjectile();
 
                 isBackswinging = true;
             }
 
-            if (timeSinceLastProjectile >= attackCooldownMs + backswingMs) {
+            if (timeSinceLastProjectile >= attackCooldownMs + backswingMs)
+            {
                 timeSinceLastProjectile = 0;
                 isBackswinging = false;
             }
@@ -86,26 +88,34 @@ namespace Pandora.Combat
 
             var lifeComponent = target.enemy.GetComponent<LifeComponent>();
 
-            if (lifeComponent.lifeValue - damage <= 0) // if the projectile kills the target on hit, stop attacking the target now
+            if (lifeComponent.lifeValue - Damage <= 0) // if the projectile kills the target on hit, stop attacking the target now
             {
                 StopAttacking();
             }
         }
 
-        public void ProjectileCollided() {
+        public void ProjectileCollided()
+        {
             var lifeComponent = target?.enemy.GetComponent<LifeComponent>();
 
-            lifeComponent?.AssignDamage(damage);
+            lifeComponent?.AssignDamage(Damage);
+
+            foreach (var effectObject in EffectObjects)
+            {
+                var effect = effectObject.GetComponent<Effect>();
+
+                effect.Apply(gameObject, target.enemy);
+            }
         }
 
-        public void OnDead() {}
+        public void OnDead() { }
 
         public bool IsInAggroRange(Enemy enemy)
         {
             var engineComponent = GetComponent<EngineComponent>();
             var engine = engineComponent.Engine;
 
-            return engine.IsInRangeCells(engineComponent.Entity, enemy.enemyEntity, AggroRangeCells);
+            return engine.IsInHitboxRangeCells(engineComponent.Entity, enemy.enemyEntity, AggroRangeCells);
         }
 
         public bool IsInAttackRange(Enemy enemy)
@@ -113,7 +123,7 @@ namespace Pandora.Combat
             var engineComponent = GetComponent<EngineComponent>();
             var engine = engineComponent.Engine;
 
-            return engine.IsInRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
+            return engine.IsInHitboxRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
         }
     }
 }
