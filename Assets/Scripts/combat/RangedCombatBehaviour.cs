@@ -17,7 +17,7 @@ namespace Pandora.Combat
         public GameObject projectile;
         public string animationStateName;
         uint timeSinceLastProjectile = 0; // ms
-        bool isBackswinging = true;
+        bool isBackswinging = false;
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 2000;
         public GameObject[] EffectObjects;
 
