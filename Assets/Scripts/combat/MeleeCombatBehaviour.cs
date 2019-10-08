@@ -16,8 +16,8 @@ namespace Pandora.Combat
         public bool isAttacking { get; private set; } = false;
         public string animationStateName;
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 0;
-        public CombatEffect[] Effects;
-    
+        public Effect[] Effects;
+
         /// <summary>Multiplier applied for the next attack</summary>
         public float? NextAttackMultiplier = null;
 
@@ -44,17 +44,19 @@ namespace Pandora.Combat
                 isAttacking = true;
             }
 
-            animator.Play(animationStateName, 0, timeSinceLastDamage / (float) (attackCooldownMs + backswingMs));
+            animator.Play(animationStateName, 0, timeSinceLastDamage / (float)(attackCooldownMs + backswingMs));
 
             timeSinceLastDamage += timeLapse;
 
-            if (timeSinceLastDamage >= attackCooldownMs && !isBackswinging) {
+            if (timeSinceLastDamage >= attackCooldownMs && !isBackswinging)
+            {
                 MeleeAssignDamage();
 
                 isBackswinging = true;
             }
 
-            if (timeSinceLastDamage >= attackCooldownMs + backswingMs) {
+            if (timeSinceLastDamage >= attackCooldownMs + backswingMs)
+            {
                 timeSinceLastDamage = 0;
                 isBackswinging = false;
             }
@@ -88,16 +90,18 @@ namespace Pandora.Combat
 
             NextAttackMultiplier = null;
 
-            foreach (var effect in Effects) {
+            foreach (var effect in Effects)
+            {
                 effect.Apply(gameObject, target);
             }
         }
 
         // Do nothing, we don't have projectiles
-        public void ProjectileCollided() {
+        public void ProjectileCollided()
+        {
         }
 
-        public void OnDead() {}
+        public void OnDead() { }
 
         public bool IsInAggroRange(Enemy enemy)
         {

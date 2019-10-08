@@ -315,6 +315,8 @@ MonoBehaviour:
   animationStateName: AttackingDragon
   AggroRangeCells: 3
   AttackRangeEngineUnits: 2000
+  Effects:
+  - {fileID: 0}
 --- !u!61 &4143209966792787441
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ namespace Pandora.Combat
         uint timeSinceLastProjectile = 0; // ms
         bool isBackswinging = true;
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 2000;
-        public CombatEffect[] Effects;
+        public MonoBehaviour[] Effects;
 
         public CombatType combatType
         {
@@ -48,13 +48,15 @@ namespace Pandora.Combat
 
             timeSinceLastProjectile += timeLapse;
 
-            if (timeSinceLastProjectile >= attackCooldownMs && !isBackswinging) {
+            if (timeSinceLastProjectile >= attackCooldownMs && !isBackswinging)
+            {
                 SpawnProjectile();
 
                 isBackswinging = true;
             }
 
-            if (timeSinceLastProjectile >= attackCooldownMs + backswingMs) {
+            if (timeSinceLastProjectile >= attackCooldownMs + backswingMs)
+            {
                 timeSinceLastProjectile = 0;
                 isBackswinging = false;
             }
@@ -92,17 +94,26 @@ namespace Pandora.Combat
             }
         }
 
-        public void ProjectileCollided() {
+        public void ProjectileCollided()
+        {
             var lifeComponent = target?.enemy.GetComponent<LifeComponent>();
 
             lifeComponent?.AssignDamage(damage);
 
-            foreach (var effect in Effects) {
-                effect.Apply(gameObject, target.enemy);
+            foreach (var effect in Effects)
+            {
+                if (!(effect is Effect))
+                {
+                    Debug.LogWarning($"{effect.name} not an effect, ignoring");
+
+                    continue;
+                }
+
+                (effect as Effect).Apply(gameObject, target.enemy);
             }
         }
 
-        public void OnDead() {}
+        public void OnDead() { }
 
         public bool IsInAggroRange(Enemy enemy)
         {
