@@ -69,7 +69,7 @@ namespace Pandora.Movement
             }
         }
 
-        public float speed = 1f;
+        public int Speed = 400;
         public MapComponent map;
 
         // Start is called before the first frame update
@@ -275,7 +275,7 @@ namespace Pandora.Movement
 
         private void CalculatePath()
         {
-            engineEntity.SetSpeed(speed);
+            engineEntity.SetSpeed(Speed);
 
             var currentPosition = CurrentCellPosition();
             var target = targetEnemy.enemyCell;

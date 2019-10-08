@@ -13,7 +13,7 @@ namespace Pandora.Combat
         Rigidbody2D body;
 
         public GameObject parent { get; set; }
-        public float speed = 1f;
+        public int speed = 400;
         public Enemy target { get; set; }
         public MapComponent map { private get; set; }
         private EngineEntity engineEntity;

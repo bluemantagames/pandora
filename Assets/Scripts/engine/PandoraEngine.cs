@@ -35,25 +35,24 @@ namespace Pandora.Engine
             }
         }
 
-        public int GetSpeed(float cellPerSecond)
+        public int GetSpeed(int engineUnitsPerSecond)
         {
-            return Mathf.FloorToInt((cellPerSecond * UnitsPerCell / 1000) * tickTime);
+            return Mathf.FloorToInt((engineUnitsPerSecond / 1000) * tickTime);
         }
 
 
-        public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, GridCell position, bool isRigid, DateTime? timestamp)
+        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, GridCell position, bool isRigid, DateTime? timestamp)
         {
             var physicsPosition = GridCellToPhysics(position) + (new Vector2Int(UnitsPerCell / 2, UnitsPerCell / 2));
 
-            return AddEntity(gameObject, cellPerSecond, physicsPosition, isRigid, timestamp);
+            return AddEntity(gameObject, engineUnitsPerSecond, physicsPosition, isRigid, timestamp);
         }
 
-        public EngineEntity AddEntity(GameObject gameObject, float cellPerSecond, Vector2Int position, bool isRigid, DateTime? timestamp)
+        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, Vector2Int position, bool isRigid, DateTime? timestamp)
         {
-            var speed = GetSpeed(cellPerSecond);
+            var speed = GetSpeed(engineUnitsPerSecond);
 
             Debug.Log($"Assigning speed {speed} in {position}");
-
 
             var entity = new EngineEntity
             {

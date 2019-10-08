@@ -18,8 +18,8 @@ namespace Pandora.Engine {
         public DateTime Timestamp;
         public Vector2Int Target;
 
-        public void SetSpeed(float GridCellSpeed) {
-            Speed = Engine.GetSpeed(GridCellSpeed);
+        public void SetSpeed(int engineUnitsPerSecond) {
+            Speed = Engine.GetSpeed(engineUnitsPerSecond);
         }
 
         public void SetTarget(GridCell cell) {

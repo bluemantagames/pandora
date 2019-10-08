@@ -8,7 +8,7 @@ namespace Pandora.Spell
     public class ProjectileSpellBehaviour : MonoBehaviour
     {
         public MapComponent map;
-        public float speed = 3f;
+        public int Speed = 1200;
         public ProjectileSpell spell;
 
         public GridCell Target;
