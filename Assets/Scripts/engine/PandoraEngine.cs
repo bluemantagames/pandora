@@ -281,6 +281,8 @@ namespace Pandora.Engine
             return IsInHitboxRange(entity1, entity2, gridCellRange * UnitsPerCell);
         }
 
+        int Square(int a) => a * a;
+        public int SquaredDistance(Vector2Int first, Vector2Int second) => Square(first.x - second.x) + Square(first.y - second.y);
 
         public bool IsInHitboxRange(EngineEntity entity1, EngineEntity entity2, int units)
         {
@@ -386,6 +388,22 @@ namespace Pandora.Engine
                 if (entity.IsStructure && !countStructures) continue;
 
                 if (entity.GetCurrentCell() == gridCell)
+                {
+                    targetEntities.Add(entity);
+                }
+            }
+
+            return targetEntities;
+        }
+
+        public List<EngineEntity> FindInHitboxRange(EngineEntity origin, int range, bool countStructures) {
+            List<EngineEntity> targetEntities = new List<EngineEntity> { };
+
+            foreach (var entity in entities)
+            {
+                if (entity.IsStructure && !countStructures) continue;
+
+                if (IsInHitboxRange(origin, entity, range))
                 {
                     targetEntities.Add(entity);
                 }

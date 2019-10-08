@@ -43,9 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c60131ddab07c47afca4bf81021972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsDisabled: 0
   Origin: {fileID: 0}
   PoisonTickMs: 200
-  PositionDurationMs: 2000
-  DamagePerTick: 0
+  PoisonDurationMs: 2000
+  DamagePerTick: 3
   OriginalColor: {r: 0, g: 0, b: 0, a: 0}

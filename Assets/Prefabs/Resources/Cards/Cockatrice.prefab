@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 906157769598500874}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.020999908, y: 0.032000065, z: 2}
-  m_LocalScale: {x: 0.79999995, y: 0.79999995, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1060352442105845637}
   m_RootOrder: 1
@@ -113,6 +113,7 @@ GameObject:
   - component: {fileID: 3519887656195453972}
   - component: {fileID: 8660774719796279383}
   - component: {fileID: 4143209966792787441}
+  - component: {fileID: 6674434008587753410}
   m_Layer: 9
   m_Name: Cockatrice
   m_TagString: Untagged
@@ -129,7 +130,7 @@ Transform:
   m_GameObject: {fileID: 1060352442105845753}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.3052, y: -7.3144, z: 0}
-  m_LocalScale: {x: 0.742203, y: 0.742203, z: 0.742203}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0}
   m_Children:
   - {fileID: 1277369349267820447}
   - {fileID: 5294188466839304543}
@@ -245,6 +246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeValue: 100
   mask: {fileID: 9015842578933355138}
+  maxLife: 0
   isDead: 0
 --- !u!95 &7129443875767093079
 Animator:
@@ -344,6 +346,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.49692154, y: 0.4982915}
   m_EdgeRadius: 0
+--- !u!114 &6674434008587753410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060352442105845753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ea49d75e7847b44f8fa857f8c11588c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FlyingTimeMs: 2000
+  EngineUnitsRange: 1200
+  TargetBuildings: 0
 --- !u!1 &1545008801043616799
 GameObject:
   m_ObjectHideFlags: 0

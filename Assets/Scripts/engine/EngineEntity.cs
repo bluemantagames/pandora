@@ -67,6 +67,10 @@ namespace Pandora.Engine {
             return Engine.FlippedPhysicsToMap(Position);
         }
 
+        public List<EngineEntity> FindInHitboxRange(int engineUnitsRange, bool countStructures) {
+            return Engine.FindInHitboxRange(this, engineUnitsRange, countStructures);
+        }
+
         public void PrintDebugInfo() {
             Engine.PrintDebugInfo(this);
         }

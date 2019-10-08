@@ -39,6 +39,8 @@ namespace Pandora.Command
 
             var commandComponent = GetComponentInParent<CommandBehaviour>();
 
+            Debug.Log($"Calling command for {gameObject}");
+
             if (commandComponent != null && !NetworkControllerSingleton.instance.matchStarted)
             {
                 commandComponent.InvokeCommand();
