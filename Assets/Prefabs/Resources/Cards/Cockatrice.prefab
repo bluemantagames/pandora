@@ -128,8 +128,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060352442105845753}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.099, y: -7.952, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.3052, y: -7.3144, z: 0}
+  m_LocalScale: {x: 0.742203, y: 0.742203, z: 0.742203}
   m_Children:
   - {fileID: 1277369349267820447}
   - {fileID: 5294188466839304543}
@@ -308,6 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a9892cbc13c6c4ca1446776a4deac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Damage: 0
   attackCooldownMs: 500
   backswingMs: 400
   projectile: {fileID: 5687362912629012028, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
@@ -315,8 +316,8 @@ MonoBehaviour:
   animationStateName: AttackingDragon
   AggroRangeCells: 3
   AttackRangeEngineUnits: 2000
-  Effects:
-  - {fileID: 0}
+  EffectObjects:
+  - {fileID: 1551170618718484600, guid: 2b07a3d9e13b3e841b80d31ad66f5554, type: 3}
 --- !u!61 &4143209966792787441
 BoxCollider2D:
   m_ObjectHideFlags: 0

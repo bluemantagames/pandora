@@ -16,7 +16,7 @@ namespace Pandora.Combat
         public bool isAttacking { get; private set; } = false;
         public string animationStateName;
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 0;
-        public Effect[] Effects;
+        public List<Effect> Effects = new List<Effect> {};
 
         /// <summary>Multiplier applied for the next attack</summary>
         public float? NextAttackMultiplier = null;
@@ -108,7 +108,7 @@ namespace Pandora.Combat
             var engineComponent = GetComponent<EngineComponent>();
             var engine = engineComponent.Engine;
 
-            return engine.IsInRangeCells(engineComponent.Entity, enemy.enemyEntity, AggroRangeCells);
+            return engine.IsInHitboxRangeCells(engineComponent.Entity, enemy.enemyEntity, AggroRangeCells);
         }
 
         public bool IsInAttackRange(Enemy enemy)
@@ -116,7 +116,7 @@ namespace Pandora.Combat
             var engineComponent = GetComponent<EngineComponent>();
             var engine = engineComponent.Engine;
 
-            return engine.IsInRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
+            return engine.IsInHitboxRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
         }
     }
 }

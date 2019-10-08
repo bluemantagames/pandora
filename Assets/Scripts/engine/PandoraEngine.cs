@@ -91,6 +91,8 @@ namespace Pandora.Engine
             {
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed));
 
+                
+
                 if (entity.Path == null) continue;
 
                 for (var i = 0; i < unitsMoved; i++)
@@ -274,13 +276,13 @@ namespace Pandora.Engine
             entities.Remove(entity);
         }
 
-        public bool IsInRangeCells(EngineEntity entity1, EngineEntity entity2, int gridCellRange)
+        public bool IsInHitboxRangeCells(EngineEntity entity1, EngineEntity entity2, int gridCellRange)
         {
-            return IsInRange(entity1, entity2, gridCellRange * UnitsPerCell);
+            return IsInHitboxRange(entity1, entity2, gridCellRange * UnitsPerCell);
         }
 
 
-        public bool IsInRange(EngineEntity entity1, EngineEntity entity2, int units)
+        public bool IsInHitboxRange(EngineEntity entity1, EngineEntity entity2, int units)
         {
             var entity1Bounds = GetPooledEntityBounds(entity1);
             var entity2Bounds = GetPooledEntityBounds(entity2);
