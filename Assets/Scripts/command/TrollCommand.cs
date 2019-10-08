@@ -28,7 +28,7 @@ namespace Pandora.Command
 
                 if (sourceTeam == targetTeam) continue;
 
-                if (source.Engine.IsInTriangularRange(source, target, Width, Height))
+                if (source.Engine.IsInConicRange(source, target, Width, Height, 20))
                 {
                     Debug.Log("[Troll] Unit damaged");
                     targetLifeComponent.AssignDamage(Damage);
