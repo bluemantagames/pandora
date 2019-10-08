@@ -134,7 +134,13 @@ namespace Pandora.Engine
 
                 for (var i = 0; i < unitsMoved; i++)
                 {
+                    var prevPosition = entity.Path.Current;
+
                     entity.Path?.MoveNext();
+
+                    var currentPosition = entity.Path.Current;
+
+                    entity.Direction = currentPosition - prevPosition;
                 }
 
                 if (entity.Path.Current != null)
