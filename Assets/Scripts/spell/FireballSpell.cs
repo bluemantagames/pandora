@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Pandora.Spell {
     public class FireballSpell : MonoBehaviour, ProjectileSpell {
         public MapComponent map { get; set; }
-        public float damage = 20f;
+        public int damage = 20;
         public float radius = 3;
 
         public void SpellCollided(GridCell cell) {

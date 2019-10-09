@@ -39,7 +39,7 @@ namespace Pandora.Combat
             }
         }
         public int range = 5;
-        public float damage = 3f;
+        public int damage = 3;
         public uint cooldownMs = 300;
         public bool isOpponent = false;
 

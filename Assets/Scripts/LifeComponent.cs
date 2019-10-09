@@ -10,10 +10,10 @@ namespace Pandora
 
     public class LifeComponent : MonoBehaviour
     {
-        public float lifeValue = 100;
+        public int lifeValue = 100;
         public Image mask;
         float maskOriginalSize;
-        public float maxLife;
+        public int maxLife;
         public bool isDead = false;
 
         // Start is called before the first frame update
@@ -23,7 +23,7 @@ namespace Pandora
             maxLife = lifeValue;
         }
 
-        public void AssignDamage(float value)
+        public void AssignDamage(int value)
         {
             lifeValue -= value;
 
@@ -41,11 +41,13 @@ namespace Pandora
                 GetComponent<CombatBehaviour>().StopAttacking();
                 GetComponent<CombatBehaviour>().OnDead();
 
-                foreach (var rigidBody in GetComponentsInChildren<Rigidbody2D>()) {
+                foreach (var rigidBody in GetComponentsInChildren<Rigidbody2D>())
+                {
                     rigidBody.simulated = false;
                 }
 
-                foreach (var renderer in GetComponentsInChildren<SpriteRenderer>()) {
+                foreach (var renderer in GetComponentsInChildren<SpriteRenderer>())
+                {
                     Debug.Log("Disabling renderer");
 
                     renderer.enabled = false;
@@ -53,7 +55,8 @@ namespace Pandora
 
                 var engineComponent = GetComponent<EngineComponent>();
 
-                if (engineComponent == null) {
+                if (engineComponent == null)
+                {
                     Debug.LogWarning("Could not find engine component");
                 }
 

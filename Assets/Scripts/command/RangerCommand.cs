@@ -7,7 +7,7 @@ namespace Pandora.Command
     {
         public Color EnragedColor = Color.red;
         Color originalColor;
-        public float AttackMultiplier = 7f;
+        public int AttackMultiplier = 7;
 
         SpriteRenderer rangerRenderer;
         MeleeCombatBehaviour combatBehaviour;

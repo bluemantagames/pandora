@@ -8,7 +8,7 @@ namespace Pandora.Combat
 
     public class MeleeCombatBehaviour : MonoBehaviour, CombatBehaviour
     {
-        public float damage = 10f;
+        public int damage = 10;
         GameObject target = null;
         uint timeSinceLastDamage = 0; // ms
         bool isBackswinging = false;
@@ -19,7 +19,7 @@ namespace Pandora.Combat
         public List<Effect> Effects = new List<Effect> {};
 
         /// <summary>Multiplier applied for the next attack</summary>
-        public float? NextAttackMultiplier = null;
+        public int? NextAttackMultiplier = null;
 
         public CombatType combatType
         {

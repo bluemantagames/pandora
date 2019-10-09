@@ -10,7 +10,7 @@ namespace Pandora.Combat
 
     public class RangedCombatBehaviour : MonoBehaviour, CombatBehaviour
     {
-        public float Damage = 10f;
+        public int Damage = 10;
         Enemy target = null;
         public bool isAttacking { get; private set; } = false;
         public int attackCooldownMs = 600, backswingMs = 200;
