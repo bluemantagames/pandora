@@ -37,7 +37,7 @@ namespace Pandora.Engine
 
         public int GetSpeed(int engineUnitsPerSecond)
         {
-            return Mathf.FloorToInt((engineUnitsPerSecond / 1000) * tickTime);
+            return Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * tickTime);
         }
 
 

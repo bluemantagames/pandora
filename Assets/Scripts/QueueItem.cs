@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    struct QueueItem
+    public struct QueueItem
     {
         public List<GridCell> points;
         public HashSet<GridCell> pointsSet;

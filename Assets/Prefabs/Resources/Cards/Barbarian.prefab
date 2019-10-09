@@ -139,6 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeValue: 100
   mask: {fileID: 9015842578933355138}
+  maxLife: 0
   isDead: 0
 --- !u!95 &7129443875767093079
 Animator:
@@ -173,7 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
   LastState: 0
-  speed: 1
+  Speed: 400
   map: {fileID: 0}
 --- !u!114 &3519887656195453972
 MonoBehaviour:

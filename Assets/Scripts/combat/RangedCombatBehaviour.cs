@@ -78,7 +78,7 @@ namespace Pandora.Combat
 
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
 
-            var map = GetComponent<MovementComponent>().map;
+            var map = MapComponent.Instance;
 
             Debug.Log($"Spawning projectile - Setting map {map}");
 

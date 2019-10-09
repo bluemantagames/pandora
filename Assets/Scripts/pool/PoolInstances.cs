@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Pandora.Engine;
+using System.Collections.Generic;
 
 namespace Pandora.Pool
 {
@@ -29,6 +30,28 @@ namespace Pandora.Pool
         public static ConcurrentObjectPool<Vector2Int> Vector2IntPool = new ConcurrentObjectPool<Vector2Int>(
             createFunction: () => new Vector2Int(),
             resetFunction: v => v.Set(0, 0),
+            profilingEnabled: false
+        );
+
+        public static ConcurrentObjectPool<List<GridCell>> GridCellListPool = new ConcurrentObjectPool<List<GridCell>>(
+            createFunction: () => new List<GridCell>(100),
+            resetFunction: v => v.Clear(),
+            profilingEnabled: false
+        );
+
+
+        public static ConcurrentObjectPool<HashSet<GridCell>> GridCellHashSetPool = new ConcurrentObjectPool<HashSet<GridCell>>(
+            createFunction: () => new HashSet<GridCell>(),
+            resetFunction: v => v.Clear(),
+            profilingEnabled: false
+        );
+
+        public static ConcurrentObjectPool<QueueItem> QueueItemPool = new ConcurrentObjectPool<QueueItem>(
+            createFunction: () => new QueueItem(),
+            resetFunction: v => {
+                v.points = new List<GridCell> {};
+                v.pointsSet = new HashSet<GridCell> {};
+            },
             profilingEnabled: false
         );
     }

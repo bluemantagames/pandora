@@ -29,6 +29,8 @@ namespace Pandora
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         float firstLaneX = 2, secondLaneX = 13;
 
+        HashSet<GridCell> riverPositions = new HashSet<GridCell>();
+
         public float cellHeight;
         public float cellWidth;
         uint frameStep = 40, remainingStep = 0, timeSinceLastStep; // milliseconds
@@ -121,14 +123,16 @@ namespace Pandora
         public bool IsObstacle(GridCell cell, bool isFlying, TeamComponent team)
         {
             var riverY = 13f;
-            var riverPositions = new HashSet<GridCell>();
             var cellVector = cell.vector;
 
-            for (var x = 0; x < bottomMapSize.x; x++)
+            if (riverPositions.Count == 0)
             {
-                if (x != firstLaneX && x != secondLaneX)
+                for (var x = 0; x < bottomMapSize.x; x++)
                 {
-                    riverPositions.Add(new GridCell(x, riverY));
+                    if (x != firstLaneX && x != secondLaneX)
+                    {
+                        riverPositions.Add(new GridCell(x, riverY));
+                    }
                 }
             }
 
@@ -441,7 +445,7 @@ namespace Pandora
         // Finds units in a gridcell-space rectangle
         public List<GameObject> GetUnitsInRect(Vector2 origin, int widthCells, int heightCells)
         {
-            var units = new List<GameObject>();
+            var units = new List<GameObject>(30);
             var lowerRange = Math.Min(origin.y, origin.y + heightCells);
             var higherRange = Math.Max(origin.y, origin.y + heightCells);
 

@@ -220,7 +220,14 @@ namespace Pandora.Movement
                             var distanceFromStart = evaluatingPosition.points.Count + 1; // use the distance between this point and the start as g(n)
                             var priority = distanceFromStart + distanceToEnd; // priority is h(n) ++ g(n)
                             var currentPositions = new List<GridCell>(evaluatingPosition.points) { advance };
-                            var queueItem = new QueueItem(currentPositions, new HashSet<GridCell>(currentPositions));
+                            var queueItem = PoolInstances.QueueItemPool.GetObject();
+                            
+                            queueItem.points = currentPositions;
+                            queueItem.pointsSet = PoolInstances.GridCellHashSetPool.GetObject();
+
+                            foreach (var position in currentPositions) {
+                                queueItem.pointsSet.Add(position);
+                            }
 
                             if (advance == end)
                             { // Stop the loop if we found the path
@@ -229,6 +236,9 @@ namespace Pandora.Movement
 
                                 break;
                             }
+
+                            PoolInstances.GridCellHashSetPool.ReturnObject(evaluatingPosition.pointsSet);
+                            PoolInstances.QueueItemPool.ReturnObject(evaluatingPosition);
 
                             priorityQueue.Enqueue(
                                 queueItem,
