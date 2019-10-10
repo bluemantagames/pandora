@@ -16,9 +16,16 @@ namespace Pandora.Command
         public int FlyingTimeMs = 2000, EngineUnitsRange = 1200;
         public bool TargetBuildings = false;
 
+        TeamComponent team;
+        EngineComponent engineComponent;
+
+        void Start() {
+            team = GetComponent<TeamComponent>();
+            engineComponent = GetComponent<EngineComponent>();
+        }
+
         public void InvokeCommand()
         {
-            var engineComponent = GetComponent<EngineComponent>();
             var cockatrice = engineComponent.Entity;
 
             var flyingMode = gameObject.AddComponent<CockatriceFlyingMode>();
@@ -33,7 +40,7 @@ namespace Pandora.Command
 
             foreach (var entity in engineComponent.Entity.FindInHitboxRange(EngineUnitsRange, TargetBuildings))
             {
-                if (entity == cockatrice) continue;
+                if (entity.GameObject.GetComponent<TeamComponent>().team == team.team) continue;
 
                 var distance = engineComponent.Engine.SquaredDistance(entity.Position, cockatrice.Position);
 

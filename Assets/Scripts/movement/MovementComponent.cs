@@ -221,11 +221,12 @@ namespace Pandora.Movement
                             var priority = distanceFromStart + distanceToEnd; // priority is h(n) ++ g(n)
                             var currentPositions = new List<GridCell>(evaluatingPosition.points) { advance };
                             var queueItem = PoolInstances.QueueItemPool.GetObject();
-                            
+
                             queueItem.points = currentPositions;
                             queueItem.pointsSet = PoolInstances.GridCellHashSetPool.GetObject();
 
-                            foreach (var position in currentPositions) {
+                            foreach (var position in currentPositions)
+                            {
                                 queueItem.pointsSet.Add(position);
                             }
 
@@ -244,7 +245,9 @@ namespace Pandora.Movement
                                 queueItem,
                                 priority
                             );
-                        } else {
+                        }
+                        else
+                        {
                             PoolInstances.GridCellPool.ReturnObject(advance);
                         }
                     }
@@ -252,9 +255,9 @@ namespace Pandora.Movement
 
                 pass += 1;
 
-                if (pass > 5000)
+                if ((evadeUnits && pass > 100) || pass > 5000)
                 {
-                    Debug.LogWarning($"Short circuiting after 5000 passes started from {currentPosition} to {end} - {team.team} {gameObject.name}");
+                    Debug.LogWarning($"Short circuiting after 5000 passes started from {currentPosition} to {end} - {team.team} {gameObject.name} {evadeUnits}");
                     Debug.LogWarning("Best paths found are");
                     Debug.LogWarning($"{priorityQueue.Dequeue()}");
                     Debug.LogWarning($"{priorityQueue.Dequeue()}");
@@ -267,7 +270,16 @@ namespace Pandora.Movement
                         Debug.Break();
                     }
 
-                    return evaluatingPosition.points;
+                    if (evadeUnits)
+                    {
+                        evadeUnits = false;
+
+                        return FindPath(end);
+                    }
+                    else
+                    {
+                        return evaluatingPosition.points;
+                    }
                 }
 
                 if (!pathFound) evaluatingPosition = priorityQueue.Dequeue();
