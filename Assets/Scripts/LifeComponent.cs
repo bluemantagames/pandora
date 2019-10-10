@@ -27,7 +27,7 @@ namespace Pandora
         {
             lifeValue -= value;
 
-            float lifePercent = lifeValue / maxLife;
+            float lifePercent = (float) lifeValue / (float) maxLife;
 
             mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
 
