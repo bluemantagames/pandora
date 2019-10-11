@@ -17,8 +17,12 @@ namespace Pandora
             foreach (var position in Positions)
             {
                 var unit = Instantiate(Unit, map.gameObject.transform);
+                var id = $"{spawn.Id}-{unitNumber}";
 
-                map.InitializeComponents(unit, new GridCell(spawn.CellX + position.x, spawn.CellY + position.y), spawn.Team, $"{spawn.Id}-{unitNumber}", spawn.Timestamp);
+                unit.name += $"-{id}";
+
+                map.InitializeComponents(unit, new GridCell(spawn.CellX + position.x, spawn.CellY + position.y), spawn.Team, id, spawn.Timestamp);
+
                 units.Add(unit);
 
                 unit.AddComponent<GroupComponent>().Objects = units;
