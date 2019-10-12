@@ -15,9 +15,11 @@ namespace Pandora.Engine
         public MapComponent Map;
         uint totalElapsed = 0;
 
+        Decimal DPi = new Decimal(3.141592653589);
+
         // Debug settings
         bool debugLines = true;
-        float debugLinesDuration = 2f;
+        float debugLinesDuration = 200f;
 
         public PandoraEngine(MapComponent map)
         {
@@ -361,7 +363,7 @@ namespace Pandora.Engine
             var p1 = new Vector2Int(sourceEntityBound.Center.x, sourceEntityBound.Center.y);
             var p2 = new Vector2Int(targetEntityBound.Center.x, targetEntityBound.Center.y);
 
-            var distance = Isqrt(
+            var distance = ISqrt(
                 ((p1.x - p2.x) * (p1.x - p2.x)) + ((p1.y - p2.y) * (p1.y - p2.y))
             );
 
@@ -405,6 +407,17 @@ namespace Pandora.Engine
             var v2 = new Vector2Int(sourceEntityBound.Center.x + (width / 2), sourceEntityBound.Center.y + height - unitsLeniency);
             var v3 = new Vector2Int(sourceEntityBound.Center.x, sourceEntityBound.Center.y - unitsLeniency);
             var target = new Vector2Int(targetEntityBound.Center.x, targetEntityBound.Center.y);
+
+            // Rotate the triangle
+            var rotatedFigure = RotateFigureByDirection(
+                new List<Vector2Int> { v1, v2, v3 },
+                v3,
+                sourceEntity.Direction
+            );
+
+            v3 = rotatedFigure[0];
+            v1 = rotatedFigure[1];
+            v2 = rotatedFigure[2];
 
             var denominator = ((v2.y - v3.y) * (v1.x - v3.x) + (v3.x - v2.x) * (v1.y - v3.y));
             var a = ((v2.y - v3.y) * (target.x - v3.x) + (v3.x - v2.x) * (target.y - v3.y)) / denominator;
@@ -649,7 +662,7 @@ namespace Pandora.Engine
         /// </summary>
         /// <param name="num">The target number</param>
         /// <returns>The square root of the target number</returns>
-        int Isqrt(int num)
+        int ISqrt(int num)
         {
             if (num == 0) return 0;
 
@@ -664,6 +677,197 @@ namespace Pandora.Engine
 
             return n;
         }
-    }
 
+        /// <summary>
+        /// Calculate the square of a number
+        /// </summary>
+        int ISquare(int n) => n * n;
+
+        Decimal DPow(Decimal n, int y)
+        {
+            if (y == 0) return 1;
+
+            Decimal result = DPow(n, y / 2);
+
+            if (y % 2 == 0)
+                return result * result;
+            else
+                return n * result * result;
+        }
+
+        /// <summary>
+        /// Transform a Def angle into a Rad angle
+        /// using Decimal
+        /// </summary>
+        /// <param name="deg">The angle in Deg</param>
+        /// <returns>A Rad angle</returns>
+        Decimal DegToRad(Decimal deg) => deg * (DPi / 180);
+
+        /// <summary>
+        /// Normalize an angle into [0, 360]
+        /// </summary>
+        /// <param name="angle">A DEG angle in Decimal</param>
+        /// <returns>A normalized angle</returns>
+        Decimal NormalizeAngle(Decimal angle)
+        {
+            Decimal normalized = angle;
+
+            // Reduce to [0, 360]
+            while (normalized > 360) normalized -= 360;
+
+            return normalized;
+        }
+
+        /// <summary>
+        /// The the quadrant relative
+        /// to an angle
+        /// </summary>
+        /// <param name="angle">A DEG angle in Decimal</param>
+        /// <returns>A quadrant [1, 4]</returns>
+        int GetAngleQuadrant(Decimal angle)
+        {
+            if (angle > 360)
+                throw new Exception("Angle must be 0 <= a <= 360");
+
+            if (angle <= 90)
+                return 1;
+            else if (angle <= 180)
+                return 2;
+            else if (angle <= 270)
+                return 3;
+            else
+                return 4;
+        }
+
+        /// <summary>
+        /// Map a [0, 360] DEG angle
+        /// to a [0, 90] one
+        /// </summary>
+        /// <param name="angle">A DEG angle in Decimal</param>
+        /// <returns>The new angle</returns>
+        Decimal AngleToFirstQuadrant(Decimal angle)
+        {
+            var quadrant = GetAngleQuadrant(angle);
+
+            if (quadrant == 2) return 180 - angle;
+            else if (quadrant == 3) return angle - 180;
+            else if (quadrant == 4) return 360 - angle;
+
+            return angle;
+        }
+
+        /// <summary>
+        /// Calculate the sine using Decimal
+        /// </summary>
+        /// <param name="angle">A DEG angle in Decimal</param>
+        /// <returns>The sine of the angle</returns>
+        Decimal DSin(Decimal angle)
+        {
+            Decimal tempSin;
+
+            var fixedAngle = NormalizeAngle(angle);
+            var quadrant = GetAngleQuadrant(fixedAngle);
+            var fqAngle = AngleToFirstQuadrant(fixedAngle);
+
+            if (fqAngle > 45)
+                tempSin = DCos(90 - fqAngle);
+            else
+            {
+                var radAngle = DegToRad(fqAngle);
+                tempSin = radAngle - (DPow(radAngle, 3) / 6) + (DPow(radAngle, 5) / 120);
+            }
+
+            if (quadrant == 3 || quadrant == 4)
+                return -tempSin;
+            else
+                return tempSin;
+        }
+
+        /// <summary>
+        /// Calculate the cosine using Decimal
+        /// </summary>
+        /// <param name="angle">A DEG angle in Decimal</param>
+        /// <returns>The cosine of the angle</returns>
+        Decimal DCos(Decimal angle)
+        {
+            Decimal tempCos;
+
+            var fixedAngle = NormalizeAngle(angle);
+            var quadrant = GetAngleQuadrant(fixedAngle);
+            var fqAngle = AngleToFirstQuadrant(fixedAngle);
+
+            if (fqAngle > 45)
+                tempCos = DSin(90 - fqAngle);
+            else
+            {
+                var radAngle = DegToRad(fqAngle);
+                tempCos = 1 - (DPow(radAngle, 2) / 2) + (DPow(radAngle, 4) / 24) - (DPow(radAngle, 6) / 720);
+            }
+
+            if (quadrant == 2 || quadrant == 3)
+                return -tempCos;
+            else
+                return tempCos;
+        }
+
+        /// <summary>
+        /// Rotate a figure _anticlockwise_ in a 2D space using Decimal
+        /// (http://mathonweb.com/help_ebook/html/algorithms.htm#sin)
+        /// </summary>
+        /// <param name="figure">A list of vertex</param>
+        /// <param name="pivot">The point of rotation</param>
+        /// <param name="angle">The angle of rotatio in deg</param>
+        /// <returns>The rotated figure</returns>
+        List<Vector2Int> RotateFigureByAngle(List<Vector2Int> figure, Vector2Int pivot, Decimal angle)
+        {
+            List<Vector2Int> rotatedFigure = new List<Vector2Int>();
+
+            // It should be safe (?)
+            var sinAngle = DSin(angle);
+            var cosAngle = DCos(angle);
+
+            foreach (Vector2Int point in figure)
+            {
+                var fixedPoint = new Vector2Int(point.x - pivot.x, point.y - pivot.y);
+
+                // Convert.ToInt32 should round too
+                var rotatedX = Convert.ToInt32((fixedPoint.x * cosAngle) - (fixedPoint.y * sinAngle));
+                var rotatedY = Convert.ToInt32((fixedPoint.x * sinAngle) + (fixedPoint.y * cosAngle));
+
+                rotatedFigure.Add(
+                    new Vector2Int(rotatedX + pivot.x, rotatedY + pivot.y)
+                );
+            }
+
+            return rotatedFigure;
+        }
+
+        /// <summary>
+        /// Rotate a figure based on the direction using Decimal
+        /// (It uses "RotateFigureByAngle" under the hood)
+        /// </summary>
+        /// <param name="figure">A list of vertex</param>
+        /// <param name="pivot">The point of rotation</param>
+        /// <param name="direction">A Vertex2int direction</param>
+        /// <returns>The rotated figure</returns>
+        List<Vector2Int> RotateFigureByDirection(List<Vector2Int> figure, Vector2Int pivot, Vector2Int direction)
+        {
+            if (direction.x == -1 && direction.y == 1)
+                return RotateFigureByAngle(figure, pivot, 45);
+            else if (direction.x == -1 && direction.y == 0)
+                return RotateFigureByAngle(figure, pivot, 90);
+            else if (direction.x == -1 && direction.y == -1)
+                return RotateFigureByAngle(figure, pivot, 135);
+            else if (direction.x == 0 && direction.y == -1)
+                return RotateFigureByAngle(figure, pivot, 180);
+            else if (direction.x == 1 && direction.y == -1)
+                return RotateFigureByAngle(figure, pivot, 225);
+            else if (direction.x == 1 && direction.y == 0)
+                return RotateFigureByAngle(figure, pivot, 270);
+            else if (direction.x == 1 && direction.y == 1)
+                return RotateFigureByAngle(figure, pivot, 315);
+
+            return figure;
+        }
+    }
 }
