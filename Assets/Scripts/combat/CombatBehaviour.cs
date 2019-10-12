@@ -2,7 +2,7 @@ using Pandora;
 using UnityEngine;
 
 namespace Pandora.Combat {
-    interface CombatBehaviour {
+    public interface CombatBehaviour {
         /// <summary>True if the unit is currently in combat</summary>
         bool isAttacking { get; }
         /// <summary>Combat type of this behaviour</summary>

@@ -12,7 +12,7 @@ using Pandora.Pool;
 
 namespace Pandora.Movement
 {
-    public class MovementComponent : MonoBehaviour, CollisionCallback
+    public class MovementComponent : MonoBehaviour, CollisionCallback, MovementBehaviour
     {
         Rigidbody2D body;
         GridCell currentTarget;
@@ -28,7 +28,7 @@ namespace Pandora.Movement
         bool isTargetForced = false;
         bool evadeUnits = false;
         Vector2Int? lastCollisionPosition;
-        public MovementStateEnum LastState;
+        public MovementStateEnum LastState { get; set; }
         Enemy lastEnemyTargeted;
 
         public bool IsFlying
@@ -71,7 +71,7 @@ namespace Pandora.Movement
         }
 
         public int Speed = 400;
-        public MapComponent map;
+        public MapComponent map { get; set; }
 
         // Start is called before the first frame update
         void Awake()

@@ -9,7 +9,7 @@ namespace Pandora
 {
     public class UnitBehaviour : MonoBehaviour, EngineBehaviour
     {
-        MovementComponent movementComponent;
+        MovementBehaviour movementBehaviour;
         CombatBehaviour combatBehaviour;
         LifeComponent lifeComponent;
         public Bounds hitbox;
@@ -22,7 +22,7 @@ namespace Pandora
         // Start is called before the first frame update
         void Awake()
         {
-            movementComponent = GetComponent<MovementComponent>();
+            movementBehaviour = GetComponent<MovementBehaviour>();
             combatBehaviour = GetComponent<CombatBehaviour>();
             lifeComponent = GetComponent<LifeComponent>();
 
@@ -34,9 +34,9 @@ namespace Pandora
         {
             if (lifeComponent.isDead) return; // Do nothing if dead
 
-            var state = movementComponent.Move();
+            var state = movementBehaviour.Move();
 
-            movementComponent.LastState = state.state;
+            movementBehaviour.LastState = state.state;
 
             if (state.state == MovementStateEnum.EnemyApproached)
             {

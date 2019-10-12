@@ -66,7 +66,7 @@ namespace Pandora
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            var movement = Card.GetComponent<MovementComponent>();
+            var movement = Card.GetComponent<MovementBehaviour>();
             var projectileSpell = Card.GetComponent<ProjectileSpellBehaviour>();
 
             if (map != null)
