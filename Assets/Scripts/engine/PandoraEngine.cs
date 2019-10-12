@@ -64,15 +64,17 @@ namespace Pandora.Engine
                 AddEntity(centerRiverObject, 0, centerPosition, true, null);
 
             centerEntity.IsStructure = true;
+            centerEntity.IsMapObstacle = true;
             rightEntity.IsStructure = true;
+            rightEntity.IsMapObstacle = true;
             leftEntity.IsStructure = true;
+            leftEntity.IsMapObstacle = true;
         }
 
         public int GetSpeed(int engineUnitsPerSecond)
         {
             return Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * tickTime);
         }
-
 
         public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, GridCell position, bool isRigid, DateTime? timestamp)
         {
@@ -417,7 +419,9 @@ namespace Pandora.Engine
 
             foreach (var entity in entities)
             {
-                if (entity.IsStructure && !countStructures) continue;
+                var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
+
+                if (isNotTargeted) continue;
 
                 var box = GetPooledEntityBounds(entity);
 
@@ -438,7 +442,9 @@ namespace Pandora.Engine
 
             foreach (var entity in entities)
             {
-                if (entity.IsStructure && !countStructures) continue;
+                var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
+
+                if (isNotTargeted) continue;
 
                 if (IsInHitboxRange(origin, entity, range))
                 {

@@ -11,7 +11,9 @@ namespace Pandora.Engine {
         public Vector2Int Direction;
         public IEnumerator<Vector2Int> Path;
         public GameObject GameObject;
-        public bool IsRigid = true, IsStructure = false; // whether the entity should move on collisions
+         // whether the entity should move on collisions, is a structure or
+         // is a "map obstacle" (e.g. river)
+        public bool IsRigid = true, IsStructure = false, IsMapObstacle = false;
         public CollisionCallback CollisionCallback;
         public PandoraEngine Engine;
         public int Layer = 1;

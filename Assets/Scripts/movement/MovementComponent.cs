@@ -145,6 +145,8 @@ namespace Pandora.Movement
             if (currentPath.Count < 1)
             {
                 Debug.LogWarning($"Empty path for {targetEnemy.enemyCell} from {currentPosition}");
+
+                return;
             }
 
             currentTarget = currentPath.First();
@@ -156,7 +158,8 @@ namespace Pandora.Movement
 
 
         /**
-         * Very simple and probably shitty and not at all optimized A* implementation.
+         * Simple A* implementation. We try to use as many pools
+         * as humanly possible in order to not allocate too much (it costs a lot of time)
          * 
          * If evadeUnits is true, it also counts units-occupied gridcells as obstacles
          */
@@ -182,7 +185,7 @@ namespace Pandora.Movement
 
             if (map.IsObstacle(end, IsFlying, team))
             {
-                Debug.LogWarning("Cannot find path towards an obstacle");
+                Debug.LogWarning($"Cannot find path towards an obstacle ({end})");
 
                 return evaluatingPosition.points;
             }
