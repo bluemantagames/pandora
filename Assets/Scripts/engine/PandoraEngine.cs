@@ -624,7 +624,8 @@ namespace Pandora.Engine
         {
             if (y == 0) return 1;
 
-            Decimal result = DPow(n, y / 2);
+            var result = PoolInstances.DecimalPool.GetObject();
+            result = DPow(n, y / 2);
 
             if (y % 2 == 0)
                 return result * result;
@@ -647,7 +648,8 @@ namespace Pandora.Engine
         /// <returns>A normalized angle</returns>
         Decimal NormalizeAngle(Decimal angle)
         {
-            Decimal normalized = angle;
+            var normalized = PoolInstances.DecimalPool.GetObject();
+            normalized = angle;
 
             // Reduce to [0, 360]
             while (normalized > 360) normalized -= 360;
@@ -684,13 +686,15 @@ namespace Pandora.Engine
         /// <returns>The new angle</returns>
         Decimal AngleToFirstQuadrant(Decimal angle)
         {
+            var result = PoolInstances.DecimalPool.GetObject();
             var quadrant = GetAngleQuadrant(angle);
 
-            if (quadrant == 2) return 180 - angle;
-            else if (quadrant == 3) return angle - 180;
-            else if (quadrant == 4) return 360 - angle;
+            if (quadrant == 2) result = 180 - angle;
+            else if (quadrant == 3) result = angle - 180;
+            else if (quadrant == 4) result = 360 - angle;
+            else result = angle;
 
-            return angle;
+            return result;
         }
 
         /// <summary>
@@ -700,7 +704,7 @@ namespace Pandora.Engine
         /// <returns>The sine of the angle</returns>
         Decimal DSin(Decimal angle)
         {
-            Decimal tempSin;
+            var tempSin = PoolInstances.DecimalPool.GetObject();
 
             var fixedAngle = NormalizeAngle(angle);
             var quadrant = GetAngleQuadrant(fixedAngle);
@@ -727,7 +731,7 @@ namespace Pandora.Engine
         /// <returns>The cosine of the angle</returns>
         Decimal DCos(Decimal angle)
         {
-            Decimal tempCos;
+            var tempCos = PoolInstances.DecimalPool.GetObject();
 
             var fixedAngle = NormalizeAngle(angle);
             var quadrant = GetAngleQuadrant(fixedAngle);
@@ -765,15 +769,17 @@ namespace Pandora.Engine
 
             foreach (Vector2Int point in figure)
             {
-                var fixedPoint = new Vector2Int(point.x - pivot.x, point.y - pivot.y);
+                var fixedPoint = PoolInstances.Vector2IntPool.GetObject();
+                var rotatedPoint = PoolInstances.Vector2IntPool.GetObject();
 
-                // Convert.ToInt32 should round too
-                var rotatedX = Convert.ToInt32((fixedPoint.x * cosAngle) - (fixedPoint.y * sinAngle));
-                var rotatedY = Convert.ToInt32((fixedPoint.x * sinAngle) + (fixedPoint.y * cosAngle));
+                fixedPoint.x = point.x - pivot.x;
+                fixedPoint.y = point.y - pivot.y;
 
-                rotatedFigure.Add(
-                    new Vector2Int(rotatedX + pivot.x, rotatedY + pivot.y)
-                );
+                // This truncate the decimal part, dunno if it's really ok
+                rotatedPoint.x = Decimal.ToInt32((fixedPoint.x * cosAngle) - (fixedPoint.y * sinAngle) + pivot.x);
+                rotatedPoint.y = Decimal.ToInt32((fixedPoint.x * sinAngle) + (fixedPoint.y * cosAngle) + pivot.y);
+
+                rotatedFigure.Add(rotatedPoint);
             }
 
             return rotatedFigure;
