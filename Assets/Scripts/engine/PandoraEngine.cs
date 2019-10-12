@@ -65,10 +65,15 @@ namespace Pandora.Engine
 
             centerEntity.IsStructure = true;
             centerEntity.IsMapObstacle = true;
+            centerEntity.Layer = Constants.WATER_LAYER;
+
             rightEntity.IsStructure = true;
             rightEntity.IsMapObstacle = true;
+            rightEntity.Layer = Constants.WATER_LAYER;
+
             leftEntity.IsStructure = true;
             leftEntity.IsMapObstacle = true;
+            leftEntity.Layer = Constants.WATER_LAYER;
         }
 
         public int GetSpeed(int engineUnitsPerSecond)
@@ -507,7 +512,9 @@ namespace Pandora.Engine
         {
             return
                 layer1 == layer2 ||
-                (layer1 == Constants.PROJECTILES_LAYER || layer2 == Constants.PROJECTILES_LAYER);
+                (layer1 == Constants.PROJECTILES_LAYER || layer2 == Constants.PROJECTILES_LAYER) ||
+                (layer1 == Constants.WATER_LAYER && layer2 != Constants.SWIMMING_LAYER) ||
+                (layer2 == Constants.WATER_LAYER && layer1 != Constants.SWIMMING_LAYER);
         }
     }
 

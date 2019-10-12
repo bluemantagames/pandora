@@ -325,9 +325,10 @@ namespace Pandora
             unit.GetComponent<TeamComponent>().team = team;
 
             var movement = unit.GetComponent<MovementComponent>();
+            var movementBehaviour = unit.GetComponent<MovementBehaviour>();
             var projectileSpell = unit.GetComponent<ProjectileSpellBehaviour>();
 
-            if (movement != null) movement.map = this;
+            if (movementBehaviour != null) movementBehaviour.map = this;
 
             if (projectileSpell != null)
             {
@@ -336,7 +337,7 @@ namespace Pandora
                 projectileSpell.map = this;
             }
 
-            var engineEntity = engine.AddEntity(unit, movement?.Speed ?? projectileSpell.Speed, cell, projectileSpell == null, timestamp);
+            var engineEntity = engine.AddEntity(unit, movementBehaviour?.Speed ?? projectileSpell.Speed, cell, projectileSpell == null, timestamp);
 
             if (movement != null) engineEntity.CollisionCallback = movement;
 

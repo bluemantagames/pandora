@@ -70,7 +70,15 @@ namespace Pandora.Movement
             }
         }
 
-        public int Speed = 400;
+
+        /// <summary>This is the value set in the unity editor, backing the interface one</summary>
+        public int MovementSpeed = 400;
+
+        public int Speed {
+            get => MovementSpeed;
+            set => MovementSpeed = value;
+        }
+
         public MapComponent map { get; set; }
 
         // Start is called before the first frame update

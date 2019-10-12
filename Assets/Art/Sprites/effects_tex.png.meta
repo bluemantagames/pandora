@@ -11,6 +11,9 @@ TextureImporter:
   - first:
       213: 8865729233865765387
     second: fireball_sprite
+  - first:
+      213: -2043017983467968750
+    second: arrow
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -165,6 +168,27 @@ TextureImporter:
       bones: []
       spriteID: a4c8643b3be50d3409b4fb59390004b4
       internalID: 8865729233865765387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: arrow
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 996
+        width: 11
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25d4815bbe9d7e24d846fcc7409b86c7
+      internalID: -2043017983467968750
       vertices: []
       indices: 
       edges: []

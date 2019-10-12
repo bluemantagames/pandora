@@ -23,12 +23,21 @@ namespace Pandora.Movement
         TeamComponent team;
         CombatBehaviour combatBehaviour;
 
+        public int MovementSpeed = 400;
+
+        public int Speed {
+            get => MovementSpeed;
+            set => MovementSpeed = value;
+        }
+
         void Start()
         {
             var engineComponent = GetComponent<EngineComponent>();
 
             entity = engineComponent.Entity;
             engine = engineComponent.Engine;
+
+            entity.Layer = Constants.SWIMMING_LAYER;
 
             team = GetComponent<TeamComponent>();
             combatBehaviour = GetComponent<CombatBehaviour>();
@@ -62,7 +71,6 @@ namespace Pandora.Movement
                 return new MovementState(target, MovementStateEnum.TargetAcquired);
             }
 
-            throw new NotImplementedException();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Pandora.Movement
     public interface MovementBehaviour {
         MapComponent map { set; }
         MovementStateEnum LastState { set; }
+        int Speed { get; }
 
         MovementState Move();
     }

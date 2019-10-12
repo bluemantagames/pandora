@@ -17,6 +17,7 @@ namespace Pandora.Combat
         public Enemy target { get; set; }
         public MapComponent map { private get; set; }
         private EngineEntity engineEntity;
+        public int StartRotationDegrees = 0;
 
         public void Collided(EngineEntity other, uint passed)
         {
@@ -54,7 +55,7 @@ namespace Pandora.Combat
         {
             // direction from us to the target
             var direction = (target.enemy.transform.position - transform.position).normalized;
-            var angle = Vector2.SignedAngle(Vector2.up, direction);
+            var angle = Vector2.SignedAngle(Vector2.up, direction) + StartRotationDegrees;
 
             var shouldBeFlipped = TeamComponent.assignedTeam == TeamComponent.topTeam;
 
