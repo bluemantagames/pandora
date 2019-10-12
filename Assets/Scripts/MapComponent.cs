@@ -17,7 +17,7 @@ namespace Pandora
     public class MapComponent : MonoBehaviour
     {
         int bottomMapSizeX = 16;
-        int bottomMapSizeY = 13;
+        public int bottomMapSizeY = 13;
         public int mapSizeX;
         public int mapSizeY;
         bool isLockedOnMiddle = false;

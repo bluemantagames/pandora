@@ -215,7 +215,8 @@ namespace Pandora.Movement
 
                         var containsUnit = false;
 
-                        if (evadeUnits) {
+                        if (evadeUnits && advance != end) // check the advance for units unless it's the end position
+                        {
                             var units = engine.FindInGridCell(advance, false);
 
                             containsUnit = units.Exists(entity => entity.GameObject.GetComponent<TeamComponent>()?.team == team.team);
@@ -331,12 +332,14 @@ namespace Pandora.Movement
 
         public void Collided(EngineEntity entity, uint totalElapsed)
         {
-            // Disabling this for flying units - harpies do this way too much making the game lag
-            // do not count collisions with projectiles
-            // do not check if we are already evading
-            if (gameObject.layer == Constants.FLYING_LAYER || !entity.IsRigid || evadeUnits) return;
+            var shouldNotCheckEvading =
+                gameObject.layer == Constants.FLYING_LAYER ||
+                !entity.IsRigid ||
+                evadeUnits ||
+                lastEnemyTargeted.enemyCell.vector.y == map.bottomMapSizeY ||
+                GetComponent<CombatBehaviour>().isAttacking;
 
-            if (GetComponent<CombatBehaviour>().isAttacking) return;
+            if (shouldNotCheckEvading) return;
 
             if (!collisionTotalElapsed.HasValue)
             {

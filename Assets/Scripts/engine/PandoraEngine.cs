@@ -19,6 +19,8 @@ namespace Pandora.Engine
         public PandoraEngine(MapComponent map)
         {
             this.Map = map;
+
+            AddRiverEntities();
         }
 
         public void Process(uint msLapsed)
@@ -33,6 +35,37 @@ namespace Pandora.Engine
             {
                 NextTick();
             }
+        }
+
+        public void AddRiverEntities()
+        {
+            var leftRiverObject = GameObject.Find("arena_water_left");
+
+            var leftPosition = new Vector2Int(UnitsPerCell, 13 * UnitsPerCell + UnitsPerCell / 2);
+
+            var leftEntity =
+                AddEntity(leftRiverObject, 0, leftPosition, true, null);
+
+            var rightRiverObject = GameObject.Find("arena_water_right");
+
+            var rightPosition = new Vector2Int(
+                (Map.mapSizeX - 1) * UnitsPerCell,
+                (13 * UnitsPerCell) + UnitsPerCell / 2
+            );
+
+            var rightEntity =
+                AddEntity(rightRiverObject, 0, rightPosition, true, null);
+
+            var centerPosition = new GridCell(8, 13);
+
+            var centerRiverObject = GameObject.Find("arena_water_center");
+
+            var centerEntity =
+                AddEntity(centerRiverObject, 0, centerPosition, true, null);
+
+            centerEntity.IsStructure = true;
+            rightEntity.IsStructure = true;
+            leftEntity.IsStructure = true;
         }
 
         public int GetSpeed(int engineUnitsPerSecond)
@@ -90,7 +123,7 @@ namespace Pandora.Engine
             {
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed));
 
-                
+
 
                 if (entity.Path == null) continue;
 
@@ -386,16 +419,21 @@ namespace Pandora.Engine
             {
                 if (entity.IsStructure && !countStructures) continue;
 
-                if (entity.GetCurrentCell() == gridCell)
+                var box = GetPooledEntityBounds(entity);
+
+                if (box.Contains(physics))
                 {
                     targetEntities.Add(entity);
                 }
+
+                ReturnBounds(box);
             }
 
             return targetEntities;
         }
 
-        public List<EngineEntity> FindInHitboxRange(EngineEntity origin, int range, bool countStructures) {
+        public List<EngineEntity> FindInHitboxRange(EngineEntity origin, int range, bool countStructures)
+        {
             List<EngineEntity> targetEntities = new List<EngineEntity> { };
 
             foreach (var entity in entities)
