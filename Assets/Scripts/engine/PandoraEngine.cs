@@ -19,7 +19,7 @@ namespace Pandora.Engine
 
         // Debug settings
         bool debugLines = true;
-        float debugLinesDuration = 200f;
+        float debugLinesDuration = 20f;
 
         public PandoraEngine(MapComponent map)
         {
@@ -403,10 +403,21 @@ namespace Pandora.Engine
             var sourceEntityBound = GetPooledEntityBounds(sourceEntity);
             var targetEntityBound = GetPooledEntityBounds(targetEntity);
 
-            var v1 = new Vector2Int(sourceEntityBound.Center.x - (width / 2), sourceEntityBound.Center.y + height - unitsLeniency);
-            var v2 = new Vector2Int(sourceEntityBound.Center.x + (width / 2), sourceEntityBound.Center.y + height - unitsLeniency);
-            var v3 = new Vector2Int(sourceEntityBound.Center.x, sourceEntityBound.Center.y - unitsLeniency);
-            var target = new Vector2Int(targetEntityBound.Center.x, targetEntityBound.Center.y);
+            var v1 = PoolInstances.Vector2IntPool.GetObject();
+            v1.x = sourceEntityBound.Center.x - (width / 2);
+            v1.y = sourceEntityBound.Center.y + height - unitsLeniency;
+
+            var v2 = PoolInstances.Vector2IntPool.GetObject();
+            v2.x = sourceEntityBound.Center.x + (width / 2);
+            v2.y = sourceEntityBound.Center.y + height - unitsLeniency;
+
+            var v3 = PoolInstances.Vector2IntPool.GetObject();
+            v3.x = sourceEntityBound.Center.x;
+            v3.y = sourceEntityBound.Center.y - unitsLeniency;
+
+            var target = PoolInstances.Vector2IntPool.GetObject();
+            target.x = targetEntityBound.Center.x;
+            target.y = targetEntityBound.Center.y;
 
             // Rotate the triangle
             var rotatedFigure = RotateFigureByDirection(
