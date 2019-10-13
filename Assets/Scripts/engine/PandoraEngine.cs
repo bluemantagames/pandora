@@ -326,8 +326,7 @@ namespace Pandora.Engine
             return IsInHitboxRange(entity1, entity2, gridCellRange * UnitsPerCell);
         }
 
-        int Square(int a) => a * a;
-        public int SquaredDistance(Vector2Int first, Vector2Int second) => Square(first.x - second.x) + Square(first.y - second.y);
+        public int SquaredDistance(Vector2Int first, Vector2Int second) => ISquare(first.x - second.x) + ISquare(first.y - second.y);
 
         public bool IsInHitboxRange(EngineEntity entity1, EngineEntity entity2, int units)
         {
@@ -363,9 +362,7 @@ namespace Pandora.Engine
             var p1 = new Vector2Int(sourceEntityBound.Center.x, sourceEntityBound.Center.y);
             var p2 = new Vector2Int(targetEntityBound.Center.x, targetEntityBound.Center.y);
 
-            var distance = ISqrt(
-                ((p1.x - p2.x) * (p1.x - p2.x)) + ((p1.y - p2.y) * (p1.y - p2.y))
-            );
+            var distance = ISqrt(SquaredDistance(p1, p2));
 
             if (Debug.isDebugBuild && debugLines)
             {
@@ -694,6 +691,12 @@ namespace Pandora.Engine
         /// </summary>
         int ISquare(int n) => n * n;
 
+        /// <summary>
+        /// Calculate the power of a Decimal
+        /// </summary>
+        /// <param name="n">The base</param>
+        /// <param name="y">The exponent</param>
+        /// <returns>A Decimal with the power result</returns>
         Decimal DPow(Decimal n, int y)
         {
             if (y == 0) return 1;
