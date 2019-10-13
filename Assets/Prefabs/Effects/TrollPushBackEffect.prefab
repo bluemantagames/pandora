@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2845307334011965445}
   - component: {fileID: 5458570122429937453}
   m_Layer: 5
-  m_Name: PushBackEffect
+  m_Name: TrollPushBackEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,5 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Origin: {fileID: 0}
-  TickMs: 200
-  DurationMs: 400
+  OriginDirection: {x: 0, y: 0}
+  TickMs: 1
+  DurationMs: 100
+  Force: 30

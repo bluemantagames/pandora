@@ -4,7 +4,7 @@ using Pandora.Movement;
 using Pandora.Pool;
 
 namespace Pandora.Combat.Effects {
-    public class PushBackEffect: MonoBehaviour, EngineBehaviour, Effect {
+    public class TrollPushBackEffect: MonoBehaviour, EngineBehaviour, Effect {
         bool _isDisabled = false;
 
         public bool IsDisabled {
@@ -15,17 +15,17 @@ namespace Pandora.Combat.Effects {
         public GameObject Origin;
         public Vector2Int OriginDirection;
         uint timePassed = 0;
-        public uint TickMs = 1, DurationMs = 200;
-        public int Force = 40;
-        public string ComponentName => "PushBack";
+        public uint TickMs = 1, DurationMs = 100;
+        public int Force = 30;
+        public string ComponentName => "TrollPushBack";
 
         public Effect Apply(GameObject origin, GameObject target) {
-            var component = target.GetComponent<PushBackEffect>();
+            var component = target.GetComponent<TrollPushBackEffect>();
 
             if (component != null) {
                 component.Refresh();
             } else {
-                component = target.AddComponent<PushBackEffect>();
+                component = target.AddComponent<TrollPushBackEffect>();
                 component.Origin = origin;
                 component.OriginDirection = origin.GetComponent<EngineComponent>().Entity.Direction;
                 component.RefreshComponents();
@@ -64,7 +64,7 @@ namespace Pandora.Combat.Effects {
 
         public void Unapply(GameObject target)
         {
-            var component = target.GetComponent<PushBackEffect>();
+            var component = target.GetComponent<TrollPushBackEffect>();
             component.IsDisabled = true;
 
             Destroy(component);
