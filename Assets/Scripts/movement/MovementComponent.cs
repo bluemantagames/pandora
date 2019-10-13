@@ -81,6 +81,14 @@ namespace Pandora.Movement
             combatBehaviour = GetComponent<CombatBehaviour>();
         }
 
+        /// <summary>
+        /// Reset the current path thus forcing
+        /// a re-pathing
+        /// </summary>
+        public void ResetPath() {
+            currentPath = null;
+        }
+
         public MovementState Move()
         {
             var currentPosition = CurrentCellPosition();

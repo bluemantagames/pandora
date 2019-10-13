@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Pandora.Engine;
+using Pandora.Combat;
 
 namespace Pandora.Command
 {
@@ -9,12 +10,13 @@ namespace Pandora.Command
         public int Width = 4000;
         public int Height = 3000;
         public int Damage = 50;
+        public GameObject[] EffectObjects;
 
         public void InvokeCommand()
         {
             Debug.Log("[Troll] Command invoked");
 
-            var source = GetComponent<EngineComponent>().Entity;
+            var sourceEntity = GetComponent<EngineComponent>().Entity;
             var sourceTeam = GetComponent<TeamComponent>().team;
             var sourceAnimator = GetComponent<Animator>();
 
@@ -23,15 +25,24 @@ namespace Pandora.Command
 
             foreach (var targetLifeComponent in MapComponent.Instance.gameObject.GetComponentsInChildren<LifeComponent>())
             {
-                var target = targetLifeComponent.gameObject.GetComponent<EngineComponent>().Entity;
-                var targetTeam = targetLifeComponent.gameObject.GetComponent<TeamComponent>().team;
+                var targetGameObject = targetLifeComponent.gameObject;
+                var targetEntity = targetGameObject.GetComponent<EngineComponent>().Entity;
+                var targetTeam = targetGameObject.GetComponent<TeamComponent>().team;
 
                 if (sourceTeam == targetTeam) continue;
 
-                if (source.Engine.IsInConicRange(source, target, Width, Height, 20))
+                if (sourceEntity.Engine.IsInConicRange(sourceEntity, targetEntity, Width, Height, 20))
                 {
-                    Debug.Log("[Troll] Unit damaged");
+                    // Assign damage
                     targetLifeComponent.AssignDamage(Damage);
+
+                    // Assign effects
+                    foreach (var effectObject in EffectObjects)
+                    {
+                        var effect = effectObject.GetComponent<Effect>();
+
+                        effect.Apply(gameObject, targetGameObject);
+                    }
                 }
             }
         }
