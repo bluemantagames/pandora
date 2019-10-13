@@ -19,7 +19,7 @@ namespace Pandora.Engine
 
         // Debug settings
         bool debugLines = true;
-        float debugLinesDuration = 20f;
+        float debugLinesDuration = 1f;
 
         public PandoraEngine(MapComponent map)
         {
