@@ -180,9 +180,6 @@ namespace Pandora
                 transform.position.y + (cell.vector.y * cellHeight) + cellHeight / 2
             );
 
-            Debug.Log($"Spawning in cell {cell}");
-            Debug.Log($"World point GridCellToWorldPosition {worldPosition}");
-
             return worldPosition;
         }
 
@@ -371,7 +368,7 @@ namespace Pandora
                 var distance = Vector2.Distance(gameObjectPosition.vector, position.vector);
                 var lifeComponent = targetGameObject.GetComponent<LifeComponent>();
 
-                if (lifeComponent == null || lifeComponent.isDead) continue; // skip spells
+                if (lifeComponent == null || lifeComponent.IsDead) continue; // skip spells
 
                 var canUnitsFight = // Units can fight if:
                     (targetGameObject.layer == unit.layer) || // same layer (ground & ground, flying & flying)
@@ -381,7 +378,7 @@ namespace Pandora
                 var isInRange = combatBehaviour.IsInAggroRange(new Enemy(targetGameObject));
 
                 var isTargetValid =
-                    (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.isDead && canUnitsFight && (
+                    (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.IsDead && canUnitsFight && (
                         (isLockedOnMiddle && targetEngineEntity.IsStructure) ? targetGameObject.GetComponent<TowerPositionComponent>().EngineTowerPosition.IsMiddle() : true
                     );
 
@@ -422,7 +419,7 @@ namespace Pandora
                     middleTowerPositionComponent = component;
                 }
 
-                if (component.EngineTowerPosition == targetTowerPosition && !component.gameObject.GetComponent<LifeComponent>().isDead)
+                if (component.EngineTowerPosition == targetTowerPosition && !component.gameObject.GetComponent<LifeComponent>().IsDead)
                 {
                     towerPositionComponent = component;
                 }
@@ -454,7 +451,7 @@ namespace Pandora
             {
                 var cellVector = GetCell(component.gameObject).vector;
 
-                var isDead = component.gameObject.GetComponent<LifeComponent>()?.isDead ?? true;
+                var isDead = component.gameObject.GetComponent<LifeComponent>()?.IsDead ?? true;
 
                 if (
                     cellVector.x >= origin.x &&
@@ -506,20 +503,6 @@ namespace Pandora
                     worldMouse.x - transform.position.x,
                     worldMouse.y - transform.position.y
                 );
-
-            Debug.Log(
-                "Cell Rect " + transform.position
-            );
-
-
-            Debug.Log(
-                "Cell Mouse " + worldMouse
-            );
-
-            Debug.Log($"Cell width {cellWidth}");
-            Debug.Log($"Cell height {cellHeight}");
-            Debug.Log($"Cell mouse position {mousePosition.x}");
-            Debug.Log($"Cell position {mousePosition.x / cellWidth}");
 
             Vector2 cellPosition = new Vector2(
                 Mathf.Floor(mousePosition.x / cellWidth),

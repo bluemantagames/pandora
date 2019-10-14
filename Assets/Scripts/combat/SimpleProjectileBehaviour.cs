@@ -70,7 +70,7 @@ namespace Pandora.Combat
             engineEntity.SetTarget(target.enemyEntity);
 
             // TODO: Play "miss" animation, and then remove the entity
-            if (target.enemyEntity.GameObject.GetComponent<LifeComponent>().isDead) {
+            if (target.enemyEntity.GameObject.GetComponent<LifeComponent>().IsDead) {
                 gameObject.SetActive(false);
 
                 Destroy(this);

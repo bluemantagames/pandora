@@ -56,7 +56,7 @@ namespace Pandora.Combat.Effects {
                 
                 lifeComponent.AssignDamage((int) DamagePerTick);
 
-                if (lifeComponent.isDead) Unapply(gameObject);
+                if (lifeComponent.IsDead) Unapply(gameObject);
             }
 
             if (timePassed % PoisonDurationMs == 0) {

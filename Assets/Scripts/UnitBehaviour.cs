@@ -32,7 +32,7 @@ namespace Pandora
         // This is called from PandoraEngine every tick
         public void TickUpdate(uint timeLapsed)
         {
-            if (lifeComponent.isDead) return; // Do nothing if dead
+            if (lifeComponent.IsDead) return; // Do nothing if dead
 
             var state = movementBehaviour.Move();
 

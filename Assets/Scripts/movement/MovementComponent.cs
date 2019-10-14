@@ -95,7 +95,7 @@ namespace Pandora.Movement
 
             lastEnemyTargeted = map.GetEnemy(gameObject, currentPosition, team);
 
-            var isTargetDead = targetEnemy?.enemy.GetComponent<LifeComponent>().isDead ?? true;
+            var isTargetDead = targetEnemy?.enemy.GetComponent<LifeComponent>().IsDead ?? true;
 
             transform.position =
                 (TeamComponent.assignedTeam == TeamComponent.bottomTeam) ?

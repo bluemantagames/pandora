@@ -247,7 +247,7 @@ MonoBehaviour:
   lifeValue: 100
   mask: {fileID: 9015842578933355138}
   maxLife: 0
-  isDead: 0
+  IsDead: 0
 --- !u!95 &7129443875767093079
 Animator:
   serializedVersion: 3
@@ -294,16 +294,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a9892cbc13c6c4ca1446776a4deac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 0
+  Damage: 1
   attackCooldownMs: 500
   backswingMs: 400
   projectile: {fileID: 5687362912629012028, guid: d519b85eadcfc0d43ab3c181acade232,
     type: 3}
   animationStateName: AttackingDragon
-  AggroRangeCells: 3
+  AggroRangeCells: 50
   AttackRangeEngineUnits: 2000
-  EffectObjects:
-  - {fileID: 1551170618718484600, guid: 2b07a3d9e13b3e841b80d31ad66f5554, type: 3}
+  EffectObjects: []
 --- !u!61 &4143209966792787441
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -357,7 +356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec9b3b5564e46048a69d3e9043e428f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 400
+  MovementSpeed: 800
 --- !u!1 &1545008801043616799
 GameObject:
   m_ObjectHideFlags: 0

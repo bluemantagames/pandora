@@ -56,7 +56,7 @@ namespace Pandora.Engine
             var rightEntity =
                 AddEntity(rightRiverObject, 0, rightPosition, true, null);
 
-            var centerPosition = new GridCell(8, 13);
+            var centerPosition = new Vector2Int(8 * UnitsPerCell, 13 * UnitsPerCell + (UnitsPerCell / 2));
 
             var centerRiverObject = GameObject.Find("arena_water_center");
 
@@ -118,6 +118,7 @@ namespace Pandora.Engine
 
             Debug.Log($"{prefix} Position {entity.Position}");
             Debug.Log($"{prefix} Speed {entity.Speed}");
+            Debug.Log($"{prefix} Path {entity.Path}");
             Debug.Log($"{prefix} Hitbox {bounds}");
 
             ReturnBounds(bounds);

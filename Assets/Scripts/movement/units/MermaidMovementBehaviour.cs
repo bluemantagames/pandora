@@ -9,7 +9,6 @@ using Pandora.Combat;
 using UnityEngine.Profiling;
 using Pandora.Engine;
 using Pandora.Pool;
-using Pandora.Combat;
 
 namespace Pandora.Movement
 {
@@ -25,7 +24,8 @@ namespace Pandora.Movement
 
         public int MovementSpeed = 400;
 
-        public int Speed {
+        public int Speed
+        {
             get => MovementSpeed;
             set => MovementSpeed = value;
         }
@@ -45,6 +45,11 @@ namespace Pandora.Movement
 
         public MovementState Move()
         {
+            if (entity == null)
+            {
+                return new MovementState(null, MovementStateEnum.Idle);
+            }
+
             transform.position =
                 (TeamComponent.assignedTeam == TeamComponent.bottomTeam) ?
                     entity.GetWorldPosition() :
@@ -59,10 +64,17 @@ namespace Pandora.Movement
                 return new MovementState(null, MovementStateEnum.Idle);
             }
 
-            if (combatBehaviour.IsInAttackRange(target)) {
+            if (combatBehaviour.IsInAttackRange(target))
+            {
+                entity.SetEmptyPath();
+
                 return new MovementState(target, MovementStateEnum.EnemyApproached);
-            } else {
+            }
+            else
+            {
                 var targetPosition = currentPosition;
+
+                Debug.Log($"Mermaid, setting target {target}");
 
                 targetPosition.vector.x = target.enemyCell.vector.x;
 

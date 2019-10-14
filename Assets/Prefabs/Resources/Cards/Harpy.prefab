@@ -139,7 +139,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeValue: 100
   mask: {fileID: 9015842578933355138}
-  isDead: 0
+  maxLife: 0
+  IsDead: 0
 --- !u!95 &7129443875767093079
 Animator:
   serializedVersion: 3
@@ -172,9 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
-  LastState: 0
-  speed: 1
-  map: {fileID: 0}
+  MovementSpeed: 400
 --- !u!114 &3519887656195453972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,12 +201,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c2243c9941e6d0488bbe0ced3e3f2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 3
+  damage: 10
   attackCooldownMs: 400
   backswingMs: 0
   animationStateName: AttackingHarpy
   AggroRangeCells: 3
-  AttackRangeEngineUnits: 200
+  AttackRangeEngineUnits: 50
 --- !u!61 &9130794682398608112
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -246,6 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebugEntity: 0
 --- !u!114 &9111943681145743900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,8 +424,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: -1797416285764677584, guid: 4e7c48f98dae35d4da42f7dd77180d13,
     type: 3}
   m_Type: 1
@@ -515,8 +513,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0

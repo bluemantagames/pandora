@@ -35,7 +35,7 @@ namespace Pandora.Command
                 }
             }
 
-            var isEveryoneAlive = groupComponent.Objects.TrueForAll(unit => !unit.GetComponent<LifeComponent>().isDead);
+            var isEveryoneAlive = groupComponent.Objects.TrueForAll(unit => !unit.GetComponent<LifeComponent>().IsDead);
 
             if (isEveryoneAlive && targetEntity != null) {
                 targetEntity.GameObject.GetComponent<TeamComponent>().team = team.team;
