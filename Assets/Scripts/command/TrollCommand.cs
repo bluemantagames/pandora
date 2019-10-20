@@ -10,6 +10,7 @@ namespace Pandora.Command
         public int Width = 4000;
         public int Height = 3000;
         public int Damage = 50;
+        public bool debug = false;
         public GameObject[] EffectObjects;
 
         public void InvokeCommand()
@@ -31,7 +32,7 @@ namespace Pandora.Command
 
                 if (sourceTeam == targetTeam) continue;
 
-                if (sourceEntity.Engine.IsInConicRange(sourceEntity, targetEntity, Width, Height, 20))
+                if (sourceEntity.Engine.IsInConicRange(sourceEntity, targetEntity, Width, Height, 20, debug))
                 {
                     // Assign damage
                     targetLifeComponent.AssignDamage(Damage);

@@ -18,7 +18,6 @@ namespace Pandora.Engine
         Decimal DPi = new Decimal(3.141592653589);
 
         // Debug settings
-        bool debugLines = true;
         float debugLinesDuration = 1f;
 
         public PandoraEngine(MapComponent map)
@@ -352,7 +351,7 @@ namespace Pandora.Engine
         /// <param name="targetEntity">The target entity</param>
         /// <param name="radius">The circle's radius</param>
         /// <returns>A boolean describing if the target entity is inside the circle</returns>
-        public bool IsInCircularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int radius)
+        public bool IsInCircularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int radius, bool debug = false)
         {
             // Here we are using the simple Euclidean Distance
 
@@ -364,7 +363,7 @@ namespace Pandora.Engine
 
             var distance = ISqrt(SquaredDistance(p1, p2));
 
-            if (Debug.isDebugBuild && debugLines)
+            if (Debug.isDebugBuild && debug)
             {
                 var source = PhysicsToWorldArena(p1);
                 var north = PhysicsToWorldArena(new Vector2Int(p1.x, p1.y + radius));
@@ -391,7 +390,7 @@ namespace Pandora.Engine
         /// <param name="height">The triangle's height (distance from the source entity)</param>
         /// <param name="unitsLeniency">Fix distance of the source entity from the main vertex</param>
         /// <returns>A boolean describing if the target entity is inside the triangle</returns>
-        public bool IsInTriangularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height, int unitsLeniency)
+        public bool IsInTriangularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height, int unitsLeniency, bool debug = false)
         {
             // Using barycentric coordinate system
             // (http://totologic.blogspot.com/2014/01/accurate-point-in-triangle-test.html)
@@ -433,7 +432,7 @@ namespace Pandora.Engine
             var c = 1 - a - b;
 
             // Debug the triangle
-            if (Debug.isDebugBuild && debugLines)
+            if (Debug.isDebugBuild && debug)
             {
                 var wv1 = PhysicsToWorldArena(v1);
                 var wv2 = PhysicsToWorldArena(v2);
@@ -457,10 +456,10 @@ namespace Pandora.Engine
         /// <param name="height">The height of the triangle</param>
         /// <param name="unitsLeniency">Fix distance of the source entity from the main vertex</param>
         /// <returns></returns>
-        public bool IsInConicRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height, int unitsLeniency)
+        public bool IsInConicRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height, int unitsLeniency, bool debug = false)
         {
-            var isInTriangularRange = IsInTriangularRange(sourceEntity, targetEntity, width, height, unitsLeniency);
-            var isInCircularRange = IsInCircularRange(sourceEntity, targetEntity, height - unitsLeniency);
+            var isInTriangularRange = IsInTriangularRange(sourceEntity, targetEntity, width, height, unitsLeniency, debug);
+            var isInCircularRange = IsInCircularRange(sourceEntity, targetEntity, height - unitsLeniency, debug);
 
             return isInTriangularRange && isInCircularRange;
         }
