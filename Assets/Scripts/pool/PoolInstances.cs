@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Pandora.Engine;
 using System.Collections.Generic;
+using System;
 
 namespace Pandora.Pool
 {
@@ -52,6 +53,11 @@ namespace Pandora.Pool
                 v.points = new List<GridCell> {};
                 v.pointsSet = new HashSet<GridCell> {};
             },
+            profilingEnabled: false
+        );
+        public static ConcurrentObjectPool<Decimal> DecimalPool = new ConcurrentObjectPool<Decimal>(
+            createFunction: () => new Decimal(),
+            resetFunction: d => d = 0,
             profilingEnabled: false
         );
     }
