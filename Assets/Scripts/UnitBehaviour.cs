@@ -12,6 +12,7 @@ namespace Pandora
         MovementBehaviour movementBehaviour;
         CombatBehaviour combatBehaviour;
         LifeComponent lifeComponent;
+        public bool DebugMove = false;
         public Bounds hitbox;
         public string ComponentName {
             get {
@@ -37,6 +38,10 @@ namespace Pandora
             var state = movementBehaviour.Move();
 
             movementBehaviour.LastState = state.state;
+
+            if (DebugMove) {
+                Debug.Log($"Movement state: {state}");
+            }
 
             if (state.state == MovementStateEnum.EnemyApproached)
             {

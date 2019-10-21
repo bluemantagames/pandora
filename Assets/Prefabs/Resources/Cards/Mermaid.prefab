@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugEntity: 0
+  DebugEntity: 1
 --- !u!114 &4232992202590164952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,6 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c8ba332ddd8ae44b1b9f93e2e3115a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebugMove: 0
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
@@ -299,7 +300,7 @@ MonoBehaviour:
   backswingMs: 400
   projectile: {fileID: 5687362912629012028, guid: d519b85eadcfc0d43ab3c181acade232,
     type: 3}
-  animationStateName: AttackingDragon
+  animationStateName: AttackingMermaid
   AggroRangeCells: 50
   AttackRangeEngineUnits: 2000
   EffectObjects: []

@@ -72,9 +72,11 @@ namespace Pandora.Movement
             }
             else
             {
-                var targetPosition = currentPosition;
+                if (combatBehaviour.isAttacking) combatBehaviour.StopAttacking();
 
-                Debug.Log($"Mermaid, setting target {target}");
+                entity.SetSpeed(MovementSpeed);
+
+                var targetPosition = currentPosition;
 
                 targetPosition.vector.x = target.enemyCell.vector.x;
 
