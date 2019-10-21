@@ -37,12 +37,14 @@ namespace Pandora.Command
                     // Assign damage
                     targetLifeComponent.AssignDamage(Damage);
 
-                    // Assign effects
-                    foreach (var effectObject in EffectObjects)
-                    {
-                        var effect = effectObject.GetComponent<Effect>();
+                    // Assign effects to non-structure units
+                    if (!targetEntity.IsStructure) {
+                        foreach (var effectObject in EffectObjects)
+                        {
+                            var effect = effectObject.GetComponent<Effect>();
 
-                        effect.Apply(gameObject, targetGameObject);
+                            effect.Apply(gameObject, targetGameObject);
+                        }
                     }
                 }
             }

@@ -21,6 +21,10 @@ namespace Pandora.Combat.Effects {
 
         public Effect Apply(GameObject origin, GameObject target) {
             var component = target.GetComponent<TrollPushBackEffect>();
+            var targetEntity = target.GetComponent<EngineComponent>().Entity;
+
+            if (targetEntity.IsStructure) 
+                return null;
 
             if (component != null) {
                 component.Refresh();
