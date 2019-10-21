@@ -371,7 +371,8 @@ namespace Pandora
                 if (lifeComponent == null || lifeComponent.IsDead) continue; // skip spells
 
                 var canUnitsFight = // Units can fight if:
-                    (targetGameObject.layer == unit.layer) || // same layer (ground & ground, flying & flying)
+                    (targetGameObject.layer == unit.layer) || // same layer (ground & ground, flying & flying, etc.)
+                    (unit.layer == Constants.SWIMMING_LAYER) ||
                     (targetGameObject.layer == Constants.FLYING_LAYER && unit.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying and we are ranged
                     (unit.layer == Constants.FLYING_LAYER); // we're flying
 

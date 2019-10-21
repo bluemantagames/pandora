@@ -12,15 +12,30 @@ namespace Pandora.Engine
         uint tickTime = 5; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         List<EngineEntity> entities = new List<EngineEntity> { };
-
         public MapComponent Map;
         uint totalElapsed = 0;
+        BoxBounds mapBounds, riverBounds;
 
         public PandoraEngine(MapComponent map)
         {
             this.Map = map;
 
             AddRiverEntities();
+
+            mapBounds = new BoxBounds();
+
+            var xBounds = UnitsPerCell * map.mapSizeX;
+            var yBounds = UnitsPerCell * map.mapSizeY;
+
+            mapBounds.LowerLeft = new Vector2Int(0, 0);
+            mapBounds.LowerRight = new Vector2Int(xBounds, 0);
+            mapBounds.UpperLeft = new Vector2Int(0, yBounds);
+            mapBounds.UpperRight = new Vector2Int(xBounds, yBounds);
+            mapBounds.Center = new Vector2Int(xBounds / 2, yBounds / 2);
+
+            var riverCenterEntity = GameObject.Find("arena_water_center").GetComponent<EngineComponent>().Entity;
+
+            riverBounds = GetPooledEntityBounds(riverCenterEntity);
         }
 
         public void Process(uint msLapsed)
@@ -67,13 +82,27 @@ namespace Pandora.Engine
             centerEntity.IsMapObstacle = true;
             centerEntity.Layer = Constants.WATER_LAYER;
 
+            var centerComponent = centerRiverObject.AddComponent<EngineComponent>();
+
+            centerComponent.Entity = centerEntity;
+
+
             rightEntity.IsStructure = true;
             rightEntity.IsMapObstacle = true;
             rightEntity.Layer = Constants.WATER_LAYER;
 
+            var rightComponent = rightRiverObject.AddComponent<EngineComponent>();
+
+            rightComponent.Entity = rightEntity;
+
+
             leftEntity.IsStructure = true;
             leftEntity.IsMapObstacle = true;
             leftEntity.Layer = Constants.WATER_LAYER;
+
+            var leftComponent = leftRiverObject.AddComponent<EngineComponent>();
+
+            leftComponent.Entity = leftEntity;
         }
 
         public int GetSpeed(int engineUnitsPerSecond)

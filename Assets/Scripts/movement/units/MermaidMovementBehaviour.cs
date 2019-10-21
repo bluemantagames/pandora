@@ -37,8 +37,6 @@ namespace Pandora.Movement
             entity = engineComponent.Entity;
             engine = engineComponent.Engine;
 
-            entity.Layer = Constants.SWIMMING_LAYER;
-
             team = GetComponent<TeamComponent>();
             combatBehaviour = GetComponent<CombatBehaviour>();
         }
