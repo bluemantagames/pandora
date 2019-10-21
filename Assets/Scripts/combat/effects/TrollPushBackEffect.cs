@@ -57,7 +57,6 @@ namespace Pandora.Combat.Effects {
                 newPosition.y = engineEntity.Position.y + yForce;
                 engineEntity.Position = newPosition;
 
-                engineComponent.RefreshComponents();
                 movementComponent.ResetPath();
             }
 
