@@ -86,10 +86,10 @@ namespace Pandora.Engine
 
             centerComponent.Entity = centerEntity;
 
-
             rightEntity.IsStructure = true;
             rightEntity.IsMapObstacle = true;
             rightEntity.Layer = Constants.WATER_LAYER;
+
 
             var rightComponent = rightRiverObject.AddComponent<EngineComponent>();
 
@@ -296,6 +296,18 @@ namespace Pandora.Engine
                         if (unmoved.IsStructure)
                         { // Give the moved entity even more speed if pushed by a structure (to avoid nasty loops)
                             moved.CollisionSpeed++;
+                        }
+
+                        // After collisions, evenutally reclamp unit positions in their own layers
+                        if (moved.Layer == Constants.SWIMMING_LAYER)
+                        {
+                            moved.Position.x = Clamp(riverBounds.LowerLeft.x, moved.Position.x, riverBounds.LowerRight.x);
+                            moved.Position.y = Clamp(riverBounds.LowerLeft.y, moved.Position.y, riverBounds.UpperLeft.y);
+                        }
+                        else
+                        {
+                            moved.Position.x = Clamp(mapBounds.LowerLeft.x, moved.Position.x, mapBounds.LowerRight.x);
+                            moved.Position.y = Clamp(mapBounds.LowerLeft.y, moved.Position.y, mapBounds.UpperLeft.y);
                         }
                     }
 
