@@ -40,6 +40,8 @@ namespace Pandora.Engine
             var riverCenterEntity = GameObject.Find("arena_water_center").GetComponent<EngineComponent>().Entity;
 
             riverBounds = GetPooledEntityBounds(riverCenterEntity);
+
+            PoolInstances.BoxBoundsPool.MaximumPoolSize = 1000;
         }
 
         public void Process(uint msLapsed)
@@ -307,18 +309,6 @@ namespace Pandora.Engine
                         { // Give the moved entity even more speed if pushed by a structure (to avoid nasty loops)
                             moved.CollisionSpeed++;
                         }
-
-                        // After collisions, evenutally reclamp unit positions in their own layers
-                        if (moved.Layer == Constants.SWIMMING_LAYER)
-                        {
-                            moved.Position.x = Clamp(riverBounds.LowerLeft.x, moved.Position.x, riverBounds.LowerRight.x);
-                            moved.Position.y = Clamp(riverBounds.LowerLeft.y, moved.Position.y, riverBounds.UpperLeft.y);
-                        }
-                        else
-                        {
-                            moved.Position.x = Clamp(mapBounds.LowerLeft.x, moved.Position.x, mapBounds.LowerRight.x);
-                            moved.Position.y = Clamp(mapBounds.LowerLeft.y, moved.Position.y, mapBounds.UpperLeft.y);
-                        }
                     }
 
                     ReturnBounds(firstBox);
@@ -329,6 +319,23 @@ namespace Pandora.Engine
             foreach (var entity in clonedEntities)
             {
                 entity.CollisionSpeed = 0; // Once collisions are solved, remove collision speed
+
+                if (!entity.IsStructure && !entity.IsMapObstacle)
+                {
+                    var bounds = (entity.Layer == Constants.SWIMMING_LAYER) ? riverBounds : mapBounds;
+                    var boxBounds = GetPooledEntityBounds(entity);
+
+                    var clampedMaxX = bounds.LowerRight.x - (boxBounds.Width / 2);
+                    var clampedMinX = bounds.LowerLeft.x + (boxBounds.Width / 2);
+
+                    var clampedMaxY = bounds.UpperLeft.y - (boxBounds.Height / 2);
+                    var clampedMinY = bounds.LowerLeft.y + (boxBounds.Height / 2);
+
+                    entity.Position.x = Clamp(clampedMinX, entity.Position.x, clampedMaxX);
+                    entity.Position.y = Clamp(clampedMinY, entity.Position.y, clampedMaxY);
+
+                    ReturnBounds(boxBounds);
+                }
 
                 var engineComponent = entity.GameObject.GetComponent<EngineComponent>();
 
@@ -720,7 +727,7 @@ namespace Pandora.Engine
         {
             if (num == 0) return 0;
 
-            int n = (num / 2) + 1;  
+            int n = (num / 2) + 1;
             int n1 = (n + (num / n)) / 2;
 
             while (n1 < n)
