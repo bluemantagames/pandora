@@ -1,8 +1,5 @@
 fileFormatVersion: 2
-guid: db20accdfca9af54c8673b4083d331b8
-labels:
-- graphy
-- tayx
+guid: 9376ebaaf85951b4091e6ecace679930
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -30,12 +27,12 @@ TextureImporter:
   generateCubemap: 6
   cubemapConvolution: 0
   seamlessCubemap: 0
-  textureFormat: -3
+  textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
     filterMode: -1
-    aniso: 16
+    aniso: -1
     mipBias: -100
     wrapU: 1
     wrapV: 1
@@ -66,7 +63,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
