@@ -4,7 +4,7 @@ using Pandora.Combat;
 
 namespace Pandora.Command
 {
-    /// <summary>On double tap, the Troll will damage all the units in a "triangle" area</summary>
+    /// <summary>On double tap, the Bard will cure, give attack damage and speed</summary>
     public class BardCommand : MonoBehaviour, CommandBehaviour
     {
         public int Radius = 3000;
@@ -32,7 +32,12 @@ namespace Pandora.Command
 
                 if (sourceEntity.Engine.IsInCircularRange(sourceEntity, targetEntity, Radius, DebugLines))
                 {
-                    // ...
+                    foreach (var effectObject in EffectObjects)
+                    {
+                        var effect = effectObject.GetComponent<Effect>();
+
+                        effect.Apply(gameObject, targetGameObject);
+                    }
                 }
             }
         }
