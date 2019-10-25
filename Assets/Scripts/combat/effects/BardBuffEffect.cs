@@ -12,11 +12,13 @@ namespace Pandora.Combat.Effects {
         }
     
         public GameObject Origin;
+        Color originalColor;
         uint timePassed = 0;
         public uint TickMs = 1, DurationMs = 3000;
         public int SpeedIncrease = 200;
         public int DamageIncrease = 30;
         public int CureAmount = 500;
+        public Color BuffedColor = Color.yellow;
         public string ComponentName => "BardBuff";
 
         void SetStats(GameObject target, int speedIncrease, int damageIncrease) {
@@ -55,11 +57,21 @@ namespace Pandora.Combat.Effects {
                 component.Origin = origin;
                 component.RefreshComponents();
 
-                // Add the buff
-                SetStats(target, SpeedIncrease, DamageIncrease);
+                // Get original color
+                var rendererComponent = target.GetComponentInChildren<SpriteRenderer>();
+                originalColor = rendererComponent.color;
             }
 
             return component;
+        }
+
+        void Start() {
+            var rendererComponent = gameObject.GetComponentInChildren<SpriteRenderer>();
+            originalColor = rendererComponent.color;
+
+            // Add the buff
+            SetStats(gameObject, SpeedIncrease, DamageIncrease);
+            rendererComponent.color = BuffedColor;
         }
 
         public void TickUpdate(uint timeLapsed)
@@ -76,10 +88,14 @@ namespace Pandora.Combat.Effects {
         public void Unapply(GameObject target)
         {
             var component = target.GetComponent<BardBuffEffect>();
+            var rendererComponent = target.GetComponent<SpriteRenderer>();
+
             component.IsDisabled = true;
 
             // Remove the buff
+                            
             SetStats(target, -SpeedIncrease, -DamageIncrease);
+            rendererComponent.color = originalColor;
 
             Destroy(component);
             RefreshComponents();
