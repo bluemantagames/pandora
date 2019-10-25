@@ -14,7 +14,7 @@ namespace Pandora.Combat.Effects {
         public GameObject Origin;
         uint timePassed = 0;
         public uint TickMs = 1, DurationMs = 3000;
-        public int SpeedIncrease = 500;
+        public int SpeedIncrease = 200;
         public int DamageIncrease = 30;
         public int CureAmount = 500;
         public string ComponentName => "BardBuff";
