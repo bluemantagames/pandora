@@ -50,4 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Origin: {fileID: 0}
   TickMs: 1
-  DurationMs: 100
+  DurationMs: 3000
+  SpeedIncrease: 500
+  DamageIncrease: 30
+  CureAmount: 500

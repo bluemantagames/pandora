@@ -449,7 +449,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Radius: 3000
   DebugLines: 1
-  EffectObjects: []
+  EffectObjects:
+  - {fileID: 2016888992844160403, guid: 952398b416080ab49a229d5e39270633, type: 3}
 --- !u!1 &2409834720673952193
 GameObject:
   m_ObjectHideFlags: 0

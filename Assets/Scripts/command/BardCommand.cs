@@ -28,7 +28,8 @@ namespace Pandora.Command
                 var targetEntity = targetGameObject.GetComponent<EngineComponent>().Entity;
                 var targetTeam = targetGameObject.GetComponent<TeamComponent>().team;
 
-                if (sourceTeam == targetTeam) continue;
+                if (sourceEntity == targetEntity) continue;
+                if (sourceTeam != targetTeam) continue;
 
                 if (sourceEntity.Engine.IsInCircularRange(sourceEntity, targetEntity, Radius, DebugLines))
                 {
