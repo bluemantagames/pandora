@@ -46,6 +46,11 @@ namespace Pandora.Combat.Effects {
             }
         }
 
+        void Cure(GameObject target, int cureAmount) {
+            var lifeComponent = target.GetComponent<LifeComponent>();
+            lifeComponent.lifeValue += cureAmount;
+        }
+
         public Effect Apply(GameObject origin, GameObject target) {
             var component = target.GetComponent<BardBuffEffect>();
 
@@ -56,10 +61,6 @@ namespace Pandora.Combat.Effects {
                 component = target.AddComponent<BardBuffEffect>();
                 component.Origin = origin;
                 component.RefreshComponents();
-
-                // Get original color
-                var rendererComponent = target.GetComponentInChildren<SpriteRenderer>();
-                originalColor = rendererComponent.color;
             }
 
             return component;
@@ -67,11 +68,17 @@ namespace Pandora.Combat.Effects {
 
         void Start() {
             var rendererComponent = gameObject.GetComponentInChildren<SpriteRenderer>();
+            var targetEntity = gameObject.GetComponent<EngineComponent>().Entity;
             originalColor = rendererComponent.color;
 
             // Add the buff
             SetStats(gameObject, SpeedIncrease, DamageIncrease);
-            rendererComponent.color = BuffedColor;
+            Cure(gameObject, CureAmount);
+
+            if (rendererComponent && !targetEntity.IsStructure) {
+                originalColor = rendererComponent.color;
+                rendererComponent.color = BuffedColor;
+            }
         }
 
         public void TickUpdate(uint timeLapsed)
@@ -89,13 +96,16 @@ namespace Pandora.Combat.Effects {
         {
             var component = target.GetComponent<BardBuffEffect>();
             var rendererComponent = target.GetComponent<SpriteRenderer>();
+            var targetEntity = gameObject.GetComponent<EngineComponent>().Entity;
 
             component.IsDisabled = true;
 
             // Remove the buff
-                            
             SetStats(target, -SpeedIncrease, -DamageIncrease);
-            rendererComponent.color = originalColor;
+
+            if (rendererComponent && !targetEntity.IsStructure) {
+                rendererComponent.color = originalColor;
+            }
 
             Destroy(component);
             RefreshComponents();
