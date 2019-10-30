@@ -15,34 +15,37 @@ namespace Pandora.Combat.Effects {
         Color originalColor;
         uint timePassed = 0;
         public uint TickMs = 1, DurationMs = 3000;
-        public int SpeedIncrease = 200;
-        public int DamageIncrease = 30;
+        public int MovementSpeedIncrease = 400;
+        public int AttackSpeedIncrease = 200;
+        
+        public int DamageIncrease = 10;
         public int CureAmount = 500;
         public Color BuffedColor = Color.yellow;
         public string ComponentName => "BardBuff";
 
-        void SetStats(GameObject target, int speedIncrease, int damageIncrease) {
+        void SetStats(GameObject target, int movSpeedIncrease, int atkSpeedIncrease, int damageIncrease) {
             var meleeCombatComponent = target.GetComponent<MeleeCombatBehaviour>();
             var rangedCombarComponent = target.GetComponent<RangedCombatBehaviour>();
             var movementComponent = target.GetComponent<MovementComponent>();
 
             // Change attack speed and damage
             if (meleeCombatComponent != null) {
-                meleeCombatComponent.attackCooldownMs -= speedIncrease;
-                meleeCombatComponent.backswingMs -= speedIncrease;
+                meleeCombatComponent.attackCooldownMs -= atkSpeedIncrease;
+                meleeCombatComponent.backswingMs -= atkSpeedIncrease;
 
                 meleeCombatComponent.damage += damageIncrease;
             }
 
             if (rangedCombarComponent != null) {
-                rangedCombarComponent.attackCooldownMs -= speedIncrease;
+                rangedCombarComponent.attackCooldownMs -= atkSpeedIncrease;
 
                 rangedCombarComponent.Damage += damageIncrease;
             }
 
             // Change movement speed
             if (movementComponent != null) {
-                movementComponent.Speed += speedIncrease;
+                movementComponent.Speed += movSpeedIncrease;
+                movementComponent.ResetPath();
             }
         }
 
@@ -72,7 +75,7 @@ namespace Pandora.Combat.Effects {
             originalColor = rendererComponent.color;
 
             // Add the buff
-            SetStats(gameObject, SpeedIncrease, DamageIncrease);
+            SetStats(gameObject, MovementSpeedIncrease, AttackSpeedIncrease, DamageIncrease);
             Cure(gameObject, CureAmount);
 
             if (rendererComponent && !targetEntity.IsStructure) {
@@ -101,7 +104,7 @@ namespace Pandora.Combat.Effects {
             component.IsDisabled = true;
 
             // Remove the buff
-            SetStats(target, -SpeedIncrease, -DamageIncrease);
+            SetStats(target, -MovementSpeedIncrease, -AttackSpeedIncrease, -DamageIncrease);
 
             if (rendererComponent && !targetEntity.IsStructure) {
                 rendererComponent.color = originalColor;
