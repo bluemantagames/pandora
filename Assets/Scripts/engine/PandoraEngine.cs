@@ -214,6 +214,7 @@ namespace Pandora.Engine
                         (!first.IsRigid && !second.IsRigid) || // there must be one rigid object
                         first == second || // entity can't collide with itself
                         !firstBox.Collides(secondBox) || // boxes must collide
+                        (first.IsMapObstacle && second.IsMapObstacle) || // two map obstacles do not collide with each other
                         !CheckLayerCollision(first.Layer, second.Layer); // layer must be compatible for collisions
 
                     // continue if they don't collide
@@ -319,23 +320,6 @@ namespace Pandora.Engine
             foreach (var entity in clonedEntities)
             {
                 entity.CollisionSpeed = 0; // Once collisions are solved, remove collision speed
-
-                if (!entity.IsStructure && !entity.IsMapObstacle)
-                {
-                    var bounds = (entity.Layer == Constants.SWIMMING_LAYER) ? riverBounds : mapBounds;
-                    var boxBounds = GetPooledEntityBounds(entity);
-
-                    var clampedMaxX = bounds.LowerRight.x - (boxBounds.Width / 2);
-                    var clampedMinX = bounds.LowerLeft.x + (boxBounds.Width / 2);
-
-                    var clampedMaxY = bounds.UpperLeft.y - (boxBounds.Height / 2);
-                    var clampedMinY = bounds.LowerLeft.y + (boxBounds.Height / 2);
-
-                    entity.Position.x = Clamp(clampedMinX, entity.Position.x, clampedMaxX);
-                    entity.Position.y = Clamp(clampedMinY, entity.Position.y, clampedMaxY);
-
-                    ReturnBounds(boxBounds);
-                }
 
                 var engineComponent = entity.GameObject.GetComponent<EngineComponent>();
 
@@ -679,8 +663,8 @@ namespace Pandora.Engine
 
             var physicsUpperRightBounds = entity.Position;
 
-            physicsUpperRightBounds.y += Mathf.FloorToInt(physicsExtents.y / 2);
             physicsUpperRightBounds.x += Mathf.FloorToInt(physicsExtents.x / 2);
+            physicsUpperRightBounds.y += Mathf.FloorToInt(physicsExtents.y / 2);
 
             var physicsLowerRightBounds = entity.Position;
 
