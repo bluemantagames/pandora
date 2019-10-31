@@ -2,6 +2,10 @@
 using Pandora.Engine;
 using Pandora.Movement;
 
+/// <summary>
+/// Effect for the Bard unit.
+/// Heal, increase attack/movement speed, increase attack damage for some time
+/// </summary>
 namespace Pandora.Combat.Effects {
     public class BardBuffEffect: MonoBehaviour, EngineBehaviour, Effect {
         bool _isDisabled = false;
@@ -19,13 +23,13 @@ namespace Pandora.Combat.Effects {
         public int AttackSpeedIncrease = 200;
         
         public int DamageIncrease = 10;
-        public int CureAmount = 500;
+        public int HealAmount = 500;
         public Color BuffedColor = Color.yellow;
         public string ComponentName => "BardBuff";
 
         void SetStats(GameObject target, int movSpeedIncrease, int atkSpeedIncrease, int damageIncrease) {
             var meleeCombatComponent = target.GetComponent<MeleeCombatBehaviour>();
-            var rangedCombarComponent = target.GetComponent<RangedCombatBehaviour>();
+            var rangedCombatComponent = target.GetComponent<RangedCombatBehaviour>();
             var movementComponent = target.GetComponent<MovementComponent>();
 
             // Change attack speed and damage
@@ -36,10 +40,10 @@ namespace Pandora.Combat.Effects {
                 meleeCombatComponent.damage += damageIncrease;
             }
 
-            if (rangedCombarComponent != null) {
-                rangedCombarComponent.attackCooldownMs -= atkSpeedIncrease;
+            if (rangedCombatComponent != null) {
+                rangedCombatComponent.attackCooldownMs -= atkSpeedIncrease;
 
-                rangedCombarComponent.Damage += damageIncrease;
+                rangedCombatComponent.Damage += damageIncrease;
             }
 
             // Change movement speed
@@ -49,9 +53,9 @@ namespace Pandora.Combat.Effects {
             }
         }
 
-        void Cure(GameObject target, int cureAmount) {
+        void Heal(GameObject target, int healAmount) {
             var lifeComponent = target.GetComponent<LifeComponent>();
-            lifeComponent.lifeValue += cureAmount;
+            lifeComponent.lifeValue += healAmount;
         }
 
         public Effect Apply(GameObject origin, GameObject target) {
@@ -76,7 +80,7 @@ namespace Pandora.Combat.Effects {
 
             // Add the buff
             SetStats(gameObject, MovementSpeedIncrease, AttackSpeedIncrease, DamageIncrease);
-            Cure(gameObject, CureAmount);
+            Heal(gameObject, HealAmount);
 
             if (rendererComponent && !targetEntity.IsStructure) {
                 originalColor = rendererComponent.color;
