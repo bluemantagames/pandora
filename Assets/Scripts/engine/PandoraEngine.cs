@@ -627,6 +627,25 @@ namespace Pandora.Engine
 
             return targetEntities;
         }
+        
+        /// <summary>
+        /// Finds the closest unit to the origin that satisfies the predicate
+        /// </summary>
+        public EngineEntity FindClosest(Vector2Int origin, Func<EngineEntity, bool> predicate) {
+            EngineEntity closestEntity = null;
+            int? closestDistance = null;
+
+            foreach (var entity in entities) {
+                var distance = Distance(origin, entity.Position);
+
+                if ((closestDistance == null || distance < closestDistance) && predicate(entity)) {
+                    closestDistance = distance;
+                    closestEntity = entity;
+                }
+            }
+
+            return closestEntity;
+        }
 
         public List<EngineEntity> FindInHitboxRange(EngineEntity origin, int range, bool countStructures)
         {
