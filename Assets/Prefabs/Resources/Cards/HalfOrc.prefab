@@ -370,16 +370,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a9892cbc13c6c4ca1446776a4deac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 0
+  Damage: 10
   attackCooldownMs: 500
   backswingMs: 400
-  projectile: {fileID: 5687362912629012028, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
+  projectile: {fileID: 5687362912629012028, guid: ee18aa8a2cbb1ff409e08df0bdadddcc,
     type: 3}
   animationStateName: HalfOrcAttack
   AggroRangeCells: 3
   AttackRangeEngineUnits: 2000
-  EffectObjects:
-  - {fileID: 1551170618718484600, guid: 2b07a3d9e13b3e841b80d31ad66f5554, type: 3}
+  EffectObjects: []
 --- !u!61 &7105882005904317285
 BoxCollider2D:
   m_ObjectHideFlags: 0
