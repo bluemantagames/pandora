@@ -13,8 +13,10 @@ namespace Pandora.Command {
         // TODO: Remove this, make the mermaids add it to the engine
         void Start() {
             var engine = MapComponent.Instance.engine;
-            var entityPosition = engine.WorldToPhysics(transform.position);
+            var entityPosition = engine.GridCellToPhysics(MapComponent.Instance.WorldPositionToGridCell(transform.position));
 
+            Debug.Log($"Spawning tornado in {entityPosition}");
+        
             var entity = engine.AddEntity(gameObject, 0, entityPosition, false, null);
 
             var engineComponent = gameObject.AddComponent<EngineComponent>();
@@ -29,11 +31,11 @@ namespace Pandora.Command {
             var entity = engineComponent.Entity;
             var engine = engineComponent.Engine;
 
-            transform.position = engine.PhysicsToWorld(entity.Position);
+            transform.position = engine.PhysicsToMap(entity.Position);
 
             foreach (var target in engine.FindInRadius(entity.Position, EngineUnitsRadius, false)) {
-                if (target == entity) continue;
-
+                if (target == entity || !target.IsRigid) continue;
+                
                 TornadoEffectObject.GetComponent<MermaidsTornadoEffect>().Apply(gameObject, target.GameObject);
             }
         }

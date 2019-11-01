@@ -38,6 +38,8 @@ namespace Pandora.Combat.Effects
                 component.EngineUnitsMaxForce = EngineUnitsMaxForce;
                 component.EngineUnitsMinForce = EngineUnitsMinForce;
 
+                Debug.Log($"Setting tornado target {target}");
+
                 component.target = target.GetComponent<EngineComponent>().Entity;
                 component.tornado = origin.GetComponent<EngineComponent>().Entity;
 
@@ -51,13 +53,19 @@ namespace Pandora.Combat.Effects
         {
             if (isDisabled) return;
 
-            var distance = engine.Distance(tornado.Position, target.Position);
-            var force = distance * ((EngineUnitsRadius) / EngineUnitsMaxForce - EngineUnitsMinForce);
+            var distance = EngineUnitsRadius - engine.Distance(tornado.Position, target.Position);
+
+            var force = distance * (decimal) (EngineUnitsMaxForce - EngineUnitsMinForce) / (decimal) EngineUnitsRadius;
+
+            if (force == 0) force = (decimal) EngineUnitsMinForce;
+
             var path = Bresenham.GetEnumerator(target.Position, tornado.Position);
 
             for (var i = 0; i < force; i++) path.MoveNext();
 
             var position = path.Current;
+
+            Debug.Log($"Unit is distant {distance + EngineUnitsRadius}, {force} has been applied, it moved to {position} ({tornado.Position} from {target.Position})");
 
             target.Position = position;
 

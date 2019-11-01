@@ -91,7 +91,7 @@ namespace Pandora.Movement
 
         /// <summary>
         /// Reset the current path thus forcing
-        /// a re-pathing
+        /// recalculation of the pathing
         /// </summary>
         public void ResetPath() {
             currentPath = null;
