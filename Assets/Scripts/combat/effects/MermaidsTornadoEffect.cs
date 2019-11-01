@@ -14,12 +14,15 @@ namespace Pandora.Combat.Effects
         public string ComponentName => "MermaidsTornadoEffect";
 
         public int EngineUnitsRadius, EngineUnitsMaxForce, EngineUnitsMinForce;
+        public bool DebugTornado = false;
 
         EngineEntity tornado, target;
         uint totalTimeLapsed = 0;
 
-        PandoraEngine engine {
-            get {
+        PandoraEngine engine
+        {
+            get
+            {
                 return MapComponent.Instance.engine;
             }
         }
@@ -37,6 +40,7 @@ namespace Pandora.Combat.Effects
                 component.EngineUnitsRadius = EngineUnitsRadius;
                 component.EngineUnitsMaxForce = EngineUnitsMaxForce;
                 component.EngineUnitsMinForce = EngineUnitsMinForce;
+                component.DebugTornado = DebugTornado;
 
                 Debug.Log($"Setting tornado target {target}");
 
@@ -52,16 +56,16 @@ namespace Pandora.Combat.Effects
         public void TickUpdate(uint timeLapsed)
         {
             if (isDisabled) return;
-            
+
             var distance = engine.Distance(tornado.Position, target.Position);
 
             if (distance > EngineUnitsRadius) Unapply(target.GameObject);
 
             var distanceFromEdge = EngineUnitsRadius - distance;
 
-            var force = distanceFromEdge * (decimal) (EngineUnitsMaxForce - EngineUnitsMinForce) / (decimal) EngineUnitsRadius;
+            var force = distanceFromEdge * (decimal)(EngineUnitsMaxForce - EngineUnitsMinForce) / (decimal)EngineUnitsRadius;
 
-            if (force == 0) force = (decimal) EngineUnitsMinForce;
+            if (force == 0) force = (decimal)EngineUnitsMinForce;
 
             var path = Bresenham.GetEnumerator(target.Position, tornado.Position);
 
@@ -69,7 +73,9 @@ namespace Pandora.Combat.Effects
 
             var position = path.Current;
 
-            Debug.Log($"Unit is distant {distanceFromEdge + EngineUnitsRadius}, {force} has been applied, it moved to {position} ({tornado.Position} from {target.Position})");
+            if (DebugTornado) {
+                Debug.Log($"Unit is distant {distanceFromEdge + EngineUnitsRadius}, {force} has been applied, it moved to {position} ({tornado.Position} from {target.Position})");
+            }
 
             target.Position = position;
 

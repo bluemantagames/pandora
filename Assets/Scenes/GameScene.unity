@@ -1135,6 +1135,11 @@ PrefabInstance:
       propertyPath: EngineUnitsRadius
       value: 800
       objectReference: {fileID: 0}
+    - target: {fileID: 9136611779521091228, guid: 0fd29991a06145d41b1bd2f053c244e7,
+        type: 3}
+      propertyPath: DurationMs
+      value: 2500
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fd29991a06145d41b1bd2f053c244e7, type: 3}
 --- !u!1 &608853129
