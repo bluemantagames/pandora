@@ -363,6 +363,8 @@ namespace Pandora.Engine
 
         public int SquaredDistance(Vector2Int first, Vector2Int second) => ISquare(first.x - second.x) + ISquare(first.y - second.y);
 
+        public int Distance(Vector2Int first, Vector2Int second) => ISqrt(SquaredDistance(first, second));
+
         public bool IsInHitboxRange(EngineEntity entity1, EngineEntity entity2, int units)
         {
             var entity1Bounds = GetPooledEntityBounds(entity1);
@@ -503,7 +505,7 @@ namespace Pandora.Engine
         // converts a world point to a physics engine point using linear interpolation 
         // TODO: this is only used on BoxCollider2D to let people use the collider tool to define boundaries
         // if this turns up to create problems we have to define int boundaries in EngineEntity
-        Vector2Int WorldToPhysics(Vector2 world)
+        public Vector2Int WorldToPhysics(Vector2 world)
         {
             var xWorldBounds = Map.cellWidth * Map.mapSizeX;
             var yWorldBounds = Map.cellHeight * Map.mapSizeY;
@@ -637,6 +639,26 @@ namespace Pandora.Engine
                 if (isNotTargeted) continue;
 
                 if (IsInHitboxRange(origin, entity, range))
+                {
+                    targetEntities.Add(entity);
+                }
+            }
+
+            return targetEntities;
+        }
+
+        public List<EngineEntity> FindInRadius(Vector2Int origin, int engineUnitsRadius, bool countStructures) {
+            List<EngineEntity> targetEntities = new List<EngineEntity> { };
+
+            foreach (var entity in entities)
+            {
+                var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
+
+                if (isNotTargeted) continue;
+                
+                var distance = Distance(origin, entity.Position);
+
+                if (distance <= engineUnitsRadius)
                 {
                     targetEntities.Add(entity);
                 }
