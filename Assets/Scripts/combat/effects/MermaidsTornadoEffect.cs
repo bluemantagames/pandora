@@ -52,10 +52,14 @@ namespace Pandora.Combat.Effects
         public void TickUpdate(uint timeLapsed)
         {
             if (isDisabled) return;
+            
+            var distance = engine.Distance(tornado.Position, target.Position);
 
-            var distance = EngineUnitsRadius - engine.Distance(tornado.Position, target.Position);
+            if (distance > EngineUnitsRadius) Unapply(target.GameObject);
 
-            var force = distance * (decimal) (EngineUnitsMaxForce - EngineUnitsMinForce) / (decimal) EngineUnitsRadius;
+            var distanceFromEdge = EngineUnitsRadius - distance;
+
+            var force = distanceFromEdge * (decimal) (EngineUnitsMaxForce - EngineUnitsMinForce) / (decimal) EngineUnitsRadius;
 
             if (force == 0) force = (decimal) EngineUnitsMinForce;
 
@@ -65,7 +69,7 @@ namespace Pandora.Combat.Effects
 
             var position = path.Current;
 
-            Debug.Log($"Unit is distant {distance + EngineUnitsRadius}, {force} has been applied, it moved to {position} ({tornado.Position} from {target.Position})");
+            Debug.Log($"Unit is distant {distanceFromEdge + EngineUnitsRadius}, {force} has been applied, it moved to {position} ({tornado.Position} from {target.Position})");
 
             target.Position = position;
 
