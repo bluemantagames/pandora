@@ -20,5 +20,14 @@ namespace Pandora
             Id = message.unitId;
             Timestamp = message.timestamp;
         }
+
+        public UnitSpawn(string unitName, GridCell cell, int team, string unitId, DateTime? timestamp) {
+            UnitName = unitName;
+            CellX = (int)Math.Floor(cell.vector.x);
+            CellY = (int)Math.Floor(cell.vector.y);
+            Team = team;
+            Id = unitId;
+            Timestamp = timestamp;
+        }
     }
 }

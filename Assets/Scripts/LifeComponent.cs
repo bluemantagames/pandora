@@ -23,6 +23,31 @@ namespace Pandora
             maxLife = lifeValue;
         }
 
+        public void Remove() {
+            GetComponent<CombatBehaviour>().StopAttacking();
+
+            foreach (var rigidBody in GetComponentsInChildren<Rigidbody2D>())
+            {
+                rigidBody.simulated = false;
+            }
+
+            foreach (var sprite in GetComponentsInChildren<SpriteRenderer>())
+            {
+                sprite.enabled = false;
+            }
+            
+            foreach (Transform child in this.transform) {
+                child.gameObject.SetActive(false);
+            }
+
+            var engineComponent = GetComponent<EngineComponent>();
+
+            if (engineComponent != null)
+            {
+                engineComponent.Remove();
+            }
+        }
+
         public void AssignDamage(int value)
         {
             lifeValue -= value;
@@ -35,32 +60,11 @@ namespace Pandora
             if (lifeValue <= 0)
             {
                 isDead = true;
-
-                Debug.Log("BB I'M DYING");
-
-                GetComponent<CombatBehaviour>().StopAttacking();
                 GetComponent<CombatBehaviour>().OnDead();
 
-                foreach (var rigidBody in GetComponentsInChildren<Rigidbody2D>())
-                {
-                    rigidBody.simulated = false;
-                }
+                Remove();
 
-                foreach (var renderer in GetComponentsInChildren<SpriteRenderer>())
-                {
-                    Debug.Log("Disabling renderer");
-
-                    renderer.enabled = false;
-                }
-
-                var engineComponent = GetComponent<EngineComponent>();
-
-                if (engineComponent == null)
-                {
-                    Debug.LogWarning("Could not find engine component");
-                }
-
-                engineComponent?.Remove();
+                Debug.Log("BB I'M DYING");
 
                 // TODO: Play "die" animation
             }
