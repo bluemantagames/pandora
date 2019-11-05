@@ -35,7 +35,11 @@ namespace Pandora.Command
 
             foreach (var target in engine.FindInRadius(entity.Position, EngineUnitsRadius, false))
             {
-                if (target == entity || !target.IsRigid) continue;
+                if (
+                    target == entity || 
+                    !target.IsRigid || 
+                    target.GameObject.GetComponent<TeamComponent>().team == GetComponent<TeamComponent>().team
+                ) continue;
 
                 var effect = TornadoEffectObject.GetComponent<MermaidsTornadoEffect>().Apply(gameObject, target.GameObject) as MermaidsTornadoEffect;
 
