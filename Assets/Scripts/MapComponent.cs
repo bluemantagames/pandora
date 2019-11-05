@@ -29,7 +29,28 @@ namespace Pandora
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         float firstLaneX = 2, secondLaneX = 13;
 
-        HashSet<GridCell> riverPositions = new HashSet<GridCell>();
+        HashSet<GridCell> _riverPositions = new HashSet<GridCell>();
+
+        HashSet<GridCell> riverPositions
+        {
+            get
+            {
+                if (_riverPositions.Count == 0)
+                {
+                    var riverY = 13f;
+
+                    for (var x = 0; x < bottomMapSize.x; x++)
+                    {
+                        if (x != firstLaneX && x != secondLaneX)
+                        {
+                            _riverPositions.Add(new GridCell(x, riverY));
+                        }
+                    }
+                }
+
+                return _riverPositions;
+            }
+        }
 
         public float cellHeight;
         public float cellWidth;
@@ -122,19 +143,7 @@ namespace Pandora
          */
         public bool IsObstacle(GridCell cell, bool isFlying, TeamComponent team)
         {
-            var riverY = 13f;
             var cellVector = cell.vector;
-
-            if (riverPositions.Count == 0)
-            {
-                for (var x = 0; x < bottomMapSize.x; x++)
-                {
-                    if (x != firstLaneX && x != secondLaneX)
-                    {
-                        riverPositions.Add(new GridCell(x, riverY));
-                    }
-                }
-            }
 
             var isOutOfBounds = (cellVector.x < 0 && cellVector.y < 0 && cellVector.x >= bottomMapSize.x && cellVector.y >= mapSizeY);
 
@@ -252,7 +261,7 @@ namespace Pandora
 
         public void SpawnCard(string cardName, int team, int requiredMana = 0)
         {
-            var mapCell = GetPointedCell();
+            var mapCell = GetPointedCell().vector;
             var id = System.Guid.NewGuid().ToString();
             var manaEnabled = GetComponent<LocalManaBehaviourScript>()?.Enabled ?? true;
 
@@ -469,13 +478,18 @@ namespace Pandora
             return units;
         }
 
-        public void OnUICardCollision(GameObject puppet)
+        /// <summary></summary>
+        public bool OnUICardCollision(GameObject puppet, bool isAquatic)
         {
             DestroyPuppet();
 
-            var cell = GetWorldPointedCell();
+            var cell = GetPointedCell();
 
-            lastPuppet = Instantiate(puppet, cell, Quaternion.identity);
+            if (isAquatic && !riverPositions.Contains(cell)) return false;
+
+            lastPuppet = Instantiate(puppet, GridCellToWorldPosition(cell), Quaternion.identity);
+
+            return true;
         }
 
         private HashSet<GridCell> GetTowerPositions(GridCell towerCell, float towerSize = 3f)
@@ -495,7 +509,7 @@ namespace Pandora
             return set;
         }
 
-        private Vector2 GetPointedCell()
+        private GridCell GetPointedCell()
         {
             Vector2 worldMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -510,12 +524,12 @@ namespace Pandora
                 Mathf.Floor(mousePosition.y / cellHeight)
             );
 
-            return cellPosition;
+            return new GridCell(cellPosition);
         }
 
         private Vector2 GetWorldPointedCell()
         {
-            var cell = GetPointedCell();
+            var cell = GetPointedCell().vector;
 
             Debug.Log($"Pointed cell {cell}");
 

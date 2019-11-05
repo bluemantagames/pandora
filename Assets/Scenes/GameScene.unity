@@ -603,6 +603,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5968370716324617280, guid: aaf9d8560b1c4e944a7ae67fb2e23f01,
+        type: 3}
+      propertyPath: IsAquatic
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaf9d8560b1c4e944a7ae67fb2e23f01, type: 3}
 --- !u!224 &260307242 stripped
