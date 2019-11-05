@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: IdleBarbarian
+  m_Name: BardAttack
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,12 +20,26 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 614fcf64e532ba343b5c24c82941e124, type: 3}
+      value: {fileID: 21300000, guid: 6ccbf4f40d3612448b6db0bb0dd9f096, type: 3}
+    - time: 0.1
+      value: {fileID: 21300000, guid: a2ebf31b1ed7f52408e31b6a8f767db5, type: 3}
+    - time: 0.2
+      value: {fileID: 21300000, guid: b96248fe8d0022044aa1668348efea09, type: 3}
+    - time: 0.3
+      value: {fileID: 21300000, guid: ca394aae27649514db3a02f80b5e035f, type: 3}
+    - time: 0.4
+      value: {fileID: 21300000, guid: 02d777169849b4445bec6209fff05345, type: 3}
+    - time: 0.5
+      value: {fileID: 21300000, guid: e084891def0ab9044949632230a430cb, type: 3}
+    - time: 0.6
+      value: {fileID: 21300000, guid: 32d4e3465096dcf448d3af9a360ab2bc, type: 3}
+    - time: 0.7
+      value: {fileID: 21300000, guid: 6ccbf4f40d3612448b6db0bb0dd9f096, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 1
+  m_SampleRate: 10
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -40,13 +54,20 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 614fcf64e532ba343b5c24c82941e124, type: 3}
+    - {fileID: 21300000, guid: 6ccbf4f40d3612448b6db0bb0dd9f096, type: 3}
+    - {fileID: 21300000, guid: a2ebf31b1ed7f52408e31b6a8f767db5, type: 3}
+    - {fileID: 21300000, guid: b96248fe8d0022044aa1668348efea09, type: 3}
+    - {fileID: 21300000, guid: ca394aae27649514db3a02f80b5e035f, type: 3}
+    - {fileID: 21300000, guid: 02d777169849b4445bec6209fff05345, type: 3}
+    - {fileID: 21300000, guid: e084891def0ab9044949632230a430cb, type: 3}
+    - {fileID: 21300000, guid: 32d4e3465096dcf448d3af9a360ab2bc, type: 3}
+    - {fileID: 21300000, guid: 6ccbf4f40d3612448b6db0bb0dd9f096, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1
+    m_StopTime: 0.8
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
