@@ -17,25 +17,6 @@ namespace Pandora.Command
         bool isDisabled = false;
 
 
-        // TODO: Remove this, make the mermaids add it to the engine
-        void Start()
-        {
-            var engine = MapComponent.Instance.engine;
-            var entityPosition = engine.GridCellToPhysics(MapComponent.Instance.WorldPositionToGridCell(transform.position));
-
-            Debug.Log($"Spawning tornado in {entityPosition}");
-
-            var entity = engine.AddEntity(gameObject, 0, entityPosition, false, null);
-
-            var engineComponent = gameObject.AddComponent<EngineComponent>();
-
-            engineComponent.Entity = entity;
-
-            var teamComponent = gameObject.GetComponent<TeamComponent>();
-
-            teamComponent.team = 1;
-        }
-
         public void TickUpdate(uint timeLapsed)
         {
             if (isDisabled) return;
@@ -56,7 +37,9 @@ namespace Pandora.Command
             {
                 if (target == entity || !target.IsRigid) continue;
 
-                TornadoEffectObject.GetComponent<MermaidsTornadoEffect>().Apply(gameObject, target.GameObject);
+                var effect = TornadoEffectObject.GetComponent<MermaidsTornadoEffect>().Apply(gameObject, target.GameObject) as MermaidsTornadoEffect;
+
+                effect.EngineUnitsRadius = EngineUnitsRadius;
 
                 targets.Add(target);
             }
@@ -84,14 +67,12 @@ namespace Pandora.Command
                     return;
                 }
 
-                var target = engine.FindClosest(middleTower.Position, foundEntity => {
-                    Debug.Log($"Found entity {foundEntity.GameObject}");
-
-                    return !foundEntity.IsStructure &&
+                var target = engine.FindClosest(middleTower.Position, foundEntity =>
+                    !foundEntity.IsStructure &&
                     !foundEntity.IsMapObstacle &&
                     foundEntity.GameObject.GetComponent<TeamComponent>().team != teamComponent.team &&
-                    foundEntity.GameObject.GetComponent<MermaidsTornadoEffect>() == null;
-                });
+                    foundEntity.GameObject.GetComponent<MermaidsTornadoEffect>() == null
+                );
 
                 if (target != null)
                 {

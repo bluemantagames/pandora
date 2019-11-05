@@ -13,8 +13,16 @@ namespace Pandora.Combat.Effects
     {
         public string ComponentName => "MermaidsTornadoEffect";
 
-        public int EngineUnitsRadius, EngineUnitsMaxForce, EngineUnitsMinForce;
-        public bool DebugTornado = false;
+        private int engineUnitsRadius;
+
+        public int EngineUnitsRadius {
+            get => engineUnitsRadius;
+            set => engineUnitsRadius = value;
+
+        }
+
+        public int EngineUnitsMaxForce, EngineUnitsMinForce;
+        public bool DebugTornado;
 
         EngineEntity tornado, target;
 
@@ -36,7 +44,6 @@ namespace Pandora.Combat.Effects
             {
                 component = target.AddComponent<MermaidsTornadoEffect>();
 
-                component.EngineUnitsRadius = EngineUnitsRadius;
                 component.EngineUnitsMaxForce = EngineUnitsMaxForce;
                 component.EngineUnitsMinForce = EngineUnitsMinForce;
                 component.DebugTornado = DebugTornado;
