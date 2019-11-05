@@ -84,12 +84,14 @@ namespace Pandora.Command
                     return;
                 }
 
-                var target = engine.FindClosest(middleTower.Position, foundEntity =>
-                    !foundEntity.IsStructure &&
+                var target = engine.FindClosest(middleTower.Position, foundEntity => {
+                    Debug.Log($"Found entity {foundEntity.GameObject}");
+
+                    return !foundEntity.IsStructure &&
                     !foundEntity.IsMapObstacle &&
                     foundEntity.GameObject.GetComponent<TeamComponent>().team != teamComponent.team &&
-                    foundEntity.GameObject.GetComponent<MermaidsTornadoEffect>() == null
-                );
+                    foundEntity.GameObject.GetComponent<MermaidsTornadoEffect>() == null;
+                });
 
                 if (target != null)
                 {
@@ -109,7 +111,7 @@ namespace Pandora.Command
 
                 engine.RemoveEntity(entity);
 
-                Destroy(gameObject);
+                GetComponent<SpriteRenderer>().enabled = false;
             }
         }
     }

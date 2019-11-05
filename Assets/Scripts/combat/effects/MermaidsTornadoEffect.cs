@@ -17,7 +17,6 @@ namespace Pandora.Combat.Effects
         public bool DebugTornado = false;
 
         EngineEntity tornado, target;
-        uint totalTimeLapsed = 0;
 
         PandoraEngine engine
         {

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5577142179831469493}
   - component: {fileID: 8513242433041003705}
   - component: {fileID: 2764531331267813786}
+  - component: {fileID: 4616569468530259142}
   m_Layer: 12
   m_Name: MermaidCommand
   m_TagString: Untagged
@@ -94,6 +95,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DoubleTapMaxDelayMs: 200
   Used: 0
+--- !u!114 &4616569468530259142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906157769598500874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87d9adc7506b19e4faae607bdb399099, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TornadoObject: {fileID: 1463601171584166044, guid: 0fd29991a06145d41b1bd2f053c244e7,
+    type: 3}
+  LeftBridgePosition: {x: 2, y: 13}
+  RightBridgePosition: {x: 13, y: 13}
 --- !u!1 &1060352442105845753
 GameObject:
   m_ObjectHideFlags: 0
@@ -112,7 +129,6 @@ GameObject:
   - component: {fileID: 3519887656195453972}
   - component: {fileID: 8660774719796279383}
   - component: {fileID: 4143209966792787441}
-  - component: {fileID: 6674434008587753410}
   - component: {fileID: 5613082795416064738}
   m_Layer: 14
   m_Name: Mermaid
@@ -330,21 +346,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.462417, y: 0.4982915}
   m_EdgeRadius: 0
---- !u!114 &6674434008587753410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060352442105845753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ea49d75e7847b44f8fa857f8c11588c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FlyingTimeMs: 2000
-  EngineUnitsRange: 1200
-  TargetBuildings: 0
 --- !u!114 &5613082795416064738
 MonoBehaviour:
   m_ObjectHideFlags: 0
