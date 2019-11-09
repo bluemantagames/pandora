@@ -48,7 +48,7 @@ namespace Pandora
         public List<GridCell> GetTowerPositions() {
             var positions = new List<GridCell> {};
 
-            if (GetComponent<LifeComponent>().isDead) {
+            if (GetComponent<LifeComponent>().IsDead) {
                 return positions;
             }
 

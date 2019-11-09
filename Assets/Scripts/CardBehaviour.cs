@@ -19,6 +19,9 @@ namespace Pandora
         public int Team = 1;
         public string CardName;
         public int RequiredMana = 0;
+        public bool IsAquatic = false;
+
+        bool canBeSpawned = false;
 
         private void CleanUpDrag(bool returnToPosition)
         {
@@ -54,7 +57,7 @@ namespace Pandora
 
                 map = hit.collider.gameObject.GetComponent<MapComponent>();
 
-                map.OnUICardCollision(Puppet);
+                canBeSpawned = map.OnUICardCollision(Puppet, IsAquatic);
 
                 GetComponent<Image>().enabled = false;
             }
@@ -66,10 +69,10 @@ namespace Pandora
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            var movement = Card.GetComponent<MovementComponent>();
+            var movement = Card.GetComponent<MovementBehaviour>();
             var projectileSpell = Card.GetComponent<ProjectileSpellBehaviour>();
 
-            if (map != null)
+            if (map != null && canBeSpawned)
             {
                 if (movement != null) movement.map = map;
                 if (projectileSpell != null) projectileSpell.map = map;

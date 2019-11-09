@@ -29,7 +29,28 @@ namespace Pandora
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         float firstLaneX = 2, secondLaneX = 13;
 
-        HashSet<GridCell> riverPositions = new HashSet<GridCell>();
+        HashSet<GridCell> _riverPositions = new HashSet<GridCell>();
+
+        HashSet<GridCell> riverPositions
+        {
+            get
+            {
+                if (_riverPositions.Count == 0)
+                {
+                    var riverY = 13f;
+
+                    for (var x = 0; x < bottomMapSize.x; x++)
+                    {
+                        if (x != firstLaneX && x != secondLaneX)
+                        {
+                            _riverPositions.Add(new GridCell(x, riverY));
+                        }
+                    }
+                }
+
+                return _riverPositions;
+            }
+        }
 
         public float cellHeight;
         public float cellWidth;
@@ -122,19 +143,7 @@ namespace Pandora
          */
         public bool IsObstacle(GridCell cell, bool isFlying, TeamComponent team)
         {
-            var riverY = 13f;
             var cellVector = cell.vector;
-
-            if (riverPositions.Count == 0)
-            {
-                for (var x = 0; x < bottomMapSize.x; x++)
-                {
-                    if (x != firstLaneX && x != secondLaneX)
-                    {
-                        riverPositions.Add(new GridCell(x, riverY));
-                    }
-                }
-            }
 
             var isOutOfBounds = (cellVector.x < 0 && cellVector.y < 0 && cellVector.x >= bottomMapSize.x && cellVector.y >= mapSizeY);
 
@@ -179,9 +188,6 @@ namespace Pandora
                 transform.position.x + (cell.vector.x * cellWidth) + cellWidth / 2,
                 transform.position.y + (cell.vector.y * cellHeight) + cellHeight / 2
             );
-
-            Debug.Log($"Spawning in cell {cell}");
-            Debug.Log($"World point GridCellToWorldPosition {worldPosition}");
 
             return worldPosition;
         }
@@ -255,7 +261,7 @@ namespace Pandora
 
         public void SpawnCard(string cardName, int team, int requiredMana = 0)
         {
-            var mapCell = GetPointedCell();
+            var mapCell = GetPointedCell().vector;
             var id = System.Guid.NewGuid().ToString();
             var manaEnabled = GetComponent<LocalManaBehaviourScript>()?.Enabled ?? true;
 
@@ -325,9 +331,10 @@ namespace Pandora
             unit.GetComponent<TeamComponent>().team = team;
 
             var movement = unit.GetComponent<MovementComponent>();
+            var movementBehaviour = unit.GetComponent<MovementBehaviour>();
             var projectileSpell = unit.GetComponent<ProjectileSpellBehaviour>();
 
-            if (movement != null) movement.map = this;
+            if (movementBehaviour != null) movementBehaviour.map = this;
 
             if (projectileSpell != null)
             {
@@ -336,7 +343,7 @@ namespace Pandora
                 projectileSpell.map = this;
             }
 
-            var engineEntity = engine.AddEntity(unit, movement?.Speed ?? projectileSpell.Speed, cell, projectileSpell == null, timestamp);
+            var engineEntity = engine.AddEntity(unit, movementBehaviour?.Speed ?? projectileSpell.Speed, cell, projectileSpell == null, timestamp);
 
             if (movement != null) engineEntity.CollisionCallback = movement;
 
@@ -370,17 +377,18 @@ namespace Pandora
                 var distance = Vector2.Distance(gameObjectPosition.vector, position.vector);
                 var lifeComponent = targetGameObject.GetComponent<LifeComponent>();
 
-                if (lifeComponent == null || lifeComponent.isDead) continue; // skip spells
+                if (lifeComponent == null || lifeComponent.IsDead) continue; // skip spells
 
                 var canUnitsFight = // Units can fight if:
-                    (targetGameObject.layer == unit.layer) || // same layer (ground & ground, flying & flying)
+                    (targetGameObject.layer == unit.layer) || // same layer (ground & ground, flying & flying, etc.)
+                    (unit.layer == Constants.SWIMMING_LAYER) ||
                     (targetGameObject.layer == Constants.FLYING_LAYER && unit.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying and we are ranged
                     (unit.layer == Constants.FLYING_LAYER); // we're flying
 
                 var isInRange = combatBehaviour.IsInAggroRange(new Enemy(targetGameObject));
 
                 var isTargetValid =
-                    (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.isDead && canUnitsFight && (
+                    (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.IsDead && canUnitsFight && (
                         (isLockedOnMiddle && targetEngineEntity.IsStructure) ? targetGameObject.GetComponent<TowerPositionComponent>().EngineTowerPosition.IsMiddle() : true
                     );
 
@@ -421,7 +429,7 @@ namespace Pandora
                     middleTowerPositionComponent = component;
                 }
 
-                if (component.EngineTowerPosition == targetTowerPosition && !component.gameObject.GetComponent<LifeComponent>().isDead)
+                if (component.EngineTowerPosition == targetTowerPosition && !component.gameObject.GetComponent<LifeComponent>().IsDead)
                 {
                     towerPositionComponent = component;
                 }
@@ -453,7 +461,7 @@ namespace Pandora
             {
                 var cellVector = GetCell(component.gameObject).vector;
 
-                var isDead = component.gameObject.GetComponent<LifeComponent>()?.isDead ?? true;
+                var isDead = component.gameObject.GetComponent<LifeComponent>()?.IsDead ?? true;
 
                 if (
                     cellVector.x >= origin.x &&
@@ -470,13 +478,18 @@ namespace Pandora
             return units;
         }
 
-        public void OnUICardCollision(GameObject puppet)
+        /// <summary></summary>
+        public bool OnUICardCollision(GameObject puppet, bool isAquatic)
         {
             DestroyPuppet();
 
-            var cell = GetWorldPointedCell();
+            var cell = GetPointedCell();
 
-            lastPuppet = Instantiate(puppet, cell, Quaternion.identity);
+            if (isAquatic && !riverPositions.Contains(cell)) return false;
+
+            lastPuppet = Instantiate(puppet, GridCellToWorldPosition(cell), Quaternion.identity);
+
+            return true;
         }
 
         private HashSet<GridCell> GetTowerPositions(GridCell towerCell, float towerSize = 3f)
@@ -496,7 +509,7 @@ namespace Pandora
             return set;
         }
 
-        private Vector2 GetPointedCell()
+        private GridCell GetPointedCell()
         {
             Vector2 worldMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -506,31 +519,17 @@ namespace Pandora
                     worldMouse.y - transform.position.y
                 );
 
-            Debug.Log(
-                "Cell Rect " + transform.position
-            );
-
-
-            Debug.Log(
-                "Cell Mouse " + worldMouse
-            );
-
-            Debug.Log($"Cell width {cellWidth}");
-            Debug.Log($"Cell height {cellHeight}");
-            Debug.Log($"Cell mouse position {mousePosition.x}");
-            Debug.Log($"Cell position {mousePosition.x / cellWidth}");
-
             Vector2 cellPosition = new Vector2(
                 Mathf.Floor(mousePosition.x / cellWidth),
                 Mathf.Floor(mousePosition.y / cellHeight)
             );
 
-            return cellPosition;
+            return new GridCell(cellPosition);
         }
 
         private Vector2 GetWorldPointedCell()
         {
-            var cell = GetPointedCell();
+            var cell = GetPointedCell().vector;
 
             Debug.Log($"Pointed cell {cell}");
 

@@ -12,7 +12,7 @@ using Pandora.Pool;
 
 namespace Pandora.Movement
 {
-    public class MovementComponent : MonoBehaviour, CollisionCallback
+    public class MovementComponent : MonoBehaviour, CollisionCallback, MovementBehaviour
     {
         Rigidbody2D body;
         GridCell currentTarget;
@@ -28,7 +28,7 @@ namespace Pandora.Movement
         bool isTargetForced = false;
         bool evadeUnits = false;
         Vector2Int? lastCollisionPosition;
-        public MovementStateEnum LastState;
+        public MovementStateEnum LastState { get; set; }
         Enemy lastEnemyTargeted;
 
         public bool IsFlying
@@ -70,8 +70,16 @@ namespace Pandora.Movement
             }
         }
 
-        public int Speed = 400;
-        public MapComponent map;
+
+        /// <summary>This is the value set in the unity editor, backing the interface one</summary>
+        public int MovementSpeed = 400;
+
+        public int Speed {
+            get => MovementSpeed;
+            set => MovementSpeed = value;
+        }
+
+        public MapComponent map { get; set; }
 
         // Start is called before the first frame update
         void Awake()
@@ -83,7 +91,7 @@ namespace Pandora.Movement
 
         /// <summary>
         /// Reset the current path thus forcing
-        /// a re-pathing
+        /// recalculation of the pathing
         /// </summary>
         public void ResetPath() {
             currentPath = null;
@@ -95,7 +103,7 @@ namespace Pandora.Movement
 
             lastEnemyTargeted = map.GetEnemy(gameObject, currentPosition, team);
 
-            var isTargetDead = targetEnemy?.enemy.GetComponent<LifeComponent>().isDead ?? true;
+            var isTargetDead = targetEnemy?.enemy.GetComponent<LifeComponent>().IsDead ?? true;
 
             transform.position =
                 (TeamComponent.assignedTeam == TeamComponent.bottomTeam) ?

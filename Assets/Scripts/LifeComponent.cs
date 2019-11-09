@@ -14,7 +14,7 @@ namespace Pandora
         public Image mask;
         float maskOriginalSize;
         public int maxLife;
-        public bool isDead = false;
+        public bool IsDead = false;
 
         // Start is called before the first frame update
         void Start()

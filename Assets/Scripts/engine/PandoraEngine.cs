@@ -11,9 +11,9 @@ namespace Pandora.Engine
         uint tickTime = 5; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         List<EngineEntity> entities = new List<EngineEntity> { };
-
         public MapComponent Map;
         uint totalElapsed = 0;
+        BoxBounds mapBounds, riverBounds;
 
         Decimal DPi = new Decimal(3.141592653589);
 
@@ -25,6 +25,23 @@ namespace Pandora.Engine
             this.Map = map;
 
             AddRiverEntities();
+
+            mapBounds = new BoxBounds();
+
+            var xBounds = UnitsPerCell * map.mapSizeX;
+            var yBounds = UnitsPerCell * map.mapSizeY;
+
+            mapBounds.LowerLeft = new Vector2Int(0, 0);
+            mapBounds.LowerRight = new Vector2Int(xBounds, 0);
+            mapBounds.UpperLeft = new Vector2Int(0, yBounds);
+            mapBounds.UpperRight = new Vector2Int(xBounds, yBounds);
+            mapBounds.Center = new Vector2Int(xBounds / 2, yBounds / 2);
+
+            var riverCenterEntity = GameObject.Find("arena_water_center").GetComponent<EngineComponent>().Entity;
+
+            riverBounds = GetPooledEntityBounds(riverCenterEntity);
+
+            PoolInstances.BoxBoundsPool.MaximumPoolSize = 1000;
         }
 
         public void Process(uint msLapsed)
@@ -60,7 +77,7 @@ namespace Pandora.Engine
             var rightEntity =
                 AddEntity(rightRiverObject, 0, rightPosition, true, null);
 
-            var centerPosition = new GridCell(8, 13);
+            var centerPosition = new Vector2Int(8 * UnitsPerCell, 13 * UnitsPerCell + (UnitsPerCell / 2));
 
             var centerRiverObject = GameObject.Find("arena_water_center");
 
@@ -69,10 +86,29 @@ namespace Pandora.Engine
 
             centerEntity.IsStructure = true;
             centerEntity.IsMapObstacle = true;
+            centerEntity.Layer = Constants.WATER_LAYER;
+
+            var centerComponent = centerRiverObject.AddComponent<EngineComponent>();
+
+            centerComponent.Entity = centerEntity;
+
             rightEntity.IsStructure = true;
             rightEntity.IsMapObstacle = true;
+            rightEntity.Layer = Constants.WATER_LAYER;
+
+
+            var rightComponent = rightRiverObject.AddComponent<EngineComponent>();
+
+            rightComponent.Entity = rightEntity;
+
+
             leftEntity.IsStructure = true;
             leftEntity.IsMapObstacle = true;
+            leftEntity.Layer = Constants.WATER_LAYER;
+
+            var leftComponent = leftRiverObject.AddComponent<EngineComponent>();
+
+            leftComponent.Entity = leftEntity;
         }
 
         public int GetSpeed(int engineUnitsPerSecond)
@@ -117,6 +153,7 @@ namespace Pandora.Engine
 
             Debug.Log($"{prefix} Position {entity.Position}");
             Debug.Log($"{prefix} Speed {entity.Speed}");
+            Debug.Log($"{prefix} Path {entity.Path}");
             Debug.Log($"{prefix} Hitbox {bounds}");
 
             ReturnBounds(bounds);
@@ -128,8 +165,6 @@ namespace Pandora.Engine
             foreach (var entity in entities)
             {
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed));
-
-
 
                 if (entity.Path == null) continue;
 
@@ -179,6 +214,7 @@ namespace Pandora.Engine
                         (!first.IsRigid && !second.IsRigid) || // there must be one rigid object
                         first == second || // entity can't collide with itself
                         !firstBox.Collides(secondBox) || // boxes must collide
+                        (first.IsMapObstacle && second.IsMapObstacle) || // two map obstacles do not collide with each other
                         !CheckLayerCollision(first.Layer, second.Layer); // layer must be compatible for collisions
 
                     // continue if they don't collide
@@ -327,6 +363,8 @@ namespace Pandora.Engine
 
         public int SquaredDistance(Vector2Int first, Vector2Int second) => ISquare(first.x - second.x) + ISquare(first.y - second.y);
 
+        public int Distance(Vector2Int first, Vector2Int second) => ISqrt(SquaredDistance(first, second));
+
         public bool IsInHitboxRange(EngineEntity entity1, EngineEntity entity2, int units)
         {
             var entity1Bounds = GetPooledEntityBounds(entity1);
@@ -467,7 +505,7 @@ namespace Pandora.Engine
         // converts a world point to a physics engine point using linear interpolation 
         // TODO: this is only used on BoxCollider2D to let people use the collider tool to define boundaries
         // if this turns up to create problems we have to define int boundaries in EngineEntity
-        Vector2Int WorldToPhysics(Vector2 world)
+        public Vector2Int WorldToPhysics(Vector2 world)
         {
             var xWorldBounds = Map.cellWidth * Map.mapSizeX;
             var yWorldBounds = Map.cellHeight * Map.mapSizeY;
@@ -589,6 +627,25 @@ namespace Pandora.Engine
 
             return targetEntities;
         }
+        
+        /// <summary>
+        /// Finds the closest unit to the origin that satisfies the predicate
+        /// </summary>
+        public EngineEntity FindClosest(Vector2Int origin, Func<EngineEntity, bool> predicate) {
+            EngineEntity closestEntity = null;
+            int? closestDistance = null;
+
+            foreach (var entity in entities) {
+                var distance = Distance(origin, entity.Position);
+
+                if ((closestDistance == null || distance < closestDistance) && predicate(entity)) {
+                    closestDistance = distance;
+                    closestEntity = entity;
+                }
+            }
+
+            return closestEntity;
+        }
 
         public List<EngineEntity> FindInHitboxRange(EngineEntity origin, int range, bool countStructures)
         {
@@ -601,6 +658,26 @@ namespace Pandora.Engine
                 if (isNotTargeted) continue;
 
                 if (IsInHitboxRange(origin, entity, range))
+                {
+                    targetEntities.Add(entity);
+                }
+            }
+
+            return targetEntities;
+        }
+
+        public List<EngineEntity> FindInRadius(Vector2Int origin, int engineUnitsRadius, bool countStructures) {
+            List<EngineEntity> targetEntities = new List<EngineEntity> { };
+
+            foreach (var entity in entities)
+            {
+                var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
+
+                if (isNotTargeted) continue;
+                
+                var distance = Distance(origin, entity.Position);
+
+                if (distance <= engineUnitsRadius)
                 {
                     targetEntities.Add(entity);
                 }
@@ -627,8 +704,8 @@ namespace Pandora.Engine
 
             var physicsUpperRightBounds = entity.Position;
 
-            physicsUpperRightBounds.y += Mathf.FloorToInt(physicsExtents.y / 2);
             physicsUpperRightBounds.x += Mathf.FloorToInt(physicsExtents.x / 2);
+            physicsUpperRightBounds.y += Mathf.FloorToInt(physicsExtents.y / 2);
 
             var physicsLowerRightBounds = entity.Position;
 
@@ -661,7 +738,9 @@ namespace Pandora.Engine
         {
             return
                 layer1 == layer2 ||
-                (layer1 == Constants.PROJECTILES_LAYER || layer2 == Constants.PROJECTILES_LAYER);
+                (layer1 == Constants.PROJECTILES_LAYER || layer2 == Constants.PROJECTILES_LAYER) ||
+                (layer1 == Constants.WATER_LAYER && layer2 != Constants.SWIMMING_LAYER) ||
+                (layer2 == Constants.WATER_LAYER && layer1 != Constants.SWIMMING_LAYER);
         }
 
         /// <summary>
@@ -673,7 +752,7 @@ namespace Pandora.Engine
         {
             if (num == 0) return 0;
 
-            int n = (num / 2) + 1;  
+            int n = (num / 2) + 1;
             int n1 = (n + (num / n)) / 2;
 
             while (n1 < n)

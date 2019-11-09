@@ -83,7 +83,7 @@ namespace Pandora.Combat
 
         public void TickUpdate(uint lapsed)
         {
-            if (GetComponent<LifeComponent>().isDead) return; // you dead man
+            if (GetComponent<LifeComponent>().IsDead) return; // you dead man
 
             if (isMiddle && !isFrontTowerDestroyed) return;
 
@@ -99,7 +99,7 @@ namespace Pandora.Combat
                     targetCell.vector.y >= aggroBoxOrigin.y &&
                     targetCell.vector.y <= aggroBoxOrigin.y + aggroBoxHeight;
 
-                isTargetDead = targetLifeComponent.isDead;
+                isTargetDead = targetLifeComponent.IsDead;
             }
 
 
