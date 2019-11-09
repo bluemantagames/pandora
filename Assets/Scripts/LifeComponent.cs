@@ -59,7 +59,7 @@ namespace Pandora
 
             if (lifeValue <= 0)
             {
-                isDead = true;
+                IsDead = true;
                 GetComponent<CombatBehaviour>().OnDead();
 
                 Remove();
