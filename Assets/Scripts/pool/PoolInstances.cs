@@ -47,11 +47,18 @@ namespace Pandora.Pool
             profilingEnabled: false
         );
 
+
+        public static ConcurrentObjectPool<HashSet<Vector2>> VectorHashSetPool = new ConcurrentObjectPool<HashSet<Vector2>>(
+            createFunction: () => new HashSet<Vector2>(),
+            resetFunction: v => v.Clear(),
+            profilingEnabled: false
+        );
+
         public static ConcurrentObjectPool<QueueItem> QueueItemPool = new ConcurrentObjectPool<QueueItem>(
             createFunction: () => new QueueItem(),
             resetFunction: v => {
-                v.points = new List<GridCell> {};
-                v.pointsSet = new HashSet<GridCell> {};
+                v.points = new List<Vector2> {};
+                v.pointsSet = new HashSet<Vector2> {};
             },
             profilingEnabled: false
         );

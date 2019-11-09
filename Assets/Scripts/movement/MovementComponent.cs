@@ -9,6 +9,7 @@ using Pandora.Combat;
 using UnityEngine.Profiling;
 using Pandora.Engine;
 using Pandora.Pool;
+using System.Linq;
 
 namespace Pandora.Movement
 {
@@ -172,6 +173,9 @@ namespace Pandora.Movement
             direction = (currentTarget.vector - currentPosition.vector).normalized;
         }
 
+        List<GridCell> VectorsToGridCells(IEnumerable<Vector2> vectors) =>
+            (from vector in vectors
+            select new GridCell(vector)).ToList();
 
         /**
          * Simple A* implementation. We try to use as many pools
@@ -182,20 +186,21 @@ namespace Pandora.Movement
         List<GridCell> FindPath(GridCell end)
         {
             var priorityQueue = new SimplePriorityQueue<QueueItem>();
+            var endVector = end.vector;
 
             priorityQueue.Clear();
 
-            var currentPosition = engineEntity.GetCurrentCell();
+            var currentPosition = engineEntity.GetCurrentCell().vector;
 
             int pass = 0;
 
             var evaluatingPosition =
                 new QueueItem(
-                    new List<GridCell> { currentPosition },
-                    new HashSet<GridCell>()
+                    new List<Vector2> { currentPosition },
+                    new HashSet<Vector2>()
                 );
 
-            GridCell item;
+            Vector2 item;
 
             var pathFound = false;
 
@@ -203,16 +208,16 @@ namespace Pandora.Movement
             {
                 Debug.LogWarning($"Cannot find path towards an obstacle ({end})");
 
-                return evaluatingPosition.points;
+                return VectorsToGridCells(evaluatingPosition.points);
             }
 
-            if (currentPosition == end)
+            if (currentPosition == endVector)
             {
-                return evaluatingPosition.points;
+                return VectorsToGridCells(evaluatingPosition.points);
             }
 
             // get the last item in the queue
-            while ((item = evaluatingPosition.points.Last()) != end && !pathFound)
+            while ((item = evaluatingPosition.points.Last()) != endVector && !pathFound)
             {
 
                 if (DebugPathfinding)
@@ -225,39 +230,44 @@ namespace Pandora.Movement
                 {
                     for (var y = -1f; y <= 1f; y++)
                     {
-                        var advance = PoolInstances.GridCellPool.GetObject();
+                        var advance = PoolInstances.Vector2Pool.GetObject();
 
-                        advance.vector.x = item.vector.x + x;
-                        advance.vector.y = item.vector.y + y;
+                        advance.x = item.x + x;
+                        advance.y = item.y + y;
+
+                        var advanceGridCell = PoolInstances.GridCellPool.GetObject();
+
+                        advanceGridCell.vector.x = advance.x;
+                        advanceGridCell.vector.x = advance.x;
 
                         var isAdvanceRedundant = evaluatingPosition.pointsSet.Contains(advance);
 
                         var containsUnit = false;
 
-                        if (evadeUnits && advance != end) // check the advance for units unless it's the end position
+                        if (evadeUnits && advance != endVector) // check the advance for units unless it's the end position
                         {
-                            var units = engine.FindInGridCell(advance, false);
+                            var units = engine.FindInGridCell(advanceGridCell, false);
 
                             containsUnit = units.Exists(entity => entity.GameObject.GetComponent<TeamComponent>()?.team == team.team);
                         }
 
-                        if (advance != item && !map.IsObstacle(advance, IsFlying, team) && !isAdvanceRedundant && !containsUnit) // except the current positions, obstacles or going back
+                        if (advance != item && !map.IsObstacle(advanceGridCell, IsFlying, team) && !isAdvanceRedundant && !containsUnit) // except the current positions, obstacles or going back
                         {
-                            var distanceToEnd = Vector2.Distance(advance.vector, end.vector); // use the distance between this point and the end as h(n)
+                            var distanceToEnd = Vector2.Distance(advance, end.vector); // use the distance between this point and the end as h(n)
                             var distanceFromStart = evaluatingPosition.points.Count + 1; // use the distance between this point and the start as g(n)
                             var priority = distanceFromStart + distanceToEnd; // priority is h(n) ++ g(n)
-                            var currentPositions = new List<GridCell>(evaluatingPosition.points) { advance };
+                            var currentPositions = new List<Vector2>(evaluatingPosition.points) { advance };
                             var queueItem = PoolInstances.QueueItemPool.GetObject();
 
                             queueItem.points = currentPositions;
-                            queueItem.pointsSet = PoolInstances.GridCellHashSetPool.GetObject();
+                            queueItem.pointsSet = PoolInstances.VectorHashSetPool.GetObject();
 
                             foreach (var position in currentPositions)
                             {
                                 queueItem.pointsSet.Add(position);
                             }
 
-                            if (advance == end)
+                            if (advance == endVector)
                             { // Stop the loop if we found the path
                                 evaluatingPosition = queueItem;
                                 pathFound = true;
@@ -265,7 +275,7 @@ namespace Pandora.Movement
                                 break;
                             }
 
-                            PoolInstances.GridCellHashSetPool.ReturnObject(evaluatingPosition.pointsSet);
+                            PoolInstances.VectorHashSetPool.ReturnObject(evaluatingPosition.pointsSet);
                             PoolInstances.QueueItemPool.ReturnObject(evaluatingPosition);
 
                             priorityQueue.Enqueue(
@@ -275,7 +285,8 @@ namespace Pandora.Movement
                         }
                         else
                         {
-                            PoolInstances.GridCellPool.ReturnObject(advance);
+                            PoolInstances.Vector2Pool.ReturnObject(advance);
+                            PoolInstances.GridCellPool.ReturnObject(advanceGridCell);
                         }
                     }
                 }
@@ -305,7 +316,7 @@ namespace Pandora.Movement
                     }
                     else
                     {
-                        return evaluatingPosition.points;
+                        return VectorsToGridCells(evaluatingPosition.points);
                     }
                 }
 
@@ -319,7 +330,7 @@ namespace Pandora.Movement
                 Debug.Log($"DebugPathfinding: Done, positions {string.Join(", ", evaluatingPosition.points)}");
             }
 
-            return evaluatingPosition.points;
+            return VectorsToGridCells(evaluatingPosition.points);
         }
 
         private void CalculatePath()

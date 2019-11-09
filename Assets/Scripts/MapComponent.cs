@@ -67,11 +67,18 @@ namespace Pandora
             BottomMiddleAggroOrigin, BottomMiddleAggroEnd,
             BottomRightAggroOrigin, BottomRightAggroEnd;
 
+        static MapComponent _instance = null;
+
         public static MapComponent Instance
         {
             get
             {
-                return GameObject.Find("Arena").GetComponent<MapComponent>();
+                if (_instance == null)
+                {
+                    _instance = GameObject.Find("Arena").GetComponent<MapComponent>();
+                }
+
+                return _instance;
             }
         }
 
