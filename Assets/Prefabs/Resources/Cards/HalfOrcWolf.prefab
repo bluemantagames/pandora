@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1000
-  m_Sprite: {fileID: 244686859132327273, guid: 25dfe6a83764dd840878b06e19f31427, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a70904bd0629dac4f8a9be288960b272, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
   lifeValue: 100
   mask: {fileID: 9015842578933355138}
   maxLife: 0
-  isDead: 0
+  IsDead: 0
 --- !u!95 &7129443875767093079
 Animator:
   serializedVersion: 3
@@ -150,7 +150,7 @@ Animator:
   m_GameObject: {fileID: 1060352442105845753}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2ed59373230666f4a840f9aebf083f22, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9444a0dc08153bd4c9cf0fa573b67a1e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -172,9 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
-  LastState: 0
-  Speed: 400
-  map: {fileID: 0}
+  MovementSpeed: 400
 --- !u!114 &3519887656195453972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c8ba332ddd8ae44b1b9f93e2e3115a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebugMove: 0
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
@@ -205,7 +204,7 @@ MonoBehaviour:
   damage: 10
   attackCooldownMs: 500
   backswingMs: 400
-  animationStateName: ClericAttack
+  animationStateName: HalfOrcWolfAttack
   AggroRangeCells: 3
   AttackRangeEngineUnits: 2
 --- !u!61 &9130794682398608112
@@ -221,18 +220,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0054599643, y: -0.2679752}
+  m_Offset: {x: -0.07011084, y: -0.21693434}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.02, y: 1.19}
+    oldSize: {x: 1.63, y: 1.66}
     newSize: {x: 1.02, y: 1.19}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.4684049, y: 0.30704856}
+  m_Size: {x: 0.33910313, y: 0.20496675}
   m_EdgeRadius: 0
 --- !u!114 &7539184034064533125
 MonoBehaviour:
