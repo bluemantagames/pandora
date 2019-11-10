@@ -79,8 +79,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1000
-  m_Sprite: {fileID: 244686859132327273, guid: 25dfe6a83764dd840878b06e19f31427, type: 3}
+  m_SortingOrder: 19
+  m_Sprite: {fileID: 21300000, guid: 5d60cde56811a01468cb2b59fcbab32f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
   lifeValue: 100
   mask: {fileID: 9015842578933355138}
   maxLife: 0
-  isDead: 0
+  IsDead: 0
 --- !u!95 &7129443875767093079
 Animator:
   serializedVersion: 3
@@ -150,7 +150,7 @@ Animator:
   m_GameObject: {fileID: 1060352442105845753}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2ed59373230666f4a840f9aebf083f22, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4c1cc504e526b944c8bed4568405535f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -172,9 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
-  LastState: 0
-  Speed: 400
-  map: {fileID: 0}
+  MovementSpeed: 400
 --- !u!114 &3519887656195453972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c8ba332ddd8ae44b1b9f93e2e3115a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebugMove: 0
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
@@ -205,7 +204,7 @@ MonoBehaviour:
   damage: 10
   attackCooldownMs: 500
   backswingMs: 400
-  animationStateName: ClericAttack
+  animationStateName: HalfOrcRiderAttack
   AggroRangeCells: 3
   AttackRangeEngineUnits: 2
 --- !u!61 &9130794682398608112
@@ -225,7 +224,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.02, y: 1.19}
+    oldSize: {x: 1.74, y: 1.71}
     newSize: {x: 1.02, y: 1.19}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
