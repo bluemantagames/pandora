@@ -17,6 +17,13 @@ namespace Pandora.Engine
 
         Decimal DPi = new Decimal(3.141592653589);
 
+        Astar<Vector2Int> astar = new Astar<Vector2Int>(
+            PoolInstances.Vector2IntHashSetPool,
+            PoolInstances.Vector2IntQueueItemPool,
+            PoolInstances.Vector2IntPool,
+            PoolInstances.Vector2IntListPool
+        );
+
         // Debug settings
         float debugLinesDuration = 1f;
 
@@ -42,6 +49,8 @@ namespace Pandora.Engine
             riverBounds = GetPooledEntityBounds(riverCenterEntity);
 
             PoolInstances.BoxBoundsPool.MaximumPoolSize = 1000;
+
+            astar.DebugPathfinding = true;
         }
 
         public void Process(uint msLapsed)
@@ -111,10 +120,54 @@ namespace Pandora.Engine
             leftComponent.Entity = leftEntity;
         }
 
-        public int GetSpeed(int engineUnitsPerSecond)
-        {
-            return Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * tickTime);
-        }
+        public int GetSpeed(int engineUnitsPerSecond) => 
+            Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * tickTime);
+
+        public IEnumerator<Vector2Int> FindPath(EngineEntity entity, Vector2Int target) =>
+            astar.FindPath(
+                entity.Position,
+                target,
+                position =>
+                {
+                    var isCollision = false;
+
+                    foreach (var engineEntity in entities)
+                    {
+                        var bound = GetPooledEntityBounds(engineEntity);
+
+                        isCollision =
+                            !engineEntity.IsStructure &&
+                            bound.Contains(position) &&
+                            CanCollide(engineEntity, entity);
+
+                        PoolInstances.BoxBoundsPool.ReturnObject(bound);
+
+                        if (isCollision) break;
+                    }
+
+                    return isCollision;
+                },
+                position =>
+                {
+                    var surroundingPositions = PoolInstances.Vector2IntListPool.GetObject();
+
+                    for (var x = -1; x <= 1; x++)
+                    {
+                        for (var y = -1; y <= 1; y++)
+                        {
+                            var advance = PoolInstances.Vector2IntPool.GetObject();
+
+                            advance.x = position.x + x;
+                            advance.y = position.y + y;
+
+                            surroundingPositions.Add(advance);
+                        }
+                    }
+
+                    return surroundingPositions;
+                },
+                (a, b) => Vector2.Distance(a, b)
+            ).GetEnumerator();
 
         public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, GridCell position, bool isRigid, DateTime? timestamp)
         {
@@ -157,6 +210,15 @@ namespace Pandora.Engine
             Debug.Log($"{prefix} Hitbox {bounds}");
 
             ReturnBounds(bounds);
+        }
+
+        bool CanCollide(EngineEntity first, EngineEntity second)
+        {
+            return
+                (first.IsRigid || second.IsRigid) && // there must be one rigid object
+                first != second && // entity can't collide with itself
+                !(first.IsMapObstacle && second.IsMapObstacle) && // two map obstacles do not collide with each other
+                CheckLayerCollision(first.Layer, second.Layer); // layer must be compatible for collisions
         }
 
         public void NextTick()
@@ -211,11 +273,8 @@ namespace Pandora.Engine
                     var secondBox = GetPooledEntityBounds(second);
 
                     var notCollision =
-                        (!first.IsRigid && !second.IsRigid) || // there must be one rigid object
-                        first == second || // entity can't collide with itself
-                        !firstBox.Collides(secondBox) || // boxes must collide
-                        (first.IsMapObstacle && second.IsMapObstacle) || // two map obstacles do not collide with each other
-                        !CheckLayerCollision(first.Layer, second.Layer); // layer must be compatible for collisions
+                        !CanCollide(first, second) ||
+                        !firstBox.Collides(secondBox); // boxes must collide
 
                     // continue if they don't collide
                     if (notCollision)
@@ -519,6 +578,26 @@ namespace Pandora.Engine
             );
         }
 
+
+        // converts a world point to a physics engine point using linear interpolation 
+        // TODO: this is only used on BoxCollider2D to let people use the collider tool to define boundaries
+        // if this turns up to create problems we have to define int boundaries in EngineEntity
+        public Vector2Int PooledWorldToPhysics(Vector2 world)
+        {
+            var xWorldBounds = Map.cellWidth * Map.mapSizeX;
+            var yWorldBounds = Map.cellHeight * Map.mapSizeY;
+
+            var xPhysicsBounds = UnitsPerCell * Map.mapSizeX;
+            var yPhysicsBounds = UnitsPerCell * Map.mapSizeY;
+
+            var vector = PoolInstances.Vector2IntPool.GetObject();
+
+            vector.x = Mathf.RoundToInt((xPhysicsBounds * world.x) / xWorldBounds);
+            vector.y = Mathf.RoundToInt((yPhysicsBounds * world.y) / yWorldBounds);
+
+            return vector;
+        }
+
         Vector2 ScreenToGUISpace(Vector2 screen)
         {
             return new Vector2(screen.x, Screen.height - screen.y);
@@ -627,18 +706,21 @@ namespace Pandora.Engine
 
             return targetEntities;
         }
-        
+
         /// <summary>
         /// Finds the closest unit to the origin that satisfies the predicate
         /// </summary>
-        public EngineEntity FindClosest(Vector2Int origin, Func<EngineEntity, bool> predicate) {
+        public EngineEntity FindClosest(Vector2Int origin, Func<EngineEntity, bool> predicate)
+        {
             EngineEntity closestEntity = null;
             int? closestDistance = null;
 
-            foreach (var entity in entities) {
+            foreach (var entity in entities)
+            {
                 var distance = Distance(origin, entity.Position);
 
-                if ((closestDistance == null || distance < closestDistance) && predicate(entity)) {
+                if ((closestDistance == null || distance < closestDistance) && predicate(entity))
+                {
                     closestDistance = distance;
                     closestEntity = entity;
                 }
@@ -666,7 +748,8 @@ namespace Pandora.Engine
             return targetEntities;
         }
 
-        public List<EngineEntity> FindInRadius(Vector2Int origin, int engineUnitsRadius, bool countStructures) {
+        public List<EngineEntity> FindInRadius(Vector2Int origin, int engineUnitsRadius, bool countStructures)
+        {
             List<EngineEntity> targetEntities = new List<EngineEntity> { };
 
             foreach (var entity in entities)
@@ -674,7 +757,7 @@ namespace Pandora.Engine
                 var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
 
                 if (isNotTargeted) continue;
-                
+
                 var distance = Distance(origin, entity.Position);
 
                 if (distance <= engineUnitsRadius)
@@ -694,8 +777,10 @@ namespace Pandora.Engine
         BoxBounds GetPooledEntityBounds(EngineEntity entity)
         {
             var bounds = PoolInstances.BoxBoundsPool.GetObject();
+
             var worldBounds = entity.GameObject.GetComponent<BoxCollider2D>().bounds;
-            var physicsExtents = WorldToPhysics(worldBounds.size);
+
+            var physicsExtents = PooledWorldToPhysics(worldBounds.size);
 
             var physicsUpperLeftBounds = entity.Position;
 
@@ -722,6 +807,8 @@ namespace Pandora.Engine
             bounds.LowerLeft = physicsLowerLeftBounds;
             bounds.LowerRight = physicsLowerRightBounds;
             bounds.Center = entity.Position;
+
+            PoolInstances.Vector2Pool.ReturnObject(physicsExtents);
 
             return bounds;
         }

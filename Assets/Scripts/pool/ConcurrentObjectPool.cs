@@ -12,7 +12,7 @@ namespace Pandora.Pool
         /// <summary>
         /// Default maximum size of a pool.
         /// </summary>
-        public const int DefaultMaximumPoolSize = 20;
+        public const int DefaultMaximumPoolSize = 100;
     }
 
     /// <summary>

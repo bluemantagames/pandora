@@ -9,7 +9,6 @@ using Pandora.Combat;
 using UnityEngine.Profiling;
 using Pandora.Engine;
 using Pandora.Pool;
-using System.Linq;
 
 namespace Pandora.Movement
 {
@@ -27,10 +26,16 @@ namespace Pandora.Movement
         /// <summary>Enables log on the A* implementation</summary>
         public bool DebugPathfinding;
         bool isTargetForced = false;
-        bool evadeUnits = false;
         Vector2Int? lastCollisionPosition;
         public MovementStateEnum LastState { get; set; }
         Enemy lastEnemyTargeted;
+
+        Astar<Vector2> astar = new Astar<Vector2>(
+            PoolInstances.Vector2HashSetPool,
+            PoolInstances.Vector2QueueItemPool,
+            PoolInstances.Vector2Pool,
+            PoolInstances.Vector2ListPool
+        );
 
         public bool IsFlying
         {
@@ -75,7 +80,8 @@ namespace Pandora.Movement
         /// <summary>This is the value set in the unity editor, backing the interface one</summary>
         public int MovementSpeed = 400;
 
-        public int Speed {
+        public int Speed
+        {
             get => MovementSpeed;
             set => MovementSpeed = value;
         }
@@ -94,7 +100,8 @@ namespace Pandora.Movement
         /// Reset the current path thus forcing
         /// recalculation of the pathing
         /// </summary>
-        public void ResetPath() {
+        public void ResetPath()
+        {
             currentPath = null;
         }
 
@@ -170,167 +177,44 @@ namespace Pandora.Movement
 
             engineEntity.SetTarget(currentTarget);
 
+            engineEntity.IsEvading = false;
+
             direction = (currentTarget.vector - currentPosition.vector).normalized;
         }
 
         List<GridCell> VectorsToGridCells(IEnumerable<Vector2> vectors) =>
             (from vector in vectors
-            select new GridCell(vector)).ToList();
+             select new GridCell(vector)).ToList();
 
-        /**
-         * Simple A* implementation. We try to use as many pools
-         * as humanly possible in order to not allocate too much (it costs a lot of time)
-         * 
-         * If evadeUnits is true, it also counts units-occupied gridcells as obstacles
-         */
         List<GridCell> FindPath(GridCell end)
         {
-            var priorityQueue = new SimplePriorityQueue<QueueItem>();
-            var endVector = end.vector;
-
-            priorityQueue.Clear();
-
-            var currentPosition = engineEntity.GetCurrentCell().vector;
-
-            int pass = 0;
-
-            var evaluatingPosition =
-                new QueueItem(
-                    new List<Vector2> { currentPosition },
-                    new HashSet<Vector2>()
-                );
-
-            Vector2 item;
-
-            var pathFound = false;
-
-            if (map.IsObstacle(end, IsFlying, team))
-            {
-                Debug.LogWarning($"Cannot find path towards an obstacle ({end})");
-
-                return VectorsToGridCells(evaluatingPosition.points);
-            }
-
-            if (currentPosition == endVector)
-            {
-                return VectorsToGridCells(evaluatingPosition.points);
-            }
-
-            // get the last item in the queue
-            while ((item = evaluatingPosition.points.Last()) != endVector && !pathFound)
-            {
-
-                if (DebugPathfinding)
-                {
-                    Debug.Log($"DebugPathfinding: Positions {string.Join(", ", evaluatingPosition.points)} - searching for {end}");
-                }
-
-                // check all surrounding positions
-                for (var x = -1f; x <= 1f; x++)
-                {
-                    for (var y = -1f; y <= 1f; y++)
+            return VectorsToGridCells(
+                astar.FindPath(
+                    engineEntity.GetCurrentCell().vector,
+                    end.vector,
+                    position => map.IsObstacle(end, IsFlying, team),
+                    position =>
                     {
-                        var advance = PoolInstances.Vector2Pool.GetObject();
+                        var surroundingPositions = PoolInstances.Vector2ListPool.GetObject();
 
-                        advance.x = item.x + x;
-                        advance.y = item.y + y;
-
-                        var advanceGridCell = PoolInstances.GridCellPool.GetObject();
-
-                        advanceGridCell.vector.x = advance.x;
-                        advanceGridCell.vector.x = advance.x;
-
-                        var isAdvanceRedundant = evaluatingPosition.pointsSet.Contains(advance);
-
-                        var containsUnit = false;
-
-                        if (evadeUnits && advance != endVector) // check the advance for units unless it's the end position
+                        for (var x = -1f; x <= 1f; x++)
                         {
-                            var units = engine.FindInGridCell(advanceGridCell, false);
-
-                            containsUnit = units.Exists(entity => entity.GameObject.GetComponent<TeamComponent>()?.team == team.team);
-                        }
-
-                        if (advance != item && !map.IsObstacle(advanceGridCell, IsFlying, team) && !isAdvanceRedundant && !containsUnit) // except the current positions, obstacles or going back
-                        {
-                            var distanceToEnd = Vector2.Distance(advance, end.vector); // use the distance between this point and the end as h(n)
-                            var distanceFromStart = evaluatingPosition.points.Count + 1; // use the distance between this point and the start as g(n)
-                            var priority = distanceFromStart + distanceToEnd; // priority is h(n) ++ g(n)
-                            var currentPositions = new List<Vector2>(evaluatingPosition.points) { advance };
-                            var queueItem = PoolInstances.QueueItemPool.GetObject();
-
-                            queueItem.points = currentPositions;
-                            queueItem.pointsSet = PoolInstances.VectorHashSetPool.GetObject();
-
-                            foreach (var position in currentPositions)
+                            for (var y = -1f; y <= 1f; y++)
                             {
-                                queueItem.pointsSet.Add(position);
+                                var advance = PoolInstances.Vector2Pool.GetObject();
+
+                                advance.x = position.x + x;
+                                advance.y = position.y + y;
+
+                                surroundingPositions.Add(advance);
                             }
-
-                            if (advance == endVector)
-                            { // Stop the loop if we found the path
-                                evaluatingPosition = queueItem;
-                                pathFound = true;
-
-                                break;
-                            }
-
-                            PoolInstances.VectorHashSetPool.ReturnObject(evaluatingPosition.pointsSet);
-                            PoolInstances.QueueItemPool.ReturnObject(evaluatingPosition);
-
-                            priorityQueue.Enqueue(
-                                queueItem,
-                                priority
-                            );
                         }
-                        else
-                        {
-                            PoolInstances.Vector2Pool.ReturnObject(advance);
-                            PoolInstances.GridCellPool.ReturnObject(advanceGridCell);
-                        }
-                    }
-                }
 
-                pass += 1;
-
-                if (pass > 5000)
-                {
-                    Debug.LogWarning($"Short circuiting after 5000 passes started from {currentPosition} to {end} - {team.team} {gameObject.name} {evadeUnits}");
-                    Debug.LogWarning("Best paths found are");
-                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
-                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
-                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
-
-                    if (DebugPathfinding)
-                    {
-                        Debug.Log("DebugPathfinding: Pausing the editor");
-
-                        Debug.Break();
-                    }
-
-                    if (evadeUnits)
-                    {
-                        evadeUnits = false;
-
-                        return FindPath(end);
-                    }
-                    else
-                    {
-                        return VectorsToGridCells(evaluatingPosition.points);
-                    }
-                }
-
-                if (!pathFound) evaluatingPosition = priorityQueue.Dequeue();
-            }
-
-            evadeUnits = false;
-
-            if (DebugPathfinding)
-            {
-                Debug.Log($"DebugPathfinding: Done, positions {string.Join(", ", evaluatingPosition.points)}");
-            }
-
-            return VectorsToGridCells(evaluatingPosition.points);
+                        return surroundingPositions;
+                    },
+                    (a, b) => Vector2.Distance(a, b)
+                )
+            );
         }
 
         private void CalculatePath()
@@ -345,14 +229,7 @@ namespace Pandora.Movement
                 Debug.Log($"DebugPathfinding: Current target is {target} ({targetEnemy})");
             }
 
-            var wereUnitEvaded = evadeUnits;
-
             currentPath = FindPath(target).Skip(1).ToList();
-
-            if (wereUnitEvaded)
-            {
-                Debug.Log($"Evaded units with {string.Join(",", currentPath)}");
-            }
         }
 
         private GridCell CurrentCellPosition()
@@ -365,7 +242,7 @@ namespace Pandora.Movement
             var shouldNotCheckEvading =
                 gameObject.layer == Constants.FLYING_LAYER ||
                 !entity.IsRigid ||
-                evadeUnits ||
+                engineEntity.IsEvading ||
                 lastEnemyTargeted.enemyCell.vector.y == map.bottomMapSizeY ||
                 GetComponent<CombatBehaviour>().isAttacking;
 
@@ -382,7 +259,7 @@ namespace Pandora.Movement
             {
                 Debug.Log("Finally evading");
 
-                evadeUnits = true;
+                engineEntity.IsEvading = true;
                 currentPath = null;
 
                 lastCollisionPosition = null;

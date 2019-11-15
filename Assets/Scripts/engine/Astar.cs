@@ -10,13 +10,26 @@ namespace Pandora.Engine
 {
     public class Astar<T> where T : IEquatable<T>
     {
-        bool DebugPathfinding = false;
+        public bool DebugPathfinding = false;
+
+        ConcurrentObjectPool<HashSet<T>> nodeHashsetPool;
+        ConcurrentObjectPool<QueueItem<T>> nodeQueueItemPool;
+        ConcurrentObjectPool<T> nodePool;
+        ConcurrentObjectPool<List<T>> nodeContainerPool;
+
+        public Astar(ConcurrentObjectPool<HashSet<T>> nodeHashsetPool, ConcurrentObjectPool<QueueItem<T>> nodeQueueItemPool, ConcurrentObjectPool<T> nodePool, ConcurrentObjectPool<List<T>> nodeContainerPool)
+        {
+            this.nodeHashsetPool = nodeHashsetPool;
+            this.nodeQueueItemPool = nodeQueueItemPool;
+            this.nodePool = nodePool;
+            this.nodeContainerPool = nodeContainerPool;
+        }
 
         /**
         * Simple A* implementation. We try to use as many pools
         * as humanly possible in order to not allocate too much (it costs a lot of time)
         */
-        List<T> FindPath(T currentPosition, T end, Func<T, bool> isObstacle, Func<T, List<T>> getSurroundingNodes, Action<List<T>> freeSurroundingNodes, Func<T, T, float> distance)
+        public List<T> FindPath(T currentPosition, T end, Func<T, bool> isObstacle, Func<T, List<T>> getSurroundingNodes, Func<T, T, float> distance)
         {
             var priorityQueue = new SimplePriorityQueue<QueueItem<T>>();
 
@@ -63,16 +76,16 @@ namespace Pandora.Engine
                 {
                     var isAdvanceRedundant = evaluatingPosition.pointsSet.Contains(advance);
 
-                    if (!advance.Equals(item) && isObstacle(advance) && !isAdvanceRedundant) // except the current positions, obstacles or going back
+                    if (!advance.Equals(item) && !isObstacle(advance) && !isAdvanceRedundant) // except the current positions, obstacles or going back
                     {
                         var distanceToEnd = distance(advance, end); // use the distance between this node and the end as h(n)
                         var distanceFromStart = evaluatingPosition.points.Count + 1; // use the distance between this node and the start as g(n)
                         var priority = distanceFromStart + distanceToEnd; // priority is h(n) ++ g(n)
                         var currentPositions = new List<T>(evaluatingPosition.points) { advance };
-                        var queueItem = PoolInstances.QueueItemPool.GetObject();
+                        var queueItem = nodeQueueItemPool.GetObject();
 
                         queueItem.points = currentPositions;
-                        queueItem.pointsSet = PoolInstances.VectorHashSetPool.GetObject();
+                        queueItem.pointsSet = nodeHashsetPool.GetObject();
 
                         foreach (var position in currentPositions)
                         {
@@ -87,8 +100,8 @@ namespace Pandora.Engine
                             break;
                         }
 
-                        PoolInstances.VectorHashSetPool.ReturnObject(evaluatingPosition.pointsSet);
-                        PoolInstances.QueueItemPool.ReturnObject(evaluatingPosition);
+                        nodeHashsetPool.ReturnObject(evaluatingPosition.pointsSet);
+                        nodeQueueItemPool.ReturnObject(evaluatingPosition);
 
                         priorityQueue.Enqueue(
                             queueItem,
@@ -97,16 +110,17 @@ namespace Pandora.Engine
                     }
                     else
                     {
-                        PoolInstances.Vector2Pool.ReturnObject(advance);
-                        PoolInstances.GridCellPool.ReturnObject(advanceGridCell);
+                        nodePool?.ReturnObject(advance);
                     }
                 }
+
+                nodeContainerPool?.ReturnObject(advances);
 
                 pass += 1;
 
                 if (pass > 5000)
                 {
-                    Debug.LogWarning($"Short circuiting after 5000 passes started from {currentPosition} to {end} - {team.team} {gameObject.name} {evadeUnits}");
+                    Debug.LogWarning($"Short circuiting after 5000 passes started from {currentPosition} to {end} ({Time.frameCount})");
                     Debug.LogWarning("Best paths found are");
                     Debug.LogWarning($"{priorityQueue.Dequeue()}");
                     Debug.LogWarning($"{priorityQueue.Dequeue()}");
