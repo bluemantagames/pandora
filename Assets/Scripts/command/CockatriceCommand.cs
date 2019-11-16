@@ -40,7 +40,7 @@ namespace Pandora.Command
 
             foreach (var entity in engineComponent.Entity.FindInHitboxRange(EngineUnitsRange, TargetBuildings))
             {
-                if (entity.GameObject.GetComponent<TeamComponent>().team == team.team) continue;
+                if (entity.GameObject.GetComponent<TeamComponent>()?.team == team.team) continue;
 
                 var distance = engineComponent.Engine.SquaredDistance(entity.Position, cockatrice.Position);
 
