@@ -25,7 +25,7 @@ namespace Pandora.Command
 
             foreach (var entity in engineComponent.Entity.FindInHitboxRange(EngineUnitsRange, false))
             {
-                if (entity.GameObject.GetComponent<TeamComponent>()?.team == team.team) continue;
+                if (entity.GameObject.GetComponent<TeamComponent>()?.team == team.team || !entity.IsRigid) continue;
 
                 var lifeValue = entity.GameObject.GetComponent<LifeComponent>().lifeValue;
 
