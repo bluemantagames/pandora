@@ -177,8 +177,6 @@ namespace Pandora.Movement
 
             engineEntity.SetTarget(currentTarget);
 
-            engineEntity.IsEvading = false;
-
             direction = (currentTarget.vector - currentPosition.vector).normalized;
         }
 
@@ -253,7 +251,6 @@ namespace Pandora.Movement
                 collisionTotalElapsed = totalElapsed;
             }
 
-            lastCollisionPosition = engineEntity.Position;
 
             if (lastCollisionPosition == engineEntity.Position && totalElapsed - (collisionTotalElapsed ?? 0) >= 20)
             {
@@ -264,6 +261,10 @@ namespace Pandora.Movement
 
                 lastCollisionPosition = null;
                 collisionTotalElapsed = null;
+            }
+            else
+            {
+                lastCollisionPosition = engineEntity.Position;
             }
 
         }

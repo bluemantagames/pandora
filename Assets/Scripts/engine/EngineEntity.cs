@@ -49,14 +49,7 @@ namespace Pandora.Engine
 
         public IEnumerator<Vector2Int> FindPath(Vector2Int position, Vector2Int target)
         {
-            if (IsEvading)
-            {
-                return Engine.FindPath(this, target);
-            }
-            else
-            {
-                return Bresenham.GetEnumerator(position, target);
-            }
+            return Bresenham.GetEnumerator(position, target);
         }
 
         public void SetTarget(Vector2Int target)

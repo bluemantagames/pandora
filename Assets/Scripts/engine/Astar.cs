@@ -35,7 +35,7 @@ namespace Pandora.Engine
 
             priorityQueue.Clear();
 
-            int pass = 0;
+            int pass = 0, advancesNum = 0;
 
             var map = MapComponent.Instance;
 
@@ -74,10 +74,24 @@ namespace Pandora.Engine
 
                 foreach (var advance in advances)
                 {
+                    advancesNum++;
+
                     var isAdvanceRedundant = evaluatingPosition.pointsSet.Contains(advance);
+
+                    System.Diagnostics.Stopwatch st = new System.Diagnostics.Stopwatch();
+
+                    st.Start();
 
                     if (!advance.Equals(item) && !isObstacle(advance) && !isAdvanceRedundant) // except the current positions, obstacles or going back
                     {
+                        st.Stop();
+
+                        if (DebugPathfinding)
+                        {
+                            Debug.Log($"MyMethod took {st.Elapsed} ms to complete");
+                            Debug.Break();
+                        }
+
                         var distanceToEnd = distance(advance, end); // use the distance between this node and the end as h(n)
                         var distanceFromStart = evaluatingPosition.points.Count + 1; // use the distance between this node and the start as g(n)
                         var priority = distanceFromStart + distanceToEnd; // priority is h(n) ++ g(n)
@@ -120,7 +134,7 @@ namespace Pandora.Engine
 
                 if (pass > 5000)
                 {
-                    Debug.LogWarning($"Short circuiting after 5000 passes started from {currentPosition} to {end} ({Time.frameCount})");
+                    Debug.LogWarning($"Short circuiting after 5000 passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} advances)");
                     Debug.LogWarning("Best paths found are");
                     Debug.LogWarning($"{priorityQueue.Dequeue()}");
                     Debug.LogWarning($"{priorityQueue.Dequeue()}");

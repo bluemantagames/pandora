@@ -120,7 +120,7 @@ namespace Pandora.Engine
             leftComponent.Entity = leftEntity;
         }
 
-        public int GetSpeed(int engineUnitsPerSecond) => 
+        public int GetSpeed(int engineUnitsPerSecond) =>
             Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * tickTime);
 
         public IEnumerator<Vector2Int> FindPath(EngineEntity entity, Vector2Int target) =>
@@ -343,6 +343,15 @@ namespace Pandora.Engine
                     {
                         direction.x = 1;
                         direction.y = 1;
+                    }
+
+                    // if units are trying to evade each other, don't let them push each other vertically
+                    if ((moved.IsEvading || unmoved.IsEvading) && direction.x == 0)
+                    {
+                        direction.x = 1;
+
+                        moved.IsEvading = false;
+                        unmoved.IsEvading = false;
                     }
 
                     if (moved.IsRigid && unmoved.IsRigid)
