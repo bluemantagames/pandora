@@ -190,7 +190,17 @@ namespace Pandora.Movement
                 astar.FindPath(
                     engineEntity.GetCurrentCell().vector,
                     end.vector,
-                    position => map.IsObstacle(end, IsFlying, team),
+                    position => {
+                        var gridCell = PoolInstances.GridCellPool.GetObject();
+
+                        gridCell.vector = position;
+
+                        var isObstacle = map.IsObstacle(gridCell, IsFlying, team);
+
+                        PoolInstances.GridCellPool.ReturnObject(gridCell);
+
+                        return isObstacle;
+                    }, 
                     position =>
                     {
                         var surroundingPositions = PoolInstances.Vector2ListPool.GetObject();
@@ -241,7 +251,7 @@ namespace Pandora.Movement
                 gameObject.layer == Constants.FLYING_LAYER ||
                 !entity.IsRigid ||
                 engineEntity.IsEvading ||
-                lastEnemyTargeted.enemyCell.vector.y == map.bottomMapSizeY ||
+                lastEnemyTargeted?.enemyCell.vector.y == map.bottomMapSizeY ||
                 GetComponent<CombatBehaviour>().isAttacking;
 
             if (shouldNotCheckEvading) return;
