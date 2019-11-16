@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Pandora.Engine;
+using Pandora.Network;
 
 namespace Pandora.Command
 {
@@ -11,6 +12,7 @@ namespace Pandora.Command
             Debug.Log("[HalfOrc] Command invoked");
 
             var sourceEntity = GetComponent<EngineComponent>().Entity;
+            var sourceId = GetComponent<UnitIdComponent>();
             var sourceLife = GetComponent<LifeComponent>();
             var sourceTeam = GetComponent<TeamComponent>().team;
             var currentCell = sourceEntity.GetCurrentCell().vector;
@@ -27,16 +29,16 @@ namespace Pandora.Command
                 "HalfOrcWolf",
                 wolfCell,
                 sourceTeam,
-                System.Guid.NewGuid().ToString(),
-                System.DateTime.Now
+                sourceId.Id + "-wolf",
+                sourceEntity.Timestamp.AddSeconds(-1)
             );
 
             var riderSpawn = new UnitSpawn(
                 "HalfOrcRider",
                 riderCell,
                 sourceTeam,
-                System.Guid.NewGuid().ToString(),
-                System.DateTime.Now
+                sourceId.Id + "-rider",
+                sourceEntity.Timestamp
             );
                 
             sourceLife.Remove();
