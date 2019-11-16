@@ -22,6 +22,8 @@ namespace Pandora.Engine
         public DateTime Timestamp;
         public Vector2Int Target;
 
+        public bool IsEvading = false;
+
         public void SetSpeed(int engineUnitsPerSecond)
         {
             Speed = Engine.GetSpeed(engineUnitsPerSecond);
@@ -34,15 +36,20 @@ namespace Pandora.Engine
             Target.x += Engine.UnitsPerCell / 2;
             Target.y += Engine.UnitsPerCell / 2;
 
-            Path = Bresenham.GetEnumerator(Position, Target);
+            Path = FindPath(Position, Target);
         }
 
         public void ResetTarget()
         {
             if (Target != null && Path != null)
             {
-                Path = Bresenham.GetEnumerator(Position, Target);
+                Path = FindPath(Position, Target);
             }
+        }
+
+        public IEnumerator<Vector2Int> FindPath(Vector2Int position, Vector2Int target)
+        {
+            return Bresenham.GetEnumerator(position, target);
         }
 
         public void SetTarget(Vector2Int target)
@@ -52,7 +59,7 @@ namespace Pandora.Engine
             Target.x += Engine.UnitsPerCell / 2;
             Target.y += Engine.UnitsPerCell / 2;
 
-            Path = Bresenham.GetEnumerator(Position, Target);
+            Path = FindPath(Position, Target);
         }
 
         public void SetEmptyPath()
@@ -65,7 +72,7 @@ namespace Pandora.Engine
         // it doesn't follow. TODO: Maybe make it follow?
         public void SetTarget(EngineEntity entity)
         {
-            Path = Bresenham.GetEnumerator(Position, entity.Position);
+            Path = FindPath(Position, entity.Position);
         }
 
         public GridCell GetCurrentCell()

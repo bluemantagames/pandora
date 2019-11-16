@@ -4,12 +4,12 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public struct QueueItem
+    public struct QueueItem<T>
     {
-        public List<GridCell> points;
-        public HashSet<GridCell> pointsSet;
+        public List<T> points;
+        public HashSet<T> pointsSet;
 
-        public QueueItem(List<GridCell> _points, HashSet<GridCell> _pointsSet)
+        public QueueItem(List<T> _points, HashSet<T> _pointsSet)
         {
             points = _points;
             pointsSet = _pointsSet;

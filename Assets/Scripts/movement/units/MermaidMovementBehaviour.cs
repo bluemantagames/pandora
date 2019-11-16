@@ -83,6 +83,11 @@ namespace Pandora.Movement
                 return new MovementState(target, MovementStateEnum.TargetAcquired);
             }
 
+
+        }
+        public void ResetPath()
+        {
+
         }
     }
 }

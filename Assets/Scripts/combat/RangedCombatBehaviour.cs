@@ -53,9 +53,7 @@ namespace Pandora.Combat
                 SpawnProjectile();
 
                 isBackswinging = true;
-            }
-
-            if (timeSinceLastProjectile >= attackCooldownMs + backswingMs)
+            } else if (timeSinceLastProjectile >= attackCooldownMs + backswingMs)
             {
                 timeSinceLastProjectile = 0;
                 isBackswinging = false;

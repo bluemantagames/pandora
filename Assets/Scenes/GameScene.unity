@@ -1054,12 +1054,12 @@ RectTransform:
   - {fileID: 729465218}
   - {fileID: 3468028253456657581}
   - {fileID: 1854864548}
-  - {fileID: 497141819}
-  - {fileID: 2103882554}
   - {fileID: 933024278}
   - {fileID: 1827780735}
   - {fileID: 1791583712}
   - {fileID: 1787789240}
+  - {fileID: 2103882554}
+  - {fileID: 497141819}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3588,6 +3588,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968370716324617283, guid: 27421fb6b693f7049b807a5040ece799,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617283, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}

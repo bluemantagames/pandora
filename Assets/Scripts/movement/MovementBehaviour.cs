@@ -18,5 +18,6 @@ namespace Pandora.Movement
         int Speed { get; }
 
         MovementState Move();
+        void ResetPath();
     }
 }

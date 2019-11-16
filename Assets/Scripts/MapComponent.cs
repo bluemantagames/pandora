@@ -54,7 +54,7 @@ namespace Pandora
 
         public float cellHeight;
         public float cellWidth;
-        uint frameStep = 40, remainingStep = 0, timeSinceLastStep; // milliseconds
+        uint frameStep = 10, remainingStep = 0, timeSinceLastStep; // milliseconds
         public PandoraEngine engine;
         public GameObject textObject;
         List<GameObject> debug = new List<GameObject> { };
@@ -67,11 +67,18 @@ namespace Pandora
             BottomMiddleAggroOrigin, BottomMiddleAggroEnd,
             BottomRightAggroOrigin, BottomRightAggroEnd;
 
+        static MapComponent _instance = null;
+
         public static MapComponent Instance
         {
             get
             {
-                return GameObject.Find("Arena").GetComponent<MapComponent>();
+                if (_instance == null)
+                {
+                    _instance = GameObject.Find("Arena").GetComponent<MapComponent>();
+                }
+
+                return _instance;
             }
         }
 
@@ -94,7 +101,7 @@ namespace Pandora
             Screen.fullScreen = false;
             Screen.SetResolution(1080, 1920, false);
 
-            Application.targetFrameRate = -1;
+            Application.targetFrameRate = 100;
 
             var topArena = GameObject.Find("top_arena");
             var topArenaPosition = topArena.transform.position;
@@ -112,7 +119,6 @@ namespace Pandora
 
                 SpawnText(gridPosition, x.ToString());
             }
-
 
             for (var y = 0; y < mapSizeY; y++)
             {
@@ -239,8 +245,6 @@ namespace Pandora
             else
             {
                 var processTime = Math.Min(frameStep, remainingStep);
-
-                //Debug.Log($"Advancing {processTime}ms");
 
                 if (remainingStep != 0 && processTime != 0 && timeSinceLastStep >= frameStep)
                 {
