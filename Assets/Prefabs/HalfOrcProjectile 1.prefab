@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5709001385554795573}
   - component: {fileID: 4061167875481412185}
   m_Layer: 11
-  m_Name: MermaidProjectile
+  m_Name: HalfOrcProjectile 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,13 +72,13 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 11
-  m_Sprite: {fileID: -4367994768778996756, guid: 8780ab8a94b2daf48955cb2d01979bb4,
+  m_Sprite: {fileID: 8226749010321765264, guid: 8780ab8a94b2daf48955cb2d01979bb4,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.12, y: 0.71}
+  m_Size: {x: 0.35, y: 0.45}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -122,8 +122,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.08, y: 0.48}
-    newSize: {x: 0.12, y: 0.71}
+    oldSize: {x: 0.12, y: 0.71}
+    newSize: {x: 0.35, y: 0.45}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -144,4 +144,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3600
-  StartRotationDegrees: 180
