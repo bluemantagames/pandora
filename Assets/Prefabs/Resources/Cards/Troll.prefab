@@ -509,7 +509,7 @@ MonoBehaviour:
   lifeValue: 1000
   mask: {fileID: 270019911485846719}
   maxLife: 0
-  isDead: 0
+  IsDead: 0
 --- !u!95 &2040455867788288362
 Animator:
   serializedVersion: 3
@@ -542,9 +542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
-  LastState: 0
-  Speed: 400
-  map: {fileID: 0}
+  MovementSpeed: 400
 --- !u!114 &5654515141237051945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,6 +555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c8ba332ddd8ae44b1b9f93e2e3115a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebugMove: 0
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
@@ -591,7 +590,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.14112091, y: -0.26272964}
+  m_Offset: {x: -0.14112091, y: -0.31611633}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -602,7 +601,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.7512665, y: 0.435524}
+  m_Size: {x: 0.5251312, y: 0.3287506}
   m_EdgeRadius: 0
 --- !u!114 &1585679712934027448
 MonoBehaviour:
