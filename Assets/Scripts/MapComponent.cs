@@ -304,7 +304,7 @@ namespace Pandora
         {
             Debug.Log($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY} Team {spawn.Team}");
 
-            var card = Resources.Load($"Cards/{spawn.UnitName}") as GameObject;
+            var card = Resources.Load($"Units/{spawn.UnitName}") as GameObject;
 
             if (spawn.Team == TeamComponent.topTeam)
             { // flip Y if top team
