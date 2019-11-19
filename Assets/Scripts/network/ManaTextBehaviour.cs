@@ -17,7 +17,7 @@ public class ManaTextBehaviour : MonoBehaviour
 
     void UpdateText()
     {
-        var manaValue = ManaSingleton.manaValue;
+        var manaValue = Mathf.FloorToInt(ManaSingleton.manaValue);
         var maxMana = ManaSingleton.maxMana;
 
         GetComponent<Text>().text = $"Mana: {manaValue} / {maxMana}";

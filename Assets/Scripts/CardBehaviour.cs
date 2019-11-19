@@ -7,6 +7,7 @@ using Pandora.Movement;
 using Pandora.Spell;
 using Pandora.Network;
 using Pandora.Deck;
+using Pandora.Deck.UI;
 
 namespace Pandora
 {
@@ -23,10 +24,43 @@ namespace Pandora
         public int RequiredMana = 0;
         public bool IsAquatic = false;
 
+        bool disabled = false;
+
+        public bool IsUI
+        {
+            get => _isUI;
+
+            set
+            {
+                _isUI = value;
+
+                // Disable mana image on UI
+                if (value)
+                {
+                    var menuCardBehaviour = gameObject.AddComponent<MenuCardBehaviour>();
+
+                    menuCardBehaviour.Canvas = GameObject.Find("Canvas");
+
+                    disabled = true;
+
+                    foreach (Transform child in transform)
+                    {
+                        Destroy(child.gameObject);
+
+                    }
+
+                    Destroy(this);
+                }
+            }
+        }
+
         bool canBeSpawned = false;
+        bool _isUI = false;
 
         private void CleanUpDrag(bool returnToPosition)
         {
+            if (disabled) return;
+
             if (map != null)
             {
                 map.DestroyPuppet();
@@ -45,6 +79,8 @@ namespace Pandora
 
         public void OnDrag(PointerEventData eventData)
         {
+            if (disabled) return;
+
             transform.position = Input.mousePosition;
 
             SetChildrenActive(false);
@@ -72,6 +108,8 @@ namespace Pandora
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (disabled) return;
+
             var movement = Card.GetComponent<MovementBehaviour>();
             var projectileSpell = Card.GetComponent<ProjectileSpellBehaviour>();
 
@@ -107,6 +145,8 @@ namespace Pandora
 
         void Update()
         {
+            if (disabled) return;
+
             if (!originalPosition.HasValue)
             {
                 originalPosition = transform.position;
@@ -115,11 +155,15 @@ namespace Pandora
 
         void OnApplicationQuit()
         {
+            if (disabled) return;
+
             NetworkControllerSingleton.instance.Stop();
         }
 
         void SetChildrenActive(bool active)
         {
+            if (disabled) return;
+
             foreach (Transform child in transform)
             {
                 var image = child.GetComponent<Image>();
