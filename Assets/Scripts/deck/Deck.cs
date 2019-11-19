@@ -8,7 +8,7 @@ namespace Pandora.Deck {
         EventBus<DeckEvent> EventBus { get; }
 
         /// <summary>Hand size</summary>
-        uint HandSize { get; }
+        int HandSize { get; }
         
         /// <summary>Deck currently played</summary>
         List<Card> Deck { get; }

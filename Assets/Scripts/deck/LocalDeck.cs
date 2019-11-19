@@ -11,7 +11,7 @@ namespace Pandora.Deck
         static LocalDeck _instance = null;
         bool mulliganAsked = false;
 
-        Stack<Card> DeckStack = new Stack<Card>();
+        Queue<Card> DeckQueue = new Queue<Card>();
         List<Card> _deck;
 
         public List<Card> Deck
@@ -45,7 +45,7 @@ namespace Pandora.Deck
                     }
                     else
                     {
-                        DeckStack.Push(shuffledDeck[idx]);
+                        DeckQueue.Enqueue(shuffledDeck[idx]);
                     }
                 }
 
@@ -59,7 +59,7 @@ namespace Pandora.Deck
             }
         }
 
-        public uint HandSize { get => 4; }
+        public int HandSize { get => 4; }
 
         public EventBus<DeckEvent> EventBus
         {
@@ -95,14 +95,15 @@ namespace Pandora.Deck
 
         public void PlayCard(Card card)
         {
-            DeckStack.Push(card);
+            DeckQueue.Enqueue(card);
 
             EventBus.Dispatch(new CardPlayed(card.Name));
+            DrawCard();
         }
 
         public void DrawCard()
         {
-            EventBus.Dispatch(new CardDrawn(DeckStack.Pop().Name));
+            EventBus.Dispatch(new CardDrawn(DeckQueue.Dequeue().Name));
         }
     }
 }

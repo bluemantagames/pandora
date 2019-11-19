@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using Pandora.Movement;
 using Pandora.Spell;
 using Pandora.Network;
+using Pandora.Deck;
 
 namespace Pandora
 {
@@ -17,6 +18,7 @@ namespace Pandora
         public GameObject Puppet;
         public GameObject Card;
         public int Team = 1;
+        public string UnitName;
         public string CardName;
         public int RequiredMana = 0;
         public bool IsAquatic = false;
@@ -33,7 +35,8 @@ namespace Pandora
 
             GetComponent<Image>().enabled = true;
 
-            if (returnToPosition) {
+            if (returnToPosition)
+            {
                 transform.position = originalPosition.Value;
 
                 SetChildrenActive(true);
@@ -77,13 +80,27 @@ namespace Pandora
                 if (movement != null) movement.map = map;
                 if (projectileSpell != null) projectileSpell.map = map;
 
-                map.SpawnCard(CardName, Team, RequiredMana);
+                map.SpawnCard(UnitName, Team, RequiredMana);
+
+                LocalDeck.Instance.PlayCard(new Card(CardName));
+
+                map.DestroyPuppet();
+
+                GetComponent<Image>().enabled = false;
+
+                SetChildrenActive(false);
+
+                Destroy(this);
+            }
+            else
+            {
+                CleanUpDrag(true);
             }
 
-            CleanUpDrag(true);
         }
 
-        void Start() {
+        void Start()
+        {
             GetComponentInChildren<Text>().text = (RequiredMana / 10).ToString();
         }
 
@@ -101,8 +118,17 @@ namespace Pandora
             NetworkControllerSingleton.instance.Stop();
         }
 
-        void SetChildrenActive(bool active) {
-            foreach (Transform child in transform) {
+        void SetChildrenActive(bool active)
+        {
+            foreach (Transform child in transform)
+            {
+                var image = child.GetComponent<Image>();
+
+                if (image != null)
+                {
+                    image.enabled = active;
+                }
+
                 child.gameObject.SetActive(active);
             }
         }
