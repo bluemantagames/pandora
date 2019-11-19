@@ -13,7 +13,7 @@ namespace Pandora.Events {
     /// in all clients)
     /// </summary>
     public class EventBus<T> {
-        Dictionary<Type, List<EventSubscriber<T>>> subscribers;
+        Dictionary<Type, List<EventSubscriber<T>>> subscribers = new Dictionary<Type, List<EventSubscriber<T>>> {};
 
         /// <summary>Subscribes to events of type `A`</summary>
         public void Subscribe<A>(EventSubscriber<T> subscriber) {
