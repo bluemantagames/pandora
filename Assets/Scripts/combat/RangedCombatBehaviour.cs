@@ -56,6 +56,7 @@ namespace Pandora.Combat
             } else if (timeSinceLastProjectile >= attackCooldownMs + backswingMs)
             {
                 timeSinceLastProjectile = 0;
+
                 isBackswinging = false;
             }
         }
