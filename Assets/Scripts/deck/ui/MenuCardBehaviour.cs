@@ -13,7 +13,7 @@ namespace Pandora.Deck.UI
         public GameObject Canvas;
         public string CardName;
 
-        void Start()
+        public void Load()
         {
             originalParent = transform.parent.gameObject;
             originalPosition = transform.localPosition;
@@ -22,6 +22,7 @@ namespace Pandora.Deck.UI
 
         public void Reset()
         {
+            Debug.Log($"Resetting {gameObject}");
 
             gameObject.transform.SetParent(originalParent.transform);
 
@@ -73,8 +74,6 @@ namespace Pandora.Deck.UI
 
             if (deckSpot != null)
             {
-                Debug.Log($"Found {deckSpot}");
-
                 SetSpot(deckSpot);
             }
             else

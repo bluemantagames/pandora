@@ -2,10 +2,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Pandora.Deck;
 using Pandora.Deck.UI;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Pandora.Network {
     public class TestMatchmakingButton: MonoBehaviour {
         public bool GameSceneToLoad = false;
+        List<Card> deck;
 
         public void Connect() {
             Debug.Log("Connecting");
@@ -14,9 +17,18 @@ namespace Pandora.Network {
 
             NetworkControllerSingleton.instance.matchStartEvent.AddListener(LoadGameScene);
 
-            var deck = transform.parent.GetComponentInChildren<MenuCardsParentBehaviour>().Deck;
+            deck = transform.parent.GetComponentInChildren<DeckSpotParentBehaviour>().Deck;
 
-            LocalDeck.Instance.Deck = deck;
+            var deckWrapper = ScriptableObject.CreateInstance<DeckWrapper>();
+
+            deckWrapper.Cards = 
+                (from card in deck
+                select card.Name).ToList();
+
+            var serializedWrapper = JsonUtility.ToJson(deckWrapper);
+
+            PlayerPrefs.SetString("DeckWrapper", serializedWrapper);
+            PlayerPrefs.Save();
         }
 
         public void StartMatch() {
@@ -32,6 +44,8 @@ namespace Pandora.Network {
                 SceneManager.LoadScene("GameScene");
 
                 GameSceneToLoad = false;
+
+                LocalDeck.Instance.Deck = deck;
             }
         }
 

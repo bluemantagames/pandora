@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Pandora.Deck {
-    public class DeckWrapper {
-        List<Card> cards;
+    public class DeckWrapper: ScriptableObject {
+        public List<string> Cards;
     }
 }

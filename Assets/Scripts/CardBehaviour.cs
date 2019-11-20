@@ -40,13 +40,15 @@ namespace Pandora
                     var menuCardBehaviour = gameObject.AddComponent<MenuCardBehaviour>();
 
                     menuCardBehaviour.Canvas = GameObject.Find("Canvas");
+                    menuCardBehaviour.CardName = CardName;
+
+                    menuCardBehaviour.Load();
 
                     disabled = true;
 
                     foreach (Transform child in transform)
                     {
                         Destroy(child.gameObject);
-
                     }
 
                     Destroy(this);

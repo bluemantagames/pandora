@@ -1,37 +1,25 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Pandora.Deck.UI
 {
     public class MenuCardsParentBehaviour : MonoBehaviour
     {
-        public List<Card> Deck
-        {
-            get
-            {
-                var deck = new List<Card> { };
-
-                foreach (Transform child in transform)
-                {
-                    var card = child.GetComponent<DeckSpotBehaviour>()?.Card;
-
-                    if (card != null)
-                    {
-                        deck.Add(card);
-                    }
-                }
-
-                return deck;
-            }
-        }
-
-        void Start()
+        void Awake()
         {
             foreach (Transform child in transform)
             {
                 child.GetComponent<CardBehaviour>().IsUI = true;
             }
+
+            GameObject.Find("Canvas").GetComponentInChildren<DeckSpotParentBehaviour>().LoadSavedDeck();
         }
+
+        public MenuCardBehaviour FindCard(string cardName) =>
+            GetComponentsInChildren<MenuCardBehaviour>()
+                .ToList()
+                .Find(c => c.CardName == cardName);
     }
 
 }
