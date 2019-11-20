@@ -29,6 +29,8 @@ namespace Pandora.Network {
 
             PlayerPrefs.SetString("DeckWrapper", serializedWrapper);
             PlayerPrefs.Save();
+
+            HandBehaviour.Deck = deck;
         }
 
         public void StartMatch() {
@@ -44,8 +46,6 @@ namespace Pandora.Network {
                 SceneManager.LoadScene("GameScene");
 
                 GameSceneToLoad = false;
-
-                LocalDeck.Instance.Deck = deck;
             }
         }
 

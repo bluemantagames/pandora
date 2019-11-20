@@ -10,6 +10,13 @@ namespace Pandora.Deck
 {
     public class HandBehaviour : MonoBehaviour
     {
+        /// <summary>
+        /// This is set before loading the GameScene
+        ///
+        /// It will be then loaded into the deck implementation by `Start()`
+        ///</summary>
+        public static List<Card> Deck;
+
         Animator animator;
 
         List<PlayableGraph> graphs = new List<PlayableGraph> { };
@@ -31,20 +38,6 @@ namespace Pandora.Deck
             rectTransform = GetComponent<RectTransform>();
             animator = GetComponent<Animator>();
 
-            var cardNames = new List<string> {
-                "Bard",
-                "Ranger",
-                "Clerics",
-                "Cockatrice",
-                "Fireball",
-                "Harpies",
-                "Mermaids",
-                "Troll"
-            };
-
-            var cards =
-                from card in cardNames
-                select new Card(card);
 
             deck = LocalDeck.Instance;
 
@@ -53,7 +46,31 @@ namespace Pandora.Deck
 
             if (deck is LocalDeck localDeck)
             {
-                localDeck.Deck = cards.ToList();
+                List<Card> cards;
+
+                if (Deck == null)
+                {
+                    var cardNames = new List<string> {
+                        "Bard",
+                        "Ranger",
+                        "Clerics",
+                        "Cockatrice",
+                        "Fireball",
+                        "Harpies",
+                        "Mermaids",
+                        "Troll"
+                    };
+
+                    cards =
+                        (from card in cardNames
+                         select new Card(card)).ToList();
+                }
+                else
+                {
+                    cards = Deck;
+                }
+
+                localDeck.Deck = cards;
             }
         }
 
@@ -75,15 +92,15 @@ namespace Pandora.Deck
             var yCurve = AnimationCurve.EaseInOut(0f, cardTransform.anchoredPosition.y, EaseOutTime, targetRectTransform.anchoredPosition.y);
 
             var clip = new AnimationClip();
+            clip.legacy = true;
 
             clip.SetCurve("", typeof(RectTransform), "m_AnchoredPosition.x", xCurve);
             clip.SetCurve("", typeof(RectTransform), "m_AnchoredPosition.y", yCurve);
 
-            PlayableGraph graph;
+            var animation = card.GetComponent<Animation>();
 
-            AnimationPlayableUtilities.PlayClip(card.GetComponent<Animator>(), clip, out graph);
-
-            graphs.Add(graph);
+            animation.AddClip(clip, clip.name);
+            animation.Play(clip.name);
         }
 
         void CardPlayed(DeckEvent ev)

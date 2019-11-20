@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1069214256245577544}
   - component: {fileID: 1069214256245577551}
   - component: {fileID: 1069214256245577550}
-  - component: {fileID: 574592095811006073}
+  - component: {fileID: 7099064934448548329}
   m_Layer: 5
   m_Name: BaseCard
   m_TagString: Untagged
@@ -91,28 +91,25 @@ MonoBehaviour:
   Puppet: {fileID: 0}
   Card: {fileID: 0}
   Team: 1
+  UnitName: 
   CardName: 
   RequiredMana: 0
   IsAquatic: 0
---- !u!95 &574592095811006073
-Animator:
-  serializedVersion: 3
+--- !u!111 &7099064934448548329
+Animation:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1069214256245577548}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &2646395196047893133
 GameObject:
   m_ObjectHideFlags: 0
