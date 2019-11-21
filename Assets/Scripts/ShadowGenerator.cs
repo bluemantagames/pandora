@@ -17,10 +17,13 @@ public class ShadowGenerator : MonoBehaviour
 
         var spawnerBehaviour = Spawner.GetComponent<SpawnerBehaviour>();
         var positions = spawnerBehaviour.Positions;
+        
+        var cellH = MapComponent.Instance.cellHeight;
+        var cellW = MapComponent.Instance.cellWidth;
 
         foreach(var position in positions) {
             var newShadow = Instantiate(SingleShadow);
-            var newPosition = new Vector3(position.x, position.y, 0);
+            var newPosition = new Vector3(position.x * cellW, position.y * cellH, 0);
 
             newShadow.transform.parent = gameObject.transform;
             newShadow.transform.localPosition = newPosition;
