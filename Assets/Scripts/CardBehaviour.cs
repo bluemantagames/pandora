@@ -23,6 +23,7 @@ namespace Pandora
         public string CardName;
         public int RequiredMana = 0;
         public bool IsAquatic = false;
+        public bool FixedInGame = false;
 
         bool disabled = false;
 
@@ -35,6 +36,7 @@ namespace Pandora
                 _isUI = value;
 
                 // Disable mana image on UI
+                // and swap this component for MenuCardBehaviour
                 if (value)
                 {
                     var menuCardBehaviour = gameObject.AddComponent<MenuCardBehaviour>();
@@ -126,11 +128,17 @@ namespace Pandora
 
                 map.DestroyPuppet();
 
-                GetComponent<Image>().enabled = false;
+                if (!FixedInGame)
+                {
+                    GetComponent<Image>().enabled = false;
 
-                SetChildrenActive(false);
+                    SetChildrenActive(false);
 
-                Destroy(this);
+                    Destroy(this);
+                } else {
+                    CleanUpDrag(true);
+                }
+
             }
             else
             {

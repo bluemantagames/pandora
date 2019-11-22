@@ -151,8 +151,6 @@ namespace Pandora.Movement
             if (currentPath == null || currentPath.Contains(currentPosition))
             {
                 AdvancePosition(currentPosition);
-
-                Debug.Log($"Found path ({gameObject.name}): {string.Join(",", currentPath)}, am in {currentPosition}");
             }
 
             return new MovementState(null, MovementStateEnum.Moving);
@@ -267,6 +265,8 @@ namespace Pandora.Movement
                 Debug.Log("Finally evading");
 
                 engineEntity.IsEvading = true;
+                engineEntity.EvadedUnit = entity;
+
                 currentPath = null;
 
                 lastCollisionPosition = null;

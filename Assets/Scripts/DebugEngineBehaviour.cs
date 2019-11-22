@@ -1,5 +1,6 @@
 using UnityEngine;
 using Pandora.Engine;
+using Pandora.Movement;
 
 namespace Pandora
 {
@@ -15,6 +16,7 @@ namespace Pandora
 
         public void DebugEngine()
         {
+            /*
             Debug.Log("Debugging");
 
             foreach (Transform entity in MapComponent.Instance.gameObject.transform)
@@ -25,7 +27,14 @@ namespace Pandora
                 {
                     component.Entity.PrintDebugInfo();
                 }
-            }
+            }*/
+
+            var unit = MapComponent.Instance.gameObject.GetComponentInChildren<MovementComponent>().gameObject;
+            var engineEntity = unit.GetComponent<EngineComponent>().Entity;
+
+            engineEntity.IsEvading = true;
+
+            engineEntity.SetTarget(new GridCell(20, 20));
         }
     }
 

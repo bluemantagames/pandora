@@ -3,21 +3,30 @@
     using System;
     using System.Collections.Generic;
     using UnityEngine;
+    using Priority_Queue;
 
-    public struct QueueItem<T>
+    public class QueueItem<T>: FastPriorityQueueNode
     {
-        public List<T> points;
-        public HashSet<T> pointsSet;
+        public T Item;
 
-        public QueueItem(List<T> _points, HashSet<T> _pointsSet)
-        {
-            points = _points;
-            pointsSet = _pointsSet;
+        public QueueItem() {}
+
+        public QueueItem(T item) {
+            this.Item = item;
         }
 
         public override string ToString()
         {
-            return string.Join(",", points);
+            return Item.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1156408058;
+
+            hashCode = hashCode * -1521134295 + EqualityComparer<T>.Default.GetHashCode(Item);
+
+            return hashCode;
         }
     }
 }

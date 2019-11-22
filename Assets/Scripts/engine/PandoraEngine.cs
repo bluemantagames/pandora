@@ -1,5 +1,6 @@
 using Pandora.Pool;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -50,7 +51,7 @@ namespace Pandora.Engine
 
             PoolInstances.BoxBoundsPool.MaximumPoolSize = 1000;
 
-            astar.DebugPathfinding = true;
+            astar.DebugPathfinding = false;
         }
 
         public void Process(uint msLapsed)
@@ -123,27 +124,36 @@ namespace Pandora.Engine
         public int GetSpeed(int engineUnitsPerSecond) =>
             Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * tickTime);
 
-        public IEnumerator<Vector2Int> FindPath(EngineEntity entity, Vector2Int target) =>
-            astar.FindPath(
+        public IEnumerator<Vector2Int> FindPath(EngineEntity entity, Vector2Int target)
+        {
+            /*var entityBounds =
+                from engineEntity in entities
+                select (entity: engineEntity, bounds: GetPooledEntityBounds(engineEntity));*/
+
+            var entityBounds = (entity.EvadedUnit != null) ? GetPooledEntityBounds(entity.EvadedUnit) : null;
+
+            var path = astar.FindPath(
                 entity.Position,
                 target,
                 position =>
                 {
                     var isCollision = false;
 
-                    foreach (var engineEntity in entities)
-                    {
-                        var bound = GetPooledEntityBounds(engineEntity);
+                    if (entityBounds != null) {
+                        isCollision = entityBounds.Contains(position);
+                    }
 
+                    /*
+                    foreach (var (engineEntity, bounds) in entityBounds)
+                    {
                         isCollision =
+                            engineEntity != entity &&
                             !engineEntity.IsStructure &&
-                            bound.Contains(position) &&
+                            bounds.Contains(position) &&
                             CanCollide(engineEntity, entity);
 
-                        PoolInstances.BoxBoundsPool.ReturnObject(bound);
-
                         if (isCollision) break;
-                    }
+                    }*/
 
                     return isCollision;
                 },
@@ -168,6 +178,14 @@ namespace Pandora.Engine
                 },
                 (a, b) => Vector2.Distance(a, b)
             ).GetEnumerator();
+
+            /*foreach (var (_, bound) in entityBounds)
+            {
+                PoolInstances.BoxBoundsPool.ReturnObject(bound);
+            }*/
+
+            return path;
+        }
 
         public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, GridCell position, bool isRigid, DateTime? timestamp)
         {
@@ -345,14 +363,14 @@ namespace Pandora.Engine
                         direction.y = 1;
                     }
 
-                    // if units are trying to evade each other, don't let them push each other vertically
+                    /*// if units are trying to evade each other, don't let them push each other vertically
                     if ((moved.IsEvading || unmoved.IsEvading) && direction.x == 0)
                     {
                         direction.x = 1;
 
                         moved.IsEvading = false;
                         unmoved.IsEvading = false;
-                    }
+                    }*/
 
                     if (moved.IsRigid && unmoved.IsRigid)
                     {

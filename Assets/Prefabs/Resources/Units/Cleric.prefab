@@ -36,7 +36,7 @@ Transform:
   m_GameObject: {fileID: 1060352442105845753}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.8662, y: -8.042, z: 2}
-  m_LocalScale: {x: 0.44864002, y: 0.44864002, z: 0.5608}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_Children:
   - {fileID: 1277369349267820447}
   - {fileID: 1849743150493558926}
@@ -140,7 +140,7 @@ MonoBehaviour:
   lifeValue: 100
   mask: {fileID: 9015842578933355138}
   maxLife: 0
-  isDead: 0
+  IsDead: 0
 --- !u!95 &7129443875767093079
 Animator:
   serializedVersion: 3
@@ -173,9 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
-  LastState: 0
-  Speed: 400
-  map: {fileID: 0}
+  MovementSpeed: 400
 --- !u!114 &3519887656195453972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c8ba332ddd8ae44b1b9f93e2e3115a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebugMove: 0
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}

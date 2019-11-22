@@ -23,6 +23,7 @@ namespace Pandora.Engine
         public Vector2Int Target;
 
         public bool IsEvading = false;
+        public EngineEntity EvadedUnit = null;
 
         public void SetSpeed(int engineUnitsPerSecond)
         {
@@ -46,10 +47,17 @@ namespace Pandora.Engine
                 Path = FindPath(Position, Target);
             }
         }
-
+ 
         public IEnumerator<Vector2Int> FindPath(Vector2Int position, Vector2Int target)
         {
-            return Bresenham.GetEnumerator(position, target);
+            if (IsEvading)
+            {
+                return Engine.FindPath(this, target);
+            }
+            else
+            {
+                return Bresenham.GetEnumerator(position, target);
+            }
         }
 
         public void SetTarget(Vector2Int target)

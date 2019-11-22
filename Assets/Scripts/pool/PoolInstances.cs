@@ -59,10 +59,7 @@ namespace Pandora.Pool
 
         public static ConcurrentObjectPool<QueueItem<Vector2>> Vector2QueueItemPool = new ConcurrentObjectPool<QueueItem<Vector2>>(
             createFunction: () => new QueueItem<Vector2>(),
-            resetFunction: v => {
-                v.points = new List<Vector2> {};
-                v.pointsSet = new HashSet<Vector2> {};
-            },
+            resetFunction: v => {},
             profilingEnabled: false
         );
 
@@ -82,10 +79,7 @@ namespace Pandora.Pool
 
         public static ConcurrentObjectPool<QueueItem<Vector2Int>> Vector2IntQueueItemPool = new ConcurrentObjectPool<QueueItem<Vector2Int>>(
             createFunction: () => new QueueItem<Vector2Int>(),
-            resetFunction: v => {
-                v.points = new List<Vector2Int> {};
-                v.pointsSet = new HashSet<Vector2Int> {};
-            },
+            resetFunction: v => {},
             profilingEnabled: false
         );
 
