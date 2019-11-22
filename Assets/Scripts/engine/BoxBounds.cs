@@ -45,6 +45,18 @@ namespace Pandora.Engine
                 box.Contains(LowerRight);
         }
 
+        public void Translate(Vector2Int center) {
+            var halfWidth = Width / 2;
+            var halfHeight = Height / 2;
+
+            Center = center;
+
+            UpperRight = Center + new Vector2Int(halfWidth, halfHeight);
+            UpperLeft = Center + new Vector2Int(-halfWidth, halfHeight);
+            LowerRight = Center + new Vector2Int(halfWidth, -halfHeight);
+            LowerLeft = Center + new Vector2Int(-halfWidth, -halfHeight);
+        }
+
         public BoxBounds Clear() {
             return this;
         }

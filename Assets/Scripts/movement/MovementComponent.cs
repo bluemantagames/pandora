@@ -171,7 +171,14 @@ namespace Pandora.Movement
                 return;
             }
 
-            currentTarget = currentPath.First();
+            if (engineEntity.IsEvading)
+            {
+                currentTarget = targetEnemy.enemyCell;
+            }
+            else
+            {
+                currentTarget = currentPath.First();
+            }
 
             engineEntity.SetTarget(currentTarget);
 
@@ -188,7 +195,8 @@ namespace Pandora.Movement
                 astar.FindPath(
                     engineEntity.GetCurrentCell().vector,
                     end.vector,
-                    position => {
+                    position =>
+                    {
                         var gridCell = PoolInstances.GridCellPool.GetObject();
 
                         gridCell.vector = position;
@@ -198,7 +206,7 @@ namespace Pandora.Movement
                         PoolInstances.GridCellPool.ReturnObject(gridCell);
 
                         return isObstacle;
-                    }, 
+                    },
                     position =>
                     {
                         var surroundingPositions = PoolInstances.Vector2ListPool.GetObject();

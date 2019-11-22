@@ -99,9 +99,7 @@ namespace Pandora.Engine
             // get the last item in the queue
             while (!(item = evaluatingPosition.Item).Equals(end) && !pathFound)
             {
-                var passSt = new System.Diagnostics.Stopwatch();
-
-                passSt.Start();
+                StartStopwatch();
 
                 if (item.Equals(end))
                 {
@@ -156,35 +154,20 @@ namespace Pandora.Engine
                         cameFrom[queueItem] = evaluatingPosition;
                         gScore[advance] = advanceGScore;
                         fScore[advance] = advanceGScore + distance(advance, end);
-                    }
 
-                    if (priorityQueue.Contains(queueItem))
-                    {
-                        priorityQueue.UpdatePriority(queueItem, fScore[advance]);
-                    }
-                    else
-                    {
                         priorityQueue.Enqueue(queueItem, fScore[advance]);
                     }
-
                 }
 
                 nodeContainerPool?.ReturnObject(advances);
 
-                passSt.Stop();
-
-                if (DebugPathfinding)
-                {
-                    Debug.Log($"Pass has taken: {passSt.Elapsed}");
-
-                    Debug.Break();
-                }
+                LogStopwatch("Pass");
 
                 pass += 1;
 
                 if (pass > 100000)
                 {
-                    Debug.LogWarning($"Short circuiting after 5000 passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} advances)");
+                    Debug.LogWarning($"Short circuiting after 100000 passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} advances)");
                     Debug.LogWarning("Best paths found are");
                     Debug.LogWarning($"{priorityQueue.Dequeue()}");
                     Debug.LogWarning($"{priorityQueue.Dequeue()}");

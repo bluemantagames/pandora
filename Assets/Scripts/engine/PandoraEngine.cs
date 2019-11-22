@@ -50,6 +50,7 @@ namespace Pandora.Engine
             riverBounds = GetPooledEntityBounds(riverCenterEntity);
 
             PoolInstances.BoxBoundsPool.MaximumPoolSize = 1000;
+            PoolInstances.Vector2IntQueueItemPool.MaximumPoolSize = 5000;
 
             astar.DebugPathfinding = false;
         }
@@ -126,34 +127,24 @@ namespace Pandora.Engine
 
         public IEnumerator<Vector2Int> FindPath(EngineEntity entity, Vector2Int target)
         {
-            /*var entityBounds =
-                from engineEntity in entities
-                select (entity: engineEntity, bounds: GetPooledEntityBounds(engineEntity));*/
-
-            var entityBounds = (entity.EvadedUnit != null) ? GetPooledEntityBounds(entity.EvadedUnit) : null;
+            var entityBounds = GetPooledEntityBounds(entity);
+            var obstacleEntityBounds = (entity.EvadedUnit != null) ? GetPooledEntityBounds(entity.EvadedUnit) : null;
 
             var path = astar.FindPath(
                 entity.Position,
                 target,
                 position =>
                 {
+                    if (position == target) return false;
+
+                    entityBounds.Translate(position);
+
                     var isCollision = false;
 
-                    if (entityBounds != null) {
-                        isCollision = entityBounds.Contains(position);
-                    }
-
-                    /*
-                    foreach (var (engineEntity, bounds) in entityBounds)
+                    if (obstacleEntityBounds != null)
                     {
-                        isCollision =
-                            engineEntity != entity &&
-                            !engineEntity.IsStructure &&
-                            bounds.Contains(position) &&
-                            CanCollide(engineEntity, entity);
-
-                        if (isCollision) break;
-                    }*/
+                        isCollision = entityBounds.Collides(obstacleEntityBounds);
+                    }
 
                     return isCollision;
                 },
@@ -179,10 +170,14 @@ namespace Pandora.Engine
                 (a, b) => Vector2.Distance(a, b)
             ).GetEnumerator();
 
-            /*foreach (var (_, bound) in entityBounds)
+            if (obstacleEntityBounds != null)
             {
-                PoolInstances.BoxBoundsPool.ReturnObject(bound);
-            }*/
+                ReturnBounds(obstacleEntityBounds);
+            }
+
+            ReturnBounds(obstacleEntityBounds);
+
+            entity.IsEvading = false;
 
             return path;
         }
