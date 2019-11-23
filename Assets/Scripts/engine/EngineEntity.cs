@@ -68,8 +68,10 @@ namespace Pandora.Engine
         {
             Target = target;
 
-            Target.x += Engine.UnitsPerCell / 2;
-            Target.y += Engine.UnitsPerCell / 2;
+            if (!IsEvading) {
+                Target.x += Engine.UnitsPerCell / 2;
+                Target.y += Engine.UnitsPerCell / 2;
+            }
 
             Path = FindPath(Position, Target);
         }

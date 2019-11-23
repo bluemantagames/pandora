@@ -5,7 +5,7 @@
     using UnityEngine;
     using Priority_Queue;
 
-    public class QueueItem<T> where T: IEquatable<T>
+    public class QueueItem<T>: StablePriorityQueueNode where T: IEquatable<T>
     {
         public T Item;
 

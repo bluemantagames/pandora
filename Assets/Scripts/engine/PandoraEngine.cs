@@ -172,7 +172,10 @@ namespace Pandora.Engine
 
                     return surroundingPositions;
                 },
-                (a, b) => Vector2.Distance(a, b),
+                // the "+ a.x" part skewes pathfinding towards left-leaning paths, 
+                // (distance will be bigger if x is bigger)
+                // letting the algorithm converge faster
+                (a, b) => Vector2.Distance(a, b) + a.x,
                 true
             );
 

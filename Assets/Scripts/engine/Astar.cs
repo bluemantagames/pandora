@@ -17,7 +17,7 @@ namespace Pandora.Engine
         ConcurrentObjectPool<T> nodePool;
         ConcurrentObjectPool<List<T>> nodeContainerPool;
 
-        SimplePriorityQueue<QueueItem<T>> priorityQueue = new SimplePriorityQueue<QueueItem<T>>();
+        StablePriorityQueue<QueueItem<T>> priorityQueue = new StablePriorityQueue<QueueItem<T>>(1000000);
 
         Dictionary<QueueItem<T>, QueueItem<T>> cameFrom = new Dictionary<QueueItem<T>, QueueItem<T>>(100000);
         Dictionary<T, QueueItem<T>> queueItems = new Dictionary<T, QueueItem<T>>(100000);
@@ -218,6 +218,9 @@ namespace Pandora.Engine
                     dequeueCandidate = priorityQueue.Dequeue();
                 }
 
+                // put back the first node with differing priority
+                priorityQueue.Enqueue(dequeueCandidate, fScore[dequeueCandidate.Item]);
+
                 evaluatingPosition = dequeueCandidates.Last();
 
                 foreach (var queueItem in dequeueCandidates)
@@ -240,6 +243,8 @@ namespace Pandora.Engine
 
             foreach (var queueItem in cameFrom.Keys)
             {
+                priorityQueue.ResetNode(queueItem);
+
                 nodeQueueItemPool.ReturnObject(queueItem);
             }
 
