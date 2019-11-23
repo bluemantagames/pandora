@@ -54,9 +54,13 @@ namespace Pandora.Command
 
             if (groupComponent != null) {
                 foreach (var gameObject in groupComponent.Objects) {
+                    var commandListener = gameObject.GetComponentInChildren<CommandListener>();
+                    
                     Debug.Log($"Using {gameObject} {string.Join(", ", groupComponent.Objects)}");
 
-                    gameObject.GetComponentInChildren<CommandListener>().Used = true;
+                    if (commandListener != null) {
+                        commandListener.Used = true;
+                    }
                 }
             }
         }
