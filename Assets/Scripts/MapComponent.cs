@@ -37,7 +37,7 @@ namespace Pandora
             {
                 if (_riverPositions.Count == 0)
                 {
-                    var riverY = 13f;
+                    var riverY = 13;
 
                     for (var x = 0; x < bottomMapSize.x; x++)
                     {
@@ -115,14 +115,14 @@ namespace Pandora
 
             for (var x = 0; x < mapSizeX; x++)
             {
-                var gridPosition = GridCellToWorldPosition(new GridCell(new Vector2(x, mapSizeY + 1)));
+                var gridPosition = GridCellToWorldPosition(new GridCell(new Vector2Int(x, mapSizeY + 1)));
 
                 SpawnText(gridPosition, x.ToString());
             }
 
             for (var y = 0; y < mapSizeY; y++)
             {
-                var gridPosition = GridCellToWorldPosition(new GridCell(new Vector2(-1, y)));
+                var gridPosition = GridCellToWorldPosition(new GridCell(new Vector2Int(-1, y)));
 
                 SpawnText(gridPosition, y.ToString());
             }
@@ -180,9 +180,9 @@ namespace Pandora
                     position.y - transform.position.y
                 );
 
-            Vector2 cellPosition = new Vector2(
-                Mathf.Floor(gridPosition.x / cellWidth),
-                Mathf.Floor(gridPosition.y / cellHeight)
+            var cellPosition = new Vector2Int(
+                Mathf.FloorToInt(gridPosition.x / cellWidth),
+                Mathf.FloorToInt(gridPosition.y / cellHeight)
             );
 
             return new GridCell(cellPosition);
@@ -279,8 +279,8 @@ namespace Pandora
                 new SpawnMessage
                 {
                     unitName = cardName,
-                    cellX = (int)Math.Floor(mapCell.x),
-                    cellY = (int)Math.Floor(mapCell.y),
+                    cellX = mapCell.x,
+                    cellY = mapCell.y,
                     team = TeamComponent.assignedTeam,
                     unitId = id,
                     manaUsed = requiredMana
@@ -501,9 +501,9 @@ namespace Pandora
         {
             var set = new HashSet<GridCell>();
 
-            for (var x = 0f; x < towerSize; x++)
+            for (var x = 0; x < towerSize; x++)
             {
-                for (var y = 0f; y < towerSize; y++)
+                for (var y = 0; y < towerSize; y++)
                 {
                     set.Add(new GridCell(towerCell.vector.x + x, towerCell.vector.y + y));
                 }
@@ -524,9 +524,9 @@ namespace Pandora
                     worldMouse.y - transform.position.y
                 );
 
-            Vector2 cellPosition = new Vector2(
-                Mathf.Floor(mousePosition.x / cellWidth),
-                Mathf.Floor(mousePosition.y / cellHeight)
+            var cellPosition = new Vector2Int(
+                Mathf.FloorToInt(mousePosition.x / cellWidth),
+                Mathf.FloorToInt(mousePosition.y / cellHeight)
             );
 
             return new GridCell(cellPosition);

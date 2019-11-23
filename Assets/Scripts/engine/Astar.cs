@@ -25,7 +25,7 @@ namespace Pandora.Engine
             this.nodeContainerPool = nodeContainerPool;
         }
 
-        Stack<System.Diagnostics.Stopwatch> stopWatches = new Stack<System.Diagnostics.Stopwatch> {};
+        Stack<System.Diagnostics.Stopwatch> stopWatches = new Stack<System.Diagnostics.Stopwatch> { };
 
         void StartStopwatch(bool ignoreDebug = false)
         {
@@ -54,8 +54,11 @@ namespace Pandora.Engine
         /**
         * Simple A* implementation. We try to use as many pools
         * as humanly possible in order to not allocate too much (it costs a lot of time)
+        *
+        * When greedy is true, g(x) is removed from the score, making this algorithm effectively
+        * a greedy best-first search, which seems to perform better when evading other units.
         */
-        public List<T> FindPath(T currentPosition, T end, Func<T, bool> isObstacle, Func<T, List<T>> getSurroundingNodes, Func<T, T, float> distance)
+        public List<T> FindPath(T currentPosition, T end, Func<T, bool> isObstacle, Func<T, List<T>> getSurroundingNodes, Func<T, T, float> distance, bool greedy = false)
         {
             var priorityQueue = new SimplePriorityQueue<QueueItem<T>>();
 
@@ -153,7 +156,7 @@ namespace Pandora.Engine
                     {
                         cameFrom[queueItem] = evaluatingPosition;
                         gScore[advance] = advanceGScore;
-                        fScore[advance] = advanceGScore + distance(advance, end);
+                        fScore[advance] = (greedy ? 0 : advanceGScore) + distance(advance, end);
 
                         priorityQueue.Enqueue(queueItem, fScore[advance]);
                     }
@@ -186,7 +189,7 @@ namespace Pandora.Engine
                 evaluatingPosition = priorityQueue.Dequeue();
             }
 
-            LogStopwatch("Total pathfinding", true);
+            LogStopwatch($"Total pathfinding using {pass} iterations", true);
 
             var path = new LinkedList<T> { };
 

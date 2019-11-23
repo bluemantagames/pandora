@@ -18,11 +18,11 @@ namespace Pandora.Command
             var currentCell = sourceEntity.GetCurrentCell().vector;
 
             var wolfCell = new GridCell(
-                new Vector2(currentCell.x + 1, currentCell.y)
+                new Vector2Int(currentCell.x + 1, currentCell.y)
             );
 
             var riderCell = new GridCell(
-                new Vector2(currentCell.x - 1, currentCell.y)
+                new Vector2Int(currentCell.x - 1, currentCell.y)
             );
 
             var wolfSpawn = new UnitSpawn(

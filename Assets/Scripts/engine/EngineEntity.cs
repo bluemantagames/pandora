@@ -52,7 +52,11 @@ namespace Pandora.Engine
         {
             if (IsEvading)
             {
-                return Engine.FindPath(this, target);
+                var path = Engine.FindPath(this, target);
+
+                IsEvading = false;
+
+                return path;
             }
             else
             {

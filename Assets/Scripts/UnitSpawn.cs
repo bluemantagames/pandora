@@ -23,8 +23,8 @@ namespace Pandora
 
         public UnitSpawn(string unitName, GridCell cell, int team, string unitId, DateTime? timestamp) {
             UnitName = unitName;
-            CellX = (int)Math.Floor(cell.vector.x);
-            CellY = (int)Math.Floor(cell.vector.y);
+            CellX = cell.vector.x;
+            CellY = cell.vector.y;
             Team = team;
             Id = unitId;
             Timestamp = timestamp;

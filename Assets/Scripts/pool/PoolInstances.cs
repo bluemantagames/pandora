@@ -23,7 +23,7 @@ namespace Pandora.Pool
         );
 
         public static ConcurrentObjectPool<GridCell> GridCellPool = new ConcurrentObjectPool<GridCell>(
-            createFunction: () => new GridCell(new Vector2(0, 0)),
+            createFunction: () => new GridCell(new Vector2Int(0, 0)),
             resetFunction: v => v.vector.Set(0, 0),
             profilingEnabled: false
         );

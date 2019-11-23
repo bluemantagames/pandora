@@ -5,15 +5,15 @@ namespace Pandora
 {
     public struct GridCell : IEquatable<GridCell>
     {
-        public Vector2 vector;
+        public Vector2Int vector;
 
-        public GridCell(Vector2 vector)
+        public GridCell(Vector2Int vector)
         {
             this.vector = vector;
         }
-        public GridCell(float x, float y)
+        public GridCell(int x, int y)
         {
-            this.vector = new Vector2(x, y);
+            this.vector = new Vector2Int(x, y);
         }
 
         public bool Equals(GridCell other)

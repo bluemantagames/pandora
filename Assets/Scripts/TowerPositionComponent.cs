@@ -15,9 +15,9 @@ namespace Pandora
     public class TowerPositionComponent : MonoBehaviour
     {
         // this should not be used anywhere. It's here just to give a way to set tower positions in the unity editor
-        public Vector2 Position {
+        public Vector2Int Position {
             get {
-                return MapComponent.Instance.GetTowerPosition(EngineTowerPosition).Value;
+                return Vector2Int.FloorToInt(MapComponent.Instance.GetTowerPosition(EngineTowerPosition).Value);
             }
         }
 

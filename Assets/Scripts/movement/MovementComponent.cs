@@ -21,6 +21,7 @@ namespace Pandora.Movement
         List<GridCell> currentPath;
         TeamComponent team;
         Enemy targetEnemy;
+        bool isEvading;
         CombatBehaviour combatBehaviour;
         uint? collisionTotalElapsed = null;
         /// <summary>Enables log on the A* implementation</summary>
@@ -30,11 +31,11 @@ namespace Pandora.Movement
         public MovementStateEnum LastState { get; set; }
         Enemy lastEnemyTargeted;
 
-        Astar<Vector2> astar = new Astar<Vector2>(
-            PoolInstances.Vector2HashSetPool,
-            PoolInstances.Vector2QueueItemPool,
-            PoolInstances.Vector2Pool,
-            PoolInstances.Vector2ListPool
+        Astar<Vector2Int> astar = new Astar<Vector2Int>(
+            PoolInstances.Vector2IntHashSetPool,
+            PoolInstances.Vector2IntQueueItemPool,
+            PoolInstances.Vector2IntPool,
+            PoolInstances.Vector2IntListPool
         );
 
         public bool IsFlying
@@ -148,7 +149,7 @@ namespace Pandora.Movement
             }
 
             // if no path has been calculated: calculate one and point the object to the first position in the queue
-            if (currentPath == null || currentPath.Contains(currentPosition))
+            if (currentPath == null || currentPath.Contains(currentPosition) || engineEntity.Path == null)
             {
                 AdvancePosition(currentPosition);
             }
@@ -162,9 +163,16 @@ namespace Pandora.Movement
          */
         private void AdvancePosition(GridCell currentPosition)
         {
-            CalculatePath();
+            engineEntity.IsEvading = isEvading;
 
-            if (currentPath.Count < 1)
+            if (!engineEntity.IsEvading)
+            {
+                CalculatePath();
+            } else {
+                currentPath = new List<GridCell> {}; // Leave pathfinding to the engine when evading
+            }
+
+            if (currentPath.Count < 1 && !engineEntity.IsEvading)
             {
                 Debug.LogWarning($"Empty path for {targetEnemy.enemyCell} from {currentPosition}");
 
@@ -182,10 +190,10 @@ namespace Pandora.Movement
 
             engineEntity.SetTarget(currentTarget);
 
-            direction = (currentTarget.vector - currentPosition.vector).normalized;
+            direction =  ((Vector2) currentTarget.vector - currentPosition.vector).normalized;
         }
 
-        List<GridCell> VectorsToGridCells(IEnumerable<Vector2> vectors) =>
+        List<GridCell> VectorsToGridCells(IEnumerable<Vector2Int> vectors) =>
             (from vector in vectors
              select new GridCell(vector)).ToList();
 
@@ -209,13 +217,13 @@ namespace Pandora.Movement
                     },
                     position =>
                     {
-                        var surroundingPositions = PoolInstances.Vector2ListPool.GetObject();
+                        var surroundingPositions = PoolInstances.Vector2IntListPool.GetObject();
 
-                        for (var x = -1f; x <= 1f; x++)
+                        for (var x = -1; x <= 1; x++)
                         {
-                            for (var y = -1f; y <= 1f; y++)
+                            for (var y = -1; y <= 1; y++)
                             {
-                                var advance = PoolInstances.Vector2Pool.GetObject();
+                                var advance = PoolInstances.Vector2IntPool.GetObject();
 
                                 advance.x = position.x + x;
                                 advance.y = position.y + y;
@@ -272,7 +280,10 @@ namespace Pandora.Movement
             {
                 Debug.Log("Finally evading");
 
-                engineEntity.IsEvading = true;
+                // we don't set engineEntity.IsEvading directly because
+                // the collision system might use it
+                isEvading = true;
+
                 engineEntity.EvadedUnit = entity;
 
                 currentPath = null;

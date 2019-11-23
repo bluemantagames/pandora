@@ -127,8 +127,8 @@ namespace Pandora.Engine
 
         public IEnumerator<Vector2Int> FindPath(EngineEntity entity, Vector2Int target)
         {
-            var entityBounds = GetPooledEntityBounds(entity);
-            var obstacleEntityBounds = (entity.EvadedUnit != null) ? GetPooledEntityBounds(entity.EvadedUnit) : null;
+            var entityBounds = GetEntityBounds(entity);
+            var obstacleEntityBounds = (entity.EvadedUnit != null) ? GetEntityBounds(entity.EvadedUnit) : null;
 
             var path = astar.FindPath(
                 entity.Position,
@@ -167,15 +167,9 @@ namespace Pandora.Engine
 
                     return surroundingPositions;
                 },
-                (a, b) => Vector2.Distance(a, b)
+                (a, b) => Vector2.Distance(a, b),
+                true
             ).GetEnumerator();
-
-            if (obstacleEntityBounds != null)
-            {
-                ReturnBounds(obstacleEntityBounds);
-            }
-
-            ReturnBounds(obstacleEntityBounds);
 
             entity.IsEvading = false;
 
@@ -251,7 +245,13 @@ namespace Pandora.Engine
 
                     var currentPosition = entity.Path.Current;
 
-                    entity.Direction = currentPosition - prevPosition;
+                    if (currentPosition == null) {
+                        entity.SetEmptyPath();
+
+                        break;
+                    } else {
+                        entity.Direction = currentPosition - prevPosition;
+                    }
                 }
 
                 if (entity.Path.Current != null)
@@ -796,10 +796,8 @@ namespace Pandora.Engine
             PoolInstances.BoxBoundsPool.ReturnObject(bounds);
         }
 
-        BoxBounds GetPooledEntityBounds(EngineEntity entity)
+        void SetEntityBounds(EngineEntity entity, BoxBounds bounds)
         {
-            var bounds = PoolInstances.BoxBoundsPool.GetObject();
-
             var worldBounds = entity.GameObject.GetComponent<BoxCollider2D>().bounds;
 
             var physicsExtents = PooledWorldToPhysics(worldBounds.size);
@@ -831,6 +829,22 @@ namespace Pandora.Engine
             bounds.Center = entity.Position;
 
             PoolInstances.Vector2Pool.ReturnObject(physicsExtents);
+        }
+
+        BoxBounds GetEntityBounds(EngineEntity entity)
+        {
+            var bounds = new BoxBounds();
+
+            SetEntityBounds(entity, bounds);
+
+            return bounds;
+        }
+
+        BoxBounds GetPooledEntityBounds(EngineEntity entity)
+        {
+            var bounds = PoolInstances.BoxBoundsPool.GetObject();
+
+            SetEntityBounds(entity, bounds);
 
             return bounds;
         }
