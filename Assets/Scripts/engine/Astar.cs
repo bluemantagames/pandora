@@ -17,6 +17,14 @@ namespace Pandora.Engine
         ConcurrentObjectPool<T> nodePool;
         ConcurrentObjectPool<List<T>> nodeContainerPool;
 
+        SimplePriorityQueue<QueueItem<T>> priorityQueue = new SimplePriorityQueue<QueueItem<T>>();
+
+        Dictionary<QueueItem<T>, QueueItem<T>> cameFrom = new Dictionary<QueueItem<T>, QueueItem<T>>(100000);
+        Dictionary<T, QueueItem<T>> queueItems = new Dictionary<T, QueueItem<T>>(100000);
+        Dictionary<T, float> gScore = new Dictionary<T, float>(100000);
+        Dictionary<T, float> fScore = new Dictionary<T, float>(100000);
+        List<QueueItem<T>> dequeueCandidates = new List<QueueItem<T>>(5000);
+
         public Astar(ConcurrentObjectPool<HashSet<T>> nodeHashsetPool, ConcurrentObjectPool<QueueItem<T>> nodeQueueItemPool, ConcurrentObjectPool<T> nodePool, ConcurrentObjectPool<List<T>> nodeContainerPool)
         {
             this.nodeHashsetPool = nodeHashsetPool;
@@ -60,14 +68,12 @@ namespace Pandora.Engine
         */
         public LinkedList<T> FindLinkedListPath(T currentPosition, T end, Func<T, bool> isObstacle, Func<T, List<T>> getSurroundingNodes, Func<T, T, float> distance, bool greedy = false)
         {
-            var priorityQueue = new SimplePriorityQueue<QueueItem<T>>();
-
             priorityQueue.Clear();
-
-            var cameFrom = new Dictionary<QueueItem<T>, QueueItem<T>>(100000);
-            var queueItems = new Dictionary<T, QueueItem<T>>(100000);
-            var gScore = new Dictionary<T, float>(100000);
-            var fScore = new Dictionary<T, float>(100000);
+            cameFrom.Clear();
+            queueItems.Clear();
+            gScore.Clear();
+            fScore.Clear();
+            dequeueCandidates.Clear();
 
             int pass = 0, advancesNum = 0;
 
@@ -158,7 +164,15 @@ namespace Pandora.Engine
                         gScore[advance] = advanceGScore;
                         fScore[advance] = (greedy ? 0 : advanceGScore) + distance(advance, end);
 
-                        priorityQueue.Enqueue(queueItem, fScore[advance]);
+                        // We don't update when in greedy mode, since the fScore doesn't change
+                        if (priorityQueue.Contains(queueItem) && !greedy)
+                        {
+                            priorityQueue.UpdatePriority(queueItem, fScore[advance]);
+                        }
+                        else
+                        {
+                            priorityQueue.Enqueue(queueItem, fScore[advance]);
+                        }
                     }
                 }
 
@@ -186,10 +200,34 @@ namespace Pandora.Engine
                     return new LinkedList<T> { };
                 }
 
-                evaluatingPosition = priorityQueue.Dequeue();
-            }
+                // This priority queue dequeues FIFO, and LIFO has a better perf for us.
+                // To address this, we dequeue all the candidates with the same priority and consider the last one
+                // We then requeue all the items except this one
+                var firstDequeued = priorityQueue.Dequeue();
 
-            LogStopwatch($"Total pathfinding using {pass} iterations", true);
+                dequeueCandidates.Clear();
+
+                dequeueCandidates.Add(firstDequeued);
+
+                var dequeueCandidate = priorityQueue.Dequeue();
+
+                while (fScore[dequeueCandidate.Item] == fScore[firstDequeued.Item])
+                {
+                    dequeueCandidates.Add(dequeueCandidate);
+
+                    dequeueCandidate = priorityQueue.Dequeue();
+                }
+
+                evaluatingPosition = dequeueCandidates.Last();
+
+                foreach (var queueItem in dequeueCandidates)
+                {
+                    if (queueItem != evaluatingPosition)
+                    {
+                        priorityQueue.Enqueue(queueItem, fScore[queueItem.Item]);
+                    }
+                }
+            }
 
             var path = new LinkedList<T> { };
 
@@ -204,6 +242,8 @@ namespace Pandora.Engine
             {
                 nodeQueueItemPool.ReturnObject(queueItem);
             }
+
+            LogStopwatch($"Total pathfinding using {pass} iterations, path is long {path.Count}", true);
 
             return path;
         }

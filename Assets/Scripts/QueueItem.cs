@@ -5,7 +5,7 @@
     using UnityEngine;
     using Priority_Queue;
 
-    public class QueueItem<T>: FastPriorityQueueNode
+    public class QueueItem<T> where T: IEquatable<T>
     {
         public T Item;
 
@@ -22,11 +22,16 @@
 
         public override int GetHashCode()
         {
-            var hashCode = 1156408058;
+            return Item.GetHashCode();
+        }
 
-            hashCode = hashCode * -1521134295 + EqualityComparer<T>.Default.GetHashCode(Item);
-
-            return hashCode;
+        public override bool Equals(object obj)
+        {
+            if (obj is QueueItem<T> item) {
+                return Item.Equals(item.Item);
+            } else{
+                return false;
+            }
         }
     }
 }
