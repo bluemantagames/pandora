@@ -131,6 +131,7 @@ namespace Pandora.Engine
 
             var unitsBounds = 
                 (from unit in entities
+                where !unit.IsStructure && CanCollide(unit, entity)
                 select (bounds: GetEntityBounds(unit), unit: unit)).ToList();
 
             var path = astar.FindPathEnumerator(
@@ -145,8 +146,6 @@ namespace Pandora.Engine
                     var isCollision = false;
 
                     foreach (var (bounds, unit) in unitsBounds) {
-                        if (unit == entity || unit.IsStructure || !unit.IsRigid || !CanCollide(unit, entity)) continue;
-
                         isCollision = entityBounds.Collides(bounds);
 
                         if (isCollision) break;
