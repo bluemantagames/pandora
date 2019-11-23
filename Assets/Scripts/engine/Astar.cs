@@ -58,16 +58,16 @@ namespace Pandora.Engine
         * When greedy is true, g(x) is removed from the score, making this algorithm effectively
         * a greedy best-first search, which seems to perform better when evading other units.
         */
-        public List<T> FindPath(T currentPosition, T end, Func<T, bool> isObstacle, Func<T, List<T>> getSurroundingNodes, Func<T, T, float> distance, bool greedy = false)
+        public LinkedList<T> FindLinkedListPath(T currentPosition, T end, Func<T, bool> isObstacle, Func<T, List<T>> getSurroundingNodes, Func<T, T, float> distance, bool greedy = false)
         {
             var priorityQueue = new SimplePriorityQueue<QueueItem<T>>();
 
             priorityQueue.Clear();
 
-            var cameFrom = new Dictionary<QueueItem<T>, QueueItem<T>>();
-            var queueItems = new Dictionary<T, QueueItem<T>>();
-            var gScore = new Dictionary<T, float>();
-            var fScore = new Dictionary<T, float>();
+            var cameFrom = new Dictionary<QueueItem<T>, QueueItem<T>>(100000);
+            var queueItems = new Dictionary<T, QueueItem<T>>(100000);
+            var gScore = new Dictionary<T, float>(100000);
+            var fScore = new Dictionary<T, float>(100000);
 
             int pass = 0, advancesNum = 0;
 
@@ -86,12 +86,12 @@ namespace Pandora.Engine
             {
                 Debug.LogWarning($"Cannot find path towards an obstacle ({end})");
 
-                return new List<T> { };
+                return new LinkedList<T> { };
             }
 
             if (currentPosition.Equals(end))
             {
-                return new List<T> { };
+                return new LinkedList<T> { };
             }
 
             gScore[currentPosition] = 0;
@@ -183,7 +183,7 @@ namespace Pandora.Engine
                         Debug.Break();
                     }
 
-                    return new List<T> { };
+                    return new LinkedList<T> { };
                 }
 
                 evaluatingPosition = priorityQueue.Dequeue();
@@ -198,11 +198,39 @@ namespace Pandora.Engine
                 path.AddFirst(new LinkedListNode<T>(cameFrom[evaluatingPosition].Item));
 
                 evaluatingPosition = cameFrom[evaluatingPosition];
-
-                nodeQueueItemPool.ReturnObject(evaluatingPosition);
             }
 
-            return path.ToList();
+            foreach (var queueItem in cameFrom.Keys)
+            {
+                nodeQueueItemPool.ReturnObject(queueItem);
+            }
+
+            return path;
+        }
+
+        /**
+        * Simple A* implementation. We try to use as many pools
+        * as humanly possible in order to not allocate too much (it costs a lot of time)
+        *
+        * When greedy is true, g(x) is removed from the score, making this algorithm effectively
+        * a greedy best-first search, which seems to perform better when evading other units.
+        */
+        public List<T> FindPath(T currentPosition, T end, Func<T, bool> isObstacle, Func<T, List<T>> getSurroundingNodes, Func<T, T, float> distance, bool greedy = false)
+        {
+            return FindLinkedListPath(currentPosition, end, isObstacle, getSurroundingNodes, distance, greedy).ToList();
+        }
+
+
+        /**
+        * Simple A* implementation. We try to use as many pools
+        * as humanly possible in order to not allocate too much (it costs a lot of time)
+        *
+        * When greedy is true, g(x) is removed from the score, making this algorithm effectively
+        * a greedy best-first search, which seems to perform better when evading other units.
+        */
+        public IEnumerator<T> FindPathEnumerator(T currentPosition, T end, Func<T, bool> isObstacle, Func<T, List<T>> getSurroundingNodes, Func<T, T, float> distance, bool greedy = false)
+        {
+            return FindLinkedListPath(currentPosition, end, isObstacle, getSurroundingNodes, distance, greedy).GetEnumerator();
         }
     }
 }

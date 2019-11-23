@@ -128,9 +128,12 @@ namespace Pandora.Engine
         public IEnumerator<Vector2Int> FindPath(EngineEntity entity, Vector2Int target)
         {
             var entityBounds = GetEntityBounds(entity);
-            var obstacleEntityBounds = (entity.EvadedUnit != null) ? GetEntityBounds(entity.EvadedUnit) : null;
 
-            var path = astar.FindPath(
+            var unitsBounds = 
+                (from unit in entities
+                select (bounds: GetEntityBounds(unit), unit: unit)).ToList();
+
+            var path = astar.FindPathEnumerator(
                 entity.Position,
                 target,
                 position =>
@@ -141,9 +144,12 @@ namespace Pandora.Engine
 
                     var isCollision = false;
 
-                    if (obstacleEntityBounds != null)
-                    {
-                        isCollision = entityBounds.Collides(obstacleEntityBounds);
+                    foreach (var (bounds, unit) in unitsBounds) {
+                        if (unit == entity || unit.IsStructure || !unit.IsRigid || !CanCollide(unit, entity)) continue;
+
+                        isCollision = entityBounds.Collides(bounds);
+
+                        if (isCollision) break;
                     }
 
                     return isCollision;
@@ -169,7 +175,7 @@ namespace Pandora.Engine
                 },
                 (a, b) => Vector2.Distance(a, b),
                 true
-            ).GetEnumerator();
+            );
 
             entity.IsEvading = false;
 
