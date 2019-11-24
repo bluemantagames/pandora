@@ -15,6 +15,7 @@ namespace Pandora
         float maskOriginalSize;
         public int maxLife;
         public bool IsDead = false;
+        public Vector2? LastPosition = null;
 
         // Start is called before the first frame update
         void Start()
@@ -48,6 +49,11 @@ namespace Pandora
             }
         }
 
+        private void SetLastPosition() {
+            var sourceEntity = GetComponent<EngineComponent>().Entity;
+            LastPosition = sourceEntity.GetCurrentCell().vector;
+        }
+
         public void AssignDamage(int value)
         {
             lifeValue -= value;
@@ -62,6 +68,7 @@ namespace Pandora
                 IsDead = true;
                 GetComponent<CombatBehaviour>().OnDead();
 
+                SetLastPosition();
                 Remove();
 
                 Debug.Log("BB I'M DYING");
