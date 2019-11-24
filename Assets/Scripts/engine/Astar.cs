@@ -242,7 +242,7 @@ namespace Pandora.Engine
 
                 if (pass > 200)
                 {
-                    Debug.LogWarning($"Short circuiting after {pass} passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} advances)");
+                    Debug.LogWarning($"Short circuiting after {pass} passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} nodes)");
 
                     if (DebugPathfinding)
                     {

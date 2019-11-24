@@ -13,6 +13,8 @@ namespace Pandora.Deck.UI
         public GameObject Canvas;
         public string CardName;
 
+        DeckSpotBehaviour lastDeckSpot;
+
         public void Load()
         {
             originalParent = transform.parent.gameObject;
@@ -28,12 +30,15 @@ namespace Pandora.Deck.UI
 
             transform.localPosition = originalPosition;
 
+            lastDeckSpot.Card = null;
+            lastDeckSpot.CardObject = null;
+
             GetComponent<RectTransform>().pivot = originalPivot;
         }
 
         public void SetSpot(GameObject deckSpot)
         {
-            var deckSpotBehaviour = deckSpot.GetComponent<DeckSpotBehaviour>();
+            var deckSpotBehaviour = lastDeckSpot = deckSpot.GetComponent<DeckSpotBehaviour>();
 
             if (deckSpotBehaviour.CardObject != null)
             {

@@ -176,7 +176,11 @@ namespace Pandora.Movement
 
             if (currentPath.Count < 1 && !engineEntity.IsEvading)
             {
-                Debug.LogWarning($"Empty path for {targetEnemy.enemyCell} from {currentPosition}");
+                Debug.LogWarning($"Empty path for {targetEnemy.enemyCell} from {currentPosition}, trying to evade");
+
+                isEvading = true;
+
+                AdvancePosition(currentPosition);
 
                 return;
             }

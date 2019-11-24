@@ -27,6 +27,8 @@ namespace Pandora.Network {
 
             var serializedWrapper = JsonUtility.ToJson(deckWrapper);
 
+            Debug.Log($"Saving {serializedWrapper}");
+
             PlayerPrefs.SetString("DeckWrapper", serializedWrapper);
             PlayerPrefs.Save();
 
