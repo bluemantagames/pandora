@@ -263,7 +263,7 @@ namespace Pandora.Engine
                     }
                 }
 
-                if (entity.Path.Current != null)
+                if (entity.Path?.Current != null)
                 {
                     entity.Position = entity.Path.Current;
                 }

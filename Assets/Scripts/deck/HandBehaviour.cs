@@ -58,7 +58,8 @@ namespace Pandora.Deck
                         "Fireball",
                         "Harpies",
                         "Mermaids",
-                        "Troll"
+                        "Troll",
+                        "Zombies"
                     };
 
                     cards =

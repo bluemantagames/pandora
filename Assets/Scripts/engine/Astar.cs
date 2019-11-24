@@ -196,7 +196,6 @@ namespace Pandora.Engine
 
                 pass += 1;
 
-
                 // This priority queue dequeues FIFO, and LIFO has a better perf for us.
                 // To address this, we dequeue all the candidates with the same priority and consider the last one
                 // We then requeue all the items except this one
@@ -230,7 +229,7 @@ namespace Pandora.Engine
 
                 if (pass > 200)
                 {
-                    Debug.LogWarning($"Short circuiting after 100000 passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} advances)");
+                    Debug.LogWarning($"Short circuiting after {pass} passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} advances)");
                     Debug.LogWarning("Best paths found are");
                     Debug.LogWarning($"{evaluatingPosition}");
                     Debug.LogWarning($"{priorityQueue.Dequeue()}");
