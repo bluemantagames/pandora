@@ -129,10 +129,10 @@ namespace Pandora.Engine
         {
             var entityBounds = GetEntityBounds(entity);
 
-            var unitsBounds = 
+            var unitsBounds =
                 (from unit in entities
-                where !unit.IsStructure && CanCollide(unit, entity)
-                select (bounds: GetEntityBounds(unit), unit: unit)).ToList();
+                 where !unit.IsStructure && CanCollide(unit, entity)
+                 select (bounds: GetEntityBounds(unit), unit: unit)).ToList();
 
             var path = astar.FindPathEnumerator(
                 entity.Position,
@@ -145,7 +145,8 @@ namespace Pandora.Engine
 
                     var isCollision = false;
 
-                    foreach (var (bounds, unit) in unitsBounds) {
+                    foreach (var (bounds, unit) in unitsBounds)
+                    {
                         isCollision = entityBounds.Collides(bounds);
 
                         if (isCollision) break;
@@ -254,11 +255,14 @@ namespace Pandora.Engine
                     var currentPosition = entity.Path.Current;
 
                     // if we exausted the current path
-                    if (currentPosition == null || prevPosition == currentPosition) {
+                    if (currentPosition == null || prevPosition == currentPosition)
+                    {
                         entity.SetEmptyPath();
 
                         break;
-                    } else {
+                    }
+                    else
+                    {
                         entity.Direction = currentPosition - prevPosition;
                     }
                 }
@@ -282,11 +286,6 @@ namespace Pandora.Engine
                 for (var i2 = 0; i2 < clonedEntities.Count; i2++)
                 {
                     passes++;
-
-                    if (passes > 5000)
-                    {
-                        throw new Exception("Cutting collision solving");
-                    }
 
                     var first = clonedEntities[i1];
                     var second = clonedEntities[i2];
@@ -391,11 +390,22 @@ namespace Pandora.Engine
                         { // Give the moved entity even more speed if pushed by a structure (to avoid nasty loops)
                             moved.CollisionSpeed++;
                         }
+
+                        if (passes > 5000)
+                        {
+                            Debug.LogError($"Cutting collision solving (last was between {moved} and {unmoved}");
+
+                            ReturnBounds(firstBox);
+                            ReturnBounds(secondBox);
+
+                            return;
+                        }
                     }
 
                     ReturnBounds(firstBox);
                     ReturnBounds(secondBox);
                 }
+
             }
 
             foreach (var entity in clonedEntities)

@@ -127,7 +127,7 @@ namespace Pandora.Movement
                 return new MovementState(targetEnemy, MovementStateEnum.EnemyApproached);
             }
 
-            // if you were attacking an enemy, but they are now out of attack range, forget them
+            // if you were attacking an enemy, but they are now out of attack range: forget them
             if (targetEnemy != null && !combatBehaviour.IsInAttackRange(targetEnemy) && LastState == MovementStateEnum.EnemyApproached)
             {
                 currentPath = null;
@@ -138,7 +138,7 @@ namespace Pandora.Movement
                 }
             }
 
-            // Otherwise, pick a target
+            // Otherwise: pick a target
             if (lastEnemyTargeted.enemy != targetEnemy?.enemy && (!combatBehaviour.isAttacking || isTargetDead) && !isTargetForced)
             {
                 targetEnemy = lastEnemyTargeted;

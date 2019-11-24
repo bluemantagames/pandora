@@ -85,6 +85,11 @@ namespace Pandora
         {
             if (disabled) return;
 
+            if (!originalPosition.HasValue)
+            {
+                originalPosition = transform.position;
+            }
+
             transform.position = Input.mousePosition;
 
             SetChildrenActive(false);
@@ -152,16 +157,6 @@ namespace Pandora
             GetComponentInChildren<Text>().text = (RequiredMana / 10).ToString();
         }
 
-
-        void Update()
-        {
-            if (disabled) return;
-
-            if (!originalPosition.HasValue)
-            {
-                originalPosition = transform.position;
-            }
-        }
 
         void OnApplicationQuit()
         {

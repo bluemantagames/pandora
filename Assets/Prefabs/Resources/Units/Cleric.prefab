@@ -207,7 +207,7 @@ MonoBehaviour:
   backswingMs: 400
   animationStateName: ClericAttack
   AggroRangeCells: 3
-  AttackRangeEngineUnits: 2
+  AttackRangeEngineUnits: 200
 --- !u!61 &9130794682398608112
 BoxCollider2D:
   m_ObjectHideFlags: 0

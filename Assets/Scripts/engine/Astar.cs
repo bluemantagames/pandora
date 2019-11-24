@@ -199,41 +199,50 @@ namespace Pandora.Engine
                 // This priority queue dequeues FIFO, and LIFO has a better perf for us.
                 // To address this, we dequeue all the candidates with the same priority and consider the last one
                 // We then requeue all the items except this one
-                var firstDequeued = priorityQueue.Dequeue();
-
-                dequeueCandidates.Clear();
-
-                dequeueCandidates.Add(firstDequeued);
-
-                var dequeueCandidate = priorityQueue.Dequeue();
-
-                while (fScore[dequeueCandidate.Item] == fScore[firstDequeued.Item])
+                if (priorityQueue.Count > 1)
                 {
-                    dequeueCandidates.Add(dequeueCandidate);
+                    var firstDequeued = priorityQueue.Dequeue();
 
-                    dequeueCandidate = priorityQueue.Dequeue();
-                }
+                    dequeueCandidates.Clear();
 
-                // put back the first node with differing priority
-                priorityQueue.Enqueue(dequeueCandidate, fScore[dequeueCandidate.Item]);
+                    dequeueCandidates.Add(firstDequeued);
 
-                evaluatingPosition = dequeueCandidates.Last();
+                    var dequeueCandidate = priorityQueue.Dequeue();
 
-                foreach (var queueItem in dequeueCandidates)
-                {
-                    if (queueItem != evaluatingPosition)
+                    while (fScore[dequeueCandidate.Item] == fScore[firstDequeued.Item])
                     {
-                        priorityQueue.Enqueue(queueItem, fScore[queueItem.Item]);
+                        dequeueCandidates.Add(dequeueCandidate);
+
+                        dequeueCandidate = priorityQueue.Dequeue();
                     }
+
+                    // put back the first node with differing priority
+                    priorityQueue.Enqueue(dequeueCandidate, fScore[dequeueCandidate.Item]);
+
+                    evaluatingPosition = dequeueCandidates.Last();
+
+                    foreach (var queueItem in dequeueCandidates)
+                    {
+                        if (queueItem != evaluatingPosition)
+                        {
+                            priorityQueue.Enqueue(queueItem, fScore[queueItem.Item]);
+                        }
+                    }
+                }
+                else if (priorityQueue.Count > 0)
+                {
+                    evaluatingPosition = priorityQueue.Dequeue();
+                }
+                else
+                {
+                    LogStopwatch($"Total pathfinding cut because no path found using {pass} iterations", true);
+
+                    return BuildPath(evaluatingPosition);
                 }
 
                 if (pass > 200)
                 {
                     Debug.LogWarning($"Short circuiting after {pass} passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} advances)");
-                    Debug.LogWarning("Best paths found are");
-                    Debug.LogWarning($"{evaluatingPosition}");
-                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
-                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
 
                     if (DebugPathfinding)
                     {
