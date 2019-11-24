@@ -1033,6 +1033,11 @@ PrefabInstance:
       propertyPath: isOpponent
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: damage
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: position.x
@@ -1283,6 +1288,11 @@ PrefabInstance:
         type: 3}
       propertyPath: isOpponent
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3866240383038811766, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: damage
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
@@ -2058,6 +2068,11 @@ PrefabInstance:
         type: 3}
       propertyPath: aggroBoxEnd.x
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: damage
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
@@ -2886,7 +2901,7 @@ PrefabInstance:
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: CardName
-      value: Clerics
+      value: Mermaids
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
@@ -2908,7 +2923,7 @@ PrefabInstance:
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: UnitName
-      value: ClericsSpawner
+      value: MermaidsSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
@@ -3148,6 +3163,11 @@ PrefabInstance:
     - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: isOpponent
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: damage
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
@@ -4220,6 +4240,11 @@ PrefabInstance:
       propertyPath: map
       value: 
       objectReference: {fileID: 996488289}
+    - target: {fileID: 3866240383038811766, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: damage
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: WorldTowerPosition

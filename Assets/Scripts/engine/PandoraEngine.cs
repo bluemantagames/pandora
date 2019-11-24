@@ -4,10 +4,11 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Profiling;
 
 namespace Pandora.Engine
 {
-    public class PandoraEngine
+    public class PandoraEngine: ScriptableObject
     {
         uint tickTime = 5; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
@@ -15,6 +16,9 @@ namespace Pandora.Engine
         public MapComponent Map;
         uint totalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
+        CustomSampler collisionsSampler, movementSampler, scriptSampler;
+        
+        public bool DebugEngine;
 
         Decimal DPi = new Decimal(3.141592653589);
 
@@ -28,7 +32,7 @@ namespace Pandora.Engine
         // Debug settings
         float debugLinesDuration = 1f;
 
-        public PandoraEngine(MapComponent map)
+        public void Init(MapComponent map)
         {
             this.Map = map;
 
@@ -53,6 +57,12 @@ namespace Pandora.Engine
             PoolInstances.Vector2IntQueueItemPool.MaximumPoolSize = 5000;
 
             astar.DebugPathfinding = false;
+
+            DebugEngine = Debug.isDebugBuild;
+
+            collisionsSampler = CustomSampler.Create("Collisions sampler");
+            movementSampler = CustomSampler.Create("Movement sampler");
+            scriptSampler = CustomSampler.Create("Script sampler");
         }
 
         public void Process(uint msLapsed)
@@ -239,6 +249,7 @@ namespace Pandora.Engine
 
         public void NextTick()
         {
+            if (DebugEngine) movementSampler.Begin();
             // Move units
             foreach (var entity in entities)
             {
@@ -273,12 +284,16 @@ namespace Pandora.Engine
                 }
             }
 
+            if (DebugEngine) movementSampler.End();
+
             // We clone the entities list while we iterate because the collision callbacks
             // might want to modify the entity list somehow (e.g. remove a projectile on collision)
             // TODO: A more efficient way to do this is to have a flag be true while we are checking collisions,
             // cache away all the removals/adds and execute them later
             var clonedEntities = new List<EngineEntity>(entities);
             var passes = 0;
+
+            if (DebugEngine) collisionsSampler.Begin();
 
             // Check for collisions
             for (var i1 = 0; i1 < clonedEntities.Count; i1++)
@@ -372,6 +387,8 @@ namespace Pandora.Engine
                         i1 = 0;
                         i2 = 0;
 
+                        Debug.Log($"Collision between {moved.GameObject} and {unmoved.GameObject}");
+
                         while (firstBox.Collides(secondBox)) // there probably is a math way to do this without a loop
                         {
                             moved.Position = moved.Position + direction; // move the entity away
@@ -408,6 +425,10 @@ namespace Pandora.Engine
 
             }
 
+            if (DebugEngine) collisionsSampler.End();
+
+            if (DebugEngine) scriptSampler.Begin();
+
             foreach (var entity in clonedEntities)
             {
                 entity.CollisionSpeed = 0; // Once collisions are solved, remove collision speed
@@ -418,9 +439,15 @@ namespace Pandora.Engine
 
                 foreach (var component in entity.GameObject.GetComponent<EngineComponent>().Components)
                 {
+                    if (DebugEngine) Profiler.BeginSample(component.ComponentName);
+
                     component.TickUpdate(tickTime);
+
+                    if (DebugEngine) Profiler.EndSample();
                 }
             }
+
+            if (DebugEngine) scriptSampler.End();
         }
 
         public void DrawDebugGUI()

@@ -54,7 +54,7 @@ namespace Pandora
 
         public float cellHeight;
         public float cellWidth;
-        uint frameStep = 10, remainingStep = 0, timeSinceLastStep; // milliseconds
+        uint frameStep = 40, remainingStep = 0, timeSinceLastStep; // milliseconds
         public PandoraEngine engine;
         public GameObject textObject;
         List<GameObject> debug = new List<GameObject> { };
@@ -101,7 +101,8 @@ namespace Pandora
             Screen.fullScreen = false;
             Screen.SetResolution(1080, 1920, false);
 
-            Application.targetFrameRate = 100;
+            Application.targetFrameRate = 30;
+            QualitySettings.vSyncCount = 0;
 
             var topArena = GameObject.Find("top_arena");
             var topArenaPosition = topArena.transform.position;
@@ -127,7 +128,9 @@ namespace Pandora
                 SpawnText(gridPosition, y.ToString());
             }
 
-            engine = new PandoraEngine(this);
+            engine = ScriptableObject.CreateInstance<PandoraEngine>();
+
+            engine.Init(this);
         }
 
         void RefreshTowerHash(TeamComponent team)
