@@ -165,6 +165,8 @@ namespace Pandora.Movement
         {
             engineEntity.IsEvading = isEvading;
 
+            isEvading = false;
+
             if (!engineEntity.IsEvading)
             {
                 CalculatePath();
@@ -274,7 +276,6 @@ namespace Pandora.Movement
             {
                 collisionTotalElapsed = totalElapsed;
             }
-
 
             if (lastCollisionPosition == engineEntity.Position && totalElapsed - (collisionTotalElapsed ?? 0) >= 20)
             {

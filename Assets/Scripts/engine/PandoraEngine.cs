@@ -249,11 +249,12 @@ namespace Pandora.Engine
                 {
                     var prevPosition = entity.Path.Current;
 
-                    entity.Path?.MoveNext();
+                    entity.Path.MoveNext();
 
                     var currentPosition = entity.Path.Current;
 
-                    if (currentPosition == null) {
+                    // if we exausted the current path
+                    if (currentPosition == null || prevPosition == currentPosition) {
                         entity.SetEmptyPath();
 
                         break;
@@ -365,15 +366,6 @@ namespace Pandora.Engine
                         direction.x = 1;
                         direction.y = 1;
                     }
-
-                    /*// if units are trying to evade each other, don't let them push each other vertically
-                    if ((moved.IsEvading || unmoved.IsEvading) && direction.x == 0)
-                    {
-                        direction.x = 1;
-
-                        moved.IsEvading = false;
-                        unmoved.IsEvading = false;
-                    }*/
 
                     if (moved.IsRigid && unmoved.IsRigid)
                     {

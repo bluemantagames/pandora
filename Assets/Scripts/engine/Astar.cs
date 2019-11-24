@@ -59,6 +59,20 @@ namespace Pandora.Engine
             }
         }
 
+        LinkedList<T> BuildPath(QueueItem<T> evaluatingPosition)
+        {
+            var path = new LinkedList<T> { };
+
+            while (cameFrom.ContainsKey(evaluatingPosition))
+            {
+                path.AddFirst(new LinkedListNode<T>(cameFrom[evaluatingPosition].Item));
+
+                evaluatingPosition = cameFrom[evaluatingPosition];
+            }
+
+            return path;
+        }
+
         /**
         * Simple A* implementation. We try to use as many pools
         * as humanly possible in order to not allocate too much (it costs a lot of time)
@@ -182,23 +196,6 @@ namespace Pandora.Engine
 
                 pass += 1;
 
-                if (pass > 100000)
-                {
-                    Debug.LogWarning($"Short circuiting after 100000 passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} advances)");
-                    Debug.LogWarning("Best paths found are");
-                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
-                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
-                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
-
-                    if (DebugPathfinding)
-                    {
-                        Debug.Log("DebugPathfinding: Pausing the editor");
-
-                        Debug.Break();
-                    }
-
-                    return new LinkedList<T> { };
-                }
 
                 // This priority queue dequeues FIFO, and LIFO has a better perf for us.
                 // To address this, we dequeue all the candidates with the same priority and consider the last one
@@ -230,16 +227,29 @@ namespace Pandora.Engine
                         priorityQueue.Enqueue(queueItem, fScore[queueItem.Item]);
                     }
                 }
+
+                if (pass > 200)
+                {
+                    Debug.LogWarning($"Short circuiting after 100000 passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} advances)");
+                    Debug.LogWarning("Best paths found are");
+                    Debug.LogWarning($"{evaluatingPosition}");
+                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
+                    Debug.LogWarning($"{priorityQueue.Dequeue()}");
+
+                    if (DebugPathfinding)
+                    {
+                        Debug.Log("DebugPathfinding: Pausing the editor");
+
+                        Debug.Break();
+                    }
+
+                    LogStopwatch($"Total pathfinding cut using {pass} iterations", true);
+
+                    return BuildPath(evaluatingPosition);
+                }
             }
 
-            var path = new LinkedList<T> { };
-
-            while (cameFrom.ContainsKey(evaluatingPosition))
-            {
-                path.AddFirst(new LinkedListNode<T>(cameFrom[evaluatingPosition].Item));
-
-                evaluatingPosition = cameFrom[evaluatingPosition];
-            }
+            var path = BuildPath(evaluatingPosition);
 
             foreach (var queueItem in cameFrom.Keys)
             {
