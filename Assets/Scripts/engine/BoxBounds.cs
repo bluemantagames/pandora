@@ -10,6 +10,10 @@ namespace Pandora.Engine
         public Vector2Int LowerLeft;
         public Vector2Int LowerRight;
         public Vector2Int Center;
+        
+        public Vector2Int[] Vertices {
+            get => new Vector2Int[] { UpperLeft, UpperRight, LowerLeft, LowerRight };
+        }
 
         public int Width {
             get {

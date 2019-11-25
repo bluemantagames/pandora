@@ -828,7 +828,7 @@ namespace Pandora.Engine
             return targetEntities;
         }
 
-        void ReturnBounds(BoxBounds bounds)
+        public void ReturnBounds(BoxBounds bounds)
         {
             PoolInstances.BoxBoundsPool.ReturnObject(bounds);
         }
@@ -877,7 +877,7 @@ namespace Pandora.Engine
             return bounds;
         }
 
-        BoxBounds GetPooledEntityBounds(EngineEntity entity)
+        public BoxBounds GetPooledEntityBounds(EngineEntity entity)
         {
             var bounds = PoolInstances.BoxBoundsPool.GetObject();
 
