@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Pandora.Pool;
 using System;
 using UnityEngine.Profiling;
+using UnityEngine;
 
 namespace Pandora.Engine.Grid
 {
@@ -9,6 +10,7 @@ namespace Pandora.Engine.Grid
     {
         int height, width, rows, columns;
         Cell[,] grid;
+        CustomSampler collisionCheck;
 
 
         public TightGrid(int height, int width, int rows, int columns)
@@ -53,9 +55,11 @@ namespace Pandora.Engine.Grid
 
             foreach (var vertex in box.Vertices)
             {
-                var cellX = vertex.x / width;
-                var cellY = vertex.x / width;
+                var cellX = Math.Max(vertex.x / (width / rows), rows - 1);
+                var cellY = Math.Max(vertex.y / (height / columns), columns - 1);
 
+                Debug.Log($"Inserting into {cellX} and {cellY}");
+                
                 grid[cellX, cellY].Insert(item);
             }
 

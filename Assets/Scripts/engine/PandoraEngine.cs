@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Profiling;
+using Pandora.Engine.Grid;
 
 namespace Pandora.Engine
 {
-    public class PandoraEngine: ScriptableObject
+    public class PandoraEngine : ScriptableObject
     {
         uint tickTime = 5; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
@@ -16,11 +17,13 @@ namespace Pandora.Engine
         public MapComponent Map;
         uint totalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
-        CustomSampler collisionsSampler, movementSampler, scriptSampler;
-        
+        CustomSampler collisionsSampler, movementSampler, scriptSampler, gridSampler;
+
         public bool DebugEngine;
 
         Decimal DPi = new Decimal(3.141592653589);
+
+        TightGrid grid;
 
         Astar<Vector2Int> astar = new Astar<Vector2Int>(
             PoolInstances.Vector2IntHashSetPool,
@@ -63,6 +66,9 @@ namespace Pandora.Engine
             collisionsSampler = CustomSampler.Create("Collisions sampler");
             movementSampler = CustomSampler.Create("Movement sampler");
             scriptSampler = CustomSampler.Create("Script sampler");
+            gridSampler = CustomSampler.Create("Grid building sampler");
+
+            grid = new TightGrid(yBounds, xBounds, 20, 10);
         }
 
         public void Process(uint msLapsed)
@@ -247,6 +253,20 @@ namespace Pandora.Engine
                 CheckLayerCollision(first.Layer, second.Layer); // layer must be compatible for collisions
         }
 
+        void BuildGrid(List<EngineEntity> entities)
+        {
+            gridSampler.Begin();
+
+            grid.Clear();
+
+            foreach (var entity in entities)
+            {
+                grid.Insert(entity);
+            }
+
+            gridSampler.End();
+        }
+
         public void NextTick()
         {
             if (DebugEngine) movementSampler.Begin();
@@ -291,35 +311,25 @@ namespace Pandora.Engine
             // TODO: A more efficient way to do this is to have a flag be true while we are checking collisions,
             // cache away all the removals/adds and execute them later
             var clonedEntities = new List<EngineEntity>(entities);
-            var passes = 0;
+            var collisionsNum = -1;
 
             if (DebugEngine) collisionsSampler.Begin();
 
-            // Check for collisions
-            for (var i1 = 0; i1 < clonedEntities.Count; i1++)
+            while (collisionsNum != 0)
             {
-                for (var i2 = 0; i2 < clonedEntities.Count; i2++)
+                BuildGrid(clonedEntities);
+
+                collisionsNum = 0;
+
+                foreach (var collision in grid.Collisions(CanCollide))
                 {
-                    passes++;
+                    var first = collision.First;
+                    var second = collision.Second;
 
-                    var first = clonedEntities[i1];
-                    var second = clonedEntities[i2];
+                    var firstBox = collision.FirstBox;
+                    var secondBox = collision.SecondBox;
 
-                    var firstBox = GetPooledEntityBounds(first);
-                    var secondBox = GetPooledEntityBounds(second);
-
-                    var notCollision =
-                        !CanCollide(first, second) ||
-                        !firstBox.Collides(secondBox); // boxes must collide
-
-                    // continue if they don't collide
-                    if (notCollision)
-                    {
-                        ReturnBounds(firstBox);
-                        ReturnBounds(secondBox);
-
-                        continue;
-                    }
+                    collisionsNum++;
 
                     if (first.CollisionCallback != null)
                     {
@@ -383,21 +393,18 @@ namespace Pandora.Engine
 
                     if (moved.IsRigid && unmoved.IsRigid)
                     {
-                        // recheck for collisions once solved
-                        i1 = 0;
-                        i2 = 0;
+                        var movedFirstBox = GetPooledEntityBounds(first);
+                        var movedSecondBox = GetPooledEntityBounds(second);
 
-                        Debug.Log($"Collision between {moved.GameObject} and {unmoved.GameObject}");
-
-                        while (firstBox.Collides(secondBox)) // there probably is a math way to do this without a loop
+                        while (movedFirstBox.Collides(movedSecondBox)) // there probably is a math way to do this without a loop
                         {
                             moved.Position = moved.Position + direction; // move the entity away
 
-                            ReturnBounds(firstBox);
-                            ReturnBounds(secondBox);
+                            ReturnBounds(movedFirstBox);
+                            ReturnBounds(movedSecondBox);
 
-                            firstBox = GetPooledEntityBounds(first);
-                            secondBox = GetPooledEntityBounds(second);
+                            movedFirstBox = GetPooledEntityBounds(first);
+                            movedSecondBox = GetPooledEntityBounds(second);
                         }
 
                         moved.ResetTarget(); // Reset engine-side pathing
@@ -407,22 +414,17 @@ namespace Pandora.Engine
                         { // Give the moved entity even more speed if pushed by a structure (to avoid nasty loops)
                             moved.CollisionSpeed++;
                         }
-
-                        if (passes > 5000)
-                        {
-                            Debug.LogError($"Cutting collision solving (last was between {moved} and {unmoved}");
-
-                            ReturnBounds(firstBox);
-                            ReturnBounds(secondBox);
-
-                            return;
-                        }
                     }
-
-                    ReturnBounds(firstBox);
-                    ReturnBounds(secondBox);
                 }
 
+                if (collisionsNum > 100)
+                {
+                    Debug.LogError($"Cutting collision solving");
+
+                    return;
+                }
+
+                Debug.Log($"Solved {collisionsNum} collisions");
             }
 
             if (DebugEngine) collisionsSampler.End();
