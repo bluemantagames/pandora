@@ -11,7 +11,7 @@ namespace Pandora.Engine
 {
     public class PandoraEngine : ScriptableObject
     {
-        uint tickTime = 5; // milliseconds in a tick
+        uint tickTime = 20; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         List<EngineEntity> entities = new List<EngineEntity> { };
         public MapComponent Map;
@@ -423,6 +423,9 @@ namespace Pandora.Engine
                         { // Give the moved entity even more speed if pushed by a structure (to avoid nasty loops)
                             moved.CollisionSpeed++;
                         }
+                    } else {
+                        // don't count the collision if objects don't move
+                        collisionsNum--;
                     }
 
                     collisionsSolveSampler.End();
