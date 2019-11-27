@@ -101,8 +101,8 @@ namespace Pandora
             Screen.fullScreen = false;
             Screen.SetResolution(1080, 1920, false);
 
-            Application.targetFrameRate = 30;
-            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = -1;
+            //QualitySettings.vSyncCount = 0;
 
             var topArena = GameObject.Find("top_arena");
             var topArenaPosition = topArena.transform.position;

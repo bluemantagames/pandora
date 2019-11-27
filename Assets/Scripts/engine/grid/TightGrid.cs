@@ -41,12 +41,19 @@ namespace Pandora.Engine.Grid
             }
         }
 
-        public IEnumerable<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision) {
+        public List<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision) {
+            var checksum = 1L;
+            var collisions = new List<Collision> {};
+
             foreach (var cell in Cells()) {
-                foreach (var collision in cell.Collisions(isCollision)) {
-                    yield return collision;
-                }
+                var (cellCollisions, updatedChecksum) = cell.Collisions(isCollision, checksum);
+
+                checksum = updatedChecksum;
+
+                collisions.AddRange(cellCollisions);
             }
+
+            return collisions;
         }
 
         public void Insert(EngineEntity item)
@@ -55,10 +62,8 @@ namespace Pandora.Engine.Grid
 
             foreach (var vertex in box.Vertices)
             {
-                var cellX = Math.Max(vertex.x / (width / rows), rows - 1);
-                var cellY = Math.Max(vertex.y / (height / columns), columns - 1);
-
-                Debug.Log($"Inserting into {cellX} and {cellY}");
+                var cellX = Math.Min(vertex.x / (width / rows), rows - 1);
+                var cellY = Math.Min(vertex.y / (height / columns), columns - 1);
                 
                 grid[cellX, cellY].Insert(item);
             }

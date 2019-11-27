@@ -16,6 +16,19 @@ namespace Pandora.Pool
             profilingEnabled: false
         );
 
+        public static ConcurrentObjectPool<Pandora.Engine.Collision> CollisionPool = new ConcurrentObjectPool<Pandora.Engine.Collision>(
+            createFunction: () => new Pandora.Engine.Collision(),
+            resetFunction: _ => {},
+            profilingEnabled: false
+        );
+
+
+        public static ConcurrentObjectPool<List<Pandora.Engine.Collision>> CollisionListPool = new ConcurrentObjectPool<List<Pandora.Engine.Collision>>(
+            createFunction: () => new List<Pandora.Engine.Collision>(50),
+            resetFunction: l => l.Clear(),
+            profilingEnabled: false
+        );
+
         public static ConcurrentObjectPool<BoxBounds> BoxBoundsPool = new ConcurrentObjectPool<BoxBounds>(
             createFunction: () => new BoxBounds(),
             resetFunction: b => b.Clear(),

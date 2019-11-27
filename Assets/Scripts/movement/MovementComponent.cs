@@ -247,6 +247,7 @@ namespace Pandora.Movement
 
         private void CalculatePath()
         {
+            Profiler.BeginSample("MovementComponent pathfinding");
             engineEntity.SetSpeed(Speed);
 
             var currentPosition = CurrentCellPosition();
@@ -258,6 +259,7 @@ namespace Pandora.Movement
             }
 
             currentPath = FindPath(target).Skip(1).ToList();
+            Profiler.EndSample();
         }
 
         private GridCell CurrentCellPosition()

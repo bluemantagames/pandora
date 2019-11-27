@@ -17,7 +17,7 @@ namespace Pandora.Engine
         public MapComponent Map;
         uint totalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
-        CustomSampler collisionsSampler, movementSampler, scriptSampler, gridSampler;
+        CustomSampler collisionsSampler, collisionsSolveSampler, collisionsCheckSampler, collisionsCallbackSampler, movementSampler, scriptSampler, gridSampler;
 
         public bool DebugEngine;
 
@@ -64,11 +64,14 @@ namespace Pandora.Engine
             DebugEngine = Debug.isDebugBuild;
 
             collisionsSampler = CustomSampler.Create("Collisions sampler");
+            collisionsSolveSampler = CustomSampler.Create("Collisions solver sampler");
+            collisionsCheckSampler = CustomSampler.Create("Collisions check sampler");
+            collisionsCallbackSampler = CustomSampler.Create("Collisions callback sampler");
             movementSampler = CustomSampler.Create("Movement sampler");
             scriptSampler = CustomSampler.Create("Script sampler");
             gridSampler = CustomSampler.Create("Grid building sampler");
 
-            grid = new TightGrid(yBounds, xBounds, 20, 10);
+            grid = new TightGrid(yBounds, xBounds, 30, 20);
         }
 
         public void Process(uint msLapsed)
@@ -127,7 +130,6 @@ namespace Pandora.Engine
             var rightComponent = rightRiverObject.AddComponent<EngineComponent>();
 
             rightComponent.Entity = rightEntity;
-
 
             leftEntity.IsStructure = true;
             leftEntity.IsMapObstacle = true;
@@ -323,6 +325,7 @@ namespace Pandora.Engine
 
                 foreach (var collision in grid.Collisions(CanCollide))
                 {
+                    collisionsCheckSampler.Begin();
                     var first = collision.First;
                     var second = collision.Second;
 
@@ -331,6 +334,7 @@ namespace Pandora.Engine
 
                     collisionsNum++;
 
+                    collisionsCallbackSampler.Begin();
                     if (first.CollisionCallback != null)
                     {
                         first.CollisionCallback.Collided(second, totalElapsed);
@@ -340,6 +344,7 @@ namespace Pandora.Engine
                     {
                         second.CollisionCallback.Collided(first, totalElapsed);
                     }
+                    collisionsCallbackSampler.End();
 
                     Vector2Int direction;
                     EngineEntity moved;
@@ -391,6 +396,10 @@ namespace Pandora.Engine
                         direction.y = 1;
                     }
 
+                    collisionsCheckSampler.End();
+
+                    collisionsSolveSampler.Begin();
+
                     if (moved.IsRigid && unmoved.IsRigid)
                     {
                         var movedFirstBox = GetPooledEntityBounds(first);
@@ -415,16 +424,18 @@ namespace Pandora.Engine
                             moved.CollisionSpeed++;
                         }
                     }
+
+                    collisionsSolveSampler.End();
                 }
 
-                if (collisionsNum > 100)
+                if (collisionsNum > 10)
                 {
                     Debug.LogError($"Cutting collision solving");
 
+                    if (DebugEngine) collisionsSampler.End();
+
                     return;
                 }
-
-                Debug.Log($"Solved {collisionsNum} collisions");
             }
 
             if (DebugEngine) collisionsSampler.End();

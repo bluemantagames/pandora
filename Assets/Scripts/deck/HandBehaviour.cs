@@ -50,7 +50,7 @@ namespace Pandora.Deck
 
                 if (Deck == null)
                 {
-                    var cardNames = new List<string> {
+                    /*var cardNames = new List<string> {
                         "Bard",
                         "Ranger",
                         "Clerics",
@@ -59,6 +59,14 @@ namespace Pandora.Deck
                         "Harpies",
                         "Mermaids",
                         "Troll",
+                        "Zombies"
+                    };*/
+
+
+                    var cardNames = new List<string> {
+                        "Bard",
+                        "Harpies",
+                        "Clerics",
                         "Zombies"
                     };
 
