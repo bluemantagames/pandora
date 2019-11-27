@@ -79,7 +79,7 @@ namespace Pandora.Combat
 
             var map = MapComponent.Instance;
 
-            Debug.Log($"Spawning projectile - Setting map {map}");
+            Debug.Log($"Spawning projectile targeting {target} - Setting map {map}");
 
             projectileObject.GetComponent<ProjectileBehaviour>().target = target;
             projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;

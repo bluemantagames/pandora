@@ -113,5 +113,8 @@ namespace Pandora.Engine
         {
             Engine.PrintDebugInfo(this);
         }
+
+        public override string ToString() =>
+            $"EngineEntity(GameObject: {GameObject.name}, Position: {Position})";
     }
 }

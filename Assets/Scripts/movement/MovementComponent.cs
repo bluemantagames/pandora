@@ -247,6 +247,16 @@ namespace Pandora.Movement
 
         private void CalculatePath()
         {
+            var pathCount = 0;
+
+            if (currentPath != null) {
+                currentPath = currentPath.Skip(1).ToList();
+
+                pathCount = currentPath.Count;
+            }
+
+            if (pathCount >= 1) return;
+
             Profiler.BeginSample("MovementComponent pathfinding");
             engineEntity.SetSpeed(Speed);
 

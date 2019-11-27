@@ -27,6 +27,9 @@ namespace Pandora.Engine {
 
             return hashCode;
         }
+        
+        public override string ToString() =>
+            $"Collision({First}, {Second})";
     }
 
 }

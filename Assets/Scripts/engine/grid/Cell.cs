@@ -41,7 +41,7 @@ namespace Pandora.Engine.Grid
             Items.Clear();
         }
 
-        public (LinkedList<Collision>, long) Collisions(Func<EngineEntity, EngineEntity, bool> isCollision, long checksum)
+        public LinkedList<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision, HashSet<(EngineEntity, EngineEntity)> processed)
         {
             collisionCheck.Begin();
 
@@ -53,18 +53,14 @@ namespace Pandora.Engine.Grid
                 {
                     if (a == b) continue;
 
-                    var hashCode = 887775774;
-
                     var first = (a.Timestamp > b.Timestamp) ? a : b;
                     var second = (first == a) ? b : a;
+                    var pair = (first, second);
 
-                    hashCode = hashCode * -1521134295 + EqualityComparer<EngineEntity>.Default.GetHashCode(first);
-                    hashCode = hashCode * -1521134295 + EqualityComparer<EngineEntity>.Default.GetHashCode(second);
-
-                    if (checksum % hashCode == 0)
+                    if (processed.Contains(pair))
                         continue;
                     else
-                        checksum = checksum * hashCode;
+                        processed.Add(pair);
 
                     var aBox = a.Engine.GetPooledEntityBounds(a);
                     var bBox = b.Engine.GetPooledEntityBounds(b);
@@ -92,11 +88,9 @@ namespace Pandora.Engine.Grid
                 }
             }
 
-            //registeredCollisions = collisions;
-
             collisionCheck.End();
 
-            return (collisions, checksum);
+            return collisions;
         }
     }
 }

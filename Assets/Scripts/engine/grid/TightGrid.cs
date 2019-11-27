@@ -11,6 +11,7 @@ namespace Pandora.Engine.Grid
         int height, width, rows, columns;
         Cell[,] grid;
         CustomSampler collisionCheck;
+        HashSet<(EngineEntity, EngineEntity)> processedCollisions = new HashSet<(EngineEntity, EngineEntity)> {};
 
 
         public TightGrid(int height, int width, int rows, int columns)
@@ -42,13 +43,12 @@ namespace Pandora.Engine.Grid
         }
 
         public List<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision) {
-            var checksum = 1L;
+            processedCollisions.Clear();
+
             var collisions = new List<Collision> {};
 
             foreach (var cell in Cells()) {
-                var (cellCollisions, updatedChecksum) = cell.Collisions(isCollision, checksum);
-
-                checksum = updatedChecksum;
+                var cellCollisions = cell.Collisions(isCollision, processedCollisions);
 
                 collisions.AddRange(cellCollisions);
             }
@@ -67,6 +67,11 @@ namespace Pandora.Engine.Grid
                 
                 grid[cellX, cellY].Insert(item);
             }
+
+            var centerCellX = Math.Min(box.Center.x / (width / rows), rows - 1);
+            var centerCellY = Math.Min(box.Center.y / (height / columns), columns - 1);
+            
+            grid[centerCellX, centerCellY].Insert(item);
 
             item.Engine.ReturnBounds(box);
         }

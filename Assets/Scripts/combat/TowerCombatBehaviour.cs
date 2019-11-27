@@ -169,6 +169,8 @@ namespace Pandora.Combat
             var projectileObject = Instantiate(projectile, worldTowerPosition, Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
+            Debug.Log($"Spawning projectile targeting {target} - Setting map {map}");
+
             projectileObject.GetComponent<ProjectileBehaviour>().target = target;
             projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;
             projectileObject.GetComponent<ProjectileBehaviour>().map = map;

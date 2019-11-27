@@ -325,6 +325,7 @@ namespace Pandora.Engine
 
                 foreach (var collision in grid.Collisions(CanCollide))
                 {
+
                     collisionsCheckSampler.Begin();
                     var first = collision.First;
                     var second = collision.Second;
@@ -337,11 +338,15 @@ namespace Pandora.Engine
                     collisionsCallbackSampler.Begin();
                     if (first.CollisionCallback != null)
                     {
+                        Debug.Log($"Processing {collision} calling {first}");
+
                         first.CollisionCallback.Collided(second, totalElapsed);
                     }
 
                     if (second.CollisionCallback != null)
                     {
+                        Debug.Log($"Processing {collision} calling {second}");
+
                         second.CollisionCallback.Collided(first, totalElapsed);
                     }
                     collisionsCallbackSampler.End();
@@ -423,7 +428,9 @@ namespace Pandora.Engine
                         { // Give the moved entity even more speed if pushed by a structure (to avoid nasty loops)
                             moved.CollisionSpeed++;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         // don't count the collision if objects don't move
                         collisionsNum--;
                     }
@@ -431,7 +438,7 @@ namespace Pandora.Engine
                     collisionsSolveSampler.End();
                 }
 
-                if (collisionsNum > 10)
+                if (collisionsNum > 100)
                 {
                     Debug.LogError($"Cutting collision solving");
 
