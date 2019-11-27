@@ -17,7 +17,7 @@ namespace Pandora.Engine
         public MapComponent Map;
         uint totalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
-        CustomSampler collisionsSampler, collisionsSolveSampler, collisionsCheckSampler, collisionsCallbackSampler, movementSampler, scriptSampler, gridSampler;
+        CustomSampler collisionsSampler, collisionsSolveSampler, collisionsCheckSampler, collisionsCallbackSampler, movementSampler, scriptSampler, gridSampler, enginePathfindingSampler;
 
         public bool DebugEngine;
 
@@ -70,6 +70,7 @@ namespace Pandora.Engine
             movementSampler = CustomSampler.Create("Movement sampler");
             scriptSampler = CustomSampler.Create("Script sampler");
             gridSampler = CustomSampler.Create("Grid building sampler");
+            enginePathfindingSampler = CustomSampler.Create("PandoraEngine pathfinding");
 
             grid = new TightGrid(yBounds, xBounds, 30, 20);
         }
@@ -145,6 +146,8 @@ namespace Pandora.Engine
 
         public IEnumerator<Vector2Int> FindPath(EngineEntity entity, Vector2Int target)
         {
+            enginePathfindingSampler.Begin();
+
             var entityBounds = GetEntityBounds(entity);
 
             var unitsBounds =
@@ -199,6 +202,8 @@ namespace Pandora.Engine
             );
 
             entity.IsEvading = false;
+
+            enginePathfindingSampler.End();
 
             return path;
         }
@@ -338,15 +343,11 @@ namespace Pandora.Engine
                     collisionsCallbackSampler.Begin();
                     if (first.CollisionCallback != null)
                     {
-                        Debug.Log($"Processing {collision} calling {first}");
-
                         first.CollisionCallback.Collided(second, totalElapsed);
                     }
 
                     if (second.CollisionCallback != null)
                     {
-                        Debug.Log($"Processing {collision} calling {second}");
-
                         second.CollisionCallback.Collided(first, totalElapsed);
                     }
                     collisionsCallbackSampler.End();
