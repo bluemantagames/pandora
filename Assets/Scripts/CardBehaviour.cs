@@ -24,6 +24,7 @@ namespace Pandora
         public int RequiredMana = 0;
         public bool IsAquatic = false;
         public bool FixedInGame = false;
+        public bool Global = false;
 
         bool disabled = false;
 
@@ -105,7 +106,7 @@ namespace Pandora
 
                 map = hit.collider.gameObject.GetComponent<MapComponent>();
 
-                canBeSpawned = map.OnUICardCollision(Puppet, IsAquatic);
+                canBeSpawned = map.OnUICardCollision(Puppet, IsAquatic, Global);
 
                 GetComponent<Image>().enabled = false;
             }

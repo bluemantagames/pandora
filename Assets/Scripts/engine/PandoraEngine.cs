@@ -11,7 +11,7 @@ namespace Pandora.Engine
 {
     public class PandoraEngine : ScriptableObject
     {
-        uint tickTime = 20; // milliseconds in a tick
+        public uint TickTime = 20; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         List<EngineEntity> entities = new List<EngineEntity> { };
         public MapComponent Map;
@@ -77,7 +77,7 @@ namespace Pandora.Engine
 
         public void Process(uint msLapsed)
         {
-            var ticksNum = msLapsed / tickTime;
+            var ticksNum = msLapsed / TickTime;
 
             totalElapsed += msLapsed;
 
@@ -142,7 +142,7 @@ namespace Pandora.Engine
         }
 
         public int GetSpeed(int engineUnitsPerSecond) =>
-            Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * tickTime);
+            Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * TickTime);
 
         public IEnumerator<Vector2Int> FindPath(EngineEntity entity, Vector2Int target)
         {
@@ -465,7 +465,7 @@ namespace Pandora.Engine
                 {
                     if (DebugEngine) Profiler.BeginSample(component.ComponentName);
 
-                    component.TickUpdate(tickTime);
+                    component.TickUpdate(TickTime);
 
                     if (DebugEngine) Profiler.EndSample();
                 }

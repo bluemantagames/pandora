@@ -25,6 +25,7 @@ namespace Pandora
         public bool debugHitboxes = false;
         Vector2 bottomMapSize;
         GameObject lastPuppet;
+        public float localTime = 0;
         public Dictionary<int, HashSet<GridCell>> TowerPositionsDictionary = new Dictionary<int, HashSet<GridCell>>();
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         float firstLaneX = 2, secondLaneX = 13;
@@ -243,7 +244,14 @@ namespace Pandora
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
-                engine.Process(Math.Max((uint)Mathf.RoundToInt(Time.deltaTime * 1000), 20));
+                localTime += Time.deltaTime;
+
+                if (localTime * 1000 > engine.TickTime)
+                {
+                    engine.Process(engine.TickTime);
+
+                    localTime = 0;
+                }
             }
             else
             {
@@ -487,13 +495,13 @@ namespace Pandora
         }
 
         /// <summary></summary>
-        public bool OnUICardCollision(GameObject puppet, bool isAquatic)
+        public bool OnUICardCollision(GameObject puppet, bool isAquatic, bool isGlobal)
         {
             DestroyPuppet();
 
             var cell = GetPointedCell();
 
-            if (isAquatic && !riverPositions.Contains(cell)) return false;
+            if ((!isGlobal && cell.vector.y > 13) || (isAquatic && !riverPositions.Contains(cell))) return false;
 
             lastPuppet = Instantiate(puppet, GridCellToWorldPosition(cell), Quaternion.identity);
 
