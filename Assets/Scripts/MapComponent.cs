@@ -359,7 +359,7 @@ namespace Pandora
                 projectileSpell.map = this;
             }
 
-            var engineEntity = engine.AddEntity(unit, movementBehaviour?.Speed ?? projectileSpell.Speed, cell, projectileSpell == null, timestamp);
+            var engineEntity = engine.AddEntity(unit, movementBehaviour?.Speed ?? projectileSpell.Speed, projectileSpell?.StartCell ?? cell, projectileSpell == null, timestamp);
 
             if (movement != null) engineEntity.CollisionCallback = movement;
 

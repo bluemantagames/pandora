@@ -65,7 +65,7 @@ namespace Pandora.Deck
 
                     var cardNames = new List<string> {
                         "Bard",
-                        "Harpies",
+                        "Fireball",
                         "Clerics",
                         "Zombies"
                     };

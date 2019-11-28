@@ -13,7 +13,7 @@ namespace Pandora.Spell
 
         public GridCell Target;
         EngineComponent entityComponent;
-        GridCell startCell = new GridCell(6, 0);
+        public GridCell StartCell = new GridCell(6, 0);
 
         void Awake() {
             entityComponent = GetComponent<EngineComponent>();
