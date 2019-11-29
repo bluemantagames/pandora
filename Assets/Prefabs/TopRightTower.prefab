@@ -136,8 +136,8 @@ MonoBehaviour:
     type: 3}
   isMiddle: 0
   range: 5
-  damage: 0
-  cooldown: 0.3
+  damage: 3
+  cooldownMs: 300
   isOpponent: 1
   isFrontTowerDestroyed: 0
   middleTower: {fileID: 0}
@@ -168,7 +168,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeValue: 100
   mask: {fileID: 7602694168785827436}
-  isDead: 0
+  maxLife: 0
+  IsDead: 0
 --- !u!114 &2693967325251540128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebugEntity: 0
 --- !u!1 &2693967325692397651
 GameObject:
   m_ObjectHideFlags: 0
