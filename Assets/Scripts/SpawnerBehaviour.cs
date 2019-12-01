@@ -8,6 +8,10 @@ namespace Pandora
         public GameObject Unit;
         public Vector2Int[] Positions;
 
+        public Vector2Int[] CellPositions {
+            get => Positions;
+        }
+
         public List<GameObject> Spawn(MapComponent map, UnitSpawn spawn)
         {
             var units = new List<GameObject> { };

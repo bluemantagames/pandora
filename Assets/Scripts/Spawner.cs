@@ -6,5 +6,7 @@ namespace Pandora
     public interface Spawner
     {
         List<GameObject> Spawn(MapComponent map, UnitSpawn spawn);
+
+        Vector2Int[] CellPositions { get; }
     }
 }

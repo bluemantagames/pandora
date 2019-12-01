@@ -106,7 +106,7 @@ namespace Pandora
 
                 map = hit.collider.gameObject.GetComponent<MapComponent>();
 
-                canBeSpawned = map.OnUICardCollision(Puppet, IsAquatic, Global);
+                canBeSpawned = map.OnUICardCollision(Puppet, IsAquatic, Global, map.LoadCard(UnitName));
 
                 GetComponent<Image>().enabled = false;
             }

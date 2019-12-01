@@ -117,6 +117,14 @@ namespace Pandora.Combat
             return engine.IsInHitboxRangeCells(engineComponent.Entity, enemy.enemyEntity, AggroRangeCells);
         }
 
+        public bool IsInAggroRange(GridCell cell)
+        {
+            var engineComponent = GetComponent<EngineComponent>();
+            var engine = engineComponent.Engine;
+
+            return Vector2.Distance(cell.vector, engineComponent.Entity.GetCurrentCell().vector) < AggroRangeCells;
+        }
+
         public bool IsInAttackRange(Enemy enemy)
         {
             var engineComponent = GetComponent<EngineComponent>();

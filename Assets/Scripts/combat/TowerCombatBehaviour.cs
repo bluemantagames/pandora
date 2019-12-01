@@ -210,6 +210,11 @@ namespace Pandora.Combat
             return false; // aggro is managed by TickUpdate
         }
 
+        public bool IsInAggroRange(GridCell cell)
+        {
+            return false; // aggro is managed by TickUpdate
+        }
+
         public bool IsInAttackRange(Enemy enemy)
         {
             return false; // attack is managed by TickUpdate

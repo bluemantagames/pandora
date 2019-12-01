@@ -11,7 +11,7 @@ namespace Pandora
     public class LifeComponent : MonoBehaviour
     {
         public int lifeValue = 100;
-        public Image mask;
+        Image mask;
         float maskOriginalSize;
         public int maxLife;
         public bool IsDead = false;
@@ -20,6 +20,8 @@ namespace Pandora
         // Start is called before the first frame update
         void Start()
         {
+            mask = GetComponentInChildren<HealthbarBehaviour>().gameObject.transform.parent.gameObject.GetComponent<Image>();
+
             maskOriginalSize = mask.rectTransform.rect.width;
             maxLife = lifeValue;
         }
@@ -61,7 +63,6 @@ namespace Pandora
             float lifePercent = (float) lifeValue / (float) maxLife;
 
             mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
-
 
             if (lifeValue <= 0)
             {

@@ -23,6 +23,9 @@ namespace Pandora.Combat {
         /// <summary>Returns whether the unit should aggro another unity</summary>
         bool IsInAggroRange(Enemy enemy);
 
+        /// <summary>Returns whether the unit aggros another unit in a cell</summary>
+        bool IsInAggroRange(GridCell cell);
+
         /// <summary>Returns whether the unit is in attack range</summary>
         bool IsInAttackRange(Enemy enemy);
     }

@@ -30,6 +30,8 @@ namespace Pandora
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         float firstLaneX = 2, secondLaneX = 13;
 
+        List<GridCell> spawningCells;
+
         HashSet<GridCell> _riverPositions = new HashSet<GridCell>();
 
         HashSet<GridCell> riverPositions
@@ -266,16 +268,22 @@ namespace Pandora
                     timeSinceLastStep = 0;
                 }
             }
+
+            EnableAggroPoints();
         }
 
         public void DestroyPuppet()
         {
             if (lastPuppet != null)
                 Destroy(lastPuppet);
+
+            ResetAggroPoints();
         }
 
         public void SpawnCard(string cardName, int team, int requiredMana = 0)
         {
+            ResetAggroPoints();
+
             var mapCell = GetPointedCell().vector;
             var id = System.Guid.NewGuid().ToString();
             var manaEnabled = GetComponent<LocalManaBehaviourScript>()?.Enabled ?? true;
@@ -311,12 +319,14 @@ namespace Pandora
             }
         }
 
+        public GameObject LoadCard(string unitName) => Resources.Load($"Units/{unitName}") as GameObject;
+
         /// <summary>Spawns a unit</summary>
         public void SpawnUnit(UnitSpawn spawn)
         {
             Debug.Log($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY} Team {spawn.Team}");
 
-            var card = Resources.Load($"Units/{spawn.UnitName}") as GameObject;
+            var card = LoadCard(spawn.UnitName);
 
             if (spawn.Team == TeamComponent.topTeam)
             { // flip Y if top team
@@ -494,18 +504,78 @@ namespace Pandora
             return units;
         }
 
+        public void ResetAggroPoints()
+        {
+            var combatBehaviours =
+                from component in GetComponentsInChildren<CombatBehaviour>()
+                where
+                    !(component is TowerCombatBehaviour) &&
+                    (component as MonoBehaviour).gameObject.GetComponent<TeamComponent>().team != TeamComponent.assignedTeam
+                select component;
+
+            foreach (var combatBehaviour in combatBehaviours)
+            {
+                if (combatBehaviour is TowerCombatBehaviour) continue;
+
+                var behaviour = combatBehaviour as MonoBehaviour;
+
+                behaviour.gameObject.GetComponentInChildren<AggroExclamPointBehaviour>().gameObject.GetComponent<Image>().enabled = false;
+            }
+
+            spawningCells = null;
+        }
+
+        public void EnableAggroPoints()
+        {
+            if (spawningCells == null) return;
+
+            var combatBehaviours =
+                            from component in GetComponentsInChildren<CombatBehaviour>()
+                            where
+                                !(component is TowerCombatBehaviour) &&
+                                (component as MonoBehaviour).gameObject.GetComponent<TeamComponent>().team != TeamComponent.assignedTeam
+                            select component;
+
+            foreach (var combatBehaviour in combatBehaviours)
+            {
+                var isInRange = false;
+
+                foreach (var unitCell in spawningCells)
+                {
+                    if (combatBehaviour.IsInAggroRange(unitCell))
+                    {
+                        isInRange = true;
+
+                        break;
+                    }
+                }
+
+                if (combatBehaviour is TowerCombatBehaviour || !isInRange) continue;
+
+                var behaviour = combatBehaviour as MonoBehaviour;
+
+                behaviour.gameObject.GetComponentInChildren<AggroExclamPointBehaviour>().gameObject.GetComponent<Image>().enabled = true;
+            }
+        }
+
         /// <summary></summary>
-        public bool OnUICardCollision(GameObject puppet, bool isAquatic, bool isGlobal)
+        public bool OnUICardCollision(GameObject puppet, bool isAquatic, bool isGlobal, GameObject unit)
         {
             DestroyPuppet();
 
             var cell = GetPointedCell();
+
+            spawningCells =
+                (from position in unit.GetComponent<Spawner>()?.CellPositions ?? new Vector2Int[] { }
+                 select new GridCell(cell.vector + position)).ToList();
 
             if ((!isGlobal && cell.vector.y > 13) || (isAquatic && !riverPositions.Contains(cell))) return false;
 
             lastPuppet = Instantiate(puppet, GridCellToWorldPosition(cell), Quaternion.identity, transform);
 
             lastPuppet.transform.SetAsFirstSibling();
+
+            EnableAggroPoints();
 
             return true;
         }
