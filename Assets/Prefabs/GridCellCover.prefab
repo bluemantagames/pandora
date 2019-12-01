@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7500223515661188609}
   - component: {fileID: 7500223515661188608}
   - component: {fileID: 7500223515661188611}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GridCellCover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,9 +26,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7500223515661188613}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 556.7, y: 282.836, z: -4.87}
-  m_LocalScale: {x: 0.27769616, y: 0.28256252, z: 1}
+  m_LocalScale: {x: 0.25699133, y: 0.2614741, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0

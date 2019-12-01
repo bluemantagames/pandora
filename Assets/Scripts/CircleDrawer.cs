@@ -10,7 +10,7 @@ public class CircleDrawer : MonoBehaviour
     public float radius = 1.0f;
 
     [Range(3, 256)]
-    public int numSegments = 3;
+    public int numSegments = 128;
     public Color c1 = new Color(0.5f, 0.5f, 0.5f, 1);
 
     void Awake()
