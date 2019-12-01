@@ -3,7 +3,7 @@ using System;
 
 namespace Pandora
 {
-    public struct GridCell : IEquatable<GridCell>
+    public class GridCell : IEquatable<GridCell>
     {
         public Vector2Int vector;
 
@@ -18,12 +18,14 @@ namespace Pandora
 
         public bool Equals(GridCell other)
         {
-            return this.vector == other.vector;
+            return this.vector == other?.vector;
         }
+
+        private static bool isNull(object a) => object.Equals(a, null);
 
         public static bool operator ==(GridCell lhs, GridCell rhs)
         {
-            return lhs.Equals(rhs);
+            return isNull(lhs) ? isNull(rhs) : lhs.Equals(rhs);
         }
 
         public static bool operator !=(GridCell lhs, GridCell rhs)
@@ -36,7 +38,8 @@ namespace Pandora
             return this.vector.GetHashCode();
         }
 
-        override public string ToString() {
+        override public string ToString()
+        {
             return $"GridCell({this.vector.ToString()})";
         }
 

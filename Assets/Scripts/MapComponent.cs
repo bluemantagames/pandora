@@ -503,7 +503,9 @@ namespace Pandora
 
             if ((!isGlobal && cell.vector.y > 13) || (isAquatic && !riverPositions.Contains(cell))) return false;
 
-            lastPuppet = Instantiate(puppet, GridCellToWorldPosition(cell), Quaternion.identity);
+            lastPuppet = Instantiate(puppet, GridCellToWorldPosition(cell), Quaternion.identity, transform);
+
+            lastPuppet.transform.SetAsFirstSibling();
 
             return true;
         }
