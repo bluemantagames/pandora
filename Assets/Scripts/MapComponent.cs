@@ -312,7 +312,7 @@ namespace Pandora
                 message.team = team;
                 message.timestamp = DateTime.Now;
 
-                SpawnUnit(new UnitSpawn(message));
+                SpawnUnit(new UnitSpawn(message), requiredMana);
 
                 ManaSingleton.UpdateMana(ManaSingleton.manaValue - requiredMana);
                 ManaSingleton.manaUnit -= requiredMana;
@@ -322,7 +322,7 @@ namespace Pandora
         public GameObject LoadCard(string unitName) => Resources.Load($"Units/{unitName}") as GameObject;
 
         /// <summary>Spawns a unit</summary>
-        public void SpawnUnit(UnitSpawn spawn)
+        public void SpawnUnit(UnitSpawn spawn, int requiredMana = 0)
         {
             Debug.Log($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY} Team {spawn.Team}");
 
@@ -348,6 +348,7 @@ namespace Pandora
             else
             {
                 InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp);
+                ShowManaUsedAlert(cardObject, requiredMana);
             }
         }
 
@@ -383,7 +384,14 @@ namespace Pandora
             unit.GetComponent<EngineComponent>().Entity = engineEntity;
             unit.AddComponent<UnitIdComponent>().Id = id;
 
-            Units.Add(id, unit);
+            Units.Add(id, unit);            
+        }
+
+        public void ShowManaUsedAlert(GameObject unit, int manaUsed) {
+            var manaUsedText = 
+                unit.GetComponentInChildren<ManaUsedAlertBehaviour>().gameObject.GetComponent<Text>();
+
+            manaUsedText.text = $"-{manaUsed}";
         }
 
         public Enemy GetEnemy(GameObject unit, GridCell position, TeamComponent team)
