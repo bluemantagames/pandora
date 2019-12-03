@@ -406,8 +406,12 @@ namespace Pandora
 
             var combatBehaviour = unit.GetComponent<CombatBehaviour>();
 
-            foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
+            foreach (var entity in engine.Entities)
             {
+                var component = entity.GameObject.GetComponent<TeamComponent>();
+
+                if (component == null) continue;
+
                 var targetGameObject = component.gameObject;
                 var gameObjectPosition = GetCell(targetGameObject);
                 var engineEntity = GetEngineEntity(unit);
