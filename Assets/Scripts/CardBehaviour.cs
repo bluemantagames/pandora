@@ -202,11 +202,6 @@ namespace Pandora
 
         void Update() 
         {
-            // Check click
-            if (Input.GetKeyDown(KeyCode.Mouse0)) {
-
-            }
-
             imageComponent.color = (Selected == true) ? Color.green : defaultColor;
         }
     }
