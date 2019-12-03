@@ -348,8 +348,9 @@ namespace Pandora
             else
             {
                 InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp);
-                ShowManaUsedAlert(cardObject, requiredMana);
             }
+
+            ShowManaUsedAlert(cardObject, requiredMana);
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>
@@ -389,7 +390,7 @@ namespace Pandora
 
         public void ShowManaUsedAlert(GameObject unit, int manaUsed) {
             var manaUsedText = 
-                unit.GetComponentInChildren<ManaUsedAlertBehaviour>().gameObject.GetComponent<Text>();
+                unit.GetComponentInChildren<ManaUsedAlertBehaviour>().gameObject.GetComponentInChildren<Text>();
 
             manaUsedText.text = $"-{manaUsed}";
         }
