@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733e88c63e6713f4fa432c8e37a8f31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeValue: 100
+  lifeValue: 150
   maxLife: 0
   IsDead: 0
 --- !u!95 &7129443875767093079
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
-  MovementSpeed: 400
+  MovementSpeed: 1000
 --- !u!114 &3519887656195453972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,12 +200,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c2243c9941e6d0488bbe0ced3e3f2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
-  attackCooldownMs: 500
-  backswingMs: 400
+  damage: 120
+  attackCooldownMs: 300
+  backswingMs: 300
   animationStateName: HalfOrcWolfAttack
   AggroRangeCells: 3
-  AttackRangeEngineUnits: 2
+  AttackRangeEngineUnits: 200
 --- !u!61 &9130794682398608112
 BoxCollider2D:
   m_ObjectHideFlags: 0

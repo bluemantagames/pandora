@@ -266,7 +266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
-  MovementSpeed: 400
+  MovementSpeed: 375
 --- !u!114 &5654515141237051945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,9 +295,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c2243c9941e6d0488bbe0ced3e3f2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 250
   attackCooldownMs: 500
-  backswingMs: 400
+  backswingMs: 1
   animationStateName: GiantAttack
   AggroRangeCells: 3
   AttackRangeEngineUnits: 200
@@ -354,7 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Width: 4000
   Height: 3000
-  Damage: 50
+  Damage: 65
   DebugLines: 1
   EffectObjects:
   - {fileID: 2016888992844160403, guid: cd54571460e65a54798ea4d9536916ee, type: 3}
