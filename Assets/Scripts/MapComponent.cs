@@ -522,7 +522,12 @@ namespace Pandora
 
                 var behaviour = combatBehaviour as MonoBehaviour;
 
-                behaviour.gameObject.GetComponentInChildren<AggroExclamPointBehaviour>().gameObject.GetComponent<Image>().enabled = false;
+                var image = behaviour?.gameObject?.GetComponentInChildren<AggroExclamPointBehaviour>()?.gameObject?.GetComponent<Image>();
+
+                if (image != null)
+                {
+                    image.enabled = false;
+                }
             }
 
             spawningCells = null;
@@ -557,7 +562,11 @@ namespace Pandora
 
                 var behaviour = combatBehaviour as MonoBehaviour;
 
-                behaviour.gameObject.GetComponentInChildren<AggroExclamPointBehaviour>().gameObject.GetComponent<Image>().enabled = true;
+                var image = behaviour?.gameObject?.GetComponentInChildren<AggroExclamPointBehaviour>()?.gameObject?.GetComponent<Image>();
+
+                if (image != null) {
+                    image.enabled = true;
+                }
             }
         }
 

@@ -2255,7 +2255,7 @@ PrefabInstance:
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: Team
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
@@ -2293,17 +2293,17 @@ PrefabInstance:
     - target: {fileID: 5968370716324617281, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.25364897
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617281, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.43529415
+      value: 0.29825354
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617281, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.44115514
+      value: 0.4716981
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 27421fb6b693f7049b807a5040ece799, type: 3}
@@ -2851,12 +2851,12 @@ PrefabInstance:
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: CardName
-      value: Fireball
+      value: Clerics
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: Team
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
@@ -2873,7 +2873,7 @@ PrefabInstance:
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: UnitName
-      value: Fireball
+      value: ClericsSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
@@ -2894,17 +2894,17 @@ PrefabInstance:
     - target: {fileID: 5968370716324617281, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.43529415
+      value: 0.8962264
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617281, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.45529425
+      value: 0.03381984
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617281, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.21306321
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 27421fb6b693f7049b807a5040ece799, type: 3}
