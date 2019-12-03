@@ -104,8 +104,7 @@ namespace Pandora
             Screen.fullScreen = false;
             Screen.SetResolution(1080, 1920, false);
 
-            Application.targetFrameRate = -1;
-            //QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = 30;
 
             var topArena = GameObject.Find("top_arena");
             var topArenaPosition = topArena.transform.position;
@@ -364,7 +363,11 @@ namespace Pandora
 
             if (projectileSpell != null)
             {
-                var towerPosition = GetTowerPositionComponent(TowerPosition.BottomMiddle);
+                projectileSpell.StartCell =
+                    new GridCell(
+                        ((team == TeamComponent.assignedTeam) ?
+                            GetTowerPositionComponent(TowerPosition.BottomMiddle) : GetTowerPositionComponent(TowerPosition.TopMiddle)).Position
+                    );
 
                 projectileSpell.map = this;
             }

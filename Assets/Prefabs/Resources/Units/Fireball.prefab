@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 0}
-  speed: 3
+  Speed: 4000
 --- !u!114 &6659282926461846134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f4a81e13c05df408aa1e6be385905a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 200
   radius: 3
 --- !u!114 &8524348773393458539
 MonoBehaviour:
@@ -138,6 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebugEntity: 0
 --- !u!61 &2775991788436886472
 BoxCollider2D:
   m_ObjectHideFlags: 0
