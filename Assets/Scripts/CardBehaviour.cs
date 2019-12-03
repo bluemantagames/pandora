@@ -11,7 +11,7 @@ using Pandora.Deck.UI;
 
 namespace Pandora
 {
-    public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerClickHandler
+    public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         Vector3? originalPosition = null;
         MapComponent map;
@@ -25,7 +25,7 @@ namespace Pandora
         public bool IsAquatic = false;
         public bool FixedInGame = false;
         public bool Global = false;
-        public bool Selected = false;
+        public bool MulliganSelected = false;
 
         Image imageComponent;
         GraphicRaycaster raycasterComponent;
@@ -187,11 +187,6 @@ namespace Pandora
             }
         }
 
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            Selected = !Selected;
-        }
-
         void Awake()
         {
             raycasterComponent = gameObject.GetComponent<GraphicRaycaster>();
@@ -202,7 +197,8 @@ namespace Pandora
 
         void Update() 
         {
-            imageComponent.color = (Selected == true) ? Color.green : defaultColor;
+
+            imageComponent.color = (MulliganSelected == true) ? Color.yellow : defaultColor;
         }
     }
 }
