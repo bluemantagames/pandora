@@ -164,10 +164,12 @@ namespace Pandora.Combat
 
             isAttacking = true;
 
-            var projectileObject = Instantiate(projectile, worldTowerPosition, Quaternion.identity);
+            var towerEntity = GetComponent<TowerPositionComponent>().TowerEntity;
+
+            var projectileObject = Instantiate(projectile, MapComponent.Instance.engine.PhysicsToWorld(towerEntity.Position), Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
-            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, map.WorldPositionToGridCell(transform.position), false, null);
+            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, towerEntity.Position, false, null);
 
             projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
 

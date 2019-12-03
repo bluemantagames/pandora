@@ -24,7 +24,7 @@ namespace Pandora.Combat
         public MapComponent map { private get; set; }
         private EngineEntity engineEntity;
         public int StartRotationDegrees = 0;
-        public bool IsAoe = false;
+        public bool IsAoe = false, ShouldHitAllies = false;
         public int EngineUnitsRadius = 0;
 
         public void Collided(EngineEntity other, uint passed)
@@ -54,11 +54,14 @@ namespace Pandora.Combat
 
                     var hitEntities = engineEntity.Engine.FindInRadius(hitbox.Center, EngineUnitsRadius + maxDimension, true);
 
+                    var alliedTeam = parent.GetComponent<TeamComponent>().team;
+
                     Debug.Log($"Searching in {EngineUnitsRadius + maxDimension}");
 
                     foreach (var entity in hitEntities)
                     {
                         if (entity.GameObject == target.enemy || entity.GameObject == gameObject || !entity.IsRigid) continue;
+                        if (entity.GameObject.GetComponent<TeamComponent>().team == alliedTeam && !ShouldHitAllies) continue;
 
                         Debug.Log($"Hit {entity}");
 

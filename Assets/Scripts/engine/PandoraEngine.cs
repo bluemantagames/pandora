@@ -79,8 +79,6 @@ namespace Pandora.Engine
         {
             var ticksNum = msLapsed / TickTime;
 
-            Debug.Log($"Advancing {ticksNum} ticks in {Time.time}");
-
             totalElapsed += msLapsed;
 
             GameObject.Find("MsElapsedText").GetComponent<Text>().text = $"Elapsed: {totalElapsed}";
