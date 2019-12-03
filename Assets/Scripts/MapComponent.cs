@@ -566,7 +566,7 @@ namespace Pandora
             var cell = GetPointedCell();
 
             spawningCells =
-                (from position in unit.GetComponent<Spawner>()?.CellPositions ?? new Vector2Int[] { }
+                (from position in unit.GetComponent<Spawner>()?.CellPositions ?? new Vector2Int[] { new Vector2Int(0, 0) }
                  select new GridCell(cell.vector + position)).ToList();
 
             if ((!isGlobal && cell.vector.y > 13) || (isAquatic && !riverPositions.Contains(cell))) return false;
