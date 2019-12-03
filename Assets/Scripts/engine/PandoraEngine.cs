@@ -892,7 +892,7 @@ namespace Pandora.Engine
             PoolInstances.Vector2Pool.ReturnObject(physicsExtents);
         }
 
-        BoxBounds GetEntityBounds(EngineEntity entity)
+        public BoxBounds GetEntityBounds(EngineEntity entity)
         {
             var bounds = new BoxBounds();
 

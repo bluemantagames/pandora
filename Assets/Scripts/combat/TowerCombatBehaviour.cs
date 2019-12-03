@@ -187,7 +187,7 @@ namespace Pandora.Combat
         }
 
         /** Called if a launched projectile collided */
-        public void ProjectileCollided()
+        public void ProjectileCollided(Enemy target)
         {
             Debug.Log($"Assigning damage {targetLifeComponent} {currentTarget}");
 

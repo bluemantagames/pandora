@@ -174,7 +174,7 @@ namespace Pandora
                 isTower = false;
             }
 
-            return isRiver || isOutOfBounds;
+            return isRiver || isTower || isOutOfBounds;
         }
 
         public GridCell WorldPositionToGridCell(Vector2 position)

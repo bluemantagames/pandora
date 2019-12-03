@@ -15,7 +15,7 @@ namespace Pandora.Combat {
         void StopAttacking();
 
         /// <summary>Called if a launched projectile collided</summary>
-        void ProjectileCollided();
+        void ProjectileCollided(Enemy target);
 
         /// <summary>Called on unit death</summary>
         void OnDead();

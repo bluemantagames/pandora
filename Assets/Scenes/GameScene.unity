@@ -307,7 +307,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 100
+  m_SortingOrder: 2
   m_Sprite: {fileID: -435753329481131937, guid: 7421b4eeb8ffe6145807ba076748f6c4,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2704,7 +2704,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 100
+  m_SortingOrder: 2
   m_Sprite: {fileID: -435753329481131937, guid: 7421b4eeb8ffe6145807ba076748f6c4,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2851,7 +2851,7 @@ PrefabInstance:
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: CardName
-      value: Ranger
+      value: Cockatrice
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
@@ -2873,7 +2873,7 @@ PrefabInstance:
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: UnitName
-      value: Ranger
+      value: Cockatrice
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
@@ -4243,6 +4243,11 @@ PrefabInstance:
       propertyPath: map
       value: 
       objectReference: {fileID: 996488289}
+    - target: {fileID: 3866240383038811720, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: lifeValue
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: WorldTowerPosition
@@ -4307,11 +4312,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 1.877
-      objectReference: {fileID: 0}
-    - target: {fileID: 3866240383038811720, guid: 3ae196b7cda494c4b8d0457362c166ec,
-        type: 3}
-      propertyPath: lifeValue
-      value: 1000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ae196b7cda494c4b8d0457362c166ec, type: 3}

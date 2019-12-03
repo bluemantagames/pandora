@@ -93,7 +93,7 @@ namespace Pandora.Combat
             }
         }
 
-        public void ProjectileCollided()
+        public void ProjectileCollided(Enemy target)
         {
             var lifeComponent = target?.enemy.GetComponent<LifeComponent>();
 

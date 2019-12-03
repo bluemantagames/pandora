@@ -308,10 +308,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a9892cbc13c6c4ca1446776a4deac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 10
+  Damage: 0
   attackCooldownMs: 500
-  backswingMs: 400
-  projectile: {fileID: 5687362912629012028, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
+  backswingMs: 500
+  projectile: {fileID: 5134347281049451002, guid: 35a164300dbc86948b7fd2e6f7ceef41,
     type: 3}
   animationStateName: AttackingDragon
   AggroRangeCells: 3

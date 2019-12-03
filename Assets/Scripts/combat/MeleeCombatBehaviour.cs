@@ -97,7 +97,7 @@ namespace Pandora.Combat
         }
 
         // Do nothing, we don't have projectiles
-        public void ProjectileCollided()
+        public void ProjectileCollided(Enemy target)
         {
         }
 
