@@ -15,6 +15,11 @@ namespace Pandora.Combat
 
         public GameObject parent { get; set; }
         public int speed = 1800;
+
+        public int Speed {
+            get => speed;
+        }
+
         public Enemy target { get; set; }
         public MapComponent map { private get; set; }
         private EngineEntity engineEntity;
@@ -53,7 +58,7 @@ namespace Pandora.Combat
 
                     foreach (var entity in hitEntities)
                     {
-                        if (entity.GameObject == target.enemy || entity.GameObject == gameObject) continue;
+                        if (entity.GameObject == target.enemy || entity.GameObject == gameObject || !entity.IsRigid) continue;
 
                         Debug.Log($"Hit {entity}");
 
@@ -61,9 +66,9 @@ namespace Pandora.Combat
                     }
                 }
 
-
                 gameObject.SetActive(false);
                 map.engine.RemoveEntity(engineEntity);
+
                 Destroy(this);
             }
         }
@@ -71,11 +76,9 @@ namespace Pandora.Combat
         // Start is called before the first frame update
         void Start()
         {
-            engineEntity = map.engine.AddEntity(gameObject, speed, map.WorldPositionToGridCell(transform.position), false, null);
-
-            engineEntity.CollisionCallback = this;
-
             body = GetComponent<Rigidbody2D>();
+
+            engineEntity = GetComponent<EngineComponent>().Entity;
         }
 
         // Update is called once per frame
@@ -94,8 +97,6 @@ namespace Pandora.Combat
 
             // Move the projectile forward
             transform.position = shouldBeFlipped ? engineEntity.GetFlippedWorldPosition() : engineEntity.GetWorldPosition();
-
-            engineEntity.SetTarget(target.enemyEntity);
 
             // TODO: Play "miss" animation, and then remove the entity
             if (target.enemyEntity.GameObject.GetComponent<LifeComponent>().IsDead)

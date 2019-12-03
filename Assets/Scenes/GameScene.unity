@@ -1994,6 +1994,11 @@ PrefabInstance:
       propertyPath: aggroBoxEnd.x
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: cooldownMs
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: position.x
@@ -4041,6 +4046,11 @@ PrefabInstance:
       propertyPath: middleTower
       value: 
       objectReference: {fileID: 2089915458}
+    - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: cooldownMs
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: WorldTowerPosition
@@ -4243,6 +4253,11 @@ PrefabInstance:
       propertyPath: map
       value: 
       objectReference: {fileID: 996488289}
+    - target: {fileID: 3866240383038811766, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: isOpponent
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3866240383038811720, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: lifeValue

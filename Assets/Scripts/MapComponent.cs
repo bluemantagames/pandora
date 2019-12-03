@@ -247,7 +247,7 @@ namespace Pandora
             {
                 localTime += Time.deltaTime;
 
-                if (localTime * 1000 > engine.TickTime)
+                if (localTime * 1000 >= engine.TickTime)
                 {
                     engine.Process(engine.TickTime);
 

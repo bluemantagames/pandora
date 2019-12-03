@@ -11,9 +11,7 @@ namespace Pandora.Combat
         public MapComponent map;
         public GameObject projectile;
         public string ComponentName {
-            get {
-                return "TowerCombatBehaviour";
-            }
+            get => "TowerCombatBehaviour";
         }
 
         public Vector2 aggroBoxOrigin {
@@ -38,10 +36,8 @@ namespace Pandora.Combat
                 return CombatType.Ranged;
             }
         }
-        public int range = 5;
         public int damage = 3;
         public uint cooldownMs = 300;
-        public bool isOpponent = false;
 
         TowerTeamComponent teamComponent;
         Vector2 worldTowerPosition
@@ -149,6 +145,8 @@ namespace Pandora.Combat
             { // if not dead, attack once cooldown is over
                 lastAttackTimeLapse += lapsed;
 
+                Debug.Log($"Time lapse is {lastAttackTimeLapse} {Time.time}");
+
                 if (lastAttackTimeLapse >= cooldownMs)
                 {
                     lastAttackTimeLapse = 0;
@@ -169,11 +167,21 @@ namespace Pandora.Combat
             var projectileObject = Instantiate(projectile, worldTowerPosition, Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
+            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, map.WorldPositionToGridCell(transform.position), false, null);
+
+            projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
+
+            projectileEngineEntity.SetTarget(target.enemyEntity);
+
             Debug.Log($"Spawning projectile targeting {target} - Setting map {map}");
 
             projectileObject.GetComponent<ProjectileBehaviour>().target = target;
             projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;
             projectileObject.GetComponent<ProjectileBehaviour>().map = map;
+
+            var engineComponent = projectileObject.AddComponent<EngineComponent>();
+
+            engineComponent.Entity = projectileEngineEntity;
         }
 
         /** Stops attacking an enemy */
