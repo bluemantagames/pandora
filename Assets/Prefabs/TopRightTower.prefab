@@ -136,8 +136,8 @@ MonoBehaviour:
     type: 3}
   isMiddle: 0
   range: 5
-  damage: 3
-  cooldownMs: 300
+  damage: 50
+  cooldownMs: 1000
   isOpponent: 1
   isFrontTowerDestroyed: 0
   middleTower: {fileID: 0}

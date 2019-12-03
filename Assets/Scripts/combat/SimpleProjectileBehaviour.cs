@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using System.Linq;
 using Pandora;
 using Pandora.Engine;
@@ -14,10 +15,17 @@ namespace Pandora.Combat
 
         public GameObject parent { get; set; }
         public int speed = 1800;
+
+        public int Speed {
+            get => speed;
+        }
+
         public Enemy target { get; set; }
         public MapComponent map { private get; set; }
         private EngineEntity engineEntity;
         public int StartRotationDegrees = 0;
+        public bool IsAoe = false;
+        public int EngineUnitsRadius = 0;
 
         public void Collided(EngineEntity other, uint passed)
         {
@@ -27,15 +35,40 @@ namespace Pandora.Combat
 
                 if (behaviour != null)
                 {
-                    behaviour.ProjectileCollided();
+                    behaviour.ProjectileCollided(target);
                 }
                 else
                 {
                     Debug.LogWarning("Could not find ProjectileCollided in parent");
                 }
 
+
+                if (IsAoe)
+                {
+                    var hitbox = engineEntity.Engine.GetEntityBounds(engineEntity);
+
+                    var maxDimension = Math.Max(
+                        hitbox.UpperRight.x - hitbox.LowerLeft.x,
+                        hitbox.UpperRight.y - hitbox.LowerLeft.y
+                    );
+
+                    var hitEntities = engineEntity.Engine.FindInRadius(hitbox.Center, EngineUnitsRadius + maxDimension, true);
+
+                    Debug.Log($"Searching in {EngineUnitsRadius + maxDimension}");
+
+                    foreach (var entity in hitEntities)
+                    {
+                        if (entity.GameObject == target.enemy || entity.GameObject == gameObject || !entity.IsRigid) continue;
+
+                        Debug.Log($"Hit {entity}");
+
+                        behaviour.ProjectileCollided(new Enemy(entity.GameObject));
+                    }
+                }
+
                 gameObject.SetActive(false);
                 map.engine.RemoveEntity(engineEntity);
+
                 Destroy(this);
             }
         }
@@ -43,11 +76,9 @@ namespace Pandora.Combat
         // Start is called before the first frame update
         void Start()
         {
-            engineEntity = map.engine.AddEntity(gameObject, speed, map.WorldPositionToGridCell(transform.position), false, null);
-
-            engineEntity.CollisionCallback = this;
-
             body = GetComponent<Rigidbody2D>();
+
+            engineEntity = GetComponent<EngineComponent>().Entity;
         }
 
         // Update is called once per frame
@@ -67,10 +98,9 @@ namespace Pandora.Combat
             // Move the projectile forward
             transform.position = shouldBeFlipped ? engineEntity.GetFlippedWorldPosition() : engineEntity.GetWorldPosition();
 
-            engineEntity.SetTarget(target.enemyEntity);
-
             // TODO: Play "miss" animation, and then remove the entity
-            if (target.enemyEntity.GameObject.GetComponent<LifeComponent>().IsDead) {
+            if (target.enemyEntity.GameObject.GetComponent<LifeComponent>().IsDead)
+            {
                 gameObject.SetActive(false);
 
                 Destroy(this);

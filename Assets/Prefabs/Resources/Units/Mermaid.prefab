@@ -260,8 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733e88c63e6713f4fa432c8e37a8f31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeValue: 100
-  mask: {fileID: 9015842578933355138}
+  lifeValue: 125
   maxLife: 0
   IsDead: 0
 --- !u!95 &7129443875767093079
@@ -311,7 +310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a9892cbc13c6c4ca1446776a4deac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 1
+  Damage: 125
   attackCooldownMs: 500
   backswingMs: 400
   projectile: {fileID: 5687362912629012028, guid: d519b85eadcfc0d43ab3c181acade232,
@@ -358,7 +357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec9b3b5564e46048a69d3e9043e428f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 800
+  MovementSpeed: 750
 --- !u!1001 &1817415095756202251
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -484,15 +483,3 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1817415095756202251}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9015842578933355138 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7216583443936785289, guid: b162e8ef05976444397a5b9c48018bb8,
-    type: 3}
-  m_PrefabInstance: {fileID: 1817415095756202251}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

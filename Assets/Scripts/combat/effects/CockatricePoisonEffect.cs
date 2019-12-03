@@ -1,11 +1,14 @@
 using UnityEngine;
 using Pandora.Engine;
 
-namespace Pandora.Combat.Effects {
-    public class CockatricePoisonEffect: MonoBehaviour, EngineBehaviour, Effect {
+namespace Pandora.Combat.Effects
+{
+    public class CockatricePoisonEffect : MonoBehaviour, EngineBehaviour, Effect
+    {
         bool _isDisabled = false;
 
-        public bool IsDisabled {
+        public bool IsDisabled
+        {
             get => _isDisabled;
             set => _isDisabled = value;
         }
@@ -18,12 +21,18 @@ namespace Pandora.Combat.Effects {
 
         public string ComponentName => "CockatricePoison";
 
-        public Effect Apply(GameObject origin, GameObject target) {
+        public SpriteRenderer spriteRenderer;
+
+        public Effect Apply(GameObject origin, GameObject target)
+        {
             var component = target.GetComponent<CockatricePoisonEffect>();
 
-            if (component != null) {
+            if (component != null)
+            {
                 component.Refresh();
-            } else {
+            }
+            else
+            {
                 component = target.AddComponent<CockatricePoisonEffect>();
 
                 component.Origin = origin;
@@ -37,8 +46,9 @@ namespace Pandora.Combat.Effects {
             return component;
         }
 
-        void Start() {
-            var spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
+        void Start()
+        {
+            spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
 
             OriginalColor = spriteRenderer.color;
 
@@ -51,15 +61,17 @@ namespace Pandora.Combat.Effects {
 
             timePassed += timeLapsed;
 
-            if (timePassed % PoisonTickMs == 0) {
+            if (timePassed % PoisonTickMs == 0)
+            {
                 var lifeComponent = gameObject.GetComponent<LifeComponent>();
-                
-                lifeComponent.AssignDamage((int) DamagePerTick);
+
+                lifeComponent.AssignDamage((int)DamagePerTick);
 
                 if (lifeComponent.IsDead) Unapply(gameObject);
             }
 
-            if (timePassed % PoisonDurationMs == 0) {
+            if (timePassed % PoisonDurationMs == 0)
+            {
                 Unapply(gameObject);
             }
         }
@@ -70,18 +82,20 @@ namespace Pandora.Combat.Effects {
 
             component.IsDisabled = true;
 
-            component.gameObject.GetComponent<SpriteRenderer>().color = component.OriginalColor;
+            component.spriteRenderer.color = component.OriginalColor;
 
             Destroy(component);
-            
+
             RefreshComponents();
         }
 
-        public void Refresh() {
+        public void Refresh()
+        {
             timePassed = 0;
         }
 
-        void RefreshComponents() {
+        void RefreshComponents()
+        {
             gameObject.GetComponent<EngineComponent>().RefreshComponents();
         }
     }

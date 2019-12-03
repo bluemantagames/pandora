@@ -6,7 +6,7 @@ namespace Pandora.Command
 {
     public class CommandListener : MonoBehaviour
     {
-        public uint DoubleTapMaxDelayMs = 200;
+        public uint DoubleTapMaxDelayMs = 500;
 
         float? lastTapMs = null;
         public bool Used = false;

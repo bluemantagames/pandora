@@ -76,14 +76,25 @@ namespace Pandora.Combat
             if (target == null) return;
 
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
+            var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
             var map = MapComponent.Instance;
+
+            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, map.WorldPositionToGridCell(transform.position), false, null);
+
+            projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
+
+            projectileEngineEntity.SetTarget(target.enemyEntity);
 
             Debug.Log($"Spawning projectile targeting {target} - Setting map {map}");
 
             projectileObject.GetComponent<ProjectileBehaviour>().target = target;
             projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;
             projectileObject.GetComponent<ProjectileBehaviour>().map = map;
+
+            var engineComponent = projectileObject.AddComponent<EngineComponent>();
+
+            engineComponent.Entity = projectileEngineEntity;
 
             var lifeComponent = target.enemy.GetComponent<LifeComponent>();
 
@@ -93,7 +104,7 @@ namespace Pandora.Combat
             }
         }
 
-        public void ProjectileCollided()
+        public void ProjectileCollided(Enemy target)
         {
             var lifeComponent = target?.enemy.GetComponent<LifeComponent>();
 

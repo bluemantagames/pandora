@@ -104,8 +104,7 @@ namespace Pandora
             Screen.fullScreen = false;
             Screen.SetResolution(1080, 1920, false);
 
-            Application.targetFrameRate = -1;
-            //QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = 30;
 
             var topArena = GameObject.Find("top_arena");
             var topArenaPosition = topArena.transform.position;
@@ -174,7 +173,7 @@ namespace Pandora
                 isTower = false;
             }
 
-            return isRiver || isOutOfBounds;
+            return isRiver || isTower || isOutOfBounds;
         }
 
         public GridCell WorldPositionToGridCell(Vector2 position)
@@ -248,7 +247,7 @@ namespace Pandora
             {
                 localTime += Time.deltaTime;
 
-                if (localTime * 1000 > engine.TickTime)
+                if (localTime * 1000 >= engine.TickTime)
                 {
                     engine.Process(engine.TickTime);
 
@@ -366,7 +365,11 @@ namespace Pandora
 
             if (projectileSpell != null)
             {
-                var towerPosition = GetTowerPositionComponent(TowerPosition.BottomMiddle);
+                projectileSpell.StartCell =
+                    new GridCell(
+                        ((team == TeamComponent.assignedTeam) ?
+                            GetTowerPositionComponent(TowerPosition.BottomMiddle) : GetTowerPositionComponent(TowerPosition.TopMiddle)).Position
+                    );
 
                 projectileSpell.map = this;
             }
@@ -528,7 +531,12 @@ namespace Pandora
 
                 var behaviour = combatBehaviour as MonoBehaviour;
 
-                behaviour.gameObject.GetComponentInChildren<AggroExclamPointBehaviour>().gameObject.GetComponent<Image>().enabled = false;
+                var image = behaviour?.gameObject?.GetComponentInChildren<AggroExclamPointBehaviour>()?.gameObject?.GetComponent<Image>();
+
+                if (image != null)
+                {
+                    image.enabled = false;
+                }
             }
 
             spawningCells = null;
@@ -563,7 +571,11 @@ namespace Pandora
 
                 var behaviour = combatBehaviour as MonoBehaviour;
 
-                behaviour.gameObject.GetComponentInChildren<AggroExclamPointBehaviour>().gameObject.GetComponent<Image>().enabled = true;
+                var image = behaviour?.gameObject?.GetComponentInChildren<AggroExclamPointBehaviour>()?.gameObject?.GetComponent<Image>();
+
+                if (image != null) {
+                    image.enabled = true;
+                }
             }
         }
 
@@ -575,7 +587,7 @@ namespace Pandora
             var cell = GetPointedCell();
 
             spawningCells =
-                (from position in unit.GetComponent<Spawner>()?.CellPositions ?? new Vector2Int[] { }
+                (from position in unit.GetComponent<Spawner>()?.CellPositions ?? new Vector2Int[] { new Vector2Int(0, 0) }
                  select new GridCell(cell.vector + position)).ToList();
 
             if ((!isGlobal && cell.vector.y > 13) || (isAquatic && !riverPositions.Contains(cell))) return false;
