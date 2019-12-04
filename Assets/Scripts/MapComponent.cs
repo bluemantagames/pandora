@@ -499,8 +499,12 @@ namespace Pandora
             var lowerRange = Math.Min(origin.y, origin.y + heightCells);
             var higherRange = Math.Max(origin.y, origin.y + heightCells);
 
-            foreach (var component in GetComponentsInChildren<UnitBehaviour>())
+            foreach (var entity in engine.Entities)
             {
+                var component = entity.GameObject.GetComponent<UnitBehaviour>();
+
+                if (component == null) continue;
+
                 var cellVector = GetCell(component.gameObject).vector;
 
                 var isDead = component.gameObject.GetComponent<LifeComponent>()?.IsDead ?? true;
