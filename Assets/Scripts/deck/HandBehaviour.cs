@@ -4,6 +4,7 @@ using UnityEngine.Playables;
 using System.Collections.Generic;
 using Pandora.Deck.Event;
 using Pandora.Events;
+using UnityEngine.UI;
 using System;
 using System.Linq;
 
@@ -27,7 +28,12 @@ namespace Pandora.Deck
 
         HandCard[] hand = new HandCard[32];
 
-        List<int> mulliganSelected = new List<int> { };
+        int mulligansAvailable = 1;
+
+        List<HandCard> mulliganSelected = new List<HandCard> { };
+
+        public GameObject MulliganTakeObject;
+        public GameObject MulliganRejectObject;
 
         int handIndex = -1;
 
@@ -46,7 +52,10 @@ namespace Pandora.Deck
 
             deck.EventBus.Subscribe<CardDrawn>(new EventSubscriber<DeckEvent>(CardDrawn, "HandDrawHandler"));
             deck.EventBus.Subscribe<CardPlayed>(new EventSubscriber<DeckEvent>(CardPlayed, "HandPlayHandler"));
-            deck.EventBus.Subscribe<MulliganSelect>(new EventSubscriber<DeckEvent>(MulliganSelect, "MulliganSelectHandled"));
+            deck.EventBus.Subscribe<CardDiscarded>(new EventSubscriber<DeckEvent>(CardDiscarded, "HandDiscardHandler"));
+            deck.EventBus.Subscribe<MulliganSelect>(new EventSubscriber<DeckEvent>(MulliganSelected, "MulliganSelectHandled"));
+            deck.EventBus.Subscribe<MulliganTaken>(new EventSubscriber<DeckEvent>(MulliganTaken, "MulliganTakenHandled"));
+            deck.EventBus.Subscribe<MulliganRejected>(new EventSubscriber<DeckEvent>(MulliganRejected, "MulliganRejectedHandled"));
 
             if (deck is LocalDeck localDeck)
             {
@@ -177,19 +186,30 @@ namespace Pandora.Deck
             Debug.Log($"Playing from {rectTransform} to {idx}");
         }
 
-        void OnDisable()
+        void CardDiscarded(DeckEvent ev)
         {
-            foreach (var graph in graphs)
+            var cardPlayed = ev as CardDiscarded;
+
+            for (var i = 0; i < hand.Length; i++)
             {
-                if (graph.IsValid()) graph.Destroy();
+                if (hand[i] != null && hand[i].Name == cardPlayed.Name)
+                {
+                    Destroy(hand[i].CardObject);
+                    hand[i] = null;
+                }
             }
         }
 
-        void MulliganSelect(DeckEvent ev) 
+        void MulliganSelected(DeckEvent ev) 
         {
+            if (mulligansAvailable <= 0) 
+            {
+                return;
+            }
+
             var cardSelected = ev as MulliganSelect;
 
-            // This is slow...
+            // This could be slow...
             for (var idx = 0; idx < hand.Length; idx++)
             {
                 if (hand[idx] == null || hand[idx].Name != cardSelected.Name)
@@ -198,23 +218,68 @@ namespace Pandora.Deck
                 }
 
                 var card = hand[idx];
-                var mulliganPosition = mulliganSelected.IndexOf(idx);
+                var mulliganPosition = mulliganSelected.IndexOf(card);
 
-                // This should be a different action perhaps...
                 if (mulliganPosition != -1) {
                     mulliganSelected.RemoveAt(mulliganPosition);
                     card.CardObject.GetComponent<CardBehaviour>().MulliganSelected = false;
-                    break;
                 }
-
-                if (mulliganSelected.Count < deck.MaxMulliganSize)
+                else if (mulliganSelected.Count < deck.MaxMulliganSize)
                 {
-                    mulliganSelected.Add(idx);
+                    mulliganSelected.Add(card);
                     card.CardObject.GetComponent<CardBehaviour>().MulliganSelected = true;
                 }
 
                 break;
             }
+        }
+
+        void MulliganTaken(DeckEvent ev) 
+        {
+            if (mulligansAvailable <= 0 || mulliganSelected.Count <= 0) 
+            {
+                return;
+            }
+
+            for (int i = mulliganSelected.Count - 1; i >= 0; i--)
+            {
+                var handCard = mulliganSelected[i];
+                
+                LocalDeck.Instance.DiscardCard(new Card(handCard.Name));
+                mulliganSelected.RemoveAt(i);
+            }
+
+            mulligansAvailable -= 1;
+
+            if (mulligansAvailable <= 0)
+            {
+                DisableMulliganUI();
+            }
+        }
+
+        void MulliganRejected(DeckEvent ev) 
+        {
+            if (mulligansAvailable <= 0) 
+            {
+                return;
+            }
+
+            mulligansAvailable = 0;
+            DisableMulliganUI();
+        }
+
+        void OnDisable()
+        {
+            foreach (var graph in graphs)
+            {
+                if (graph.IsValid()) graph.Destroy();
+            }
+        }
+
+        void DisableMulliganUI()
+        {
+            if (MulliganTakeObject != null) MulliganTakeObject.GetComponent<Button>().interactable = false;
+            if (MulliganRejectObject != null) MulliganRejectObject.GetComponent<Button>().interactable = false;
         }
 
     }

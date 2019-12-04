@@ -16,10 +16,10 @@ namespace Pandora.Deck {
         List<Card> Deck { get; }
 
         /// <summary>Take mulligan</summary>
-        void TakeMulligan();
+        void MulliganTaken();
         
         /// <summary>Reject mulligan</summary>
-        void RejectMulligan();
+        void MulliganReject();
 
     }
 }

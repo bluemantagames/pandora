@@ -81,20 +81,6 @@ namespace Pandora.Deck
             }
         }
 
-        /// <summary>Reject mulligan</summary>
-        public void RejectMulligan()
-        {
-            EventBus.Dispatch(new MulliganRejected());
-        }
-
-        /// <summary>Take mulligan</summary>
-        public void TakeMulligan()
-        {
-            EventBus.Dispatch(new MulliganTaken());
-
-            Deck = _deck;
-        }
-
         public void PlayCard(Card card)
         {
             DeckQueue.Enqueue(card);
@@ -108,9 +94,27 @@ namespace Pandora.Deck
             EventBus.Dispatch(new CardDrawn(DeckQueue.Dequeue().Name));
         }
 
+        public void DiscardCard(Card card)
+        {
+            DeckQueue.Enqueue(card);
+            
+            EventBus.Dispatch(new CardDiscarded(card.Name));
+            DrawCard();
+        }
+
         public void MulliganSelect(Card card)
         {
             EventBus.Dispatch(new MulliganSelect(card.Name));
+        }
+
+        public void MulliganTaken()
+        {
+            EventBus.Dispatch(new MulliganTaken());
+        }
+
+        public void MulliganReject() 
+        {
+            EventBus.Dispatch(new MulliganRejected());
         }
     }
 }
