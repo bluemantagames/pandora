@@ -226,7 +226,7 @@ namespace Pandora
                     {
                         Debug.Log($"Received {spawn} - spawning unit");
 
-                        SpawnUnit(new UnitSpawn(spawn));
+                        SpawnUnit(new UnitSpawn(spawn), spawn.manaUsed);
                     }
 
                     if (command is CommandMessage commandMessage)
