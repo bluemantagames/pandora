@@ -11,7 +11,7 @@ using Pandora.Deck.UI;
 
 namespace Pandora
 {
-    public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
+    public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
         Vector3? originalPosition = null;
         MapComponent map;
@@ -185,6 +185,12 @@ namespace Pandora
 
                 child.gameObject.SetActive(active);
             }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            //Debug.Log($"[MULLIGAN] Clicked {CardName}");
+            LocalDeck.Instance.MulliganSelect(new Card(CardName));
         }
 
         void Awake()

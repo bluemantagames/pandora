@@ -61,6 +61,8 @@ namespace Pandora.Deck
 
         public int HandSize { get => 4; }
 
+        public int MaxMulliganSize { get => 2; }
+
         public EventBus<DeckEvent> EventBus
         {
             get => _eventBus;
@@ -104,6 +106,11 @@ namespace Pandora.Deck
         public void DrawCard()
         {
             EventBus.Dispatch(new CardDrawn(DeckQueue.Dequeue().Name));
+        }
+
+        public void MulliganSelect(Card card)
+        {
+            EventBus.Dispatch(new MulliganSelect(card.Name));
         }
     }
 }

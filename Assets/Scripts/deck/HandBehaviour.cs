@@ -4,6 +4,7 @@ using UnityEngine.Playables;
 using System.Collections.Generic;
 using Pandora.Deck.Event;
 using Pandora.Events;
+using System;
 using System.Linq;
 
 namespace Pandora.Deck
@@ -26,6 +27,8 @@ namespace Pandora.Deck
 
         HandCard[] hand = new HandCard[32];
 
+        List<int> mulliganSelected = new List<int> { };
+
         int handIndex = -1;
 
         public GameObject[] UIHandSlots;
@@ -43,6 +46,7 @@ namespace Pandora.Deck
 
             deck.EventBus.Subscribe<CardDrawn>(new EventSubscriber<DeckEvent>(CardDrawn, "HandDrawHandler"));
             deck.EventBus.Subscribe<CardPlayed>(new EventSubscriber<DeckEvent>(CardPlayed, "HandPlayHandler"));
+            deck.EventBus.Subscribe<MulliganSelect>(new EventSubscriber<DeckEvent>(MulliganSelect, "MulliganSelectHandled"));
 
             if (deck is LocalDeck localDeck)
             {
@@ -178,6 +182,38 @@ namespace Pandora.Deck
             foreach (var graph in graphs)
             {
                 if (graph.IsValid()) graph.Destroy();
+            }
+        }
+
+        void MulliganSelect(DeckEvent ev) 
+        {
+            var cardSelected = ev as MulliganSelect;
+
+            // This is slow...
+            for (var idx = 0; idx < hand.Length; idx++)
+            {
+                if (hand[idx] == null || hand[idx].Name != cardSelected.Name)
+                {
+                    continue;
+                }
+
+                var card = hand[idx];
+                var mulliganPosition = mulliganSelected.IndexOf(idx);
+
+                // This should be a different action perhaps...
+                if (mulliganPosition != -1) {
+                    mulliganSelected.RemoveAt(mulliganPosition);
+                    card.CardObject.GetComponent<CardBehaviour>().MulliganSelected = false;
+                    break;
+                }
+
+                if (mulliganSelected.Count < deck.MaxMulliganSize)
+                {
+                    mulliganSelected.Add(idx);
+                    card.CardObject.GetComponent<CardBehaviour>().MulliganSelected = true;
+                }
+
+                break;
             }
         }
 
