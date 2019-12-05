@@ -155,6 +155,9 @@ namespace Pandora.Engine
                  where !unit.IsStructure && CanCollide(unit, entity)
                  select (bounds: GetEntityBounds(unit), unit: unit)).ToList();
 
+            var isFlying = entity.GameObject.layer == Constants.FLYING_LAYER;
+            var team = entity.GameObject.GetComponent<TeamComponent>();
+
             var path = astar.FindPathEnumerator(
                 entity.Position,
                 target,
@@ -166,11 +169,16 @@ namespace Pandora.Engine
 
                     var isCollision = false;
 
+
                     foreach (var (bounds, unit) in unitsBounds)
                     {
-                        isCollision = entityBounds.Collides(bounds);
+                        var cell = PooledPhysicsToGridCell(position);
+
+                        isCollision = entityBounds.Collides(bounds) || MapComponent.Instance.IsObstacle(cell, isFlying, team);
 
                         if (isCollision) break;
+
+                        PoolInstances.GridCellPool.ReturnObject(cell);
                     }
 
                     return isCollision;
@@ -758,13 +766,29 @@ namespace Pandora.Engine
             );
         }
 
+        void SetPhysicsToGridCell(GridCell cell, Vector2Int physics)
+        {
+            cell.vector.x = physics.x / UnitsPerCell;
+            cell.vector.y = physics.y / UnitsPerCell;
+        }
+
+        public GridCell PooledPhysicsToGridCell(Vector2Int physics)
+        {
+            var cell = PoolInstances.GridCellPool.GetObject();
+
+            SetPhysicsToGridCell(cell, physics);
+
+            return cell;
+        }
+
 
         public GridCell PhysicsToGridCell(Vector2Int physics)
         {
-            var xCell = physics.x / UnitsPerCell;
-            var yCell = physics.y / UnitsPerCell;
+            var cell = new GridCell(0, 0);
 
-            return new GridCell(xCell, yCell);
+            SetPhysicsToGridCell(cell, physics);
+
+            return cell;
         }
 
         public List<EngineEntity> FindInGridCell(GridCell gridCell, bool countStructures)
@@ -924,6 +948,7 @@ namespace Pandora.Engine
         {
             return
                 layer1 == layer2 ||
+                ((layer1 == Constants.RIVER_BOUNDS_LAYER || layer2 == Constants.RIVER_BOUNDS_LAYER) && (layer1 == Constants.SWIMMING_LAYER || layer2 == Constants.SWIMMING_LAYER)) ||
                 (layer1 == Constants.PROJECTILES_LAYER || layer2 == Constants.PROJECTILES_LAYER) ||
                 (layer1 == Constants.WATER_LAYER && layer2 != Constants.SWIMMING_LAYER) ||
                 (layer2 == Constants.WATER_LAYER && layer1 != Constants.SWIMMING_LAYER);

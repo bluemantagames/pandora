@@ -388,14 +388,18 @@ namespace Pandora
             unit.GetComponent<EngineComponent>().Entity = engineEntity;
             unit.AddComponent<UnitIdComponent>().Id = id;
 
-            Units.Add(id, unit);            
+            Units.Add(id, unit);
         }
 
-        public void ShowManaUsedAlert(GameObject unit, int manaUsed) {
-            var manaUsedText = 
-                unit.GetComponentInChildren<ManaUsedAlertBehaviour>().gameObject.GetComponentInChildren<Text>();
+        public void ShowManaUsedAlert(GameObject unit, int manaUsed)
+        {
+            var manaUsedText =
+                unit.GetComponentInChildren<ManaUsedAlertBehaviour>()?.gameObject.GetComponentInChildren<Text>();
 
-            manaUsedText.text = $"-{manaUsed}";
+            if (manaUsedText != null)
+            {
+                manaUsedText.text = $"-{manaUsed}";
+            }
         }
 
         public Enemy GetEnemy(GameObject unit, GridCell position, TeamComponent team)
@@ -581,7 +585,8 @@ namespace Pandora
 
                 var image = behaviour?.gameObject?.GetComponentInChildren<AggroExclamPointBehaviour>()?.gameObject?.GetComponent<Image>();
 
-                if (image != null) {
+                if (image != null)
+                {
                     image.enabled = true;
                 }
             }
