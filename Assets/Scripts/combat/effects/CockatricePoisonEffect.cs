@@ -18,6 +18,7 @@ namespace Pandora.Combat.Effects
         uint timePassed = 0;
         public uint PoisonTickMs = 200, PoisonDurationMs = 2000, DamagePerTick = 30;
         public Color OriginalColor;
+        GameObject target;
 
         public string ComponentName => "CockatricePoison";
 
@@ -39,6 +40,9 @@ namespace Pandora.Combat.Effects
                 component.PoisonTickMs = PoisonTickMs;
                 component.PoisonDurationMs = PoisonDurationMs;
                 component.DamagePerTick = DamagePerTick;
+                component.target = target;
+
+                component.Init();
 
                 component.RefreshComponents();
             }
@@ -46,9 +50,9 @@ namespace Pandora.Combat.Effects
             return component;
         }
 
-        void Start()
+        void Init()
         {
-            spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
+            spriteRenderer = target.GetComponentInChildren<SpriteRenderer>();
 
             OriginalColor = spriteRenderer.color;
 
@@ -59,8 +63,6 @@ namespace Pandora.Combat.Effects
         {
             if (IsDisabled) return;
 
-            timePassed += timeLapsed;
-
             if (timePassed % PoisonTickMs == 0)
             {
                 var lifeComponent = gameObject.GetComponent<LifeComponent>();
@@ -70,10 +72,12 @@ namespace Pandora.Combat.Effects
                 if (lifeComponent.IsDead) Unapply(gameObject);
             }
 
-            if (timePassed % PoisonDurationMs == 0)
+            if (timePassed != 0 && timePassed % PoisonDurationMs == 0)
             {
                 Unapply(gameObject);
             }
+
+            timePassed += timeLapsed;
         }
 
         public void Unapply(GameObject target)

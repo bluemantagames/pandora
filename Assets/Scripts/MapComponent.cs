@@ -226,7 +226,7 @@ namespace Pandora
                     {
                         Debug.Log($"Received {spawn} - spawning unit");
 
-                        SpawnUnit(new UnitSpawn(spawn));
+                        SpawnUnit(new UnitSpawn(spawn), spawn.manaUsed);
                     }
 
                     if (command is CommandMessage commandMessage)
@@ -388,14 +388,18 @@ namespace Pandora
             unit.GetComponent<EngineComponent>().Entity = engineEntity;
             unit.AddComponent<UnitIdComponent>().Id = id;
 
-            Units.Add(id, unit);            
+            Units.Add(id, unit);
         }
 
-        public void ShowManaUsedAlert(GameObject unit, int manaUsed) {
-            var manaUsedText = 
-                unit.GetComponentInChildren<ManaUsedAlertBehaviour>().gameObject.GetComponentInChildren<Text>();
+        public void ShowManaUsedAlert(GameObject unit, int manaUsed)
+        {
+            var manaUsedText =
+                unit.GetComponentInChildren<ManaUsedAlertBehaviour>()?.gameObject.GetComponentInChildren<Text>();
 
-            manaUsedText.text = $"-{manaUsed}";
+            if (manaUsedText != null)
+            {
+                manaUsedText.text = $"-{manaUsed}";
+            }
         }
 
         public Enemy GetEnemy(GameObject unit, GridCell position, TeamComponent team)
@@ -406,8 +410,12 @@ namespace Pandora
 
             var combatBehaviour = unit.GetComponent<CombatBehaviour>();
 
-            foreach (TeamComponent component in GetComponentsInChildren<TeamComponent>())
+            foreach (var entity in engine.Entities)
             {
+                var component = entity.GameObject.GetComponent<TeamComponent>();
+
+                if (component == null) continue;
+
                 var targetGameObject = component.gameObject;
                 var gameObjectPosition = GetCell(targetGameObject);
                 var engineEntity = GetEngineEntity(unit);
@@ -495,8 +503,12 @@ namespace Pandora
             var lowerRange = Math.Min(origin.y, origin.y + heightCells);
             var higherRange = Math.Max(origin.y, origin.y + heightCells);
 
-            foreach (var component in GetComponentsInChildren<UnitBehaviour>())
+            foreach (var entity in engine.Entities)
             {
+                var component = entity.GameObject.GetComponent<UnitBehaviour>();
+
+                if (component == null) continue;
+
                 var cellVector = GetCell(component.gameObject).vector;
 
                 var isDead = component.gameObject.GetComponent<LifeComponent>()?.IsDead ?? true;
@@ -573,7 +585,8 @@ namespace Pandora
 
                 var image = behaviour?.gameObject?.GetComponentInChildren<AggroExclamPointBehaviour>()?.gameObject?.GetComponent<Image>();
 
-                if (image != null) {
+                if (image != null)
+                {
                     image.enabled = true;
                 }
             }

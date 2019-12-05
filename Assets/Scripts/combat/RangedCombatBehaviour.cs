@@ -80,7 +80,9 @@ namespace Pandora.Combat
 
             var map = MapComponent.Instance;
 
-            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, map.WorldPositionToGridCell(transform.position), false, null);
+            var engineEntity = GetComponent<EngineComponent>().Entity;
+
+            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, engineEntity.Position, false, null);
 
             projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
 
