@@ -5,6 +5,7 @@ using Pandora;
 using UnityEngine;
 using System.Linq;
 using Pandora.Pool;
+using UnityEngine.Profiling;
 
 namespace Pandora.Engine
 {
@@ -25,12 +26,18 @@ namespace Pandora.Engine
         Dictionary<T, float> fScore = new Dictionary<T, float>(100000);
         List<QueueItem<T>> dequeueCandidates = new List<QueueItem<T>>(5000);
 
+        CustomSampler surroundingSampler, obstacleSampler, passSampler;
+
         public Astar(ConcurrentObjectPool<HashSet<T>> nodeHashsetPool, ConcurrentObjectPool<QueueItem<T>> nodeQueueItemPool, ConcurrentObjectPool<T> nodePool, ConcurrentObjectPool<List<T>> nodeContainerPool)
         {
             this.nodeHashsetPool = nodeHashsetPool;
             this.nodeQueueItemPool = nodeQueueItemPool;
             this.nodePool = nodePool;
             this.nodeContainerPool = nodeContainerPool;
+
+            surroundingSampler = CustomSampler.Create("Get surrounding nodes");
+            obstacleSampler = CustomSampler.Create("Check obstacles");
+            passSampler = CustomSampler.Create("Pathfinding pass");
         }
 
         Stack<System.Diagnostics.Stopwatch> stopWatches = new Stack<System.Diagnostics.Stopwatch> { };
@@ -122,7 +129,7 @@ namespace Pandora.Engine
             // get the last item in the queue
             while (!(item = evaluatingPosition.Item).Equals(end) && !pathFound)
             {
-                StartStopwatch();
+                passSampler.Begin();
 
                 if (item.Equals(end))
                 {
@@ -131,9 +138,9 @@ namespace Pandora.Engine
                     break;
                 }
 
-                StartStopwatch();
+                surroundingSampler.Begin();
                 var advances = getSurroundingNodes(item);
-                LogStopwatch("Get surrounding nodes");
+                surroundingSampler.End();
 
                 if (DebugPathfinding)
                 {
@@ -144,16 +151,16 @@ namespace Pandora.Engine
                 {
                     advancesNum++;
 
-                    StartStopwatch();
+                    obstacleSampler.Begin();
                     if (isObstacle(advance) || advance.Equals(item))
                     {
                         nodePool.ReturnObject(advance);
 
-                        LogStopwatch("Obstacle");
+                        obstacleSampler.End();
 
                         continue;
                     }
-                    LogStopwatch("Obstacle");
+                    obstacleSampler.End();
 
                     QueueItem<T> queueItem = null;
 
@@ -192,7 +199,7 @@ namespace Pandora.Engine
 
                 nodeContainerPool?.ReturnObject(advances);
 
-                LogStopwatch("Pass");
+                passSampler.End();
 
                 pass += 1;
 

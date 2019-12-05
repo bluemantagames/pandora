@@ -169,16 +169,15 @@ namespace Pandora.Engine
 
                     var isCollision = false;
 
-
                     foreach (var (bounds, unit) in unitsBounds)
                     {
-                        var cell = PooledPhysicsToGridCell(position);
+                        isCollision = entityBounds.Collides(bounds);
 
-                        isCollision = entityBounds.Collides(bounds) || MapComponent.Instance.IsObstacle(cell, isFlying, team);
+                        if (isCollision)
+                        {
+                            break;
+                        }
 
-                        if (isCollision) break;
-
-                        PoolInstances.GridCellPool.ReturnObject(cell);
                     }
 
                     return isCollision;

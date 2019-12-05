@@ -202,8 +202,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 20
-  attackCooldownMs: 500
-  backswingMs: 500
+  attackCooldownMs: 100
+  backswingMs: 100
   animationStateName: ZombieAttack
   AggroRangeCells: 3
   AttackRangeEngineUnits: 200
