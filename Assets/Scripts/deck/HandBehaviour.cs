@@ -28,12 +28,6 @@ namespace Pandora.Deck
 
         HandCard[] hand = new HandCard[32];
 
-        int mulligansAvailable = 1;
-
-        List<HandCard> mulliganSelected = new List<HandCard> { };
-
-        public GameObject MulliganTakeObject;
-        public GameObject MulliganRejectObject;
 
         int handIndex = -1;
 
@@ -41,6 +35,14 @@ namespace Pandora.Deck
         public float EaseOutTime = 0.35f;
 
         Deck deck;
+
+        // Mulligan stuff
+        int mulligansAvailable = 1;
+        float mulliganSecondsLeft = 20f;
+        List<HandCard> mulliganSelectedCards = new List<HandCard> { };
+        public GameObject MulliganTakeObject;
+        public GameObject MulliganRejectObject;
+        public GameObject MulliganTimerText;
 
         void Start()
         {
@@ -90,6 +92,12 @@ namespace Pandora.Deck
 
         void Update()
         {
+            if (mulligansAvailable > 0) {
+                if (mulliganSecondsLeft <= 0) DisableMulligan();
+
+                mulliganSecondsLeft -= Time.deltaTime;
+                UpdateMulliganText();
+            }
         }
 
         void AnimateMovementTo(GameObject card, int idx)
@@ -218,15 +226,15 @@ namespace Pandora.Deck
                 }
 
                 var card = hand[idx];
-                var mulliganPosition = mulliganSelected.IndexOf(card);
+                var mulliganPosition = mulliganSelectedCards.IndexOf(card);
 
                 if (mulliganPosition != -1) {
-                    mulliganSelected.RemoveAt(mulliganPosition);
+                    mulliganSelectedCards.RemoveAt(mulliganPosition);
                     card.CardObject.GetComponent<CardBehaviour>().MulliganSelected = false;
                 }
-                else if (mulliganSelected.Count < deck.MaxMulliganSize)
+                else if (mulliganSelectedCards.Count < deck.MaxMulliganSize)
                 {
-                    mulliganSelected.Add(card);
+                    mulliganSelectedCards.Add(card);
                     card.CardObject.GetComponent<CardBehaviour>().MulliganSelected = true;
                 }
 
@@ -236,17 +244,17 @@ namespace Pandora.Deck
 
         void MulliganTaken(DeckEvent ev) 
         {
-            if (mulligansAvailable <= 0 || mulliganSelected.Count <= 0) 
+            if (mulligansAvailable <= 0 || mulliganSelectedCards.Count <= 0) 
             {
                 return;
             }
 
-            for (int i = mulliganSelected.Count - 1; i >= 0; i--)
+            for (int i = mulliganSelectedCards.Count - 1; i >= 0; i--)
             {
-                var handCard = mulliganSelected[i];
+                var handCard = mulliganSelectedCards[i];
                 
                 LocalDeck.Instance.DiscardCard(new Card(handCard.Name));
-                mulliganSelected.RemoveAt(i);
+                mulliganSelectedCards.RemoveAt(i);
             }
 
             mulligansAvailable -= 1;
@@ -264,8 +272,7 @@ namespace Pandora.Deck
                 return;
             }
 
-            mulligansAvailable = 0;
-            DisableMulliganUI();
+            DisableMulligan();
         }
 
         void OnDisable()
@@ -276,10 +283,31 @@ namespace Pandora.Deck
             }
         }
 
+        void UpdateMulliganText()
+        {
+            if (MulliganTimerText == null)
+            {
+                return;
+            }
+
+            var textComponent = MulliganTimerText.GetComponent<Text>();
+            var timerValue = mulliganSecondsLeft > 0 ? mulliganSecondsLeft : 0;
+
+            textComponent.text = 
+                $"Mulligan ends in {string.Format("{0:F1}", timerValue)} seconds";
+        }
+
         void DisableMulliganUI()
         {
-            if (MulliganTakeObject != null) MulliganTakeObject.GetComponent<Button>().interactable = false;
-            if (MulliganRejectObject != null) MulliganRejectObject.GetComponent<Button>().interactable = false;
+            if (MulliganTakeObject != null) Destroy(MulliganTakeObject);
+            if (MulliganRejectObject != null) Destroy(MulliganRejectObject);
+            if (MulliganTimerText != null) Destroy(MulliganTimerText);
+        }
+
+        void DisableMulligan()
+        {
+            mulligansAvailable = 0;
+            DisableMulliganUI();
         }
 
     }
