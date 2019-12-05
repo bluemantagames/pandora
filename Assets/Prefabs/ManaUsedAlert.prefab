@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 138122753094299318}
   - component: {fileID: 3194966993881014014}
   - component: {fileID: 8661888751684248623}
-  - component: {fileID: 1478155414072171610}
+  - component: {fileID: 4267941853257333204}
   m_Layer: 0
   m_Name: ManaUsedAlert
   m_TagString: Untagged
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1478155414072171610
+--- !u!114 &4267941853257333204
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -206,6 +206,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4622400506397244976}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5246bee26a52343fba42ce071589c11d, type: 3}
+  m_Script: {fileID: 11500000, guid: c99f33296d6be4cafbdf637279b93334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
