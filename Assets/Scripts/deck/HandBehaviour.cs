@@ -127,6 +127,11 @@ namespace Pandora.Deck
 
         void CardPlayed(DeckEvent ev)
         {
+            if (mulligansAvailable > 0) 
+            {
+                LocalDeck.Instance.MulliganReject();
+            }
+
             var cardPlayed = ev as CardPlayed;
 
             for (var i = 0; i < hand.Length; i++)
