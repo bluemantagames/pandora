@@ -189,8 +189,8 @@ namespace Pandora
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            //Debug.Log($"[MULLIGAN] Clicked {CardName}");
-            LocalDeck.Instance.MulliganSelect(new Card(CardName));
+            Debug.Log($"[MULLIGAN] Clicked {CardName}");
+            LocalDeck.Instance.CardSelect(new Card(CardName));
         }
 
         void Awake()

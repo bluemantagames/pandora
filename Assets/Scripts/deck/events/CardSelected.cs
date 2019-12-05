@@ -1,8 +1,8 @@
 namespace Pandora.Deck.Event {
-    public class MulliganSelect: DeckEvent {
+    public class CardSelected: DeckEvent {
         public string Name;
 
-        public MulliganSelect(string name) {
+        public CardSelected(string name) {
             Name = name;
         }
     }

@@ -102,9 +102,9 @@ namespace Pandora.Deck
             DrawCard();
         }
 
-        public void MulliganSelect(Card card)
+        public void CardSelect(Card card)
         {
-            EventBus.Dispatch(new MulliganSelect(card.Name));
+            EventBus.Dispatch(new CardSelected(card.Name));
         }
 
         public void MulliganTaken()
