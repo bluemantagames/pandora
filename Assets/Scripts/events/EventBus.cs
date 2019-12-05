@@ -48,7 +48,7 @@ namespace Pandora.Events {
                     subscriber.Action(ev);
                 }
             } else {
-                Debug.LogWarning($"No subscribers found for {ev}");
+                Logger.DebugWarning($"No subscribers found for {ev}");
             }
         }
 

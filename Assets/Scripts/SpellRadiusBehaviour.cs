@@ -30,7 +30,7 @@ public class SpellRadiusBehaviour : MonoBehaviour
             {
                 var cell = new GridCell(x, y);
 
-                Debug.Log($"Checking {currentPosition}");
+                Logger.Debug($"Checking {currentPosition}");
 
                 var distance = Vector2.Distance(currentPosition.vector, cell.vector);
 

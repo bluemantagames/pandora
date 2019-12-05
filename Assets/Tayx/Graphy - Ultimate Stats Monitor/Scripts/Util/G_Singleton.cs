@@ -48,7 +48,7 @@ namespace Tayx.Graphy.Utils
                 
                 if (_applicationIsQuitting)
                 {
-                    //Debug.LogWarning("[Singleton] Instance '" + typeof(T) +
+                    //Logger.DebugWarning("[Singleton] Instance '" + typeof(T) +
                     //    "' already destroyed on application quit." +
                     //    " Won't create again - returning null.");
                     return null;
@@ -62,7 +62,7 @@ namespace Tayx.Graphy.Utils
 
                         if (FindObjectsOfType(typeof(T)).Length > 1)
                         {
-                            //Debug.LogError("[Singleton] Something went really wrong " +
+                            //Debug.DebugError("[Singleton] Something went really wrong " +
                             //    " - there should never be more than 1 singleton!" +
                             //    " Reopening the scene might fix it.");
                             return _instance;
@@ -76,11 +76,11 @@ namespace Tayx.Graphy.Utils
 
                             //DontDestroyOnLoad(singleton);
 
-                            //Debug.Log("[Singleton] An instance of " + typeof(T) +
+                            //Logger.Debug("[Singleton] An instance of " + typeof(T) +
                             //    " is needed in the scene, so '" + singleton +
                             //    "' was created with DontDestroyOnLoad.");
 
-                            Debug.Log
+                            Logger.Debug
                             (
                                 "[Singleton] An instance of " + typeof(T) +
                                 " is trying to be accessed, but it wasn't initialized first. " +
@@ -90,7 +90,7 @@ namespace Tayx.Graphy.Utils
                         }
                         else
                         {
-                            //Debug.Log("[Singleton] Using instance already created: " +
+                            //Logger.Debug("[Singleton] Using instance already created: " +
                             //    _instance.gameObject.name);
                         }
                     }

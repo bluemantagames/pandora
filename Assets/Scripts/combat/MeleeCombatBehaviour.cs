@@ -67,7 +67,7 @@ namespace Pandora.Combat
             isAttacking = false;
             target = null;
 
-            Debug.Log($"Combat: Stop attacking {GetComponent<TeamComponent>().team}");
+            Logger.Debug($"Combat: Stop attacking {GetComponent<TeamComponent>().team}");
 
             var animator = GetComponent<Animator>();
 
@@ -80,7 +80,7 @@ namespace Pandora.Combat
             if (target == null)
                 return;
 
-            Debug.Log($"Combat: Dealing damage {GetComponent<TeamComponent>().team}");
+            Logger.Debug($"Combat: Dealing damage {GetComponent<TeamComponent>().team}");
 
             var lifeComponent = target.GetComponent<LifeComponent>();
 

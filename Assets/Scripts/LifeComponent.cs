@@ -72,7 +72,7 @@ namespace Pandora
                 SetLastPosition();
                 Remove();
 
-                Debug.Log("BB I'M DYING");
+                Logger.Debug("BB I'M DYING");
 
                 // TODO: Play "die" animation
             }

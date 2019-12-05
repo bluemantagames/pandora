@@ -13,7 +13,7 @@ namespace Pandora.Command
 
         public void InvokeCommand()
         {
-            Debug.Log("[Bard] Command invoked");
+            Logger.Debug("[Bard] Command invoked");
 
             var sourceEntity = GetComponent<EngineComponent>().Entity;
             var sourceTeam = GetComponent<TeamComponent>().team;

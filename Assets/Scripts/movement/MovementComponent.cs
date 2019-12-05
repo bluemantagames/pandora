@@ -176,7 +176,7 @@ namespace Pandora.Movement
 
             if (currentPath.Count < 1 && !engineEntity.IsEvading)
             {
-                Debug.LogWarning($"Empty path for {targetEnemy.enemyCell} from {currentPosition}, trying to evade");
+                Logger.DebugWarning($"Empty path for {targetEnemy.enemyCell} from {currentPosition}, trying to evade");
 
                 isEvading = true;
 
@@ -265,7 +265,7 @@ namespace Pandora.Movement
 
             if (DebugPathfinding)
             {
-                Debug.Log($"DebugPathfinding: Current target is {target} ({targetEnemy})");
+                Logger.Debug($"DebugPathfinding: Current target is {target} ({targetEnemy})");
             }
 
             currentPath = FindPath(target).Skip(1).ToList();
@@ -295,7 +295,7 @@ namespace Pandora.Movement
 
             if (lastCollisionPosition == engineEntity.Position && totalElapsed - (collisionTotalElapsed ?? 0) >= 50)
             {
-                Debug.Log("Finally evading");
+                Logger.Debug("Finally evading");
 
                 // we don't set engineEntity.IsEvading directly because
                 // the collision system might use it

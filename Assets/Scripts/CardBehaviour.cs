@@ -102,7 +102,7 @@ namespace Pandora
 
             if (hit.collider != null && hit.collider.gameObject.GetComponent<MapComponent>() != null)
             {
-                Debug.Log("Calling OnUICardCollision");
+                Logger.Debug("Calling OnUICardCollision");
 
                 map = hit.collider.gameObject.GetComponent<MapComponent>();
 

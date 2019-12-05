@@ -54,7 +54,7 @@ namespace Pandora.Command
 
                 foreach (var tower in MapComponent.Instance.gameObject.GetComponentsInChildren<TowerPositionComponent>())
                 {
-                    Debug.Log($"Inspecting {tower.EngineTowerPosition.IsMiddle()} {tower.GetComponent<TowerTeamComponent>().engineTeam} {teamComponent.team}");
+                    Logger.Debug($"Inspecting {tower.EngineTowerPosition.IsMiddle()} {tower.GetComponent<TowerTeamComponent>().engineTeam} {teamComponent.team}");
 
                     if (tower.EngineTowerPosition.IsMiddle() && tower.GetComponent<TowerTeamComponent>().engineTeam == teamComponent.team)
                     {
@@ -66,7 +66,7 @@ namespace Pandora.Command
 
                 if (middleTower == null)
                 {
-                    Debug.LogWarning("Could not find middle tower");
+                    Logger.DebugWarning("Could not find middle tower");
 
                     return;
                 }

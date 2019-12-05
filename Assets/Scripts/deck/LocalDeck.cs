@@ -39,7 +39,7 @@ namespace Pandora.Deck
                 {
                     if (idx < HandSize)
                     {
-                        Debug.Log("Dispatching");
+                        Logger.Debug("Dispatching");
 
                         EventBus.Dispatch(new CardDrawn(shuffledDeck[idx].Name));
                     }

@@ -55,7 +55,7 @@ namespace Pandora.Engine
 
                 stopWatch.Stop();
 
-                Debug.Log($"{log} took {stopWatch.Elapsed}");
+                Logger.Debug($"{log} took {stopWatch.Elapsed}");
             }
         }
 
@@ -104,7 +104,7 @@ namespace Pandora.Engine
 
             if (isObstacle(end))
             {
-                Debug.LogWarning($"Cannot find path towards an obstacle ({end})");
+                Logger.DebugWarning($"Cannot find path towards an obstacle ({end})");
 
                 return new LinkedList<T> { };
             }
@@ -137,7 +137,7 @@ namespace Pandora.Engine
 
                 if (DebugPathfinding)
                 {
-                    Debug.Log($"Checking {item}");
+                    Logger.Debug($"Checking {item}");
                 }
 
                 foreach (var advance in advances)
@@ -240,13 +240,13 @@ namespace Pandora.Engine
                     return BuildPath(evaluatingPosition);
                 }
 
-                if (pass > 200)
+                if (pass > 25)
                 {
-                    Debug.LogWarning($"Short circuiting after {pass} passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} nodes)");
+                    Logger.DebugWarning($"Short circuiting after {pass} passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} nodes)");
 
                     if (DebugPathfinding)
                     {
-                        Debug.Log("DebugPathfinding: Pausing the editor");
+                        Logger.Debug("DebugPathfinding: Pausing the editor");
 
                         Debug.Break();
                     }

@@ -9,7 +9,7 @@ namespace Pandora.Command
     {
         public void InvokeCommand()
         {
-            Debug.Log("[HalfOrc] Command invoked");
+            Logger.Debug("[HalfOrc] Command invoked");
 
             var sourceEntity = GetComponent<EngineComponent>().Entity;
             var sourceId = GetComponent<UnitIdComponent>();

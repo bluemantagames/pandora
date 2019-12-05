@@ -227,7 +227,7 @@ namespace Pandora.Engine
         {
             var speed = GetSpeed(engineUnitsPerSecond);
 
-            Debug.Log($"Assigning speed {speed} in {position}");
+            Logger.Debug($"Assigning speed {speed} in {position}");
 
             var entity = new EngineEntity
             {
@@ -253,10 +253,10 @@ namespace Pandora.Engine
             var prefix = $"({entity.GameObject.name}) PrintDebugInfo:";
             var bounds = GetPooledEntityBounds(entity);
 
-            Debug.Log($"{prefix} Position {entity.Position}");
-            Debug.Log($"{prefix} Speed {entity.Speed}");
-            Debug.Log($"{prefix} Path {entity.Path}");
-            Debug.Log($"{prefix} Hitbox {bounds}");
+            Logger.Debug($"{prefix} Position {entity.Position}");
+            Logger.Debug($"{prefix} Speed {entity.Speed}");
+            Logger.Debug($"{prefix} Path {entity.Path}");
+            Logger.Debug($"{prefix} Hitbox {bounds}");
 
             ReturnBounds(bounds);
         }

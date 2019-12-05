@@ -39,7 +39,7 @@ namespace Pandora.Combat
                 }
                 else
                 {
-                    Debug.LogWarning("Could not find ProjectileCollided in parent");
+                    Logger.DebugWarning("Could not find ProjectileCollided in parent");
                 }
 
 
@@ -56,14 +56,14 @@ namespace Pandora.Combat
 
                     var alliedTeam = parent.GetComponent<TeamComponent>().team;
 
-                    Debug.Log($"Searching in {EngineUnitsRadius + maxDimension}");
+                    Logger.Debug($"Searching in {EngineUnitsRadius + maxDimension}");
 
                     foreach (var entity in hitEntities)
                     {
                         if (entity.GameObject == target.enemy || entity.GameObject == gameObject || !entity.IsRigid) continue;
                         if (entity.GameObject.GetComponent<TeamComponent>().team == alliedTeam && !ShouldHitAllies) continue;
 
-                        Debug.Log($"Hit {entity}");
+                        Logger.Debug($"Hit {entity}");
 
                         behaviour.ProjectileCollided(new Enemy(entity.GameObject));
                     }
@@ -93,7 +93,7 @@ namespace Pandora.Combat
 
             var shouldBeFlipped = TeamComponent.assignedTeam == TeamComponent.topTeam;
 
-            Debug.Log($"Angling projectiles at {angle}");
+            Logger.Debug($"Angling projectiles at {angle}");
 
             // rotate the projectile towards the target
             transform.rotation = Quaternion.Euler(0f, 0f, angle);

@@ -66,7 +66,7 @@ namespace Pandora.Deck
                         "Bard",
                         "Mermaids",
                         "Clerics",
-                        "HalfOrc"
+                        "Zombies"
                     };
 
 
@@ -91,7 +91,7 @@ namespace Pandora.Deck
         {
             var cardTransform = card.GetComponent<RectTransform>();
 
-            Debug.Log($"Animating {card} to {idx}");
+            Logger.Debug($"Animating {card} to {idx}");
 
             var targetRectTransform = UIHandSlots[idx].GetComponent<RectTransform>();
 
@@ -130,14 +130,14 @@ namespace Pandora.Deck
             var cardDrawn = ev as CardDrawn;
             int idx;
 
-            Debug.Log($"Received {cardDrawn}");
+            Logger.Debug($"Received {cardDrawn}");
 
             if (handIndex + 1 > deck.HandSize - 1)
             {
                 // Shift the cards to the rightest position possible
                 for (var i = deck.HandSize - 1; i >= 0; i--)
                 {
-                    Debug.Log($"Checking {i}");
+                    Logger.Debug($"Checking {i}");
 
                     if (hand[i] == null) continue;
 
@@ -169,7 +169,7 @@ namespace Pandora.Deck
                 idx = ++handIndex;
             }
 
-            Debug.Log($"Drawing card {idx}");
+            Logger.Debug($"Drawing card {idx}");
 
             var cardPrefab = Resources.Load($"Cards/{cardDrawn.Name}") as GameObject;
             var card = Instantiate(cardPrefab, transform.position, Quaternion.identity, transform.parent);
@@ -178,7 +178,7 @@ namespace Pandora.Deck
 
             AnimateMovementTo(card, idx);
 
-            Debug.Log($"Playing from {rectTransform} to {idx}");
+            Logger.Debug($"Playing from {rectTransform} to {idx}");
         }
 
         void OnDisable()
