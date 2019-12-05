@@ -5,5 +5,6 @@ namespace Pandora {
         public static int PROJECTILES_LAYER = 11;
         public static int WATER_LAYER = 1000;
         public static int SWIMMING_LAYER = 14;
+        public static int RIVER_BOUNDS_LAYER = 15;
     }
 }

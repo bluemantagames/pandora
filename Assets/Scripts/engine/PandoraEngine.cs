@@ -13,7 +13,7 @@ namespace Pandora.Engine
     {
         public uint TickTime = 20; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
-        List<EngineEntity> entities = new List<EngineEntity> { };
+        public List<EngineEntity> Entities = new List<EngineEntity> { };
         public MapComponent Map;
         uint totalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
@@ -151,9 +151,12 @@ namespace Pandora.Engine
             var entityBounds = GetEntityBounds(entity);
 
             var unitsBounds =
-                (from unit in entities
+                (from unit in Entities
                  where !unit.IsStructure && CanCollide(unit, entity)
                  select (bounds: GetEntityBounds(unit), unit: unit)).ToList();
+
+            var isFlying = entity.GameObject.layer == Constants.FLYING_LAYER;
+            var team = entity.GameObject.GetComponent<TeamComponent>();
 
             var path = astar.FindPathEnumerator(
                 entity.Position,
@@ -166,11 +169,16 @@ namespace Pandora.Engine
 
                     var isCollision = false;
 
+
                     foreach (var (bounds, unit) in unitsBounds)
                     {
-                        isCollision = entityBounds.Collides(bounds);
+                        var cell = PooledPhysicsToGridCell(position);
+
+                        isCollision = entityBounds.Collides(bounds) || MapComponent.Instance.IsObstacle(cell, isFlying, team);
 
                         if (isCollision) break;
+
+                        PoolInstances.GridCellPool.ReturnObject(cell);
                     }
 
                     return isCollision;
@@ -233,7 +241,9 @@ namespace Pandora.Engine
                 Timestamp = timestamp ?? DateTime.Now
             };
 
-            entities.Add(entity);
+            Entities.Add(entity);
+
+            Entities.Sort((a, b) => a.Timestamp.CompareTo(b.Timestamp));
 
             return entity;
         }
@@ -278,7 +288,7 @@ namespace Pandora.Engine
         {
             if (DebugEngine) movementSampler.Begin();
             // Move units
-            foreach (var entity in entities)
+            foreach (var entity in Entities)
             {
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed));
 
@@ -317,7 +327,7 @@ namespace Pandora.Engine
             // might want to modify the entity list somehow (e.g. remove a projectile on collision)
             // TODO: A more efficient way to do this is to have a flag be true while we are checking collisions,
             // cache away all the removals/adds and execute them later
-            var clonedEntities = new List<EngineEntity>(entities);
+            var clonedEntities = new List<EngineEntity>(Entities);
             var collisionsNum = -1;
 
             if (DebugEngine) collisionsSampler.Begin();
@@ -476,7 +486,7 @@ namespace Pandora.Engine
 
         public void DrawDebugGUI()
         {
-            foreach (var entity in entities)
+            foreach (var entity in Entities)
             {
                 var boxBounds = GetPooledEntityBounds(entity);
 
@@ -495,7 +505,7 @@ namespace Pandora.Engine
 
         public void RemoveEntity(EngineEntity entity)
         {
-            entities.Remove(entity);
+            Entities.Remove(entity);
         }
 
         public bool IsInHitboxRangeCells(EngineEntity entity1, EngineEntity entity2, int gridCellRange)
@@ -756,13 +766,29 @@ namespace Pandora.Engine
             );
         }
 
+        void SetPhysicsToGridCell(GridCell cell, Vector2Int physics)
+        {
+            cell.vector.x = physics.x / UnitsPerCell;
+            cell.vector.y = physics.y / UnitsPerCell;
+        }
+
+        public GridCell PooledPhysicsToGridCell(Vector2Int physics)
+        {
+            var cell = PoolInstances.GridCellPool.GetObject();
+
+            SetPhysicsToGridCell(cell, physics);
+
+            return cell;
+        }
+
 
         public GridCell PhysicsToGridCell(Vector2Int physics)
         {
-            var xCell = physics.x / UnitsPerCell;
-            var yCell = physics.y / UnitsPerCell;
+            var cell = new GridCell(0, 0);
 
-            return new GridCell(xCell, yCell);
+            SetPhysicsToGridCell(cell, physics);
+
+            return cell;
         }
 
         public List<EngineEntity> FindInGridCell(GridCell gridCell, bool countStructures)
@@ -771,7 +797,7 @@ namespace Pandora.Engine
 
             List<EngineEntity> targetEntities = new List<EngineEntity> { };
 
-            foreach (var entity in entities)
+            foreach (var entity in Entities)
             {
                 var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
 
@@ -798,7 +824,7 @@ namespace Pandora.Engine
             EngineEntity closestEntity = null;
             int? closestDistance = null;
 
-            foreach (var entity in entities)
+            foreach (var entity in Entities)
             {
                 var distance = Distance(origin, entity.Position);
 
@@ -816,7 +842,7 @@ namespace Pandora.Engine
         {
             List<EngineEntity> targetEntities = new List<EngineEntity> { };
 
-            foreach (var entity in entities)
+            foreach (var entity in Entities)
             {
                 var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
 
@@ -835,7 +861,7 @@ namespace Pandora.Engine
         {
             List<EngineEntity> targetEntities = new List<EngineEntity> { };
 
-            foreach (var entity in entities)
+            foreach (var entity in Entities)
             {
                 var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
 
@@ -922,6 +948,7 @@ namespace Pandora.Engine
         {
             return
                 layer1 == layer2 ||
+                ((layer1 == Constants.RIVER_BOUNDS_LAYER || layer2 == Constants.RIVER_BOUNDS_LAYER) && (layer1 == Constants.SWIMMING_LAYER || layer2 == Constants.SWIMMING_LAYER)) ||
                 (layer1 == Constants.PROJECTILES_LAYER || layer2 == Constants.PROJECTILES_LAYER) ||
                 (layer1 == Constants.WATER_LAYER && layer2 != Constants.SWIMMING_LAYER) ||
                 (layer2 == Constants.WATER_LAYER && layer1 != Constants.SWIMMING_LAYER);

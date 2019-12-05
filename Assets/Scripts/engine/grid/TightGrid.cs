@@ -60,12 +60,17 @@ namespace Pandora.Engine.Grid
         {
             var box = item.Engine.GetPooledEntityBounds(item);
 
-            foreach (var vertex in box.Vertices)
+            var startX = Math.Min(box.LowerLeft.x / (width / rows), rows - 1);
+            var endX = Math.Min(box.LowerRight.x / (width / rows), rows - 1);
+
+            var startY = Math.Min(box.LowerLeft.y / (height / columns), columns - 1);
+            var endY = Math.Min(box.UpperLeft.y / (height / columns), columns - 1);
+
+            for (var x = startX; x < endX; x++)
             {
-                var cellX = Math.Min(vertex.x / (width / rows), rows - 1);
-                var cellY = Math.Min(vertex.y / (height / columns), columns - 1);
-                
-                grid[cellX, cellY].Insert(item);
+                for (var y = startY; y < endY; y++) {
+                    grid[x, y].Insert(item);
+                }
             }
 
             var centerCellX = Math.Min(box.Center.x / (width / rows), rows - 1);

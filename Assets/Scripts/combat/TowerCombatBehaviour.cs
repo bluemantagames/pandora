@@ -67,14 +67,15 @@ namespace Pandora.Combat
 
         uint lastAttackTimeLapse = 0;
         TowerPositionComponent towerPosition;
+        EngineComponent engineComponent;
 
 
         /** Begins attacking an enemy */
         void Awake()
         {
             teamComponent = GetComponent<TowerTeamComponent>();
-
             towerPosition = GetComponent<TowerPositionComponent>();
+            engineComponent = GetComponent<EngineComponent>();
         }
 
         public void TickUpdate(uint lapsed)
@@ -103,7 +104,7 @@ namespace Pandora.Combat
             {
                 var units = map.GetUnitsInRect(aggroBoxOrigin, aggroBoxWidth, aggroBoxHeight);
 
-                float? closestDistance = null;
+                int? closestDistance = null;
                 GameObject closestUnit = null;
 
                 foreach (var unit in units)
@@ -114,8 +115,8 @@ namespace Pandora.Combat
 
                     if (!shouldAttack) continue;
 
-                    var distance = Vector2.Distance(
-                        worldTowerPosition, unit.transform.position
+                    var distance = engineComponent.Engine.SquaredDistance(
+                        engineComponent.Entity.Position, unit.GetComponent<EngineComponent>().Entity.Position
                     );
 
                     if (closestDistance == null || closestDistance > distance)

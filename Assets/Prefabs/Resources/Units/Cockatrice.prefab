@@ -106,7 +106,6 @@ GameObject:
   - component: {fileID: 1060352442105845636}
   - component: {fileID: 1060352442105845639}
   - component: {fileID: 9210484262350055100}
-  - component: {fileID: -686807744401818249}
   - component: {fileID: 4232992202590164952}
   - component: {fileID: 7129443875767093079}
   - component: {fileID: 2632802218825909037}
@@ -114,6 +113,7 @@ GameObject:
   - component: {fileID: 8660774719796279383}
   - component: {fileID: 4143209966792787441}
   - component: {fileID: 6674434008587753410}
+  - component: {fileID: 7984523475807771379}
   m_Layer: 9
   m_Name: Cockatrice
   m_TagString: Untagged
@@ -220,19 +220,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43f41e00d952f54fb36119cddc0ca11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060352442105845753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugEntity: 0
 --- !u!114 &4232992202590164952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,6 +347,19 @@ MonoBehaviour:
   FlyingTimeMs: 2000
   EngineUnitsRange: 1200
   TargetBuildings: 0
+--- !u!114 &7984523475807771379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060352442105845753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DebugEntity: 0
 --- !u!1001 &423815601085274011
 PrefabInstance:
   m_ObjectHideFlags: 0
