@@ -9,15 +9,17 @@ namespace Pandora.Deck {
 
         /// <summary>Hand size</summary>
         int HandSize { get; }
+
+        int MaxMulliganSize { get; }
         
         /// <summary>Deck currently played</summary>
         List<Card> Deck { get; }
 
         /// <summary>Take mulligan</summary>
-        void TakeMulligan();
+        void MulliganTaken();
         
         /// <summary>Reject mulligan</summary>
-        void RejectMulligan();
+        void MulliganReject();
 
     }
 }
