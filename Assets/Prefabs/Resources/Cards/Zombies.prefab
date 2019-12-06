@@ -117,12 +117,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -6217765932031404888, guid: 5d99a425df70f0044acf7b79f6d0d1d9,
-        type: 3}
     - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
         type: 3}
       propertyPath: CardName
@@ -144,6 +138,17 @@ PrefabInstance:
       propertyPath: Puppet
       value: 
       objectReference: {fileID: 4546825404429134782, guid: bbc7d4c433f21ec45a60e0af6b22e4b3,
+        type: 3}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: RequiredMana
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -6217765932031404888, guid: 5d99a425df70f0044acf7b79f6d0d1d9,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3024322f337f5844bd8d8be1328fece, type: 3}
