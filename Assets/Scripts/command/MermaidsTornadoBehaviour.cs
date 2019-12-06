@@ -74,7 +74,7 @@ namespace Pandora.Command
                 var target = engine.FindClosest(middleTower.Position, foundEntity =>
                     !foundEntity.IsStructure &&
                     !foundEntity.IsMapObstacle &&
-                    foundEntity.GameObject.GetComponent<TeamComponent>().team != teamComponent.team &&
+                    foundEntity.GameObject.GetComponent<TeamComponent>()?.team != teamComponent.team &&
                     foundEntity.GameObject.GetComponent<MermaidsTornadoEffect>() == null
                 );
 

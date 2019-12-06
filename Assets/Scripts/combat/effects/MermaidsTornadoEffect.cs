@@ -69,7 +69,8 @@ namespace Pandora.Combat.Effects
 
             var distanceFromEdge = EngineUnitsRadius - distance;
 
-            var force = distanceFromEdge * (decimal)(EngineUnitsMaxForce - EngineUnitsMinForce) / (decimal)EngineUnitsRadius;
+            // NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+            var force = (((distance - EngineUnitsRadius) * (decimal)(EngineUnitsMaxForce - EngineUnitsMinForce)) / (decimal)-EngineUnitsRadius) + EngineUnitsMinForce;
 
             if (force == 0) force = (decimal)EngineUnitsMinForce;
 

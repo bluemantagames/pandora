@@ -559,11 +559,11 @@ namespace Pandora
             if (spawningCells == null) return;
 
             var combatBehaviours =
-                            from component in GetComponentsInChildren<CombatBehaviour>()
-                            where
-                                !(component is TowerCombatBehaviour) &&
-                                (component as MonoBehaviour).gameObject.GetComponent<TeamComponent>().team != TeamComponent.assignedTeam
-                            select component;
+                from component in GetComponentsInChildren<CombatBehaviour>()
+                where
+                    !(component is TowerCombatBehaviour) &&
+                    (component as MonoBehaviour).gameObject.GetComponent<TeamComponent>().team != TeamComponent.assignedTeam
+                select component;
 
             foreach (var combatBehaviour in combatBehaviours)
             {

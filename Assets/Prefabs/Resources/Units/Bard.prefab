@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
-  MovementSpeed: 600
+  MovementSpeed: 400
 --- !u!114 &3238954853332854145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Radius: 3000
-  DebugLines: 1
+  DebugLines: 0
   EffectObjects:
   - {fileID: 2016888992844160403, guid: 952398b416080ab49a229d5e39270633, type: 3}
 --- !u!1 &2409834720673952193
