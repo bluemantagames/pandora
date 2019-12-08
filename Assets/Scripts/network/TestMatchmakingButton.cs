@@ -11,7 +11,7 @@ namespace Pandora.Network {
         List<Card> deck;
 
         public void Connect() {
-            Debug.Log("Connecting");
+            Logger.Debug("Connecting");
 
             NetworkControllerSingleton.instance.StartMatchmaking();
 
@@ -27,7 +27,7 @@ namespace Pandora.Network {
 
             var serializedWrapper = JsonUtility.ToJson(deckWrapper);
 
-            Debug.Log($"Saving {serializedWrapper}");
+            Logger.Debug($"Saving {serializedWrapper}");
 
             PlayerPrefs.SetString("DeckWrapper", serializedWrapper);
             PlayerPrefs.Save();

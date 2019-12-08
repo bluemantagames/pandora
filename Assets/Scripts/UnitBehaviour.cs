@@ -27,7 +27,7 @@ namespace Pandora
             combatBehaviour = GetComponent<CombatBehaviour>();
             lifeComponent = GetComponent<LifeComponent>();
 
-            Debug.Log($"CombatBehaviour is {combatBehaviour}");
+            Logger.Debug($"CombatBehaviour is {combatBehaviour}");
         }
 
         // This is called from PandoraEngine every tick
@@ -40,7 +40,7 @@ namespace Pandora
             movementBehaviour.LastState = state.state;
 
             if (DebugMove) {
-                Debug.Log($"Movement state: {state}");
+                Logger.Debug($"Movement state: {state}");
             }
 
             if (state.state == MovementStateEnum.EnemyApproached)

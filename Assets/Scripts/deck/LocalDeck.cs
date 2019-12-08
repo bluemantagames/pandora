@@ -39,7 +39,7 @@ namespace Pandora.Deck
                 {
                     if (idx < HandSize)
                     {
-                        Debug.Log("Dispatching");
+                        Logger.Debug("Dispatching");
 
                         EventBus.Dispatch(new CardDrawn(shuffledDeck[idx].Name));
                     }
@@ -61,6 +61,8 @@ namespace Pandora.Deck
 
         public int HandSize { get => 4; }
 
+        public int MaxMulliganSize { get => 2; }
+
         public EventBus<DeckEvent> EventBus
         {
             get => _eventBus;
@@ -79,20 +81,6 @@ namespace Pandora.Deck
             }
         }
 
-        /// <summary>Reject mulligan</summary>
-        public void RejectMulligan()
-        {
-            EventBus.Dispatch(new MulliganRejected());
-        }
-
-        /// <summary>Take mulligan</summary>
-        public void TakeMulligan()
-        {
-            EventBus.Dispatch(new MulliganTaken());
-
-            Deck = _deck;
-        }
-
         public void PlayCard(Card card)
         {
             DeckQueue.Enqueue(card);
@@ -104,6 +92,29 @@ namespace Pandora.Deck
         public void DrawCard()
         {
             EventBus.Dispatch(new CardDrawn(DeckQueue.Dequeue().Name));
+        }
+
+        public void DiscardCard(Card card)
+        {
+            DeckQueue.Enqueue(card);
+            
+            EventBus.Dispatch(new CardDiscarded(card.Name));
+            DrawCard();
+        }
+
+        public void CardSelect(Card card)
+        {
+            EventBus.Dispatch(new CardSelected(card.Name));
+        }
+
+        public void MulliganTaken()
+        {
+            EventBus.Dispatch(new MulliganTaken());
+        }
+
+        public void MulliganReject() 
+        {
+            EventBus.Dispatch(new MulliganRejected());
         }
     }
 }

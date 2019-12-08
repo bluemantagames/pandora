@@ -17,7 +17,7 @@ namespace Pandora
         public void DebugEngine()
         {
             /*
-            Debug.Log("Debugging");
+            Logger.Debug("Debugging");
 
             foreach (Transform entity in MapComponent.Instance.gameObject.transform)
             {

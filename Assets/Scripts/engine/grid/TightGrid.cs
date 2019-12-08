@@ -66,17 +66,12 @@ namespace Pandora.Engine.Grid
             var startY = Math.Min(box.LowerLeft.y / (height / columns), columns - 1);
             var endY = Math.Min(box.UpperLeft.y / (height / columns), columns - 1);
 
-            for (var x = startX; x < endX; x++)
+            for (var x = startX; x <= endX; x++)
             {
-                for (var y = startY; y < endY; y++) {
+                for (var y = startY; y <= endY; y++) {
                     grid[x, y].Insert(item);
                 }
             }
-
-            var centerCellX = Math.Min(box.Center.x / (width / rows), rows - 1);
-            var centerCellY = Math.Min(box.Center.y / (height / columns), columns - 1);
-            
-            grid[centerCellX, centerCellY].Insert(item);
 
             item.Engine.ReturnBounds(box);
         }

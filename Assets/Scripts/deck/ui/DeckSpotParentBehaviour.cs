@@ -27,7 +27,7 @@ namespace Pandora.Deck.UI {
         public void LoadSavedDeck() {
             var serializedDeckWrapper = PlayerPrefs.GetString("DeckWrapper");
 
-            Debug.Log($"Loaded {serializedDeckWrapper}");
+            Logger.Debug($"Loaded {serializedDeckWrapper}");
 
             if (serializedDeckWrapper == null) return;
 

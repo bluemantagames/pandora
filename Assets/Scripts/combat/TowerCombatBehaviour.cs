@@ -124,13 +124,13 @@ namespace Pandora.Combat
                         closestDistance = distance;
                         closestUnit = unit;
 
-                        Debug.Log($"Closest unit is {unit}");
+                        Logger.Debug($"Closest unit is {unit}");
                     }
                 }
 
                 if (closestUnit != null)
                 {
-                    Debug.Log($"Attacking {closestUnit} - {closestUnit.GetComponent<LifeComponent>()}");
+                    Logger.Debug($"Attacking {closestUnit} - {closestUnit.GetComponent<LifeComponent>()}");
 
                     currentTarget = closestUnit;
                     targetLifeComponent = currentTarget.GetComponent<LifeComponent>();
@@ -146,7 +146,7 @@ namespace Pandora.Combat
             { // if not dead, attack once cooldown is over
                 lastAttackTimeLapse += lapsed;
 
-                Debug.Log($"Time lapse is {lastAttackTimeLapse} {Time.time}");
+                Logger.Debug($"Time lapse is {lastAttackTimeLapse} {Time.time}");
 
                 if (lastAttackTimeLapse >= cooldownMs)
                 {
@@ -161,7 +161,7 @@ namespace Pandora.Combat
         {
             if (currentTarget == null) return;
 
-            Debug.Log($"Attacking {target} - {isMiddle} - {targetLifeComponent}");
+            Logger.Debug($"Attacking {target} - {isMiddle} - {targetLifeComponent}");
 
             isAttacking = true;
 
@@ -176,7 +176,7 @@ namespace Pandora.Combat
 
             projectileEngineEntity.SetTarget(target.enemyEntity);
 
-            Debug.Log($"Spawning projectile targeting {target} - Setting map {map}");
+            Logger.Debug($"Spawning projectile targeting {target} - Setting map {map}");
 
             projectileObject.GetComponent<ProjectileBehaviour>().target = target;
             projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;
@@ -190,7 +190,7 @@ namespace Pandora.Combat
         /** Stops attacking an enemy */
         public void StopAttacking()
         {
-            Debug.Log($"Attacking must stop - {isMiddle}");
+            Logger.Debug($"Attacking must stop - {isMiddle}");
 
             currentTarget = null;
             targetLifeComponent = null;
@@ -200,7 +200,7 @@ namespace Pandora.Combat
         /** Called if a launched projectile collided */
         public void ProjectileCollided(Enemy target)
         {
-            Debug.Log($"Assigning damage {targetLifeComponent} {currentTarget}");
+            Logger.Debug($"Assigning damage {targetLifeComponent} {currentTarget}");
 
             if (targetLifeComponent != null)
                 targetLifeComponent.AssignDamage(damage);
@@ -210,7 +210,7 @@ namespace Pandora.Combat
         {
             if (middleTower != null)
             {
-                Debug.Log("Enabling middle tower");
+                Logger.Debug("Enabling middle tower");
 
                 middleTower.GetComponent<TowerCombatBehaviour>().isFrontTowerDestroyed = true;
             }

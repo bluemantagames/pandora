@@ -68,7 +68,7 @@ namespace Pandora.Network
 
             client.ExecuteAsync<MatchmakingResponse>(request, response =>
             {
-                Debug.Log($"Match found, token: {response.Data.token}");
+                Logger.Debug($"Match found, token: {response.Data.token}");
 
                 matchToken = response.Data.token;
 
@@ -87,14 +87,14 @@ namespace Pandora.Network
             var matchPort = 9090;
             var dns = Dns.GetHostEntry(matchHost);
 
-            Debug.Log($"Dns: {dns}");
+            Logger.Debug($"Dns: {dns}");
 
             var address = dns.AddressList[0];
             var ipe = new IPEndPoint(address, matchPort);
 
             matchSocket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-            Debug.Log($"Connecting to {matchHost}:{matchPort}");
+            Logger.Debug($"Connecting to {matchHost}:{matchPort}");
 
             matchSocket.Connect(ipe);
 
@@ -155,7 +155,7 @@ namespace Pandora.Network
 
                 var size = BitConverter.ToInt32(sizeBytes, 0);
 
-                Debug.Log($"Asking for {size} bytes");
+                Logger.Debug($"Asking for {size} bytes");
 
                 var messageBytes = new Byte[size];
 
@@ -163,7 +163,7 @@ namespace Pandora.Network
 
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBytes);
 
-                Debug.Log($"Received {envelope}");
+                Logger.Debug($"Received {envelope}");
 
                 if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Start)
                 {
@@ -174,7 +174,7 @@ namespace Pandora.Network
                     TeamComponent.topTeam = envelope.Start.Team == 1 ? 2 : 1;
                     PlayerId = envelope.Start.Id;
 
-                    Debug.Log($"We're team {TeamComponent.assignedTeam}");
+                    Logger.Debug($"We're team {TeamComponent.assignedTeam}");
 
                     matchStartEvent.Invoke();
                 }
@@ -217,11 +217,11 @@ namespace Pandora.Network
                         if (playerInfo.Id == PlayerId)
                         {
                             mana = playerInfo.Mana;
-                            Debug.Log($"Player ({PlayerId}) received mana: {mana}");
+                            Logger.Debug($"Player ({PlayerId}) received mana: {mana}");
                         }
                     }
 
-                    Debug.Log("Enqueuing Step");
+                    Logger.Debug("Enqueuing Step");
 
                     stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
                 }
@@ -239,7 +239,7 @@ namespace Pandora.Network
         {
             var lengthBytes = BitConverter.GetBytes(message.Length);
 
-            Debug.Log($"Sending {lengthBytes.Length} bytes as message length");
+            Logger.Debug($"Sending {lengthBytes.Length} bytes as message length");
 
             if (BitConverter.IsLittleEndian)
             {

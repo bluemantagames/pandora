@@ -88,7 +88,7 @@ namespace Pandora.Combat
 
             projectileEngineEntity.SetTarget(target.enemyEntity);
 
-            Debug.Log($"Spawning projectile targeting {target} - Setting map {map}");
+            Logger.Debug($"Spawning projectile targeting {target} - Setting map {map}");
 
             projectileObject.GetComponent<ProjectileBehaviour>().target = target;
             projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;

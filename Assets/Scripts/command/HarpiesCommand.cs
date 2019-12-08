@@ -28,7 +28,7 @@ namespace Pandora.Command
 
             var positions = entities.Select(harpy => harpy.GetComponent<EngineComponent>());
 
-            Debug.Log("harpy command invoked");
+            Logger.Debug("harpy command invoked");
 
             var teamComponent = GetComponent<TeamComponent>();
 
@@ -47,12 +47,12 @@ namespace Pandora.Command
                 }
             }
 
-            Debug.Log($"harpy command invoked {target}");
+            Logger.Debug($"harpy command invoked {target}");
 
             if (target == null) {
-                Debug.LogWarning("Could not find a target for harpies command");
+                Logger.DebugWarning("Could not find a target for harpies command");
             } else {
-                Debug.Log($"Harpies attacking {target}");
+                Logger.Debug($"Harpies attacking {target}");
 
                 foreach (var harpy in entities) {
                     harpy.GetComponent<MovementComponent>().Target = target;

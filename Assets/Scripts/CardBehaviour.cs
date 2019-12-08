@@ -11,7 +11,7 @@ using Pandora.Deck.UI;
 
 namespace Pandora
 {
-    public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
+    public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
         Vector3? originalPosition = null;
         MapComponent map;
@@ -25,7 +25,11 @@ namespace Pandora
         public bool IsAquatic = false;
         public bool FixedInGame = false;
         public bool Global = false;
+        public bool MulliganSelected = false;
 
+        Image imageComponent;
+        GraphicRaycaster raycasterComponent;
+        Color defaultColor;
         bool disabled = false;
 
         public bool IsUI
@@ -102,7 +106,7 @@ namespace Pandora
 
             if (hit.collider != null && hit.collider.gameObject.GetComponent<MapComponent>() != null)
             {
-                Debug.Log("Calling OnUICardCollision");
+                Logger.Debug("Calling OnUICardCollision");
 
                 map = hit.collider.gameObject.GetComponent<MapComponent>();
 
@@ -128,9 +132,12 @@ namespace Pandora
                 if (movement != null) movement.map = map;
                 if (projectileSpell != null) projectileSpell.map = map;
 
-                map.SpawnCard(UnitName, Team, RequiredMana);
+                var spawned = map.SpawnCard(UnitName, Team, RequiredMana);
 
-                LocalDeck.Instance.PlayCard(new Card(CardName));
+                if (spawned)
+                {
+                    LocalDeck.Instance.PlayCard(new Card(CardName));
+                }
 
                 map.DestroyPuppet();
 
@@ -141,7 +148,9 @@ namespace Pandora
                     SetChildrenActive(false);
 
                     Destroy(this);
-                } else {
+                }
+                else
+                {
                     CleanUpDrag(true);
                 }
 
@@ -181,6 +190,26 @@ namespace Pandora
 
                 child.gameObject.SetActive(active);
             }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            Debug.Log($"[MULLIGAN] Clicked {CardName}");
+            LocalDeck.Instance.CardSelect(new Card(CardName));
+        }
+
+        void Awake()
+        {
+            raycasterComponent = gameObject.GetComponent<GraphicRaycaster>();
+
+            imageComponent = gameObject.GetComponent<Image>();
+            defaultColor = imageComponent.color;
+        }
+
+        void Update()
+        {
+
+            imageComponent.color = (MulliganSelected == true) ? Color.yellow : defaultColor;
         }
     }
 }

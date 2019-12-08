@@ -47,7 +47,7 @@ namespace Pandora.Command
                     lifeComponent.AssignDamage(lifeComponent.lifeValue);
                 }
             } else {
-                Debug.LogWarning("Somebody is dead or no valid targets, cannot convert");
+                Logger.DebugWarning("Somebody is dead or no valid targets, cannot convert");
             }
         }
     }

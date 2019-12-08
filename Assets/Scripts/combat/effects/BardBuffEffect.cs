@@ -56,6 +56,11 @@ namespace Pandora.Combat.Effects {
         void Heal(GameObject target, int healAmount) {
             var lifeComponent = target.GetComponent<LifeComponent>();
             lifeComponent.lifeValue += healAmount;
+
+            if (lifeComponent.lifeValue > lifeComponent.maxLife) {
+                lifeComponent.lifeValue = lifeComponent.maxLife;
+            }
+
         }
 
         public Effect Apply(GameObject origin, GameObject target) {

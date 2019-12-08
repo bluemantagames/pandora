@@ -14,7 +14,7 @@ namespace Pandora.Spell {
 
                 var cellPosition = cell.vector;
 
-                Debug.Log($"Spell evaluating {targetPosition}");
+                Logger.Debug($"Spell evaluating {targetPosition}");
 
                 if (
                     targetPosition.x >= cellPosition.x - radius &&
@@ -22,7 +22,7 @@ namespace Pandora.Spell {
                     targetPosition.y >= cellPosition.y - radius &&
                     targetPosition.y <= cellPosition.y + radius
                 ) {
-                    Debug.Log($"Hitting {lifeComponent.gameObject}");
+                    Logger.Debug($"Hitting {lifeComponent.gameObject}");
 
                     lifeComponent.AssignDamage(damage);
                 }

@@ -11,7 +11,7 @@ namespace Pandora.Command
 
         public void InvokeCommand()
         {
-            Debug.Log("[Zombie] Command invoked");
+            Logger.Debug("[Zombie] Command invoked");
             
             var sourceEntity = GetComponent<EngineComponent>().Entity;
             var team = GetComponent<TeamComponent>().team;

@@ -30,7 +30,7 @@ namespace Pandora.Command
 
             var entityPosition = engine.GridCellToPhysics(new GridCell(tornadoPosition));
 
-            Debug.Log($"Spawning tornado in {entityPosition}");
+            Logger.Debug($"Spawning tornado in {entityPosition}");
 
             var entity = engine.AddEntity(tornado, 0, entityPosition, false, null);
 

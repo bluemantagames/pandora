@@ -528,10 +528,10 @@ namespace Tayx.Graphy
                     switch (debugPacket.MessageType)
                     {
                         case MessageType.Log:
-                            Debug.Log(message);
+                            Logger.Debug(message);
                             break;
                         case MessageType.Warning:
-                            Debug.LogWarning(message);
+                            Logger.DebugWarning(message);
                             break;
                         case MessageType.Error:
                             Debug.LogError(message);

@@ -24,7 +24,7 @@ namespace Pandora.Deck.UI
 
         public void Reset()
         {
-            Debug.Log($"Resetting {gameObject}");
+            Logger.Debug($"Resetting {gameObject}");
 
             gameObject.transform.SetParent(originalParent.transform);
 

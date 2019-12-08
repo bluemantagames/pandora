@@ -48,7 +48,7 @@ namespace Pandora.Combat.Effects
                 component.EngineUnitsMinForce = EngineUnitsMinForce;
                 component.DebugTornado = DebugTornado;
 
-                Debug.Log($"Setting tornado target {target}");
+                Logger.Debug($"Setting tornado target {target}");
 
                 component.target = target.GetComponent<EngineComponent>().Entity;
                 component.tornado = origin.GetComponent<EngineComponent>().Entity;
@@ -69,7 +69,8 @@ namespace Pandora.Combat.Effects
 
             var distanceFromEdge = EngineUnitsRadius - distance;
 
-            var force = distanceFromEdge * (decimal)(EngineUnitsMaxForce - EngineUnitsMinForce) / (decimal)EngineUnitsRadius;
+            // NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+            var force = (((distance - EngineUnitsRadius) * (decimal)(EngineUnitsMaxForce - EngineUnitsMinForce)) / (decimal)-EngineUnitsRadius) + EngineUnitsMinForce;
 
             if (force == 0) force = (decimal)EngineUnitsMinForce;
 
@@ -80,7 +81,7 @@ namespace Pandora.Combat.Effects
             var position = path.Current;
 
             if (DebugTornado) {
-                Debug.Log($"Unit is distant {distanceFromEdge + EngineUnitsRadius}, {force} has been applied, it moved to {position} ({tornado.Position} from {target.Position})");
+                Logger.Debug($"Unit is distant {distanceFromEdge + EngineUnitsRadius}, {force} has been applied, it moved to {position} ({tornado.Position} from {target.Position})");
             }
 
             target.Position = position;

@@ -110,8 +110,8 @@ namespace Pandora
             var topArenaPosition = topArena.transform.position;
             var topArenaSize = topArena.GetComponent<SpriteRenderer>().bounds.size;
 
-            Debug.Log($"Top arena position y {topArenaPosition.y}");
-            Debug.Log($"Top arena position {(topArenaPosition.y + topArenaSize.y)}");
+            Logger.Debug($"Top arena position y {topArenaPosition.y}");
+            Logger.Debug($"Top arena position {(topArenaPosition.y + topArenaSize.y)}");
 
             cellWidth = topArenaSize.x / mapSizeX;
             cellHeight = ((topArenaPosition.y + topArenaSize.y) - transform.position.y) / mapSizeY;
@@ -213,7 +213,7 @@ namespace Pandora
             {
                 if (remainingStep > 0)
                 {
-                    Debug.LogWarning($"We're being too slow, we might possibly desync (we are {remainingStep}ms behind)");
+                    Logger.DebugWarning($"We're being too slow, we might possibly desync (we are {remainingStep}ms behind)");
 
                     engine.Process(remainingStep);
                 }
@@ -224,7 +224,7 @@ namespace Pandora
                 {
                     if (command is SpawnMessage spawn)
                     {
-                        Debug.Log($"Received {spawn} - spawning unit");
+                        Logger.Debug($"Received {spawn} - spawning unit");
 
                         SpawnUnit(new UnitSpawn(spawn), spawn.manaUsed);
                     }
@@ -279,7 +279,7 @@ namespace Pandora
             ResetAggroPoints();
         }
 
-        public void SpawnCard(string cardName, int team, int requiredMana = 0)
+        public bool SpawnCard(string cardName, int team, int requiredMana = 0)
         {
             ResetAggroPoints();
 
@@ -290,7 +290,7 @@ namespace Pandora
             // TODO: Notify player somehow if they lack mana
             if (manaEnabled && ManaSingleton.manaValue < requiredMana)
             {
-                return;
+                return false;
             }
 
             var message =
@@ -316,6 +316,8 @@ namespace Pandora
                 ManaSingleton.UpdateMana(ManaSingleton.manaValue - requiredMana);
                 ManaSingleton.manaUnit -= requiredMana;
             }
+
+            return true;
         }
 
         public GameObject LoadCard(string unitName) => Resources.Load($"Units/{unitName}") as GameObject;
@@ -323,7 +325,7 @@ namespace Pandora
         /// <summary>Spawns a unit</summary>
         public void SpawnUnit(UnitSpawn spawn, int requiredMana = 0)
         {
-            Debug.Log($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY} Team {spawn.Team}");
+            Logger.Debug($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY} Team {spawn.Team}");
 
             var card = LoadCard(spawn.UnitName);
 
@@ -350,6 +352,8 @@ namespace Pandora
             }
 
             ShowManaUsedAlert(cardObject, requiredMana);
+
+            CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>
@@ -559,11 +563,11 @@ namespace Pandora
             if (spawningCells == null) return;
 
             var combatBehaviours =
-                            from component in GetComponentsInChildren<CombatBehaviour>()
-                            where
-                                !(component is TowerCombatBehaviour) &&
-                                (component as MonoBehaviour).gameObject.GetComponent<TeamComponent>().team != TeamComponent.assignedTeam
-                            select component;
+                from component in GetComponentsInChildren<CombatBehaviour>()
+                where
+                    !(component is TowerCombatBehaviour) &&
+                    (component as MonoBehaviour).gameObject.GetComponent<TeamComponent>().team != TeamComponent.assignedTeam
+                select component;
 
             foreach (var combatBehaviour in combatBehaviours)
             {
@@ -626,7 +630,7 @@ namespace Pandora
                 }
             }
 
-            Debug.Log("Tower positions " + string.Join(",", set));
+            Logger.Debug("Tower positions " + string.Join(",", set));
 
             return set;
         }
@@ -653,7 +657,7 @@ namespace Pandora
         {
             var cell = GetPointedCell().vector;
 
-            Debug.Log($"Pointed cell {cell}");
+            Logger.Debug($"Pointed cell {cell}");
 
             var worldCellPoint = transform.position;
 

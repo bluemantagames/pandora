@@ -12,12 +12,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mermaids
       objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 8726211211295533116, guid: 5d99a425df70f0044acf7b79f6d0d1d9,
-        type: 3}
     - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
         type: 3}
       propertyPath: Puppet
@@ -45,6 +39,17 @@ PrefabInstance:
       propertyPath: IsAquatic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: RequiredMana
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8726211211295533116, guid: 5d99a425df70f0044acf7b79f6d0d1d9,
+        type: 3}
     - target: {fileID: 1069214256245577549, guid: f3024322f337f5844bd8d8be1328fece,
         type: 3}
       propertyPath: m_LocalPosition.x

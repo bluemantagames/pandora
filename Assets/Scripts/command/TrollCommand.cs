@@ -15,7 +15,7 @@ namespace Pandora.Command
 
         public void InvokeCommand()
         {
-            Debug.Log("[Troll] Command invoked");
+            Logger.Debug("[Troll] Command invoked");
 
             var sourceEntity = GetComponent<EngineComponent>().Entity;
             var sourceTeam = GetComponent<TeamComponent>().team;
