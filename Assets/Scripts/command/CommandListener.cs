@@ -15,8 +15,6 @@ namespace Pandora.Command
         {
             if (Used) return;
 
-            var groupComponent = GetComponentInParent<GroupComponent>();
-
             var tapTime = Time.time * 1000;
             var elapsed = tapTime - lastTapMs;
 
@@ -27,8 +25,17 @@ namespace Pandora.Command
                 return;
             }
 
+            Command();
+        }
+
+        public void Command()
+        {
+            if (Used) return;
+
             var id = GetComponentInParent<UnitIdComponent>().Id;
-            
+
+            var groupComponent = GetComponentInParent<GroupComponent>();
+
             NetworkControllerSingleton.instance.EnqueueMessage(
                 new CommandMessage
                 {
@@ -52,17 +59,22 @@ namespace Pandora.Command
 
             Used = true;
 
-            if (groupComponent != null) {
-                foreach (var gameObject in groupComponent.Objects) {
+            if (groupComponent != null)
+            {
+                foreach (var gameObject in groupComponent.Objects)
+                {
                     var commandListener = gameObject.GetComponentInChildren<CommandListener>();
-                    
+
                     Logger.Debug($"Using {gameObject} {string.Join(", ", groupComponent.Objects)}");
 
-                    if (commandListener != null) {
+                    if (commandListener != null)
+                    {
                         commandListener.Used = true;
                     }
                 }
             }
+
+            CommandViewportBehaviour.Instance.RemoveCommand(id);
         }
 
     }

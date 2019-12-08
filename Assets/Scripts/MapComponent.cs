@@ -279,7 +279,7 @@ namespace Pandora
             ResetAggroPoints();
         }
 
-        public void SpawnCard(string cardName, int team, int requiredMana = 0)
+        public bool SpawnCard(string cardName, int team, int requiredMana = 0)
         {
             ResetAggroPoints();
 
@@ -290,7 +290,7 @@ namespace Pandora
             // TODO: Notify player somehow if they lack mana
             if (manaEnabled && ManaSingleton.manaValue < requiredMana)
             {
-                return;
+                return false;
             }
 
             var message =
@@ -316,6 +316,8 @@ namespace Pandora
                 ManaSingleton.UpdateMana(ManaSingleton.manaValue - requiredMana);
                 ManaSingleton.manaUnit -= requiredMana;
             }
+
+            return true;
         }
 
         public GameObject LoadCard(string unitName) => Resources.Load($"Units/{unitName}") as GameObject;
@@ -350,6 +352,8 @@ namespace Pandora
             }
 
             ShowManaUsedAlert(cardObject, requiredMana);
+
+            CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>

@@ -132,9 +132,12 @@ namespace Pandora
                 if (movement != null) movement.map = map;
                 if (projectileSpell != null) projectileSpell.map = map;
 
-                map.SpawnCard(UnitName, Team, RequiredMana);
+                var spawned = map.SpawnCard(UnitName, Team, RequiredMana);
 
-                LocalDeck.Instance.PlayCard(new Card(CardName));
+                if (spawned)
+                {
+                    LocalDeck.Instance.PlayCard(new Card(CardName));
+                }
 
                 map.DestroyPuppet();
 
@@ -145,7 +148,9 @@ namespace Pandora
                     SetChildrenActive(false);
 
                     Destroy(this);
-                } else {
+                }
+                else
+                {
                     CleanUpDrag(true);
                 }
 
@@ -201,7 +206,7 @@ namespace Pandora
             defaultColor = imageComponent.color;
         }
 
-        void Update() 
+        void Update()
         {
 
             imageComponent.color = (MulliganSelected == true) ? Color.yellow : defaultColor;

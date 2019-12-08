@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Pandora.Engine;
 using Pandora.Combat;
+using Pandora.Network;
 
 namespace Pandora
 {
@@ -26,7 +27,8 @@ namespace Pandora
             maxLife = lifeValue;
         }
 
-        public void Remove() {
+        public void Remove()
+        {
             GetComponent<CombatBehaviour>().StopAttacking();
 
             foreach (var rigidBody in GetComponentsInChildren<Rigidbody2D>())
@@ -38,8 +40,9 @@ namespace Pandora
             {
                 sprite.enabled = false;
             }
-            
-            foreach (Transform child in this.transform) {
+
+            foreach (Transform child in this.transform)
+            {
                 child.gameObject.SetActive(false);
             }
 
@@ -51,7 +54,8 @@ namespace Pandora
             }
         }
 
-        private void SetLastPosition() {
+        private void SetLastPosition()
+        {
             var sourceEntity = GetComponent<EngineComponent>().Entity;
             LastPosition = sourceEntity.GetCurrentCell().vector;
         }
@@ -60,7 +64,7 @@ namespace Pandora
         {
             lifeValue -= value;
 
-            float lifePercent = (float) lifeValue / (float) maxLife;
+            float lifePercent = (float)lifeValue / (float)maxLife;
 
             mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
 
@@ -68,6 +72,22 @@ namespace Pandora
             {
                 IsDead = true;
                 GetComponent<CombatBehaviour>().OnDead();
+
+                var groupComponent = GetComponent<GroupComponent>();
+
+                if (groupComponent != null)
+                {
+                    groupComponent.AliveObjects.Remove(gameObject);
+
+                    if (groupComponent.AliveObjects.Count == 0)
+                    {
+                        CommandViewportBehaviour.Instance.RemoveCommand(groupComponent.OriginalId);
+                    }
+                }
+                else
+                {
+                    CommandViewportBehaviour.Instance.RemoveCommand(GetComponent<UnitIdComponent>().Id);
+                }
 
                 SetLastPosition();
                 Remove();

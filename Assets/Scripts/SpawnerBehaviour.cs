@@ -21,7 +21,7 @@ namespace Pandora
             foreach (var position in Positions)
             {
                 var unit = Instantiate(Unit, map.gameObject.transform);
-                var id = $"{spawn.Id}-{unitNumber}";
+                var id = (unitNumber > 1) ? $"{spawn.Id}-{unitNumber}" : spawn.Id;
 
                 unit.name += $"-{id}";
 
@@ -31,7 +31,11 @@ namespace Pandora
 
                 units.Add(unit);
 
-                unit.AddComponent<GroupComponent>().Objects = units;
+                var groupComponent = unit.AddComponent<GroupComponent>();
+
+                groupComponent.Objects = units;
+                groupComponent.AliveObjects = new List<GameObject>(units);
+                groupComponent.OriginalId = spawn.Id;
 
                 unitNumber++;
             }
