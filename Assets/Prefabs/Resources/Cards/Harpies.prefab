@@ -12,6 +12,39 @@ PrefabInstance:
       propertyPath: m_Name
       value: Harpies
       objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: Puppet
+      value: 
+      objectReference: {fileID: 2912803032986980184, guid: db44486426ed37f43bb26cb303179f89,
+        type: 3}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 7233908571152258386, guid: 1d103170791359141b04bc6e9493602e,
+        type: 3}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: CardName
+      value: Harpies
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: UnitName
+      value: HarpiesSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: RequiredMana
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 9020873244740579982, guid: 5d99a425df70f0044acf7b79f6d0d1d9,
+        type: 3}
     - target: {fileID: 1069214256245577549, guid: f3024322f337f5844bd8d8be1328fece,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -117,38 +150,5 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: Puppet
-      value: 
-      objectReference: {fileID: 2912803032986980184, guid: db44486426ed37f43bb26cb303179f89,
-        type: 3}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: Card
-      value: 
-      objectReference: {fileID: 7233908571152258386, guid: 1d103170791359141b04bc6e9493602e,
-        type: 3}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: CardName
-      value: Harpies
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: UnitName
-      value: HarpiesSpawner
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: RequiredMana
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 9020873244740579982, guid: 5d99a425df70f0044acf7b79f6d0d1d9,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3024322f337f5844bd8d8be1328fece, type: 3}
