@@ -170,6 +170,8 @@ namespace Pandora.Network
                     matchStarted = true;
 
                     TeamComponent.assignedTeam = envelope.Start.Team;
+                    TeamComponent.bottomTeam = envelope.Start.Team;
+                    TeamComponent.topTeam = envelope.Start.Team == 1 ? 2 : 1;
                     PlayerId = envelope.Start.Id;
 
                     Debug.Log($"We're team {TeamComponent.assignedTeam}");
