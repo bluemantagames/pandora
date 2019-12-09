@@ -2,42 +2,34 @@ using System.Collections.Generic;
 using System;
 using Pandora.Pool;
 using UnityEngine.Profiling;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Pandora.Engine.Grid
 {
     public class Cell
     {
-        public List<EngineEntity> Items;
-        CustomSampler collisionCheck;
-        public List<Collision> registeredCollisions;
+        public LinkedList<EngineEntity> Items;
+        CustomSampler collisionCheck, hitboxCheck, itemAddCheck;
 
         public Cell(int x, int y, int w, int h)
         {
-            Items = new List<EngineEntity> { };
+            Items = new LinkedList<EngineEntity> { };
 
             collisionCheck = CustomSampler.Create($"Check collision {x}, {y}");
+            hitboxCheck = CustomSampler.Create($"Check hitbox collision {x}, {y}");
+            itemAddCheck = CustomSampler.Create($"Item added to {x}, {y}");
         }
 
         public void Insert(EngineEntity item)
         {
-            Items.Add(item);
+            itemAddCheck.Begin();
+            Items.AddFirst(item);
+            itemAddCheck.End();
         }
 
         public void Clear()
         {
-            if (registeredCollisions != null)
-            {
-                foreach (var collision in registeredCollisions)
-                {
-                    collision.First.Engine.ReturnBounds(collision.FirstBox);
-                    collision.Second.Engine.ReturnBounds(collision.SecondBox);
-
-                    PoolInstances.CollisionPool.ReturnObject(collision);
-                }
-            }
-
-            PoolInstances.CollisionListPool.ReturnObject(registeredCollisions);
-
             Items.Clear();
         }
 
@@ -62,6 +54,8 @@ namespace Pandora.Engine.Grid
                     else
                         processed.Add(pair);
 
+                    hitboxCheck.Begin();
+
                     var aBox = a.Engine.GetPooledEntityBounds(a);
                     var bBox = b.Engine.GetPooledEntityBounds(b);
 
@@ -85,6 +79,7 @@ namespace Pandora.Engine.Grid
                         PoolInstances.CollisionPool.ReturnObject(collision);
                     }
 
+                    hitboxCheck.End();
                 }
             }
 
