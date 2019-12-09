@@ -38,7 +38,7 @@ namespace Pandora.Command
                     targetLifeComponent.AssignDamage(Damage);
 
                     // Assign effects to non-structure units
-                    if (!targetEntity.IsStructure) {
+                    if (!targetEntity.IsStructure && targetEntity.GameObject.layer != Constants.SWIMMING_LAYER) {
                         foreach (var effectObject in EffectObjects)
                         {
                             var effect = effectObject.GetComponent<Effect>();

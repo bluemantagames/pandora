@@ -8,5 +8,7 @@ namespace Pandora.Combat {
         MapComponent map { set; }
 
         int Speed { get; }
+
+        void Init();
     }
 }

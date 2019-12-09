@@ -65,6 +65,7 @@ namespace Pandora
             lifeValue -= value;
 
             float lifePercent = (float)lifeValue / (float)maxLife;
+            var idComponent = GetComponent<UnitIdComponent>();
 
             mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
 
@@ -84,9 +85,9 @@ namespace Pandora
                         CommandViewportBehaviour.Instance.RemoveCommand(groupComponent.OriginalId);
                     }
                 }
-                else
+                else if (idComponent != null)
                 {
-                    CommandViewportBehaviour.Instance.RemoveCommand(GetComponent<UnitIdComponent>().Id);
+                    CommandViewportBehaviour.Instance.RemoveCommand(idComponent.Id);
                 }
 
                 SetLastPosition();

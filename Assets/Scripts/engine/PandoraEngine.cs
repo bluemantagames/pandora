@@ -843,7 +843,7 @@ namespace Pandora.Engine
 
             foreach (var entity in Entities)
             {
-                var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
+                var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle || !entity.IsRigid;
 
                 if (isNotTargeted) continue;
 

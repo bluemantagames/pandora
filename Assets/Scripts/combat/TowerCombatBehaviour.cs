@@ -185,6 +185,9 @@ namespace Pandora.Combat
             var engineComponent = projectileObject.AddComponent<EngineComponent>();
 
             engineComponent.Entity = projectileEngineEntity;
+
+            projectileObject.GetComponent<ProjectileBehaviour>().Init();
+
         }
 
         /** Stops attacking an enemy */

@@ -11,7 +11,7 @@ namespace Pandora.Engine.Grid
         int height, width, rows, columns;
         Cell[,] grid;
         CustomSampler collisionCheck;
-        HashSet<(EngineEntity, EngineEntity)> processedCollisions = new HashSet<(EngineEntity, EngineEntity)> {};
+        HashSet<(EngineEntity, EngineEntity)> processedCollisions = new HashSet<(EngineEntity, EngineEntity)> { };
 
 
         public TightGrid(int height, int width, int rows, int columns)
@@ -21,7 +21,7 @@ namespace Pandora.Engine.Grid
             this.rows = rows;
             this.columns = columns;
 
-            grid = new Cell[rows, columns];
+            grid = new Cell[rows + 1, columns + 1];
 
             for (var x = 0; x < rows; x++)
             {
@@ -32,7 +32,8 @@ namespace Pandora.Engine.Grid
             }
         }
 
-        IEnumerable<Cell> Cells() {
+        IEnumerable<Cell> Cells()
+        {
             for (var x = 0; x < rows; x++)
             {
                 for (var y = 0; y < columns; y++)
@@ -42,12 +43,14 @@ namespace Pandora.Engine.Grid
             }
         }
 
-        public List<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision) {
+        public List<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision)
+        {
             processedCollisions.Clear();
 
-            var collisions = new List<Collision> {};
+            var collisions = new List<Collision> { };
 
-            foreach (var cell in Cells()) {
+            foreach (var cell in Cells())
+            {
                 var cellCollisions = cell.Collisions(isCollision, processedCollisions);
 
                 collisions.AddRange(cellCollisions);
@@ -68,16 +71,22 @@ namespace Pandora.Engine.Grid
 
             for (var x = startX; x <= endX; x++)
             {
-                for (var y = startY; y <= endY; y++) {
-                    grid[x, y].Insert(item);
+                for (var y = startY; y <= endY; y++)
+                {
+                    if (x <= rows - 1 && y <= grid.GetLength(1) - 1)
+                    {
+                        grid[x, y].Insert(item);
+                    }
                 }
             }
 
             item.Engine.ReturnBounds(box);
         }
 
-        public void Clear() {
-            foreach (var cell in Cells()) {
+        public void Clear()
+        {
+            foreach (var cell in Cells())
+            {
                 cell.Clear();
             }
         }
