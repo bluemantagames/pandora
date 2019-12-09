@@ -61,6 +61,8 @@ namespace Pandora
                 }
             }
 
+            if (foundCard == null) return;
+
             var card = foundCard.GetComponent<Image>();
 
             var handler = Instantiate(CommandImage, transform.position, Quaternion.identity, transform);

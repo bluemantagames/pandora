@@ -102,7 +102,7 @@ namespace Pandora
             timeSinceLastStep = frameStep; // initialize time since last step so we don't skip frames
 
             Screen.fullScreen = false;
-            Screen.SetResolution(1080, 1920, false);
+            Screen.SetResolution(720, 1280, false);
 
             Application.targetFrameRate = 30;
 
@@ -353,7 +353,10 @@ namespace Pandora
 
             ShowManaUsedAlert(cardObject, requiredMana);
 
-            CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
+            if (spawn.Team == TeamComponent.assignedTeam)
+            {
+                CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
+            }
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>

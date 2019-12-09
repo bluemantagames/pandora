@@ -98,6 +98,8 @@ namespace Pandora.Combat
 
             engineComponent.Entity = projectileEngineEntity;
 
+            projectileObject.GetComponent<ProjectileBehaviour>().Init();
+
             var lifeComponent = target.enemy.GetComponent<LifeComponent>();
 
             if (lifeComponent.lifeValue - Damage <= 0) // if the projectile kills the target on hit, stop attacking the target now
