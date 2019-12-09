@@ -72,7 +72,7 @@ namespace Pandora.Engine
             gridSampler = CustomSampler.Create("Grid building sampler");
             enginePathfindingSampler = CustomSampler.Create("PandoraEngine pathfinding");
 
-            grid = new TightGrid(yBounds, xBounds, 30, 20);
+            grid = new TightGrid(yBounds, xBounds, 5, 4);
         }
 
         public void Process(uint msLapsed)
