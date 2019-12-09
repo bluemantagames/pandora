@@ -76,8 +76,7 @@ namespace Pandora.Combat
             }
         }
 
-        // Start is called before the first frame update
-        void Start()
+        public void Init()
         {
             body = GetComponent<Rigidbody2D>();
 

@@ -16,7 +16,7 @@ namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {
-        bool isDebugBuild = Debug.isDebugBuild;
+        bool isDebugBuild = false;
 
         string matchmakingHost
         {

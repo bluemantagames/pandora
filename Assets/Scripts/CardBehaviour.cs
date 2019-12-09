@@ -141,7 +141,7 @@ namespace Pandora
 
                 map.DestroyPuppet();
 
-                if (!FixedInGame)
+                if (spawned && !FixedInGame)
                 {
                     GetComponent<Image>().enabled = false;
 
