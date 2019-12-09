@@ -33,11 +33,9 @@ namespace Pandora.Engine.Grid
             Items.Clear();
         }
 
-        public LinkedList<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision, HashSet<(EngineEntity, EngineEntity)> processed)
+        public LinkedList<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision, HashSet<(EngineEntity, EngineEntity)> processed, LinkedList<Collision> collisions)
         {
             collisionCheck.Begin();
-
-            var collisions = new LinkedList<Collision>();
 
             foreach (var a in Items)
             {
@@ -69,7 +67,7 @@ namespace Pandora.Engine.Grid
 
                     if (aBox.Collides(bBox) && isCollision(a, b))
                     {
-                        collisions.AddFirst(new LinkedListNode<Collision>(collision));
+                        collisions.AddFirst(collision);
                     }
                     else
                     {

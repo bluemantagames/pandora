@@ -43,17 +43,15 @@ namespace Pandora.Engine.Grid
             }
         }
 
-        public List<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision)
+        public LinkedList<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision)
         {
             processedCollisions.Clear();
 
-            var collisions = new List<Collision> { };
+            var collisions = new LinkedList<Collision> { };
 
             foreach (var cell in Cells())
             {
-                var cellCollisions = cell.Collisions(isCollision, processedCollisions);
-
-                collisions.AddRange(cellCollisions);
+                var cellCollisions = cell.Collisions(isCollision, processedCollisions, collisions);
             }
 
             return collisions;
