@@ -328,14 +328,27 @@ namespace Pandora
             Logger.Debug($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY} Team {spawn.Team}");
 
             var card = LoadCard(spawn.UnitName);
+            var manaAnimationGridPosition = new Vector2Int(spawn.CellX, spawn.CellY);
 
             if (spawn.Team == TeamComponent.topTeam)
-            { // flip Y if top team
+            { 
+                // flip Y if top team
                 spawn.CellY = mapSizeY - spawn.CellY;
             }
 
+            // This exists because the manaAnimation game object
+            // needs the real y-position of the enemy team
+            if (spawn.Team != TeamComponent.assignedTeam)
+            {
+                // flip Y if enemy team
+                manaAnimationGridPosition.y = mapSizeY - manaAnimationGridPosition.y;
+            }
+
             var unitGridCell = new GridCell(spawn.CellX, spawn.CellY);
+            var manaAnimationGridCell = new GridCell(manaAnimationGridPosition.x, manaAnimationGridPosition.y);
             var cardPosition = GridCellToWorldPosition(unitGridCell);
+            var manaAnimationPosition = GridCellToWorldPosition(manaAnimationGridCell);
+
             var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
 
             cardObject.name += $"-{spawn.Id}";
@@ -351,7 +364,7 @@ namespace Pandora
                 InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp);
             }
 
-            ShowManaUsedAlert(cardObject, requiredMana);
+            ShowManaUsedAlert(cardObject, requiredMana, manaAnimationPosition);
 
             if (spawn.Team == TeamComponent.assignedTeam)
             {
@@ -398,10 +411,12 @@ namespace Pandora
             Units.Add(id, unit);
         }
 
-        public void ShowManaUsedAlert(GameObject unit, int manaUsed)
+        public void ShowManaUsedAlert(GameObject unit, int manaUsed, Vector2 position)
         {
-            var manaUsedText =
-                unit.GetComponentInChildren<ManaUsedAlertBehaviour>()?.gameObject.GetComponentInChildren<Text>();
+            var manaUsedObject = unit.GetComponentInChildren<ManaUsedAlertBehaviour>().gameObject;
+            var manaUsedText = manaUsedObject.GetComponentInChildren<Text>();
+
+            manaUsedObject.transform.position = position;
 
             if (manaUsedText != null)
             {
