@@ -5,14 +5,14 @@ namespace Pandora
 {
     public class HealthbarBehaviour : MonoBehaviour
     {
-        public Color OpponentColor;
-        Color originalColor;
+        public Sprite OpponentSprite;
+        Sprite originalSprite;
         Image imageComponent;
 
         void Start()
         {
             imageComponent = GetComponent<Image>();
-            originalColor = imageComponent.color;
+            originalSprite = imageComponent.sprite;
 
             RefreshColor();
         }
@@ -23,11 +23,11 @@ namespace Pandora
 
             if (teamComponent?.team != TeamComponent.assignedTeam)
             {
-                imageComponent.color = OpponentColor;
+                imageComponent.sprite = OpponentSprite;
             }
             else
             {
-                imageComponent.color = originalColor;
+                imageComponent.sprite = originalSprite;
             }
         }
 
