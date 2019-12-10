@@ -21,7 +21,7 @@ namespace Pandora
             foreach (var position in Positions)
             {
                 var unit = Instantiate(Unit, map.gameObject.transform);
-                var id = (unitNumber > 1) ? $"{spawn.Id}-{unitNumber}" : spawn.Id;
+                var id = $"{spawn.Id}-{unitNumber}";
 
                 unit.name += $"-{id}";
 

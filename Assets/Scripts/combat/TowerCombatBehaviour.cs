@@ -134,8 +134,6 @@ namespace Pandora.Combat
 
                     currentTarget = closestUnit;
                     targetLifeComponent = currentTarget.GetComponent<LifeComponent>();
-
-                    AttackEnemy(new Enemy(currentTarget), 0);
                 }
             }
             else if (isTargetDead || !isTargetInAggroBox)
@@ -161,6 +159,7 @@ namespace Pandora.Combat
         {
             if (currentTarget == null) return;
 
+            Logger.Debug("Lapse: firing");
             Logger.Debug($"Attacking {target} - {isMiddle} - {targetLifeComponent}");
 
             isAttacking = true;
