@@ -1688,16 +1688,16 @@ MonoBehaviour:
   BottomRightTowerPosition: {x: 12, y: 3}
   BottomMiddleTowerPosition: {x: 6, y: 0}
   TopLeftAggroOrigin: {x: 0, y: 15}
-  TopLeftAggroEnd: {x: 7, y: 20}
+  TopLeftAggroEnd: {x: 7, y: 26}
   TopMiddleAggroOrigin: {x: 0, y: 15}
   TopMiddleAggroEnd: {x: 15, y: 26}
   TopRightAggroOrigin: {x: 8, y: 15}
-  TopRightAggroEnd: {x: 15, y: 20}
-  BottomLeftAggroOrigin: {x: 0, y: 6}
+  TopRightAggroEnd: {x: 15, y: 26}
+  BottomLeftAggroOrigin: {x: 0, y: 0}
   BottomLeftAggroEnd: {x: 7, y: 11}
   BottomMiddleAggroOrigin: {x: 0, y: 0}
   BottomMiddleAggroEnd: {x: 15, y: 11}
-  BottomRightAggroOrigin: {x: 8, y: 6}
+  BottomRightAggroOrigin: {x: 8, y: 0}
   BottomRightAggroEnd: {x: 15, y: 11}
 --- !u!61 &996488290
 BoxCollider2D:
