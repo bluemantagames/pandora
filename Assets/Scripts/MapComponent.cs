@@ -411,6 +411,8 @@ namespace Pandora
             unit.GetComponent<EngineComponent>().Entity = engineEntity;
             unit.AddComponent<UnitIdComponent>().Id = id;
 
+            unit.GetComponentInChildren<HealthbarBehaviour>().RefreshColor();
+
             Units.Add(id, unit);
         }
 

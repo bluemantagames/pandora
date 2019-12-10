@@ -87,9 +87,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335829e36f54ef54f955ddc9d07787a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OpponentColor: {r: 1, g: 0, b: 0, a: 0}
   OpponentSprite: {fileID: 8027760352401318747, guid: 4e7c48f98dae35d4da42f7dd77180d13,
     type: 3}
+  HPSeparator: {fileID: 114114483744972174, guid: da5047713dcdcf04fa065008b98d3f2d,
+    type: 3}
+  HPSeparatorRange: 100
+  LifeComponent: {fileID: 0}
 --- !u!1 &885019136172078356
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +121,7 @@ RectTransform:
   m_GameObject: {fileID: 885019136172078356}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children:
   - {fileID: 1191788910211103977}
   - {fileID: 3263110296628745972}

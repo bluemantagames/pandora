@@ -21,10 +21,15 @@ namespace Pandora
         // Start is called before the first frame update
         void Start()
         {
-            mask = GetComponentInChildren<HealthbarBehaviour>().gameObject.transform.parent.gameObject.GetComponent<Image>();
+            var healthbarBehaviour = GetComponentInChildren<HealthbarBehaviour>();
+            mask = healthbarBehaviour.gameObject.transform.parent.gameObject.GetComponent<Image>();
+
+            healthbarBehaviour.LifeComponent = this;
 
             maskOriginalSize = mask.rectTransform.rect.width;
             maxLife = lifeValue;
+         
+            healthbarBehaviour.DrawSeparators();
         }
 
         public void Remove()
