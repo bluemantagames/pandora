@@ -1260,11 +1260,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 1.944
       objectReference: {fileID: 0}
-    - target: {fileID: 2693967325251540130, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
-        type: 3}
-      propertyPath: lifeValue
-      value: 1000
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1e52bdc3ec5dd6449d8749a2604c5a3, type: 3}
 --- !u!4 &738133526 stripped
@@ -1404,11 +1399,6 @@ PrefabInstance:
       propertyPath: map
       value: 
       objectReference: {fileID: 996488289}
-    - target: {fileID: 3866240383038811720, guid: 3ae196b7cda494c4b8d0457362c166ec,
-        type: 3}
-      propertyPath: lifeValue
-      value: 1000
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ae196b7cda494c4b8d0457362c166ec, type: 3}
 --- !u!4 &819278250 stripped
@@ -2795,11 +2785,6 @@ PrefabInstance:
       propertyPath: aggroBoxEnd.x
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
-        type: 3}
-      propertyPath: cooldownMs
-      value: 1000
-      objectReference: {fileID: 0}
     - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: position.x
@@ -2869,11 +2854,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 1.83
-      objectReference: {fileID: 0}
-    - target: {fileID: 2693967325251540130, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
-        type: 3}
-      propertyPath: lifeValue
-      value: 1000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1e52bdc3ec5dd6449d8749a2604c5a3, type: 3}
@@ -4417,11 +4397,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0.421
       objectReference: {fileID: 0}
-    - target: {fileID: 2693967325251540130, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
-        type: 3}
-      propertyPath: lifeValue
-      value: 1000
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1e52bdc3ec5dd6449d8749a2604c5a3, type: 3}
 --- !u!4 &1838545263 stripped
@@ -5427,11 +5402,6 @@ PrefabInstance:
       propertyPath: middleTower
       value: 
       objectReference: {fileID: 2089915458}
-    - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
-        type: 3}
-      propertyPath: cooldownMs
-      value: 1000
-      objectReference: {fileID: 0}
     - target: {fileID: 2693967325251540129, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: WorldTowerPosition
@@ -5496,11 +5466,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 1.301
-      objectReference: {fileID: 0}
-    - target: {fileID: 2693967325251540130, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
-        type: 3}
-      propertyPath: lifeValue
-      value: 1000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1e52bdc3ec5dd6449d8749a2604c5a3, type: 3}
@@ -5638,11 +5603,6 @@ PrefabInstance:
         type: 3}
       propertyPath: isOpponent
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3866240383038811720, guid: 3ae196b7cda494c4b8d0457362c166ec,
-        type: 3}
-      propertyPath: lifeValue
-      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}

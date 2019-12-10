@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733e88c63e6713f4fa432c8e37a8f31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeValue: 400
+  lifeValue: 600
   maxLife: 0
   IsDead: 0
 --- !u!95 &7129443875767093079
@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c2243c9941e6d0488bbe0ced3e3f2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 222
+  damage: 300
   attackCooldownMs: 1000
   backswingMs: 1000
   animationStateName: HalfOrcRiderAttack

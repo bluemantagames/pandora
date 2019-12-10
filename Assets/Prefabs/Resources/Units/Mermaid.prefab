@@ -310,14 +310,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a9892cbc13c6c4ca1446776a4deac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 125
+  Damage: 35
   attackCooldownMs: 500
   backswingMs: 400
   projectile: {fileID: 5687362912629012028, guid: d519b85eadcfc0d43ab3c181acade232,
     type: 3}
   animationStateName: AttackingMermaid
   AggroRangeCells: 50
-  AttackRangeEngineUnits: 2000
+  AttackRangeEngineUnits: 1200
   EffectObjects: []
 --- !u!61 &4143209966792787441
 BoxCollider2D:
@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec9b3b5564e46048a69d3e9043e428f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 750
+  MovementSpeed: 900
 --- !u!1001 &1817415095756202251
 PrefabInstance:
   m_ObjectHideFlags: 0

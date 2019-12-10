@@ -34,10 +34,13 @@ namespace Pandora
                 var groupComponent = unit.AddComponent<GroupComponent>();
 
                 groupComponent.Objects = units;
-                groupComponent.AliveObjects = new List<GameObject>(units);
                 groupComponent.OriginalId = spawn.Id;
 
                 unitNumber++;
+            }
+
+            foreach (var unit in units) {
+                unit.GetComponent<GroupComponent>().AliveObjects = new List<GameObject>(units);
             }
 
             return units;

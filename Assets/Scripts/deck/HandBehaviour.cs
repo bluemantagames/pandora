@@ -80,11 +80,10 @@ namespace Pandora.Deck
                     
                     var cardNames = new List<string> {
                         "Bard",
-                        "Mermaids",
-                        "Clerics",
-                        "Zombies"
+                        "Ranger",
+                        "HalfOrc",
+                        "Troll"
                     };
-
 
                     cards =
                         (from card in cardNames
