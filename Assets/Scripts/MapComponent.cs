@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.UI;
 using System;
 using System.Collections;
@@ -30,6 +31,7 @@ namespace Pandora
         public Dictionary<int, HashSet<GridCell>> TowerPositionsDictionary = new Dictionary<int, HashSet<GridCell>>();
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         float firstLaneX = 2, secondLaneX = 13;
+        CustomSampler aggroSampler, targetValidSampler;
 
         List<GridCell> spawningCells;
 
@@ -93,6 +95,9 @@ namespace Pandora
 
         public void Awake()
         {
+            aggroSampler = CustomSampler.Create("Check aggro");
+            targetValidSampler = CustomSampler.Create("Check target valid");
+
             mapSizeX = bottomMapSizeX;
             mapSizeY = (bottomMapSizeY * 2) + 1;
 
@@ -138,6 +143,9 @@ namespace Pandora
             ThreadPool.GetMinThreads(out availableThreads, out complThreads);
 
             Logger.Debug($"Threads: {availableThreads}");
+
+            Logger.Debug($"Map x size: {cellWidth * mapSizeX}");
+            Logger.Debug($"Map y size: {cellHeight * mapSizeY}");
 
             engine.Init(this);
         }
@@ -418,11 +426,14 @@ namespace Pandora
 
         public Enemy GetEnemy(GameObject unit, GridCell position, TeamComponent team)
         {
-            float? minDistance = null;
+            int? minDistance = null;
             GameObject inRangeEnemy = null;
             var cellVector = position.vector;
 
             var combatBehaviour = unit.GetComponent<CombatBehaviour>();
+
+            var engineEntity = GetEngineEntity(unit);
+            var unitTeam = unit.GetComponent<TeamComponent>();
 
             foreach (var entity in engine.Entities)
             {
@@ -431,10 +442,11 @@ namespace Pandora
                 if (component == null) continue;
 
                 var targetGameObject = component.gameObject;
-                var gameObjectPosition = GetCell(targetGameObject);
-                var engineEntity = GetEngineEntity(unit);
-                var targetEngineEntity = GetEngineEntity(targetGameObject);
-                var distance = Vector2.Distance(gameObjectPosition.vector, position.vector);
+                var distance = engine.SquaredDistance(engineEntity.Position, entity.Position);
+
+                if (minDistance != null && minDistance < distance) continue;
+                if (component.team == unitTeam.team) continue;
+
                 var lifeComponent = targetGameObject.GetComponent<LifeComponent>();
 
                 if (lifeComponent == null || lifeComponent.IsDead) continue; // skip spells
@@ -445,12 +457,16 @@ namespace Pandora
                     (targetGameObject.layer == Constants.FLYING_LAYER && unit.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying and we are ranged
                     (unit.layer == Constants.FLYING_LAYER); // we're flying
 
+                aggroSampler.Begin();
                 var isInRange = combatBehaviour.IsInAggroRange(new Enemy(targetGameObject));
+                aggroSampler.End();
 
+                targetValidSampler.Begin();
                 var isTargetValid =
                     (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.IsDead && canUnitsFight && (
-                        (isLockedOnMiddle && targetEngineEntity.IsStructure) ? targetGameObject.GetComponent<TowerPositionComponent>().EngineTowerPosition.IsMiddle() : true
+                        (isLockedOnMiddle && entity.IsStructure) ? targetGameObject.GetComponent<TowerPositionComponent>().EngineTowerPosition.IsMiddle() : true
                     );
+                targetValidSampler.End();
 
                 if (isTargetValid)
                 {

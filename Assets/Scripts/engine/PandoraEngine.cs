@@ -74,7 +74,7 @@ namespace Pandora.Engine
             gridSampler = CustomSampler.Create("Grid building sampler");
             enginePathfindingSampler = CustomSampler.Create("PandoraEngine pathfinding");
 
-            grid = new TightGrid(yBounds, xBounds, 30, 20);
+            grid = new TightGrid(yBounds, xBounds, 19, 32);
         }
 
         public void Process(uint msLapsed)
@@ -330,6 +330,7 @@ namespace Pandora.Engine
             // cache away all the removals/adds and execute them later
             var clonedEntities = new List<EngineEntity>(Entities);
             var collisionsNum = -1;
+            var collisionSolvedCount = 0;
 
             if (DebugEngine) collisionsSampler.Begin();
 
@@ -338,6 +339,7 @@ namespace Pandora.Engine
                 BuildGrid(clonedEntities);
 
                 collisionsNum = 0;
+                collisionSolvedCount++;
 
                 foreach (var collision in grid.Collisions(CanCollide))
                 {
@@ -450,7 +452,7 @@ namespace Pandora.Engine
                     collisionsSolveSampler.End();
                 }
 
-                if (collisionsNum > 100)
+                if (collisionSolvedCount > 10)
                 {
                     Debug.LogError($"Cutting collision solving");
 

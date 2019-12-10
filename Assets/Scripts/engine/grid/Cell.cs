@@ -41,7 +41,7 @@ namespace Pandora.Engine.Grid
             {
                 foreach (var b in Items)
                 {
-                    if (a == b) continue;
+                    if (a == b || a.IsMapObstacle && b.IsMapObstacle) continue;
 
                     var first = (a.Timestamp > b.Timestamp) ? a : b;
                     var second = (first == a) ? b : a;
