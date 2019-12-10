@@ -52,6 +52,16 @@ namespace Pandora
             {
                 engineComponent.Remove();
             }
+
+            foreach (var towerCombatBehaviour in MapComponent.Instance.gameObject.GetComponentsInChildren<TowerCombatBehaviour>()) {
+                if (towerCombatBehaviour.CurrentTarget == gameObject) {
+                    towerCombatBehaviour.StopAttacking();
+                }
+            }
+
+            IsDead = true;
+
+            Destroy(gameObject, 1000);
         }
 
         private void SetLastPosition()

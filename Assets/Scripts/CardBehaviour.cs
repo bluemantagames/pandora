@@ -86,7 +86,9 @@ namespace Pandora
             }
         }
 
-        public void OnDrag(PointerEventData eventData)
+        public void OnDrag(PointerEventData eventData) => OnDrag();
+
+        public void OnDrag()
         {
             if (disabled) return;
 

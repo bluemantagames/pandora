@@ -13,10 +13,11 @@ using Pandora.Network.Messages;
 using Pandora.Engine;
 using System.Threading;
 using Pandora.Command;
+using UnityEngine.EventSystems;
 
 namespace Pandora
 {
-    public class MapComponent : MonoBehaviour
+    public class MapComponent : MonoBehaviour, IPointerClickHandler
     {
         int bottomMapSizeX = 16;
         public int bottomMapSizeY = 13;
@@ -139,7 +140,7 @@ namespace Pandora
             engine = ScriptableObject.CreateInstance<PandoraEngine>();
 
             int availableThreads, complThreads;
-            
+
             ThreadPool.GetMinThreads(out availableThreads, out complThreads);
 
             Logger.Debug($"Threads: {availableThreads}");
@@ -768,6 +769,11 @@ namespace Pandora
             }
 
             return position;
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            Debug.Log("Map touched");
         }
     }
 }
