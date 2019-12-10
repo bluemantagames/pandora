@@ -10,6 +10,7 @@ using Pandora.Combat;
 using Pandora.Network;
 using Pandora.Network.Messages;
 using Pandora.Engine;
+using System.Threading;
 using Pandora.Command;
 
 namespace Pandora
@@ -131,6 +132,12 @@ namespace Pandora
             }
 
             engine = ScriptableObject.CreateInstance<PandoraEngine>();
+
+            int availableThreads, complThreads;
+            
+            ThreadPool.GetMinThreads(out availableThreads, out complThreads);
+
+            Logger.Debug($"Threads: {availableThreads}");
 
             engine.Init(this);
         }

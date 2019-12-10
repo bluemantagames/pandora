@@ -6,6 +6,7 @@ namespace Pandora.Engine
     public class EngineComponent : MonoBehaviour
     {
         List<EngineBehaviour> cachedComponents = new List<EngineBehaviour> { };
+        List<AsyncEngineBehaviour> cachedAsyncComponents = new List<AsyncEngineBehaviour> { };
 
         /// <summary>Deterministically sorted list of Engine behaviours</summary>
         public List<EngineBehaviour> Components
@@ -48,10 +49,20 @@ namespace Pandora.Engine
                 GetComponents<EngineBehaviour>()
             );
 
+            cachedAsyncComponents = new List<AsyncEngineBehaviour>(
+                GetComponents<AsyncEngineBehaviour>()
+            );
+
             cachedComponents.Sort(CompareBehaviours);
+            cachedAsyncComponents.Sort(CompareBehaviours);
         }
 
         int CompareBehaviours(EngineBehaviour first, EngineBehaviour second)
+        {
+            return first.ComponentName.CompareTo(second.ComponentName);
+        }
+
+        int CompareBehaviours(AsyncEngineBehaviour first, AsyncEngineBehaviour second)
         {
             return first.ComponentName.CompareTo(second.ComponentName);
         }

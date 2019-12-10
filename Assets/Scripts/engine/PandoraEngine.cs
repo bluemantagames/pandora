@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Profiling;
 using Pandora.Engine.Grid;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Pandora.Engine
 {
@@ -884,7 +886,7 @@ namespace Pandora.Engine
 
         void SetEntityBounds(EngineEntity entity, BoxBounds bounds)
         {
-            var worldBounds = entity.GameObject.GetComponent<BoxCollider2D>().bounds;
+            var worldBounds = entity.Bounds;
 
             var physicsExtents = PooledWorldToPhysics(worldBounds.size);
 

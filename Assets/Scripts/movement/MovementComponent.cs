@@ -9,10 +9,12 @@ using Pandora.Combat;
 using UnityEngine.Profiling;
 using Pandora.Engine;
 using Pandora.Pool;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Pandora.Movement
 {
-    public class MovementComponent : MonoBehaviour, CollisionCallback, MovementBehaviour
+    public class MovementComponent : MonoBehaviour, CollisionCallback, MovementBehaviour, AsyncEngineBehaviour
     {
         Rigidbody2D body;
         GridCell currentTarget;
@@ -30,6 +32,7 @@ namespace Pandora.Movement
         Vector2Int? lastCollisionPosition;
         public MovementStateEnum LastState { get; set; }
         Enemy lastEnemyTargeted;
+        TaskFactory factory = new TaskFactory(TaskScheduler.Default);
 
         Astar<Vector2Int> astar = new Astar<Vector2Int>(
             PoolInstances.Vector2IntHashSetPool,
@@ -88,6 +91,8 @@ namespace Pandora.Movement
         }
 
         public MapComponent map { get; set; }
+
+        public string ComponentName => throw new NotImplementedException();
 
         // Start is called before the first frame update
         void Awake()
@@ -313,6 +318,12 @@ namespace Pandora.Movement
                 lastCollisionPosition = engineEntity.Position;
             }
 
+        }
+
+        public Task AsyncTickUpdate(uint timeLapsed)
+        {
+            return factory.StartNew(() => {
+            });
         }
     }
 }

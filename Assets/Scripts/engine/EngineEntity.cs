@@ -12,7 +12,20 @@ namespace Pandora.Engine
         public Vector2Int Position;
         public Vector2Int Direction;
         public IEnumerator<Vector2Int> Path;
-        public GameObject GameObject;
+
+        GameObject _gameObject;
+
+        public Bounds Bounds;
+
+        public GameObject GameObject {
+            get => _gameObject;
+
+            set {
+                _gameObject = value;
+
+                Bounds = _gameObject.GetComponent<BoxCollider2D>().bounds;
+            }
+        }
         // whether the entity should move on collisions, is a structure or
         // is a "map obstacle" (e.g. river)
         public bool IsRigid = true, IsStructure = false, IsMapObstacle = false;
