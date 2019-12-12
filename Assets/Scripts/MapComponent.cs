@@ -111,7 +111,7 @@ namespace Pandora
             Screen.fullScreen = false;
             Screen.SetResolution(720, 1280, false);
 
-            Application.targetFrameRate = 30;
+            Application.targetFrameRate = 25;
 
             var topArena = GameObject.Find("top_arena");
             var topArenaPosition = topArena.transform.position;
@@ -413,7 +413,7 @@ namespace Pandora
             unit.GetComponent<EngineComponent>().Entity = engineEntity;
             unit.AddComponent<UnitIdComponent>().Id = id;
 
-            unit.GetComponentInChildren<HealthbarBehaviour>().RefreshColor();
+            unit.GetComponentInChildren<HealthbarBehaviour>()?.RefreshColor();
 
             Units.Add(id, unit);
         }

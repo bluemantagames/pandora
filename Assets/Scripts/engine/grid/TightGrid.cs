@@ -75,10 +75,7 @@ namespace Pandora.Engine.Grid
             {
                 for (var y = startY; y <= endY; y++)
                 {
-                    if (x <= rows - 1 && y <= columns - 1)
-                    {
-                        grid[x][y].Insert(item);
-                    }
+                    grid[x][y].Insert(item);
                 }
             }
 
