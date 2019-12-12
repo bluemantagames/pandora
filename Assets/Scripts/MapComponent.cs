@@ -272,9 +272,11 @@ namespace Pandora
             }
             else
             {
-                var processTime = Math.Min(frameStep, remainingStep);
+                //var processTime = Math.Min(frameStep, remainingStep);
+                var processTime = frameStep;
 
-                if (remainingStep != 0 && processTime != 0 && timeSinceLastStep >= frameStep)
+                //if (remainingStep != 0 && processTime != 0 && timeSinceLastStep >= frameStep)
+                if (remainingStep > 0 && processTime != 0)
                 {
                     engine.Process(processTime);
 
