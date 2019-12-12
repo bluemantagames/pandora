@@ -953,8 +953,8 @@ namespace Pandora.Engine
                 layer1 == layer2 ||
                 ((layer1 == Constants.RIVER_BOUNDS_LAYER || layer2 == Constants.RIVER_BOUNDS_LAYER) && (layer1 == Constants.SWIMMING_LAYER || layer2 == Constants.SWIMMING_LAYER)) ||
                 (layer1 == Constants.PROJECTILES_LAYER || layer2 == Constants.PROJECTILES_LAYER) ||
-                (layer1 == Constants.WATER_LAYER && layer2 != Constants.SWIMMING_LAYER) ||
-                (layer2 == Constants.WATER_LAYER && layer1 != Constants.SWIMMING_LAYER);
+                (layer1 == Constants.WATER_LAYER && (layer2 != Constants.SWIMMING_LAYER && layer2 != Constants.FLYING_LAYER)) ||
+                (layer2 == Constants.WATER_LAYER && (layer1 != Constants.SWIMMING_LAYER && layer1 != Constants.FLYING_LAYER));
         }
 
         /// <summary>

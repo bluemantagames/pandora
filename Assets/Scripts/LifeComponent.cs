@@ -93,7 +93,7 @@ namespace Pandora
 
                 if (groupComponent != null)
                 {
-                    groupComponent.AliveObjects.Remove(gameObject);
+                    groupComponent.AliveObjects.RemoveAll((unit) => unit.name == gameObject.name);
 
                     if (groupComponent.AliveObjects.Count == 0)
                     {

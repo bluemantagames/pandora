@@ -75,7 +75,7 @@ namespace Pandora
             DrawCommands();
         }
 
-        void Start()
+        void Awake()
         {
             _instance = this;
         }

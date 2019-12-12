@@ -39,8 +39,10 @@ namespace Pandora
                 unitNumber++;
             }
 
+            var unitList = new List<GameObject>(units);
+
             foreach (var unit in units) {
-                unit.GetComponent<GroupComponent>().AliveObjects = new List<GameObject>(units);
+                unit.GetComponent<GroupComponent>().AliveObjects = unitList;
             }
 
             return units;
