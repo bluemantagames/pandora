@@ -349,7 +349,7 @@ namespace Pandora
 
             if (spawn.Team == TeamComponent.topTeam)
             { // flip Y if top team
-                spawn.CellY = mapSizeY - spawn.CellY;
+                spawn.CellY = (mapSizeY - 1) - spawn.CellY;
             }
 
             var unitGridCell = new GridCell(spawn.CellX, spawn.CellY);
