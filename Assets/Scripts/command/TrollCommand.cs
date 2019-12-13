@@ -50,13 +50,5 @@ namespace Pandora.Command
             }
         }
 
-        void Awake()
-        {
-        }
-
-        void Update()
-        {
-        }
-
     }
 }

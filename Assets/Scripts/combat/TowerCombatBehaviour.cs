@@ -169,7 +169,9 @@ namespace Pandora.Combat
             var projectileObject = Instantiate(projectile, MapComponent.Instance.engine.PhysicsToWorld(towerEntity.Position), Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
-            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, towerEntity.Position, false, null);
+            var epoch = System.DateTime.MinValue;
+
+            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, towerEntity.Position, false, epoch.AddSeconds((int) towerPosition.EngineTowerPosition));
 
             projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
 

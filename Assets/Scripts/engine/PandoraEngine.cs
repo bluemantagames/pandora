@@ -13,7 +13,7 @@ namespace Pandora.Engine
 {
     public class PandoraEngine : ScriptableObject
     {
-        public uint TickTime = 20; // milliseconds in a tick
+        public uint TickTime = 40; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         public List<EngineEntity> Entities = new List<EngineEntity> { };
         public MapComponent Map;

@@ -32,7 +32,6 @@ namespace Pandora.Command
         {
             if (Used) return;
 
-
             var groupComponent = GetComponentInParent<GroupComponent>();
             var id = GetComponentInParent<UnitIdComponent>().Id;
 
