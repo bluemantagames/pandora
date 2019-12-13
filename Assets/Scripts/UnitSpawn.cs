@@ -10,7 +10,7 @@ namespace Pandora
         public int CellY;
         public int Team;
         public string Id;
-        public DateTime? Timestamp;
+        public DateTime Timestamp;
 
         public UnitSpawn(SpawnMessage message) {
             UnitName = message.unitName;
@@ -21,7 +21,7 @@ namespace Pandora
             Timestamp = message.timestamp;
         }
 
-        public UnitSpawn(string unitName, GridCell cell, int team, string unitId, DateTime? timestamp) {
+        public UnitSpawn(string unitName, GridCell cell, int team, string unitId, DateTime timestamp) {
             UnitName = unitName;
             CellX = cell.vector.x;
             CellY = cell.vector.y;

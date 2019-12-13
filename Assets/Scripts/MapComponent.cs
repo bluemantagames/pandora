@@ -378,7 +378,7 @@ namespace Pandora
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>
-        public void InitializeComponents(GameObject unit, GridCell cell, int team, string id, DateTime? timestamp)
+        public void InitializeComponents(GameObject unit, GridCell cell, int team, string id, DateTime timestamp)
         {
             unit.GetComponent<TeamComponent>().team = team;
 

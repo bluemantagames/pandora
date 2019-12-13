@@ -171,7 +171,7 @@ namespace Pandora.Combat
 
             var epoch = System.DateTime.MinValue;
 
-            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, towerEntity.Position, false, epoch.AddSeconds((int) towerPosition.EngineTowerPosition));
+            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, towerEntity.Position, false, epoch.AddSeconds((int) towerPosition.EngineTowerPosition * 10));
 
             projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
 

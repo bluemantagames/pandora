@@ -17,7 +17,7 @@ namespace Pandora.Engine
         public int UnitsPerCell = 400; // physics engine units per grid cell
         public List<EngineEntity> Entities = new List<EngineEntity> { };
         public MapComponent Map;
-        uint totalElapsed = 0;
+        public uint totalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
         CustomSampler collisionsSampler, collisionsSolveSampler, collisionsCheckSampler, collisionsCallbackSampler, movementSampler, scriptSampler, gridSampler, enginePathfindingSampler;
 
@@ -98,7 +98,7 @@ namespace Pandora.Engine
             var leftPosition = new Vector2Int(UnitsPerCell, 13 * UnitsPerCell + UnitsPerCell / 2);
 
             var leftEntity =
-                AddEntity(leftRiverObject, 0, leftPosition, true, null);
+                AddEntity(leftRiverObject, 0, leftPosition, true, DateTime.MinValue);
 
             var rightRiverObject = GameObject.Find("arena_water_right");
 
@@ -108,14 +108,14 @@ namespace Pandora.Engine
             );
 
             var rightEntity =
-                AddEntity(rightRiverObject, 0, rightPosition, true, null);
+                AddEntity(rightRiverObject, 0, rightPosition, true, DateTime.MinValue);
 
             var centerPosition = new Vector2Int(8 * UnitsPerCell, 13 * UnitsPerCell + (UnitsPerCell / 2));
 
             var centerRiverObject = GameObject.Find("arena_water_center");
 
             var centerEntity =
-                AddEntity(centerRiverObject, 0, centerPosition, true, null);
+                AddEntity(centerRiverObject, 0, centerPosition, true, DateTime.MinValue);
 
             centerEntity.IsStructure = true;
             centerEntity.IsMapObstacle = true;
@@ -217,14 +217,14 @@ namespace Pandora.Engine
             return path;
         }
 
-        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, GridCell position, bool isRigid, DateTime? timestamp)
+        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, GridCell position, bool isRigid, DateTime timestamp)
         {
             var physicsPosition = GridCellToPhysics(position) + (new Vector2Int(UnitsPerCell / 2, UnitsPerCell / 2));
 
             return AddEntity(gameObject, engineUnitsPerSecond, physicsPosition, isRigid, timestamp);
         }
 
-        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, Vector2Int position, bool isRigid, DateTime? timestamp)
+        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, Vector2Int position, bool isRigid, DateTime timestamp)
         {
             var speed = GetSpeed(engineUnitsPerSecond);
 
@@ -239,7 +239,7 @@ namespace Pandora.Engine
                 Engine = this,
                 IsRigid = isRigid,
                 Layer = gameObject.layer,
-                Timestamp = timestamp ?? DateTime.Now
+                Timestamp = timestamp
             };
 
             Entities.Add(entity);
