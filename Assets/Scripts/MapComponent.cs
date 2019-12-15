@@ -249,7 +249,9 @@ namespace Pandora
                     {
                         var unit = Units[commandMessage.unitId];
 
-                        unit?.GetComponent<CommandBehaviour>()?.InvokeCommand();
+                        Debug.Log($"Commanded {commandMessage.unitId}");
+
+                        unit.GetComponent<CommandBehaviour>().InvokeCommand();
                     }
                 }
 
