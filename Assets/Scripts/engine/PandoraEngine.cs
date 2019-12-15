@@ -155,7 +155,7 @@ namespace Pandora.Engine
             var unitsBounds =
                 (from unit in Entities
                  where !unit.IsStructure && CanCollide(unit, entity)
-                 select (bounds: GetEntityBounds(unit), unit: unit)).ToList();
+                 select (bounds: GetPooledEntityBounds(unit), unit: unit)).ToList();
 
             var isFlying = entity.GameObject.layer == Constants.FLYING_LAYER;
             var team = entity.GameObject.GetComponent<TeamComponent>();
@@ -211,6 +211,12 @@ namespace Pandora.Engine
             );
 
             entity.IsEvading = false;
+
+
+            foreach (var (bounds, _) in unitsBounds)
+            {
+                ReturnBounds(bounds);
+            }
 
             enginePathfindingSampler.End();
 

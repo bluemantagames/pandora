@@ -34,14 +34,7 @@ namespace Pandora.Movement
         public MovementStateEnum LastState { get; set; }
         Enemy lastEnemyTargeted;
         TaskFactory factory = new TaskFactory(TaskScheduler.Default);
-        CustomSampler advancePositionSampler, getEnemySampler;
-
-        Astar<Vector2Int> astar = new Astar<Vector2Int>(
-            PoolInstances.Vector2IntHashSetPool,
-            PoolInstances.Vector2IntQueueItemPool,
-            PoolInstances.Vector2IntPool,
-            PoolInstances.Vector2IntListPool
-        );
+        CustomSampler advancePositionSampler, getEnemySampler, pathfindingSampler;
 
         public bool IsFlying
         {
@@ -96,7 +89,6 @@ namespace Pandora.Movement
 
         public string ComponentName => throw new NotImplementedException();
 
-        // Start is called before the first frame update
         void Awake()
         {
             body = GetComponent<Rigidbody2D>();
@@ -105,6 +97,7 @@ namespace Pandora.Movement
 
             advancePositionSampler = CustomSampler.Create($"AdvancePosition() {gameObject.name}");
             getEnemySampler = CustomSampler.Create($"GetEnemy() {gameObject.name}");
+            pathfindingSampler = CustomSampler.Create($"FindPath() {gameObject.name}");
         }
 
         /// <summary>
@@ -220,7 +213,7 @@ namespace Pandora.Movement
         List<GridCell> FindPath(GridCell end)
         {
             return VectorsToGridCells(
-                astar.FindPath(
+                Astar<Vector2Int>.Vector2Instance.FindPath(
                     engineEntity.GetCurrentCell().vector,
                     end.vector,
                     position =>
@@ -271,7 +264,7 @@ namespace Pandora.Movement
 
             if (pathCount >= 1) return;
 
-            Profiler.BeginSample("MovementComponent pathfinding");
+            pathfindingSampler.Begin();
             engineEntity.SetSpeed(Speed);
 
             var currentPosition = CurrentCellPosition();
@@ -283,7 +276,7 @@ namespace Pandora.Movement
             }
 
             currentPath = FindPath(target).Skip(1).ToList();
-            Profiler.EndSample();
+            pathfindingSampler.End();
         }
 
         private GridCell CurrentCellPosition()

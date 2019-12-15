@@ -50,7 +50,6 @@ namespace Pandora.Deck
             rectTransform = GetComponent<RectTransform>();
             animator = GetComponent<Animator>();
 
-
             deck = LocalDeck.Instance;
 
             deck.EventBus.Subscribe<CardDrawn>(new EventSubscriber<DeckEvent>(CardDrawn, "HandDrawHandler"));

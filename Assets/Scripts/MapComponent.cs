@@ -375,6 +375,10 @@ namespace Pandora
             {
                 CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
             }
+
+            /*UnityEngine.Profiling.Memory.Experimental.MemoryProfiler.TakeTempSnapshot((a, b) => {
+                Debug.Log($"Captured snapshot {a}, {b}, {Application.temporaryCachePath}");
+            });*/
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>
