@@ -28,7 +28,6 @@ namespace Pandora.Deck
 
         HandCard[] hand = new HandCard[32];
 
-
         int handIndex = -1;
 
         public GameObject[] UIHandSlots;

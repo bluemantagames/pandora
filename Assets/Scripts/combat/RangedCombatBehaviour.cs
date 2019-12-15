@@ -4,6 +4,7 @@ using UnityEngine;
 using Pandora;
 using Pandora.Movement;
 using Pandora.Engine;
+using System;
 
 namespace Pandora.Combat
 {
@@ -34,6 +35,9 @@ namespace Pandora.Combat
         {
             var animator = GetComponent<Animator>();
 
+            var cappedBackswingMs = Math.Max(1, backswingMs);
+            var cappedAttackCooldownMs = Math.Max(1, attackCooldownMs);
+
             if (!isAttacking)
             {
                 this.target = target;
@@ -44,16 +48,16 @@ namespace Pandora.Combat
                 isAttacking = true;
             }
 
-            animator.Play(animationStateName, 0, timeSinceLastProjectile / (float)(attackCooldownMs + backswingMs));
+            animator.Play(animationStateName, 0, timeSinceLastProjectile / (float)(cappedAttackCooldownMs + cappedBackswingMs));
 
             timeSinceLastProjectile += timeLapse;
 
-            if (timeSinceLastProjectile >= attackCooldownMs && !isBackswinging)
+            if (timeSinceLastProjectile >= cappedAttackCooldownMs && !isBackswinging)
             {
                 SpawnProjectile();
 
                 isBackswinging = true;
-            } else if (timeSinceLastProjectile >= attackCooldownMs + backswingMs)
+            } else if (timeSinceLastProjectile >= cappedAttackCooldownMs + cappedBackswingMs)
             {
                 timeSinceLastProjectile = 0;
 
