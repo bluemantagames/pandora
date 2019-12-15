@@ -371,7 +371,7 @@ namespace Pandora
 
             ShowManaUsedAlert(cardObject, requiredMana);
 
-            if (spawn.Team == TeamComponent.assignedTeam)
+            if (spawn.Team == TeamComponent.assignedTeam && cardObject.GetComponent<ProjectileSpellBehaviour>() == null)
             {
                 CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
             }
