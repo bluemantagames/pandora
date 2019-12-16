@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Pandora.Movement;
 using Pandora.Spell;
 using Pandora.Combat;
+using Pandora.Deck;
 using Pandora.Network;
 using Pandora.Network.Messages;
 using Pandora.Engine;
@@ -17,7 +18,7 @@ using UnityEngine.EventSystems;
 
 namespace Pandora
 {
-    public class MapComponent : MonoBehaviour, IPointerClickHandler
+    public class MapComponent : MonoBehaviour, IPointerDownHandler
     {
         int bottomMapSizeX = 16;
         public int bottomMapSizeY = 13;
@@ -781,9 +782,16 @@ namespace Pandora
             return position;
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public void OnPointerDown(PointerEventData eventData)
         {
-            Debug.Log("Map touched");
+            var selectedCards = HandBehaviour.Instance.SelectedCards;
+
+            if (selectedCards.Count > 0)
+            {
+                Logger.Debug($"Dragging {selectedCards}");
+
+                selectedCards[0].CardObject.GetComponent<CardBehaviour>().Dragging = true;
+            }
         }
     }
 }
