@@ -357,12 +357,12 @@ namespace Pandora
                 spawn.CellY = (mapSizeY - 1) - spawn.CellY;
             }
 
-            // This exists because the manaAnimation game object
+            // This exists because the ManaUsedAlert game object
             // needs the real y-position of the enemy team
             if (spawn.Team != TeamComponent.assignedTeam)
             {
                 // flip Y if enemy team
-                manaAnimationGridPosition.y = mapSizeY - manaAnimationGridPosition.y;
+                manaAnimationGridPosition.y = (mapSizeY - 1) - manaAnimationGridPosition.y;
             }
 
             var unitGridCell = new GridCell(spawn.CellX, spawn.CellY);
@@ -382,10 +382,22 @@ namespace Pandora
             }
             else
             {
-                InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp);
+                InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp);   
             }
 
-            ShowManaUsedAlert(cardObject, requiredMana, manaAnimationPosition);
+            // This is tricky, we need the stuff below because the spawner and the units are actually
+            // created in different positions. The spawner element (NOT THE UNITS) is created 
+            // non-mirrored, while the single unit is created directly mirrored in the field.
+            // This leads to unconcistencies in the ManaUsedAlert component position in the Team 2
+            // (since the Team 2 field is mirrored).
+            if (spawner == null && TeamComponent.assignedTeam == TeamComponent.topTeam) 
+            {
+                ShowManaUsedAlert(cardObject, requiredMana, cardPosition);
+            }
+            else
+            {
+                ShowManaUsedAlert(cardObject, requiredMana, manaAnimationPosition);
+            }
 
             if (spawn.Team == TeamComponent.assignedTeam && cardObject.GetComponent<ProjectileSpellBehaviour>() == null)
             {
