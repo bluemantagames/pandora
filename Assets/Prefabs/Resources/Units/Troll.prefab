@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733e88c63e6713f4fa432c8e37a8f31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeValue: 1000
+  lifeValue: 750
   maxLife: 0
   IsDead: 0
 --- !u!95 &2040455867788288362
@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c2243c9941e6d0488bbe0ced3e3f2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 250
+  damage: 300
   attackCooldownMs: 500
   backswingMs: 1
   animationStateName: GiantAttack

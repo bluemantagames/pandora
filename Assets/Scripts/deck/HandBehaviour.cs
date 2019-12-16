@@ -28,7 +28,6 @@ namespace Pandora.Deck
 
         HandCard[] hand = new HandCard[32];
 
-
         int handIndex = -1;
 
         public GameObject[] UIHandSlots;
@@ -36,7 +35,13 @@ namespace Pandora.Deck
 
         Deck deck;
 
-        List<HandCard> selectedCards = new List<HandCard> { };
+        public List<HandCard> SelectedCards = new List<HandCard> { };
+
+        static private HandBehaviour _instance = null;
+
+        static public HandBehaviour Instance {
+            get => _instance;
+        }
 
         // Mulligan stuff
         int mulligansAvailable = 1;
@@ -50,7 +55,6 @@ namespace Pandora.Deck
             rectTransform = GetComponent<RectTransform>();
             animator = GetComponent<Animator>();
 
-
             deck = LocalDeck.Instance;
 
             deck.EventBus.Subscribe<CardDrawn>(new EventSubscriber<DeckEvent>(CardDrawn, "HandDrawHandler"));
@@ -59,6 +63,8 @@ namespace Pandora.Deck
             deck.EventBus.Subscribe<CardSelected>(new EventSubscriber<DeckEvent>(CardSelected, "MulliganSelectHandled"));
             deck.EventBus.Subscribe<MulliganTaken>(new EventSubscriber<DeckEvent>(MulliganTaken, "MulliganTakenHandled"));
             deck.EventBus.Subscribe<MulliganRejected>(new EventSubscriber<DeckEvent>(MulliganRejected, "MulliganRejectedHandled"));
+
+            _instance = this;
 
             if (deck is LocalDeck localDeck)
             {
@@ -77,14 +83,13 @@ namespace Pandora.Deck
                         "Troll",
                         "Zombies"
                     };*/
-                    
+
                     var cardNames = new List<string> {
                         "Bard",
+                        "Zombies",
                         "Mermaids",
-                        "Clerics",
-                        "Zombies"
+                        "Troll"
                     };
-
 
                     cards =
                         (from card in cardNames
@@ -101,7 +106,8 @@ namespace Pandora.Deck
 
         void Update()
         {
-            if (mulligansAvailable > 0) {
+            if (mulligansAvailable > 0)
+            {
                 if (mulliganSecondsLeft <= 0) DisableMulligan();
 
                 mulliganSecondsLeft -= Time.deltaTime;
@@ -136,7 +142,7 @@ namespace Pandora.Deck
 
         void CardPlayed(DeckEvent ev)
         {
-            if (mulligansAvailable > 0) 
+            if (mulligansAvailable > 0)
             {
                 LocalDeck.Instance.MulliganReject();
             }
@@ -222,7 +228,7 @@ namespace Pandora.Deck
             }
         }
 
-        void CardSelected(DeckEvent ev) 
+        void CardSelected(DeckEvent ev)
         {
             var cardSelected = ev as CardSelected;
             var isMulligan = mulligansAvailable > 0;
@@ -236,7 +242,7 @@ namespace Pandora.Deck
                 }
 
                 var card = hand[idx];
-                var selectedIndex = selectedCards.IndexOf(card);
+                var selectedIndex = SelectedCards.IndexOf(card);
 
                 // If we are in the Mulligan and we select
                 // a card that was already selected
@@ -249,7 +255,7 @@ namespace Pandora.Deck
                 // If we are in the Mulligan, we select
                 // a card that was NOT already selected
                 // and we have still "space"
-                if (isMulligan && selectedCards.Count < deck.MaxMulliganSize)
+                if (isMulligan && SelectedCards.Count < deck.MaxMulliganSize)
                 {
                     Select(card);
                     break;
@@ -257,10 +263,10 @@ namespace Pandora.Deck
 
                 // If we are not in the Mulligan we just 
                 // select cards individually
-                if (!isMulligan) 
+                if (!isMulligan)
                 {
                     // Deselect the previus cards (it shoul be just one but whatev)
-                    for (var i = 0; i <= selectedCards.Count - 1; i++)
+                    for (var i = 0; i <= SelectedCards.Count - 1; i++)
                         Deselect(i);
 
                     Select(card);
@@ -269,19 +275,19 @@ namespace Pandora.Deck
             }
         }
 
-        void MulliganTaken(DeckEvent ev) 
+        void MulliganTaken(DeckEvent ev)
         {
-            if (mulligansAvailable <= 0 || selectedCards.Count <= 0) 
+            if (mulligansAvailable <= 0 || SelectedCards.Count <= 0)
             {
                 return;
             }
 
-            for (int i = selectedCards.Count - 1; i >= 0; i--)
+            for (int i = SelectedCards.Count - 1; i >= 0; i--)
             {
-                var handCard = selectedCards[i];
-                
+                var handCard = SelectedCards[i];
+
                 LocalDeck.Instance.DiscardCard(new Card(handCard.Name));
-                selectedCards.RemoveAt(i);
+                SelectedCards.RemoveAt(i);
             }
 
             mulligansAvailable -= 1;
@@ -292,9 +298,9 @@ namespace Pandora.Deck
             }
         }
 
-        void MulliganRejected(DeckEvent ev) 
+        void MulliganRejected(DeckEvent ev)
         {
-            if (mulligansAvailable <= 0) 
+            if (mulligansAvailable <= 0)
             {
                 return;
             }
@@ -310,16 +316,24 @@ namespace Pandora.Deck
             }
         }
 
-        void Select(HandCard card) {
-            selectedCards.Add(card);
+        void Select(HandCard card)
+        {
+            SelectedCards.Add(card);
             card.CardObject.GetComponent<CardBehaviour>().MulliganSelected = true;
         }
 
-        void Deselect(int index) {
-            if (selectedCards.ElementAt(index) == null) return;
-            
-            selectedCards[index].CardObject.GetComponent<CardBehaviour>().MulliganSelected = false;
-            selectedCards.RemoveAt(index);
+        void Deselect(int index)
+        {
+            if (SelectedCards.ElementAt(index) == null) return;
+
+            var combatBehaviour = SelectedCards[index]?.CardObject?.GetComponent<CardBehaviour>();
+
+            if (combatBehaviour != null)
+            {
+                combatBehaviour.MulliganSelected = false;
+            }
+
+            SelectedCards.RemoveAt(index);
         }
 
         void UpdateMulliganText()
@@ -332,7 +346,7 @@ namespace Pandora.Deck
             var textComponent = MulliganTimerText.GetComponent<Text>();
             var timerValue = mulliganSecondsLeft > 0 ? mulliganSecondsLeft : 0;
 
-            textComponent.text = 
+            textComponent.text =
                 $"Mulligan ends in {string.Format("{0:F1}", timerValue)} seconds";
         }
 

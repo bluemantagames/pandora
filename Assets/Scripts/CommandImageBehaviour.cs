@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using Pandora.Engine;
 using Pandora.Network;
 using Pandora.Command;
+using System.Collections.Generic;
 
 namespace Pandora
 {
@@ -13,7 +14,9 @@ namespace Pandora
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            foreach (var entity in MapComponent.Instance.engine.Entities)
+            var entities = new List<EngineEntity>(MapComponent.Instance.engine.Entities);
+
+            foreach (var entity in entities)
             {
                 var group = entity.GameObject.GetComponent<GroupComponent>();
                 var unitId = entity.GameObject.GetComponent<UnitIdComponent>();

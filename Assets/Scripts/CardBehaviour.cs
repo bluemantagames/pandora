@@ -11,7 +11,7 @@ using Pandora.Deck.UI;
 
 namespace Pandora
 {
-    public class CardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerClickHandler
+    public class CardBehaviour : MonoBehaviour, IDragHandler, IPointerClickHandler
     {
         Vector3? originalPosition = null;
         MapComponent map;
@@ -31,6 +31,8 @@ namespace Pandora
         GraphicRaycaster raycasterComponent;
         Color defaultColor;
         bool disabled = false;
+        public bool Dragging = false;
+        Vector2? lastMousePosition = null;
 
         public bool IsUI
         {
@@ -86,7 +88,9 @@ namespace Pandora
             }
         }
 
-        public void OnDrag(PointerEventData eventData)
+        public void OnDrag(PointerEventData eventData) => Dragging = true;
+
+        void OnDrag()
         {
             if (disabled) return;
 
@@ -120,7 +124,7 @@ namespace Pandora
             }
         }
 
-        public void OnEndDrag(PointerEventData eventData)
+        public void OnEndDrag()
         {
             if (disabled) return;
 
@@ -208,8 +212,28 @@ namespace Pandora
 
         void Update()
         {
-
             imageComponent.color = (MulliganSelected == true) ? Color.yellow : defaultColor;
+
+            if (Dragging)
+            {
+                if (!Input.GetMouseButton(0))
+                {
+                    Dragging = false;
+
+                    OnEndDrag();
+
+                    return;
+                }
+
+                var mousePosition = Input.mousePosition;
+
+                if (lastMousePosition == null || lastMousePosition != mousePosition)
+                {
+                    lastMousePosition = mousePosition;
+
+                    OnDrag();
+                }
+            }
         }
     }
 }

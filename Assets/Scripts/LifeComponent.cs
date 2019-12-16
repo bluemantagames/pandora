@@ -21,10 +21,15 @@ namespace Pandora
         // Start is called before the first frame update
         void Start()
         {
-            mask = GetComponentInChildren<HealthbarBehaviour>().gameObject.transform.parent.gameObject.GetComponent<Image>();
+            var healthbarBehaviour = GetComponentInChildren<HealthbarBehaviour>();
+            mask = healthbarBehaviour.gameObject.transform.parent.gameObject.GetComponent<Image>();
+
+            healthbarBehaviour.LifeComponent = this;
 
             maskOriginalSize = mask.rectTransform.rect.width;
             maxLife = lifeValue;
+         
+            healthbarBehaviour.DrawSeparators();
         }
 
         public void Remove()
@@ -52,6 +57,16 @@ namespace Pandora
             {
                 engineComponent.Remove();
             }
+
+            foreach (var towerCombatBehaviour in MapComponent.Instance.gameObject.GetComponentsInChildren<TowerCombatBehaviour>()) {
+                if (towerCombatBehaviour.CurrentTarget == gameObject) {
+                    towerCombatBehaviour.StopAttacking();
+                }
+            }
+
+            IsDead = true;
+
+            Destroy(gameObject, 1000);
         }
 
         private void SetLastPosition()
@@ -78,7 +93,7 @@ namespace Pandora
 
                 if (groupComponent != null)
                 {
-                    groupComponent.AliveObjects.Remove(gameObject);
+                    groupComponent.AliveObjects.RemoveAll((unit) => unit.name == gameObject.name);
 
                     if (groupComponent.AliveObjects.Count == 0)
                     {

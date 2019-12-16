@@ -27,6 +27,8 @@ namespace Pandora.Combat.Effects {
         public Color BuffedColor = Color.yellow;
         public string ComponentName => "BardBuff";
 
+        bool applied = false;
+
         void SetStats(GameObject target, int movSpeedIncrease, int atkSpeedIncrease, int damageIncrease) {
             var meleeCombatComponent = target.GetComponent<MeleeCombatBehaviour>();
             var rangedCombatComponent = target.GetComponent<RangedCombatBehaviour>();
@@ -83,9 +85,6 @@ namespace Pandora.Combat.Effects {
             var targetEntity = gameObject.GetComponent<EngineComponent>().Entity;
             originalColor = rendererComponent.color;
 
-            // Add the buff
-            SetStats(gameObject, MovementSpeedIncrease, AttackSpeedIncrease, DamageIncrease);
-            Heal(gameObject, HealAmount);
 
             if (rendererComponent && !targetEntity.IsStructure) {
                 originalColor = rendererComponent.color;
@@ -96,6 +95,14 @@ namespace Pandora.Combat.Effects {
         public void TickUpdate(uint timeLapsed)
         {
             if (IsDisabled) return;
+
+            if (!applied) {
+                // Add the buff
+                SetStats(gameObject, MovementSpeedIncrease, AttackSpeedIncrease, DamageIncrease);
+                Heal(gameObject, HealAmount);
+
+                applied = true;
+            }
 
             timePassed += timeLapsed;
 

@@ -32,7 +32,7 @@ namespace Pandora.Command
 
             Logger.Debug($"Spawning tornado in {entityPosition}");
 
-            var entity = engine.AddEntity(tornado, 0, entityPosition, false, null);
+            var entity = engine.AddEntity(tornado, 0, entityPosition, false, System.DateTime.MinValue);
 
             var engineComponent = tornado.AddComponent<EngineComponent>();
 

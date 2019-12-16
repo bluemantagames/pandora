@@ -145,7 +145,9 @@ namespace Pandora
                 center.x += MapComponent.Instance.engine.UnitsPerCell / 2;
             }
 
-            TowerEntity = MapComponent.Instance.engine.AddEntity(gameObject, 0, center, true, null);
+            var epoch = System.DateTime.MinValue;
+
+            TowerEntity = MapComponent.Instance.engine.AddEntity(gameObject, 0, center, true, epoch.AddSeconds((int) EngineTowerPosition));
             TowerEntity.IsStructure = true;
 
             GetComponent<EngineComponent>().Entity = TowerEntity;

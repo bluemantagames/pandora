@@ -28,6 +28,26 @@ namespace Pandora.Engine
 
         CustomSampler surroundingSampler, obstacleSampler, passSampler;
 
+        private static Astar<Vector2Int> _vector2Instance = null;
+
+        static public Astar<Vector2Int> Vector2Instance
+        {
+            get
+            {
+                if (_vector2Instance == null)
+                {
+                    _vector2Instance = new Astar<Vector2Int>(
+                        PoolInstances.Vector2IntHashSetPool,
+                        PoolInstances.Vector2IntQueueItemPool,
+                        PoolInstances.Vector2IntPool,
+                        PoolInstances.Vector2IntListPool
+                    );
+                }
+
+                return _vector2Instance;
+            }
+        }
+
         public Astar(ConcurrentObjectPool<HashSet<T>> nodeHashsetPool, ConcurrentObjectPool<QueueItem<T>> nodeQueueItemPool, ConcurrentObjectPool<T> nodePool, ConcurrentObjectPool<List<T>> nodeContainerPool)
         {
             this.nodeHashsetPool = nodeHashsetPool;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 using Pandora.Movement;
 using Pandora.Combat;
 using Pandora.Engine;
@@ -20,12 +21,16 @@ namespace Pandora
             }
         } 
 
+        CustomSampler moveSampler;
+
         // Start is called before the first frame update
         void Awake()
         {
             movementBehaviour = GetComponent<MovementBehaviour>();
             combatBehaviour = GetComponent<CombatBehaviour>();
             lifeComponent = GetComponent<LifeComponent>();
+
+            moveSampler = CustomSampler.Create($"Move() {gameObject.name}");
 
             Logger.Debug($"CombatBehaviour is {combatBehaviour}");
         }
@@ -35,7 +40,9 @@ namespace Pandora
         {
             if (lifeComponent.IsDead) return; // Do nothing if dead
 
+            moveSampler.Begin();
             var state = movementBehaviour.Move();
+            moveSampler.End();
 
             movementBehaviour.LastState = state.state;
 

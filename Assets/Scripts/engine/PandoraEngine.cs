@@ -13,11 +13,11 @@ namespace Pandora.Engine
 {
     public class PandoraEngine : ScriptableObject
     {
-        public uint TickTime = 20; // milliseconds in a tick
+        public uint TickTime = 40; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         public List<EngineEntity> Entities = new List<EngineEntity> { };
         public MapComponent Map;
-        uint totalElapsed = 0;
+        public uint totalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
         CustomSampler collisionsSampler, collisionsSolveSampler, collisionsCheckSampler, collisionsCallbackSampler, movementSampler, scriptSampler, gridSampler, enginePathfindingSampler;
 
@@ -74,7 +74,7 @@ namespace Pandora.Engine
             gridSampler = CustomSampler.Create("Grid building sampler");
             enginePathfindingSampler = CustomSampler.Create("PandoraEngine pathfinding");
 
-            grid = new TightGrid(yBounds, xBounds, 30, 20);
+            grid = new TightGrid(yBounds, xBounds, 19, 32);
         }
 
         public void Process(uint msLapsed)
@@ -98,7 +98,7 @@ namespace Pandora.Engine
             var leftPosition = new Vector2Int(UnitsPerCell, 13 * UnitsPerCell + UnitsPerCell / 2);
 
             var leftEntity =
-                AddEntity(leftRiverObject, 0, leftPosition, true, null);
+                AddEntity(leftRiverObject, 0, leftPosition, true, DateTime.MinValue);
 
             var rightRiverObject = GameObject.Find("arena_water_right");
 
@@ -108,14 +108,14 @@ namespace Pandora.Engine
             );
 
             var rightEntity =
-                AddEntity(rightRiverObject, 0, rightPosition, true, null);
+                AddEntity(rightRiverObject, 0, rightPosition, true, DateTime.MinValue);
 
             var centerPosition = new Vector2Int(8 * UnitsPerCell, 13 * UnitsPerCell + (UnitsPerCell / 2));
 
             var centerRiverObject = GameObject.Find("arena_water_center");
 
             var centerEntity =
-                AddEntity(centerRiverObject, 0, centerPosition, true, null);
+                AddEntity(centerRiverObject, 0, centerPosition, true, DateTime.MinValue);
 
             centerEntity.IsStructure = true;
             centerEntity.IsMapObstacle = true;
@@ -155,7 +155,7 @@ namespace Pandora.Engine
             var unitsBounds =
                 (from unit in Entities
                  where !unit.IsStructure && CanCollide(unit, entity)
-                 select (bounds: GetEntityBounds(unit), unit: unit)).ToList();
+                 select (bounds: GetPooledEntityBounds(unit), unit: unit)).ToList();
 
             var isFlying = entity.GameObject.layer == Constants.FLYING_LAYER;
             var team = entity.GameObject.GetComponent<TeamComponent>();
@@ -212,19 +212,25 @@ namespace Pandora.Engine
 
             entity.IsEvading = false;
 
+
+            foreach (var (bounds, _) in unitsBounds)
+            {
+                ReturnBounds(bounds);
+            }
+
             enginePathfindingSampler.End();
 
             return path;
         }
 
-        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, GridCell position, bool isRigid, DateTime? timestamp)
+        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, GridCell position, bool isRigid, DateTime timestamp)
         {
             var physicsPosition = GridCellToPhysics(position) + (new Vector2Int(UnitsPerCell / 2, UnitsPerCell / 2));
 
             return AddEntity(gameObject, engineUnitsPerSecond, physicsPosition, isRigid, timestamp);
         }
 
-        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, Vector2Int position, bool isRigid, DateTime? timestamp)
+        public EngineEntity AddEntity(GameObject gameObject, int engineUnitsPerSecond, Vector2Int position, bool isRigid, DateTime timestamp)
         {
             var speed = GetSpeed(engineUnitsPerSecond);
 
@@ -239,7 +245,7 @@ namespace Pandora.Engine
                 Engine = this,
                 IsRigid = isRigid,
                 Layer = gameObject.layer,
-                Timestamp = timestamp ?? DateTime.Now
+                Timestamp = timestamp
             };
 
             Entities.Add(entity);
@@ -330,6 +336,7 @@ namespace Pandora.Engine
             // cache away all the removals/adds and execute them later
             var clonedEntities = new List<EngineEntity>(Entities);
             var collisionsNum = -1;
+            var collisionSolvedCount = 0;
 
             if (DebugEngine) collisionsSampler.Begin();
 
@@ -338,6 +345,7 @@ namespace Pandora.Engine
                 BuildGrid(clonedEntities);
 
                 collisionsNum = 0;
+                collisionSolvedCount++;
 
                 foreach (var collision in grid.Collisions(CanCollide))
                 {
@@ -450,7 +458,7 @@ namespace Pandora.Engine
                     collisionsSolveSampler.End();
                 }
 
-                if (collisionsNum > 100)
+                if (collisionSolvedCount > 10)
                 {
                     Debug.LogError($"Cutting collision solving");
 
@@ -951,8 +959,8 @@ namespace Pandora.Engine
                 layer1 == layer2 ||
                 ((layer1 == Constants.RIVER_BOUNDS_LAYER || layer2 == Constants.RIVER_BOUNDS_LAYER) && (layer1 == Constants.SWIMMING_LAYER || layer2 == Constants.SWIMMING_LAYER)) ||
                 (layer1 == Constants.PROJECTILES_LAYER || layer2 == Constants.PROJECTILES_LAYER) ||
-                (layer1 == Constants.WATER_LAYER && layer2 != Constants.SWIMMING_LAYER) ||
-                (layer2 == Constants.WATER_LAYER && layer1 != Constants.SWIMMING_LAYER);
+                (layer1 == Constants.WATER_LAYER && (layer2 != Constants.SWIMMING_LAYER && layer2 != Constants.FLYING_LAYER)) ||
+                (layer2 == Constants.WATER_LAYER && (layer1 != Constants.SWIMMING_LAYER && layer1 != Constants.FLYING_LAYER));
         }
 
         /// <summary>

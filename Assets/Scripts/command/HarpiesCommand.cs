@@ -26,16 +26,19 @@ namespace Pandora.Command
                 from harpy in GetComponent<GroupComponent>().Objects
                 select harpy;
 
-            var positions = entities.Select(harpy => harpy.GetComponent<EngineComponent>());
+            var harpyEntities = entities.Select(harpy => harpy.GetComponent<EngineComponent>());
 
             Logger.Debug("harpy command invoked");
 
             var teamComponent = GetComponent<TeamComponent>();
 
-            foreach (var lifeComponent in MapComponent.Instance.gameObject.GetComponentsInChildren<LifeComponent>())
+            foreach (var targetEntity in MapComponent.Instance.engine.Entities)
             {
-                var targetEntity = lifeComponent.gameObject.GetComponent<EngineComponent>().Entity;
-                var isInRange = positions.Any(harpyCell => harpyCell.Engine.IsInHitboxRange(harpyCell.Entity, targetEntity, SearchRangeEngineUnits));
+                var lifeComponent = targetEntity.GameObject.GetComponent<LifeComponent>();
+
+                if (lifeComponent == null) continue;
+
+                var isInRange = harpyEntities.Any(harpyCell => harpyCell.Engine.IsInHitboxRange(harpyCell.Entity, targetEntity, SearchRangeEngineUnits));
                 var targetTeamComponent = lifeComponent.gameObject.GetComponent<TeamComponent>();
 
                 if (!isInRange) continue;

@@ -5,7 +5,7 @@ using Pandora.Engine;
 
 namespace Pandora.Spell
 {
-    public class ProjectileSpellBehaviour : MonoBehaviour
+    public class ProjectileSpellBehaviour : MonoBehaviour, EngineBehaviour
     {
         public MapComponent map;
         public int Speed = 1200;
@@ -15,20 +15,19 @@ namespace Pandora.Spell
         EngineComponent entityComponent;
         public GridCell StartCell = new GridCell(6, 0);
 
-        void Awake() {
+        public string ComponentName {
+            get => "ProjectileSpellBehaviour";
+        }
+
+        void Awake()
+        {
             entityComponent = GetComponent<EngineComponent>();
         }
 
-        // Update is called once per frame
-        void Update()
+        public void TickUpdate(uint msElapsed)
         {
-            if (TeamComponent.assignedTeam == TeamComponent.topTeam) {
-                transform.position = entityComponent.Entity.GetFlippedWorldPosition();
-            } else {
-                transform.position = entityComponent.Entity.GetWorldPosition();
-            }
-
-            if (entityComponent.Entity.GetCurrentCell() == Target) {
+            if (entityComponent.Entity.GetCurrentCell() == Target)
+            {
                 spell.SpellCollided(Target);
 
                 Destroy(this);
@@ -36,6 +35,19 @@ namespace Pandora.Spell
                 gameObject.SetActive(false);
 
                 entityComponent.Remove();
+            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (TeamComponent.assignedTeam == TeamComponent.topTeam)
+            {
+                transform.position = entityComponent.Entity.GetFlippedWorldPosition();
+            }
+            else
+            {
+                transform.position = entityComponent.Entity.GetWorldPosition();
             }
         }
     }

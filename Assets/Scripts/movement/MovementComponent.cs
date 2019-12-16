@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.Profiling;
 using System.Linq;
 using Priority_Queue;
 using Pandora;
@@ -33,13 +34,7 @@ namespace Pandora.Movement
         public MovementStateEnum LastState { get; set; }
         Enemy lastEnemyTargeted;
         TaskFactory factory = new TaskFactory(TaskScheduler.Default);
-
-        Astar<Vector2Int> astar = new Astar<Vector2Int>(
-            PoolInstances.Vector2IntHashSetPool,
-            PoolInstances.Vector2IntQueueItemPool,
-            PoolInstances.Vector2IntPool,
-            PoolInstances.Vector2IntListPool
-        );
+        CustomSampler advancePositionSampler, getEnemySampler, pathfindingSampler;
 
         public bool IsFlying
         {
@@ -94,12 +89,15 @@ namespace Pandora.Movement
 
         public string ComponentName => throw new NotImplementedException();
 
-        // Start is called before the first frame update
         void Awake()
         {
             body = GetComponent<Rigidbody2D>();
             team = GetComponent<TeamComponent>();
             combatBehaviour = GetComponent<CombatBehaviour>();
+
+            advancePositionSampler = CustomSampler.Create($"AdvancePosition() {gameObject.name}");
+            getEnemySampler = CustomSampler.Create($"GetEnemy() {gameObject.name}");
+            pathfindingSampler = CustomSampler.Create($"FindPath() {gameObject.name}");
         }
 
         /// <summary>
@@ -115,7 +113,9 @@ namespace Pandora.Movement
         {
             var currentPosition = CurrentCellPosition();
 
+            getEnemySampler.Begin();
             lastEnemyTargeted = map.GetEnemy(gameObject, currentPosition, team);
+            getEnemySampler.End();
 
             var isTargetDead = targetEnemy?.enemy.GetComponent<LifeComponent>().IsDead ?? true;
 
@@ -156,7 +156,9 @@ namespace Pandora.Movement
             // if no path has been calculated: calculate one and point the object to the first position in the queue
             if (currentPath == null || currentPath.Contains(currentPosition) || engineEntity.Path == null)
             {
+                advancePositionSampler.Begin();
                 AdvancePosition(currentPosition);
+                advancePositionSampler.End();
             }
 
             return new MovementState(null, MovementStateEnum.Moving);
@@ -211,7 +213,7 @@ namespace Pandora.Movement
         List<GridCell> FindPath(GridCell end)
         {
             return VectorsToGridCells(
-                astar.FindPath(
+                Astar<Vector2Int>.Vector2Instance.FindPath(
                     engineEntity.GetCurrentCell().vector,
                     end.vector,
                     position =>
@@ -262,7 +264,7 @@ namespace Pandora.Movement
 
             if (pathCount >= 1) return;
 
-            Profiler.BeginSample("MovementComponent pathfinding");
+            pathfindingSampler.Begin();
             engineEntity.SetSpeed(Speed);
 
             var currentPosition = CurrentCellPosition();
@@ -274,7 +276,7 @@ namespace Pandora.Movement
             }
 
             currentPath = FindPath(target).Skip(1).ToList();
-            Profiler.EndSample();
+            pathfindingSampler.End();
         }
 
         private GridCell CurrentCellPosition()
@@ -298,7 +300,7 @@ namespace Pandora.Movement
                 collisionTotalElapsed = totalElapsed;
             }
 
-            if (lastCollisionPosition == engineEntity.Position && totalElapsed - (collisionTotalElapsed ?? 0) >= 50)
+            if (lastCollisionPosition == engineEntity.Position && totalElapsed - (collisionTotalElapsed ?? 0) >= 400)
             {
                 Logger.Debug("Finally evading");
 

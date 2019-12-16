@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5577142179831469493}
   - component: {fileID: 8513242433041003705}
   - component: {fileID: 2764531331267813786}
-  - component: {fileID: 4616569468530259142}
   m_Layer: 12
   m_Name: MermaidCommand
   m_TagString: Untagged
@@ -95,22 +94,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DoubleTapMaxDelayMs: 200
   Used: 0
---- !u!114 &4616569468530259142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 906157769598500874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87d9adc7506b19e4faae607bdb399099, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TornadoObject: {fileID: 1463601171584166044, guid: 0fd29991a06145d41b1bd2f053c244e7,
-    type: 3}
-  LeftBridgePosition: {x: 2, y: 13}
-  RightBridgePosition: {x: 13, y: 13}
 --- !u!1 &1060352442105845753
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,6 +113,7 @@ GameObject:
   - component: {fileID: 8660774719796279383}
   - component: {fileID: 4143209966792787441}
   - component: {fileID: 5613082795416064738}
+  - component: {fileID: 2583046289241324959}
   m_Layer: 14
   m_Name: Mermaid
   m_TagString: Untagged
@@ -310,14 +294,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a9892cbc13c6c4ca1446776a4deac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 125
+  Damage: 35
   attackCooldownMs: 500
   backswingMs: 400
   projectile: {fileID: 5687362912629012028, guid: d519b85eadcfc0d43ab3c181acade232,
     type: 3}
   animationStateName: AttackingMermaid
   AggroRangeCells: 50
-  AttackRangeEngineUnits: 2000
+  AttackRangeEngineUnits: 1200
   EffectObjects: []
 --- !u!61 &4143209966792787441
 BoxCollider2D:
@@ -357,7 +341,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec9b3b5564e46048a69d3e9043e428f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 750
+  MovementSpeed: 900
+--- !u!114 &2583046289241324959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060352442105845753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87d9adc7506b19e4faae607bdb399099, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TornadoObject: {fileID: 1463601171584166044, guid: 0fd29991a06145d41b1bd2f053c244e7,
+    type: 3}
+  LeftBridgePosition: {x: 2, y: 13}
+  RightBridgePosition: {x: 13, y: 13}
 --- !u!1001 &1817415095756202251
 PrefabInstance:
   m_ObjectHideFlags: 0

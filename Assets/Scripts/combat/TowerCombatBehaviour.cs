@@ -51,7 +51,7 @@ namespace Pandora.Combat
         public bool isFrontTowerDestroyed = false;
         public GameObject middleTower = null;
 
-        GameObject currentTarget;
+        public GameObject CurrentTarget;
         LifeComponent targetLifeComponent;
         int aggroBoxHeight {
             get {
@@ -100,7 +100,7 @@ namespace Pandora.Combat
             }
 
 
-            if (currentTarget == null)
+            if (CurrentTarget == null)
             {
                 var units = map.GetUnitsInRect(aggroBoxOrigin, aggroBoxWidth, aggroBoxHeight);
 
@@ -132,10 +132,8 @@ namespace Pandora.Combat
                 {
                     Logger.Debug($"Attacking {closestUnit} - {closestUnit.GetComponent<LifeComponent>()}");
 
-                    currentTarget = closestUnit;
-                    targetLifeComponent = currentTarget.GetComponent<LifeComponent>();
-
-                    AttackEnemy(new Enemy(currentTarget), 0);
+                    CurrentTarget = closestUnit;
+                    targetLifeComponent = CurrentTarget.GetComponent<LifeComponent>();
                 }
             }
             else if (isTargetDead || !isTargetInAggroBox)
@@ -152,15 +150,16 @@ namespace Pandora.Combat
                 {
                     lastAttackTimeLapse = 0;
 
-                    AttackEnemy(new Enemy(currentTarget), 0);
+                    AttackEnemy(new Enemy(CurrentTarget), 0);
                 }
             }
         }
 
         public void AttackEnemy(Enemy target, uint timeLapse)
         {
-            if (currentTarget == null) return;
+            if (CurrentTarget == null) return;
 
+            Logger.Debug("Lapse: firing");
             Logger.Debug($"Attacking {target} - {isMiddle} - {targetLifeComponent}");
 
             isAttacking = true;
@@ -170,7 +169,9 @@ namespace Pandora.Combat
             var projectileObject = Instantiate(projectile, MapComponent.Instance.engine.PhysicsToWorld(towerEntity.Position), Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
-            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, towerEntity.Position, false, null);
+            var epoch = System.DateTime.MinValue;
+
+            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, towerEntity.Position, false, epoch.AddSeconds((int) towerPosition.EngineTowerPosition * 10));
 
             projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
 
@@ -195,7 +196,7 @@ namespace Pandora.Combat
         {
             Logger.Debug($"Attacking must stop - {isMiddle}");
 
-            currentTarget = null;
+            CurrentTarget = null;
             targetLifeComponent = null;
             isAttacking = false;
         }
@@ -203,7 +204,7 @@ namespace Pandora.Combat
         /** Called if a launched projectile collided */
         public void ProjectileCollided(Enemy target)
         {
-            Logger.Debug($"Assigning damage {targetLifeComponent} {currentTarget}");
+            Logger.Debug($"Assigning damage {targetLifeComponent} {CurrentTarget}");
 
             if (targetLifeComponent != null)
                 targetLifeComponent.AssignDamage(damage);

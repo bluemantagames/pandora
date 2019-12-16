@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Pandora.Engine;
+using System;
 
 namespace Pandora.Combat
 {
@@ -34,6 +35,9 @@ namespace Pandora.Combat
         {
             var animator = GetComponent<Animator>();
 
+            var cappedBackswingMs = Math.Max(1, backswingMs);
+            var cappedAttackCooldownMs = Math.Max(1, attackCooldownMs);
+
             if (!isAttacking)
             {
                 this.target = target.enemy;
@@ -44,18 +48,18 @@ namespace Pandora.Combat
                 isAttacking = true;
             }
 
-            animator.Play(animationStateName, 0, timeSinceLastDamage / (float)(attackCooldownMs + backswingMs));
+            animator.Play(animationStateName, 0, timeSinceLastDamage / (float)(cappedAttackCooldownMs + cappedBackswingMs));
 
             timeSinceLastDamage += timeLapse;
 
-            if (timeSinceLastDamage >= attackCooldownMs && !isBackswinging)
+            if (timeSinceLastDamage >= cappedAttackCooldownMs && !isBackswinging)
             {
                 MeleeAssignDamage();
 
                 isBackswinging = true;
             }
 
-            if (timeSinceLastDamage >= attackCooldownMs + backswingMs)
+            if (timeSinceLastDamage >= cappedAttackCooldownMs + cappedBackswingMs)
             {
                 timeSinceLastDamage = 0;
                 isBackswinging = false;

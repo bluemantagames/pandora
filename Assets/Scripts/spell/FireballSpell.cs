@@ -5,7 +5,7 @@ namespace Pandora.Spell {
     public class FireballSpell : MonoBehaviour, ProjectileSpell {
         public MapComponent map { get; set; }
         public int damage = 20;
-        public float radius = 3;
+        public int radius = 3;
 
         public void SpellCollided(GridCell cell) {
             foreach (var lifeComponent in map.gameObject.GetComponentsInChildren<LifeComponent>()) {

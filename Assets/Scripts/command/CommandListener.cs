@@ -32,9 +32,8 @@ namespace Pandora.Command
         {
             if (Used) return;
 
-            var id = GetComponentInParent<UnitIdComponent>().Id;
-
             var groupComponent = GetComponentInParent<GroupComponent>();
+            var id = GetComponentInParent<UnitIdComponent>().Id;
 
             NetworkControllerSingleton.instance.EnqueueMessage(
                 new CommandMessage
@@ -74,7 +73,7 @@ namespace Pandora.Command
                 }
             }
 
-            CommandViewportBehaviour.Instance.RemoveCommand(id);
+            CommandViewportBehaviour.Instance.RemoveCommand(groupComponent?.OriginalId ?? id);
         }
 
     }

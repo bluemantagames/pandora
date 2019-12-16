@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.UI;
 using System;
 using System.Collections;
@@ -7,15 +8,17 @@ using System.Collections.Generic;
 using Pandora.Movement;
 using Pandora.Spell;
 using Pandora.Combat;
+using Pandora.Deck;
 using Pandora.Network;
 using Pandora.Network.Messages;
 using Pandora.Engine;
 using System.Threading;
 using Pandora.Command;
+using UnityEngine.EventSystems;
 
 namespace Pandora
 {
-    public class MapComponent : MonoBehaviour
+    public class MapComponent : MonoBehaviour, IPointerDownHandler
     {
         int bottomMapSizeX = 16;
         public int bottomMapSizeY = 13;
@@ -30,6 +33,7 @@ namespace Pandora
         public Dictionary<int, HashSet<GridCell>> TowerPositionsDictionary = new Dictionary<int, HashSet<GridCell>>();
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         float firstLaneX = 2, secondLaneX = 13;
+        CustomSampler aggroSampler, targetValidSampler;
 
         List<GridCell> spawningCells;
 
@@ -93,6 +97,9 @@ namespace Pandora
 
         public void Awake()
         {
+            aggroSampler = CustomSampler.Create("Check aggro");
+            targetValidSampler = CustomSampler.Create("Check target valid");
+
             mapSizeX = bottomMapSizeX;
             mapSizeY = (bottomMapSizeY * 2) + 1;
 
@@ -134,10 +141,13 @@ namespace Pandora
             engine = ScriptableObject.CreateInstance<PandoraEngine>();
 
             int availableThreads, complThreads;
-            
+
             ThreadPool.GetMinThreads(out availableThreads, out complThreads);
 
             Logger.Debug($"Threads: {availableThreads}");
+
+            Logger.Debug($"Map x size: {cellWidth * mapSizeX}");
+            Logger.Debug($"Map y size: {cellHeight * mapSizeY}");
 
             engine.Init(this);
         }
@@ -240,7 +250,9 @@ namespace Pandora
                     {
                         var unit = Units[commandMessage.unitId];
 
-                        unit?.GetComponent<CommandBehaviour>()?.InvokeCommand();
+                        Debug.Log($"Commanded {commandMessage.unitId}");
+
+                        unit.GetComponent<CommandBehaviour>().InvokeCommand();
                     }
                 }
 
@@ -263,9 +275,11 @@ namespace Pandora
             }
             else
             {
-                var processTime = Math.Min(frameStep, remainingStep);
+                //var processTime = Math.Min(frameStep, remainingStep);
+                var processTime = frameStep;
 
-                if (remainingStep != 0 && processTime != 0 && timeSinceLastStep >= frameStep)
+                //if (remainingStep != 0 && processTime != 0 && timeSinceLastStep >= frameStep)
+                if (remainingStep > 0 && processTime != 0)
                 {
                     engine.Process(processTime);
 
@@ -340,7 +354,7 @@ namespace Pandora
             if (spawn.Team == TeamComponent.topTeam)
             { 
                 // flip Y if top team
-                spawn.CellY = mapSizeY - spawn.CellY;
+                spawn.CellY = (mapSizeY - 1) - spawn.CellY;
             }
 
             // This exists because the manaAnimation game object
@@ -373,14 +387,18 @@ namespace Pandora
 
             ShowManaUsedAlert(cardObject, requiredMana, manaAnimationPosition);
 
-            if (spawn.Team == TeamComponent.assignedTeam)
+            if (spawn.Team == TeamComponent.assignedTeam && cardObject.GetComponent<ProjectileSpellBehaviour>() == null)
             {
                 CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
             }
+
+            /*UnityEngine.Profiling.Memory.Experimental.MemoryProfiler.TakeTempSnapshot((a, b) => {
+                Debug.Log($"Captured snapshot {a}, {b}, {Application.temporaryCachePath}");
+            });*/
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>
-        public void InitializeComponents(GameObject unit, GridCell cell, int team, string id, DateTime? timestamp)
+        public void InitializeComponents(GameObject unit, GridCell cell, int team, string id, DateTime timestamp)
         {
             unit.GetComponent<TeamComponent>().team = team;
 
@@ -415,6 +433,8 @@ namespace Pandora
             unit.GetComponent<EngineComponent>().Entity = engineEntity;
             unit.AddComponent<UnitIdComponent>().Id = id;
 
+            unit.GetComponentInChildren<HealthbarBehaviour>()?.RefreshColor();
+
             Units.Add(id, unit);
         }
 
@@ -433,11 +453,14 @@ namespace Pandora
 
         public Enemy GetEnemy(GameObject unit, GridCell position, TeamComponent team)
         {
-            float? minDistance = null;
+            int? minDistance = null;
             GameObject inRangeEnemy = null;
             var cellVector = position.vector;
 
             var combatBehaviour = unit.GetComponent<CombatBehaviour>();
+
+            var engineEntity = GetEngineEntity(unit);
+            var unitTeam = unit.GetComponent<TeamComponent>();
 
             foreach (var entity in engine.Entities)
             {
@@ -446,10 +469,11 @@ namespace Pandora
                 if (component == null) continue;
 
                 var targetGameObject = component.gameObject;
-                var gameObjectPosition = GetCell(targetGameObject);
-                var engineEntity = GetEngineEntity(unit);
-                var targetEngineEntity = GetEngineEntity(targetGameObject);
-                var distance = Vector2.Distance(gameObjectPosition.vector, position.vector);
+                var distance = engine.SquaredDistance(engineEntity.Position, entity.Position);
+
+                if (minDistance != null && minDistance < distance) continue;
+                if (component.team == unitTeam.team) continue;
+
                 var lifeComponent = targetGameObject.GetComponent<LifeComponent>();
 
                 if (lifeComponent == null || lifeComponent.IsDead) continue; // skip spells
@@ -460,12 +484,16 @@ namespace Pandora
                     (targetGameObject.layer == Constants.FLYING_LAYER && unit.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying and we are ranged
                     (unit.layer == Constants.FLYING_LAYER); // we're flying
 
+                aggroSampler.Begin();
                 var isInRange = combatBehaviour.IsInAggroRange(new Enemy(targetGameObject));
+                aggroSampler.End();
 
+                targetValidSampler.Begin();
                 var isTargetValid =
                     (minDistance == null || minDistance > distance) && isInRange && component.IsOpponent() != unit.GetComponent<TeamComponent>().IsOpponent() && !lifeComponent.IsDead && canUnitsFight && (
-                        (isLockedOnMiddle && targetEngineEntity.IsStructure) ? targetGameObject.GetComponent<TowerPositionComponent>().EngineTowerPosition.IsMiddle() : true
+                        (isLockedOnMiddle && entity.IsStructure) ? targetGameObject.GetComponent<TowerPositionComponent>().EngineTowerPosition.IsMiddle() : true
                     );
+                targetValidSampler.End();
 
                 if (isTargetValid)
                 {
@@ -767,6 +795,18 @@ namespace Pandora
             }
 
             return position;
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            var selectedCards = HandBehaviour.Instance.SelectedCards;
+
+            if (selectedCards.Count > 0)
+            {
+                Logger.Debug($"Dragging {selectedCards}");
+
+                selectedCards[0].CardObject.GetComponent<CardBehaviour>().Dragging = true;
+            }
         }
     }
 }

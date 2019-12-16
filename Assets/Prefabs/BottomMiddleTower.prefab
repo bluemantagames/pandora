@@ -218,10 +218,8 @@ MonoBehaviour:
   projectile: {fileID: 5687362912629012028, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
     type: 3}
   isMiddle: 1
-  range: 5
   damage: 50
-  cooldownMs: 1000
-  isOpponent: 1
+  cooldownMs: 500
   isFrontTowerDestroyed: 0
   middleTower: {fileID: 0}
 --- !u!114 &3866240383038811721
@@ -249,7 +247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733e88c63e6713f4fa432c8e37a8f31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeValue: 100
+  lifeValue: 1500
   maxLife: 0
   IsDead: 0
 --- !u!114 &3866240383038811767
