@@ -144,7 +144,7 @@ namespace Pandora.Movement
             }
 
             // Otherwise: pick a target
-            if (lastEnemyTargeted.enemy != targetEnemy?.enemy && (!combatBehaviour.isAttacking || isTargetDead) && !isTargetForced)
+            if (lastEnemyTargeted.enemy != targetEnemy?.enemy && !combatBehaviour.isAttacking && ((isTargetForced && isTargetDead) || !isTargetForced))
             {
                 targetEnemy = lastEnemyTargeted;
 

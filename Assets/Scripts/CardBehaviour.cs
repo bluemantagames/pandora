@@ -90,6 +90,18 @@ namespace Pandora
 
         public void OnDrag(PointerEventData eventData) => Dragging = true;
 
+        GridCell GetPointed()
+        {
+            var cell = map.GetPointedCell();
+
+            if (!IsAquatic && !Global)
+            {
+                cell.vector.y = System.Math.Min(cell.vector.y, map.bottomMapSizeY - 1);
+            }
+
+            return cell;
+        }
+
         void OnDrag()
         {
             if (disabled) return;
@@ -114,7 +126,7 @@ namespace Pandora
 
                 map = hit.collider.gameObject.GetComponent<MapComponent>();
 
-                canBeSpawned = map.OnUICardCollision(Puppet, IsAquatic, Global, map.LoadCard(UnitName));
+                canBeSpawned = map.OnUICardCollision(Puppet, IsAquatic, Global, map.LoadCard(UnitName), GetPointed());
 
                 GetComponent<Image>().enabled = false;
             }
@@ -136,7 +148,7 @@ namespace Pandora
                 if (movement != null) movement.map = map;
                 if (projectileSpell != null) projectileSpell.map = map;
 
-                var spawned = map.SpawnCard(UnitName, Team, RequiredMana);
+                var spawned = map.SpawnCard(UnitName, Team, GetPointed(), RequiredMana);
 
                 if (spawned)
                 {

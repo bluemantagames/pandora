@@ -300,11 +300,11 @@ namespace Pandora
             ResetAggroPoints();
         }
 
-        public bool SpawnCard(string cardName, int team, int requiredMana = 0)
+        public bool SpawnCard(string cardName, int team, GridCell cell, int requiredMana = 0)
         {
             ResetAggroPoints();
 
-            var mapCell = GetPointedCell().vector;
+            var spawnPosition = cell.vector;
             var id = System.Guid.NewGuid().ToString();
             var manaEnabled = GetComponent<LocalManaBehaviourScript>()?.Enabled ?? true;
 
@@ -318,8 +318,8 @@ namespace Pandora
                 new SpawnMessage
                 {
                     unitName = cardName,
-                    cellX = mapCell.x,
-                    cellY = mapCell.y,
+                    cellX = spawnPosition.x,
+                    cellY = spawnPosition.y,
                     team = TeamComponent.assignedTeam,
                     unitId = id,
                     manaUsed = requiredMana
@@ -662,11 +662,9 @@ namespace Pandora
         }
 
         /// <summary></summary>
-        public bool OnUICardCollision(GameObject puppet, bool isAquatic, bool isGlobal, GameObject unit)
+        public bool OnUICardCollision(GameObject puppet, bool isAquatic, bool isGlobal, GameObject unit, GridCell cell)
         {
             DestroyPuppet();
-
-            var cell = GetPointedCell();
 
             spawningCells =
                 (from position in unit.GetComponent<Spawner>()?.CellPositions ?? new Vector2Int[] { new Vector2Int(0, 0) }
@@ -700,7 +698,7 @@ namespace Pandora
             return set;
         }
 
-        private GridCell GetPointedCell()
+        public GridCell GetPointedCell()
         {
             Vector2 worldMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
