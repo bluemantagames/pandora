@@ -32,6 +32,7 @@ namespace Pandora.Combat.Effects {
                 component = target.AddComponent<TrollPushBackEffect>();
                 component.Origin = origin;
                 component.OriginDirection = origin.GetComponent<EngineComponent>().Entity.Direction;
+                component.Force = Force;
                 component.RefreshComponents();
             }
 

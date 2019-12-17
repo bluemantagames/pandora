@@ -456,7 +456,10 @@ namespace Pandora
 
         public void ShowManaUsedAlert(GameObject unit, int manaUsed, Vector2 position)
         {
-            var manaUsedObject = unit.GetComponentInChildren<ManaUsedAlertBehaviour>().gameObject;
+            var manaUsedObject = unit.GetComponentInChildren<ManaUsedAlertBehaviour>()?.gameObject;
+
+            if (manaUsedObject == null) return;
+
             var manaUsedText = manaUsedObject.GetComponentInChildren<Text>();
 
             manaUsedObject.transform.position = position;

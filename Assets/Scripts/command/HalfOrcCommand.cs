@@ -17,12 +17,14 @@ namespace Pandora.Command
             var sourceTeam = GetComponent<TeamComponent>().team;
             var currentCell = sourceEntity.GetCurrentCell().vector;
 
+            int wolfOffset = -1, riderOffset = 1;
+
             var wolfCell = new GridCell(
-                new Vector2Int(currentCell.x - 1, currentCell.y)
+                new Vector2Int(currentCell.x, currentCell.y + wolfOffset)
             );
 
             var riderCell = new GridCell(
-                new Vector2Int(currentCell.x + 1, currentCell.y)
+                new Vector2Int(currentCell.x, currentCell.y + riderOffset)
             );
 
             var wolfSpawn = new UnitSpawn(
