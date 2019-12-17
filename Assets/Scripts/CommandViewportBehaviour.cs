@@ -44,6 +44,8 @@ namespace Pandora
             {
                 var handler = handlers[i];
 
+                if (handler == null) continue;
+
                 if (handler.GetComponent<CommandImageBehaviour>().UnitId == id)
                 {
                     handlers[i] = null;

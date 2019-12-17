@@ -34,6 +34,8 @@ namespace Pandora
                 if (isOurEntity)
                 {
                     entity.GameObject.GetComponentInChildren<CommandListener>().Command();
+
+                    break;
                 }
             }
         }

@@ -382,7 +382,7 @@ namespace Pandora
             }
             else
             {
-                InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp);   
+                InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp, spawn.UnitName); 
             }
 
             // This is tricky, we need the stuff below because the spawner and the units are actually
@@ -410,7 +410,7 @@ namespace Pandora
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>
-        public void InitializeComponents(GameObject unit, GridCell cell, int team, string id, DateTime timestamp)
+        public void InitializeComponents(GameObject unit, GridCell cell, int team, string id, DateTime timestamp, string unitName)
         {
             unit.GetComponent<TeamComponent>().team = team;
 
@@ -443,7 +443,11 @@ namespace Pandora
             }
 
             unit.GetComponent<EngineComponent>().Entity = engineEntity;
-            unit.AddComponent<UnitIdComponent>().Id = id;
+
+            var idComponent = unit.AddComponent<UnitIdComponent>();
+
+            idComponent.Id = id;
+            idComponent.UnitName = unitName;
 
             unit.GetComponentInChildren<HealthbarBehaviour>()?.RefreshColor();
 

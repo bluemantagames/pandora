@@ -41,7 +41,7 @@ namespace Pandora.Command
 
 
                 var zombieSpawn = new UnitSpawn(
-                    "Zombie",
+                    GetComponent<UnitIdComponent>().UnitName,
                     zombieCell,
                     team,
                     zombieId + "-resurrected",

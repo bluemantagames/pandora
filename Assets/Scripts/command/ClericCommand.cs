@@ -38,8 +38,7 @@ namespace Pandora.Command
             var isEveryoneAlive = groupComponent.Objects.TrueForAll(unit => !unit.GetComponent<LifeComponent>().IsDead);
 
             if (isEveryoneAlive && targetEntity != null) {
-                targetEntity.GameObject.GetComponent<TeamComponent>().team = team.team;
-                targetEntity.GameObject.GetComponentInChildren<HealthbarBehaviour>().RefreshColor();
+                targetEntity.GameObject.GetComponent<TeamComponent>().Convert(team.team);
 
                 foreach (var cleric in groupComponent.Objects) {
                     var lifeComponent = cleric.GetComponent<LifeComponent>();

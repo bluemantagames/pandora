@@ -27,7 +27,7 @@ namespace Pandora
 
                 var timestamp = spawn.Timestamp.AddSeconds(unitNumber);
 
-                map.InitializeComponents(unit, new GridCell(spawn.CellX + position.x, spawn.CellY + position.y), spawn.Team, id, timestamp);
+                map.InitializeComponents(unit, new GridCell(spawn.CellX + position.x, spawn.CellY + position.y), spawn.Team, id, timestamp, spawn.UnitName);
 
                 units.Add(unit);
 
