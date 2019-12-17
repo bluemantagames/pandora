@@ -193,7 +193,7 @@ namespace Pandora.Network
                                     cellX = command.Spawn.X,
                                     cellY = command.Spawn.Y,
                                     team = command.Spawn.Team,
-                                    timestamp = DateTimeOffset.FromUnixTimeSeconds((long)command.Timestamp).UtcDateTime,
+                                    timestamp = DateTimeOffset.FromUnixTimeMilliseconds((long)command.Timestamp).UtcDateTime,
                                     unitId = command.Spawn.UnitId
                                 };
 
