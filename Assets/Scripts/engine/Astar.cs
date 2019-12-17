@@ -90,6 +90,8 @@ namespace Pandora.Engine
         {
             var path = new LinkedList<T> { };
 
+            path.AddFirst(evaluatingPosition.Item);
+
             while (cameFrom.ContainsKey(evaluatingPosition))
             {
                 path.AddFirst(new LinkedListNode<T>(cameFrom[evaluatingPosition].Item));
@@ -267,7 +269,7 @@ namespace Pandora.Engine
                     return BuildPath(evaluatingPosition);
                 }
 
-                if (pass > 25)
+                if (pass > 10)
                 {
                     Logger.DebugWarning($"Short circuiting after {pass} passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} nodes)");
 
