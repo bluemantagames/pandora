@@ -43,7 +43,8 @@ namespace Pandora.Command
 
                 if (!isInRange) continue;
 
-                if ((hp == null || hp.Value < lifeComponent.lifeValue) && teamComponent.team != targetTeamComponent.team) {
+                if ((hp == null || hp.Value < lifeComponent.lifeValue) && teamComponent.team != targetTeamComponent.team)
+                {
                     hp = Mathf.FloorToInt(lifeComponent.lifeValue);
 
                     target = new Enemy(lifeComponent.gameObject);
@@ -52,18 +53,27 @@ namespace Pandora.Command
 
             Logger.Debug($"harpy command invoked {target}");
 
-            if (target == null) {
+            if (target == null)
+            {
                 Logger.DebugWarning("Could not find a target for harpies command");
-            } else {
+            }
+            else
+            {
                 Logger.Debug($"Harpies attacking {target}");
 
-                foreach (var harpy in entities) {
+                foreach (var harpy in entities)
+                {
                     harpy.GetComponent<MovementComponent>().Target = target;
                 }
 
-                originalColor = target.enemy.GetComponent<SpriteRenderer>().color;
-                target.enemy.GetComponent<SpriteRenderer>().color = SelectedColor;
-                coloredTimePassed = 0f;
+                var spriteRenderer = target.enemy.GetComponent<SpriteRenderer>();
+
+                if (spriteRenderer != null)
+                {
+                    originalColor = spriteRenderer.color;
+                    spriteRenderer.color = SelectedColor;
+                    coloredTimePassed = 0f;
+                }
             }
         }
 
@@ -73,12 +83,14 @@ namespace Pandora.Command
 
         void Update()
         {
-            if (coloredTimePassed.HasValue) {
+            if (coloredTimePassed.HasValue)
+            {
                 coloredTimePassed += Time.deltaTime;
 
-                if (coloredTimePassed >= BlinkTime)  {
+                if (coloredTimePassed >= BlinkTime)
+                {
                     target.enemy.GetComponent<SpriteRenderer>().color = originalColor;
-                    
+
                     coloredTimePassed = null;
                 }
 

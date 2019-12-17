@@ -2,26 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace Pandora
 {
     public class CommandViewportBehaviour : MonoBehaviour
     {
-        List<GameObject> handlers = new List<GameObject> {};
+        List<GameObject> handlers = new List<GameObject> { };
 
         public GameObject CommandImage;
 
         static CommandViewportBehaviour _instance;
 
-        public static CommandViewportBehaviour Instance {
+        public static CommandViewportBehaviour Instance
+        {
             get => _instance;
         }
 
-        public void DrawCommands() {
+        public void DrawCommands()
+        {
             var rect = GetComponent<RectTransform>();
 
-            for (var i = 0; i < handlers.Count; i++) {
+            for (var i = 0; i < handlers.Count; i++)
+            {
                 var handler = handlers[i];
+
+                if (handler == null) continue;
 
                 var handlerRect = handler.GetComponent<RectTransform>();
                 var width = handlerRect.rect.width;
@@ -32,10 +38,16 @@ namespace Pandora
             }
         }
 
-        public void RemoveCommand(string id) {
-            foreach (var handler in handlers) {
-                if (handler.GetComponent<CommandImageBehaviour>().UnitId == id) {
-                    handlers.Remove(handler);
+        public void RemoveCommand(string id)
+        {
+            for (var i = 0; i < handlers.Count; i++)
+            {
+                var handler = handlers[i];
+
+                if (handler.GetComponent<CommandImageBehaviour>().UnitId == id)
+                {
+                    handlers[i] = null;
+
                     Destroy(handler);
 
                     break;
@@ -46,15 +58,18 @@ namespace Pandora
         }
 
 
-        public void AddCommand(string unit, string id) {
+        public void AddCommand(string unit, string id)
+        {
             var cards = Resources.LoadAll("Cards/", typeof(GameObject));
 
             GameObject foundCard = null;
 
-            foreach (var cardObject in cards) {
+            foreach (var cardObject in cards)
+            {
                 var cardGameObject = cardObject as GameObject;
 
-                if (cardGameObject.GetComponent<CardBehaviour>().UnitName == unit) {
+                if (cardGameObject.GetComponent<CardBehaviour>().UnitName == unit)
+                {
                     foundCard = cardGameObject;
 
                     break;
@@ -67,7 +82,24 @@ namespace Pandora
 
             var handler = Instantiate(CommandImage, transform.position, Quaternion.identity, transform);
 
-            handlers.Add(handler);
+            var added = false;
+
+            // fill an empty position if there is one
+            for (var i = 0; i < handlers.Count; i++)
+            {
+                if (handlers[i] == null)
+                {
+                    handlers[i] = handler;
+
+                    added = true;
+                }
+            }
+
+            // add the command at the end otherwise
+            if (!added)
+            {
+                handlers.Add(handler);
+            }
 
             handler.GetComponent<Image>().sprite = card.sprite;
             handler.GetComponent<CommandImageBehaviour>().UnitId = id;
