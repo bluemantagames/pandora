@@ -88,7 +88,7 @@ namespace Pandora.Deck
                         "Troll",
                         "Zombies",
                         "Mermaids",
-                        "Harpies"
+                        "HalfOrc"
                     };
 
                     cards =

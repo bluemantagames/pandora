@@ -39,9 +39,8 @@ namespace Pandora.Command
                     lifeComponent.LastPosition.Value
                 );
 
-
                 var zombieSpawn = new UnitSpawn(
-                    GetComponent<UnitIdComponent>().UnitName,
+                    "Zombie",
                     zombieCell,
                     team,
                     zombieId + "-resurrected",

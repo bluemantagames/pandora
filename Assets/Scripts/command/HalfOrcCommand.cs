@@ -27,6 +27,11 @@ namespace Pandora.Command
                 new Vector2Int(currentCell.x, currentCell.y + riderOffset)
             );
 
+            if (sourceTeam == TeamComponent.topTeam) {
+                riderCell = MapComponent.Instance.Flip(riderCell);
+                wolfCell = MapComponent.Instance.Flip(wolfCell);
+            }
+
             var wolfSpawn = new UnitSpawn(
                 "HalfOrcWolf",
                 wolfCell,
