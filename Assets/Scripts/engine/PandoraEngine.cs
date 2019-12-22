@@ -16,6 +16,7 @@ namespace Pandora.Engine
         public uint TickTime = 40; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         public List<EngineEntity> Entities = new List<EngineEntity> { };
+        public List<EngineBehaviour> Behaviours = new List<EngineBehaviour> { };
         public MapComponent Map;
         public uint totalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
@@ -255,6 +256,11 @@ namespace Pandora.Engine
             return entity;
         }
 
+        public void AddBehaviour(EngineBehaviour behaviour)
+        {
+            Behaviours.Add(behaviour);
+        }
+
         public void PrintDebugInfo(EngineEntity entity)
         {
             var prefix = $"({entity.GameObject.name}) PrintDebugInfo:";
@@ -491,6 +497,11 @@ namespace Pandora.Engine
             }
 
             if (DebugEngine) scriptSampler.End();
+
+            foreach (var behaviour in Behaviours)
+            {
+                behaviour.TickUpdate(TickTime);
+            }
         }
 
         public void DrawDebugGUI()
