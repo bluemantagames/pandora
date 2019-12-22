@@ -9,7 +9,6 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
     public string ComponentName {
         get => "EndGameBehaviour";
     }
-    private bool GameEnded = false;
     public Text TimerComponent;
     private uint msDuration;
     private uint timePassed;
@@ -29,7 +28,7 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
 
     public void TickUpdate(uint timeLapsed)
     {                
-        if (GameEnded) return;
+        if (EndGameSingleton.Instance.GameEnded) return;
 
         timePassed += timeLapsed;
 
@@ -46,7 +45,8 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
         if (timePassed % msDuration == 0) 
         {
             // The game has ended
-            GameEnded = true;
+            // and we should calc the winner
+            EndGameSingleton.Instance.SetWinner(0);
         }
     }
 }
