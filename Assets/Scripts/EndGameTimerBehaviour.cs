@@ -3,16 +3,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using Pandora.Engine;
 
-public class EndGameBehaviour : MonoBehaviour, EngineBehaviour
+public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
 {
     public uint GameDurationSeconds = 10;
     public string ComponentName {
         get => "EndGameBehaviour";
     }
+    private bool GameEnded = false;
     public Text TimerComponent;
     private uint msDuration;
     private uint timePassed;
-    private bool gameEnded = false;
 
     void Start()
     {
@@ -29,7 +29,7 @@ public class EndGameBehaviour : MonoBehaviour, EngineBehaviour
 
     public void TickUpdate(uint timeLapsed)
     {                
-        if (gameEnded) return;
+        if (GameEnded) return;
 
         timePassed += timeLapsed;
 
@@ -45,8 +45,8 @@ public class EndGameBehaviour : MonoBehaviour, EngineBehaviour
 
         if (timePassed % msDuration == 0) 
         {
-            Debug.Log("[TIMER] GAME OVER!");
-            gameEnded = true;
+            // The game has ended
+            GameEnded = true;
         }
     }
 }
