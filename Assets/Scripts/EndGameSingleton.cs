@@ -26,6 +26,8 @@ class EndGameSingleton {
         GameEnded = true;
         WinnerTeam = winnerTeam;
 
+        Logger.Debug($"[ENDGAME] TEAM {WinnerTeam} WON!");
+
         var matchFinishedMessage = new MatchFinishedMessage 
         { 
             WinnerTeam = winnerTeam 

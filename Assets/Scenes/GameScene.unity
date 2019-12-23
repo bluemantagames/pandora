@@ -1242,6 +1242,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameDurationSeconds: 10
   TimerComponent: {fileID: 1740791755}
+  Towers:
+  - {fileID: 2089915458}
+  - {fileID: 2693967325521330709}
+  - {fileID: 1559341007}
+  - {fileID: 231804828}
+  - {fileID: 1838545264}
+  - {fileID: 738133527}
 --- !u!114 &637381875
 MonoBehaviour:
   m_ObjectHideFlags: 0
