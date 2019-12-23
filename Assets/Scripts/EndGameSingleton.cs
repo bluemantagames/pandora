@@ -3,8 +3,8 @@ using Pandora.Network.Messages;
 
 class EndGameSingleton {
     static EndGameSingleton _instance = null;
-    public bool GameEnded { get; private set; }
-    public int WinnerTeam { get; private set; }
+    public bool GameEnded { get; private set; } = false;
+    public int WinnerTeam { get; private set; } = 0;
 
     static public EndGameSingleton Instance
     {
@@ -21,6 +21,8 @@ class EndGameSingleton {
 
     public void SetWinner(int winnerTeam)
     {
+        if (GameEnded) return;
+
         GameEnded = true;
         WinnerTeam = winnerTeam;
 

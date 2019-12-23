@@ -1138,8 +1138,10 @@ GameObject:
   - component: {fileID: 637381873}
   - component: {fileID: 637381872}
   - component: {fileID: 637381871}
+  - component: {fileID: 637381875}
+  - component: {fileID: 637381874}
   m_Layer: 5
-  m_Name: EndGameCanvas
+  m_Name: EndGameCountdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1226,6 +1228,33 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &637381874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637381869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2208437d1a126478a9b53da66991b07e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameDurationSeconds: 10
+  TimerComponent: {fileID: 1740791755}
+--- !u!114 &637381875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637381869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DebugEntity: 0
 --- !u!1001 &738133525
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3865,8 +3894,6 @@ GameObject:
   - component: {fileID: 1740791754}
   - component: {fileID: 1740791756}
   - component: {fileID: 1740791755}
-  - component: {fileID: 1740791758}
-  - component: {fileID: 1740791757}
   m_Layer: 5
   m_Name: EndGameTimer
   m_TagString: Untagged
@@ -3933,32 +3960,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1740791753}
   m_CullTransparentMesh: 0
---- !u!114 &1740791757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1740791753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugEntity: 0
---- !u!114 &1740791758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1740791753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2208437d1a126478a9b53da66991b07e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameDurationSeconds: 10
 --- !u!1001 &1771430263
 PrefabInstance:
   m_ObjectHideFlags: 0

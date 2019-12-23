@@ -110,6 +110,23 @@ namespace Pandora
 
                 Logger.Debug("BB I'M DYING");
 
+                // Check if the component is a middle tower
+                var towerPositionComponent = GetComponent<TowerPositionComponent>();
+
+                if (towerPositionComponent != null) 
+                {
+                    switch(towerPositionComponent.WorldTowerPosition)
+                    {
+                        case TowerPosition.BottomMiddle:
+                            EndGameSingleton.Instance.SetWinner(1);
+                            break;
+
+                        case TowerPosition.TopMiddle:
+                            EndGameSingleton.Instance.SetWinner(2);
+                            break; 
+                    }
+                }
+
                 // TODO: Play "die" animation
             }
         }
