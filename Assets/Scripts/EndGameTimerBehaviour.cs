@@ -11,10 +11,12 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
     public string ComponentName {
         get => "EndGameBehaviour";
     }
+    public Text TitleComponent;
     public Text TimerComponent;
     public List<GameObject> Towers;
     private uint msDuration;
     private uint timePassed;
+    private bool winnerTextSet = false;
 
     void Start()
     {
@@ -31,11 +33,19 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
 
     public void TickUpdate(uint timeLapsed)
     {                
-        if (EndGameSingleton.Instance.GameEnded) return;
+        if (EndGameSingleton.Instance.GameEnded) 
+        {
+            if (!winnerTextSet)
+            {
+                SetWinnerText(EndGameSingleton.Instance.WinnerTeam);
+                winnerTextSet = true;
+            }
+
+            return;
+        };
 
         timePassed += timeLapsed;
 
-        // Update timer
         if (TimerComponent)
         {
             var timeLeft = msDuration - timePassed;
@@ -50,6 +60,25 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
             // The game has ended
             var winnerTeam = GetWinnerTeam();
             EndGameSingleton.Instance.SetWinner(winnerTeam);
+        }
+    }
+    
+    public void SetWinnerText(int winnerTeam)
+    {
+        if (TimerComponent == null) return;
+
+        if (TitleComponent != null)
+        {
+            TitleComponent.text = "Match result:";
+        }
+
+        if (winnerTeam == 0)
+        {
+            TimerComponent.text = $"DRAW";
+        }
+        else 
+        {
+            TimerComponent.text = $"TEAM {winnerTeam} WON";
         }
     }
 
