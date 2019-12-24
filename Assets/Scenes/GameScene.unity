@@ -1163,10 +1163,10 @@ RectTransform:
   m_Father: {fileID: 608853133}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -273.5, y: 1094.7}
-  m_SizeDelta: {x: -826.8, y: -2341.4}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 288.5, y: -123.30005}
+  m_SizeDelta: {x: 297.2, y: 94.6001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &637381871
 MonoBehaviour:
@@ -1240,7 +1240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2208437d1a126478a9b53da66991b07e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameDurationSeconds: 180
+  GameDurationSeconds: 60
   TitleComponent: {fileID: 351780930}
   TimerComponent: {fileID: 1740791755}
   Towers:

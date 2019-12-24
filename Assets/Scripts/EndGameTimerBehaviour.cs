@@ -52,10 +52,10 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
 
             TimerComponent.text = TimeSpan
                 .FromMilliseconds(timeLeft)
-                .ToString(@"ss\:ff");
+                .ToString(@"mm\:ss\:ff");
         }
 
-        if (timePassed % msDuration == 0) 
+        if (timePassed % msDuration <= 0) 
         {
             // The game has ended
             var winnerTeam = GetWinnerTeam();
@@ -84,10 +84,11 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
 
     int GetWinnerTeam() 
     {
-        int team1LowestHp = -1;
-        int team2LowestHp = -1;
-        List<GameObject> team1Towers = new List<GameObject>();
-        List<GameObject> team2Towers = new List<GameObject>();
+        int bottomLowestHp = -1;
+        int topLowestHp = -1;
+        int winnerSide = 0;
+        List<GameObject> bottomTowers = new List<GameObject>();
+        List<GameObject> topTowers = new List<GameObject>();
 
         foreach (var tower in Towers)
         {
@@ -103,38 +104,41 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
                 case TowerPosition.BottomMiddle:
                 case TowerPosition.BottomLeft:
                 case TowerPosition.BottomRight:
-                    team1Towers.Add(tower);
+                    bottomTowers.Add(tower);
 
-                    if (team1LowestHp == -1 || lifeComponent.lifeValue < team1LowestHp)
-                        team1LowestHp = lifeComponent.lifeValue;
+                    if (bottomLowestHp == -1 || lifeComponent.lifeValue < bottomLowestHp)
+                        bottomLowestHp = lifeComponent.lifeValue;
 
                     break;
 
                 case TowerPosition.TopMiddle:
                 case TowerPosition.TopLeft:
                 case TowerPosition.TopRight:
-                    team2Towers.Add(tower);
+                    topTowers.Add(tower);
 
-                    if (team2LowestHp == -1 || lifeComponent.lifeValue < team2LowestHp)
-                        team2LowestHp = lifeComponent.lifeValue;
+                    if (topLowestHp == -1 || lifeComponent.lifeValue < topLowestHp)
+                        topLowestHp = lifeComponent.lifeValue;
 
                     break;
             }
         }
 
         // If a team has more towers...
-        if (team1Towers.Count > team2Towers.Count)
-            return 1;
-        else if (team2Towers.Count > team1Towers.Count)
-            return 2;
+        if (bottomTowers.Count > topTowers.Count)
+            winnerSide = 1;
+        else if (topTowers.Count > bottomTowers.Count)
+            winnerSide = 2;
 
         // Checking for the tower with the lowest HP...
-        if (team1LowestHp > team2LowestHp)
-            return 1;
-        else if (team2LowestHp > team1LowestHp)
-            return 2; 
+        if (bottomLowestHp > topLowestHp)
+            winnerSide = 1;
+        else if (topLowestHp > bottomLowestHp)
+            winnerSide = 2; 
         
-        // Otherwise it's a draw...
-        return 0;
+        // Checking which team actually won
+        if (winnerSide == 0 || TeamComponent.assignedTeam == 1) 
+            return winnerSide;
+        else
+            return winnerSide == 1 ? 2 : 1;
     }
 }
