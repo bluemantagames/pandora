@@ -118,11 +118,16 @@ namespace Pandora
                     switch(towerPositionComponent.WorldTowerPosition)
                     {
                         case TowerPosition.BottomMiddle:
-                            EndGameSingleton.Instance.SetWinner(1);
+                            EndGameSingleton.Instance.SetWinner(
+                                TeamComponent.assignedTeam == 1 ? 2 : 1
+                            );
+
                             break;
 
                         case TowerPosition.TopMiddle:
-                            EndGameSingleton.Instance.SetWinner(2);
+                            EndGameSingleton.Instance.SetWinner(
+                                TeamComponent.assignedTeam
+                            );
                             break; 
                     }
                 }
