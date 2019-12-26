@@ -7,10 +7,11 @@ using Pandora.Events;
 using UnityEngine.UI;
 using System;
 using System.Linq;
+using Pandora.Engine;
 
 namespace Pandora.Deck
 {
-    public class HandBehaviour : MonoBehaviour
+    public class HandBehaviour : MonoBehaviour, EngineBehaviour
     {
         /// <summary>
         /// This is set before loading the GameScene
@@ -18,6 +19,10 @@ namespace Pandora.Deck
         /// It will be then loaded into the deck implementation by `Start()`
         ///</summary>
         public static List<Card> Deck;
+
+        public string ComponentName {
+        get => "HandBehaviour";
+    }
 
         Animator animator;
 
@@ -44,11 +49,14 @@ namespace Pandora.Deck
         }
 
         // Mulligan stuff
-        int mulligansAvailable = 1;
-        float mulliganSecondsLeft = 20f;
+        uint mulligansAvailable = 1;
+        uint mulliganSecDuration = 20;
         public GameObject MulliganTakeObject;
         public GameObject MulliganRejectObject;
         public GameObject MulliganTimerText;
+        private uint mulliganMsDuration;
+        private uint mulliganTimePassed;
+        private uint mulliganTimeLeft;
 
         void Start()
         {
@@ -64,7 +72,18 @@ namespace Pandora.Deck
             deck.EventBus.Subscribe<MulliganTaken>(new EventSubscriber<DeckEvent>(MulliganTaken, "MulliganTakenHandled"));
             deck.EventBus.Subscribe<MulliganRejected>(new EventSubscriber<DeckEvent>(MulliganRejected, "MulliganRejectedHandled"));
 
+            mulliganTimePassed = 0;
+            mulliganMsDuration = mulliganSecDuration * 1000;
+
             _instance = this;
+
+            // Assign this component to the engine
+            var engineComponent = GetComponent<EngineComponent>();
+
+            if (engineComponent != null) 
+            {
+                engineComponent.Engine.AddBehaviour(this);
+            }
 
             if (deck is LocalDeck localDeck)
             {
@@ -104,13 +123,14 @@ namespace Pandora.Deck
             }
         }
 
-        void Update()
+        public void TickUpdate(uint timeLapsed)
         {
+            mulliganTimePassed += timeLapsed;
+
             if (mulligansAvailable > 0)
             {
-                if (mulliganSecondsLeft <= 0) DisableMulligan();
+                if (mulliganTimePassed % mulliganMsDuration <= 0) DisableMulligan();
 
-                mulliganSecondsLeft -= Time.deltaTime;
                 UpdateMulliganText();
             }
         }
@@ -342,12 +362,16 @@ namespace Pandora.Deck
             {
                 return;
             }
-
+            
             var textComponent = MulliganTimerText.GetComponent<Text>();
-            var timerValue = mulliganSecondsLeft > 0 ? mulliganSecondsLeft : 0;
+            var timeLeft = mulliganMsDuration - mulliganTimePassed;
+
+            var mulliganTimer = TimeSpan
+                .FromMilliseconds(timeLeft)
+                .ToString(@"mm\:ss\:ff");
 
             textComponent.text =
-                $"Mulligan ends in {string.Format("{0:F1}", timerValue)} seconds";
+                $"Mulligan ends in {mulliganTimer} seconds";
         }
 
         void DisableMulliganUI()
