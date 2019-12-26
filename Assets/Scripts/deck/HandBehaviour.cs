@@ -125,10 +125,10 @@ namespace Pandora.Deck
 
         public void TickUpdate(uint timeLapsed)
         {
-            mulliganTimePassed += timeLapsed;
-
             if (mulligansAvailable > 0)
             {
+                mulliganTimePassed += timeLapsed;
+                
                 if (mulliganTimePassed % mulliganMsDuration <= 0) DisableMulligan();
 
                 UpdateMulliganText();
