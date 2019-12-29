@@ -130,6 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 92357916}
   - component: {fileID: 92357918}
+  - component: {fileID: 92357917}
   m_Layer: 5
   m_Name: DrawnCardContainer
   m_TagString: Untagged
@@ -156,6 +157,19 @@ RectTransform:
   m_AnchoredPosition: {x: -86, y: -89}
   m_SizeDelta: {x: 134.1, y: 140.5}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &92357917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 92357915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DebugEntity: 0
 --- !u!114 &92357918
 MonoBehaviour:
   m_ObjectHideFlags: 0

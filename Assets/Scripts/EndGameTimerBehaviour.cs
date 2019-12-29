@@ -86,7 +86,6 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
     {
         int bottomLowestHp = -1;
         int topLowestHp = -1;
-        int winnerSide = 0;
         List<GameObject> bottomTowers = new List<GameObject>();
         List<GameObject> topTowers = new List<GameObject>();
 
@@ -99,7 +98,7 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
 
             if (lifeComponent.lifeValue <= 0) continue;
 
-            switch (towerPositionComponent.WorldTowerPosition)
+            switch (towerPositionComponent.EngineTowerPosition)
             {
                 case TowerPosition.BottomMiddle:
                 case TowerPosition.BottomLeft:
@@ -125,20 +124,17 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
 
         // If a team has more towers...
         if (bottomTowers.Count > topTowers.Count)
-            winnerSide = 1;
+            return TeamComponent.bottomTeam;
         else if (topTowers.Count > bottomTowers.Count)
-            winnerSide = 2;
+            return TeamComponent.topTeam;
 
         // Checking for the tower with the lowest HP...
         if (bottomLowestHp > topLowestHp)
-            winnerSide = 1;
+            return TeamComponent.bottomTeam;
         else if (topLowestHp > bottomLowestHp)
-            winnerSide = 2; 
+            return TeamComponent.topTeam; 
         
-        // Checking which team actually won
-        if (winnerSide == 0 || TeamComponent.assignedTeam == 1) 
-            return winnerSide;
-        else
-            return winnerSide == 1 ? 2 : 1;
+        // Otherwise it's a draw...
+        return 0;
     }
 }

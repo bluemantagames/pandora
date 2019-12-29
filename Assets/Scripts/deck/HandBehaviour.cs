@@ -21,8 +21,8 @@ namespace Pandora.Deck
         public static List<Card> Deck;
 
         public string ComponentName {
-        get => "HandBehaviour";
-    }
+            get => "HandBehaviour";
+        }
 
         Animator animator;
 
