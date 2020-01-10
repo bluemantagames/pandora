@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Pandora.Deck;
 using Pandora.Deck.UI;
 using System.Collections.Generic;
@@ -8,16 +9,28 @@ using System.Linq;
 namespace Pandora.Network {
     public class TestMatchmakingButton: MonoBehaviour {
         public bool GameSceneToLoad = false;
+        public string DefaultUsername = "Anon";
+        public Text UsernameObject;
         List<Card> deck;
+        string username;
 
         public void Connect() {
             Logger.Debug("Connecting");
 
-            NetworkControllerSingleton.instance.StartMatchmaking();
+            deck = transform.parent.GetComponentInChildren<DeckSpotParentBehaviour>().Deck;
+            username = DefaultUsername;
+
+            if (UsernameObject.text.Length > 0) 
+            {
+                username = UsernameObject.text;
+            }
+
+            NetworkControllerSingleton.instance.StartMatchmaking(
+                username,
+                deck.ConvertAll(card => card.Name)
+            );
 
             NetworkControllerSingleton.instance.matchStartEvent.AddListener(LoadGameScene);
-
-            deck = transform.parent.GetComponentInChildren<DeckSpotParentBehaviour>().Deck;
 
             var deckWrapper = ScriptableObject.CreateInstance<DeckWrapper>();
 
@@ -35,8 +48,10 @@ namespace Pandora.Network {
             HandBehaviour.Deck = deck;
         }
 
-        public void StartMatch() {
-            NetworkControllerSingleton.instance.StartMatch();
+        public void StartMatch(string username, List<string> deck) {
+            NetworkControllerSingleton.instance.StartMatch(
+                new MatchParams(username, deck)
+            );
         }
 
         void LoadGameScene() {
@@ -44,7 +59,8 @@ namespace Pandora.Network {
         }
 
         void Update() {
-            if (GameSceneToLoad) {
+            if (GameSceneToLoad) 
+            {
                 SceneManager.LoadScene("GameScene");
 
                 GameSceneToLoad = false;
