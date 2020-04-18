@@ -16,7 +16,7 @@ namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {
-        bool isDebugBuild = false;
+        bool isDebugBuild = true;
 
         string matchmakingHost
         {
@@ -57,7 +57,7 @@ namespace Pandora.Network
 
         private NetworkControllerSingleton() { }
 
-        public void StartMatchmaking()
+        public void StartMatchmaking(String username, List<String> deck)
         {
             var client = new RestClient(matchmakingHost);
             var request = new RestRequest(matchmakingUrl, Method.GET);
@@ -74,15 +74,26 @@ namespace Pandora.Network
 
                 if (networkThread == null)
                 {
-                    networkThread = new Thread(new ThreadStart(StartMatch));
+                    networkThread = new Thread(new ParameterizedThreadStart(StartMatch));
 
-                    networkThread.Start();
+                    networkThread.Start(
+                        new MatchParams(username, deck)
+                    );
                 }
             });
         }
 
-        public void StartMatch()
+        public void StartMatch(object data)
         {
+            if (data.GetType() != typeof(MatchParams)) 
+            {
+                return;
+            }
+
+            Debug.Log("THREAD WORKING!");
+
+            MatchParams matchParams = (MatchParams)data;
+
             var matchHost = (isDebugBuild) ? "127.0.0.1" : "pocket-adventures.com";
             var matchPort = 9090;
             var dns = Dns.GetHostEntry(matchHost);
@@ -100,8 +111,11 @@ namespace Pandora.Network
 
             var join = new Join
             {
-                Token = matchToken
+                Token = matchToken,
+                Username = matchParams.Username
             };
+            
+            join.Deck.Add(matchParams.Deck);
 
             var envelope = new ClientEnvelope
             {
