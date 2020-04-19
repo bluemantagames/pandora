@@ -13,7 +13,7 @@
         /// 
         /// 1 by default (e.g. when client is not connected)
         ///</summary>
-        static public int assignedTeam = 2;
+        static public int assignedTeam = 1;
 
         /// <summary>Team that occupies the top of the map</summary>
         static public int topTeam = 2;

@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -497,6 +498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameSceneToLoad: 0
   DefaultUsername: Anon
+  ProdMatchmaking: 0
   UsernameObject: {fileID: 1741083110}
 --- !u!114 &186685742
 MonoBehaviour:
@@ -595,11 +597,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 728018212}
     m_Modifications:
-    - target: {fileID: 9070381787345277265, guid: fb164d07ffb23a84596e95088b1cc8ae,
-        type: 3}
-      propertyPath: m_Name
-      value: Mermaids
-      objectReference: {fileID: 0}
     - target: {fileID: 9070381787345277264, guid: fb164d07ffb23a84596e95088b1cc8ae,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -704,6 +701,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9070381787345277265, guid: fb164d07ffb23a84596e95088b1cc8ae,
+        type: 3}
+      propertyPath: m_Name
+      value: Mermaids
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb164d07ffb23a84596e95088b1cc8ae, type: 3}
@@ -3293,11 +3295,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 728018212}
     m_Modifications:
-    - target: {fileID: 3545436999122184297, guid: 1c4b8ebe9da50864fa253419f643bb5d,
-        type: 3}
-      propertyPath: m_Name
-      value: Fireball
-      objectReference: {fileID: 0}
     - target: {fileID: 3545436999122184296, guid: 1c4b8ebe9da50864fa253419f643bb5d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3403,6 +3400,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3545436999122184297, guid: 1c4b8ebe9da50864fa253419f643bb5d,
+        type: 3}
+      propertyPath: m_Name
+      value: Fireball
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c4b8ebe9da50864fa253419f643bb5d, type: 3}
 --- !u!224 &1967592298 stripped
@@ -3418,11 +3420,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 728018212}
     m_Modifications:
-    - target: {fileID: 1666105596513172271, guid: b1229fcc8d83ef04f811a8c54ddc2266,
-        type: 3}
-      propertyPath: m_Name
-      value: Bard
-      objectReference: {fileID: 0}
     - target: {fileID: 1666105596513172270, guid: b1229fcc8d83ef04f811a8c54ddc2266,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3527,6 +3524,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666105596513172271, guid: b1229fcc8d83ef04f811a8c54ddc2266,
+        type: 3}
+      propertyPath: m_Name
+      value: Bard
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1229fcc8d83ef04f811a8c54ddc2266, type: 3}
@@ -3793,11 +3795,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 728018212}
     m_Modifications:
-    - target: {fileID: 2226387889367678953, guid: 653c4b4654a561046908fcc5f4267534,
-        type: 3}
-      propertyPath: m_Name
-      value: Ranger
-      objectReference: {fileID: 0}
     - target: {fileID: 2226387889367678952, guid: 653c4b4654a561046908fcc5f4267534,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3902,6 +3899,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2226387889367678953, guid: 653c4b4654a561046908fcc5f4267534,
+        type: 3}
+      propertyPath: m_Name
+      value: Ranger
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 653c4b4654a561046908fcc5f4267534, type: 3}

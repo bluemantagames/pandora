@@ -16,16 +16,18 @@ namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {
-        bool isDebugBuild = true;
+        public bool isDebugBuild = Debug.isDebugBuild;
 
         string matchmakingHost
         {
             get
             {
+                Debug.Log($"Is debug build? {isDebugBuild}");
+
                 if (isDebugBuild)
                     return "http://localhost:8080";
                 else 
-                    return "http://pocket-adventures.com:8080";
+                    return "http://3bitpodcast.com:8080";
             }
         }
 
@@ -94,7 +96,7 @@ namespace Pandora.Network
 
             MatchParams matchParams = (MatchParams)data;
 
-            var matchHost = (isDebugBuild) ? "127.0.0.1" : "pocket-adventures.com";
+            var matchHost = (isDebugBuild) ? "127.0.0.1" : "3bitpodcast.com";
             var matchPort = 9090;
             var dns = Dns.GetHostEntry(matchHost);
 
