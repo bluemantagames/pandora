@@ -42,6 +42,8 @@ namespace Pandora.Network
                 deck.ConvertAll(card => card.Name)
             );
 
+            GameObject.Find("MatchmakingButton").GetComponent<Button>().interactable = false;
+
             NetworkControllerSingleton.instance.matchStartEvent.AddListener(LoadGameScene);
 
             var deckWrapper = ScriptableObject.CreateInstance<DeckWrapper>();
