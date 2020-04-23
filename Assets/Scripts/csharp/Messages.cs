@@ -33,21 +33,23 @@ namespace Pandora.Messages {
             "ASABKAkSCQoBeBgCIAEoBRIJCgF5GAMgASgFEhEKCW1hbmFfdXNlZBgGIAEo",
             "BSI7CgdDb21tYW5kEhEKCXBsYXllcl9pZBgFIAEoBRIMCgR0ZWFtGAQgASgF",
             "Eg8KB3VuaXRfaWQYByABKAkiJAoNTWF0Y2hGaW5pc2hlZBITCgt3aW5uZXJf",
-            "dGVhbRgBIAEoBSKCAQoEU3RlcBIWCg50aW1lX3Bhc3NlZF9tcxgBIAEoDRIv",
-            "Cghjb21tYW5kcxgCIAMoCzIdLnBhbmRvcmEubWVzc2FnZXMuU3RlcENvbW1h",
-            "bmQSMQoLcGxheWVyX2luZm8YAyADKAsyHC5wYW5kb3JhLm1lc3NhZ2VzLlBs",
-            "YXllckluZm8iiAEKC1N0ZXBDb21tYW5kEhEKCXRpbWVzdGFtcBgCIAEoBBIo",
-            "CgVzcGF3bhgBIAEoCzIXLnBhbmRvcmEubWVzc2FnZXMuU3Bhd25IABIxCgx1",
-            "bml0X2NvbW1hbmQYAyABKAsyGS5wYW5kb3JhLm1lc3NhZ2VzLkNvbW1hbmRI",
-            "AEIJCgdjb21tYW5kIuUBCg5DbGllbnRFbnZlbG9wZRINCgV0b2tlbhgDIAEo",
-            "CRImCgRqb2luGAIgASgLMhYucGFuZG9yYS5tZXNzYWdlcy5Kb2luSAASKAoF",
-            "c3Bhd24YASABKAsyFy5wYW5kb3JhLm1lc3NhZ2VzLlNwYXduSAASLAoHY29t",
-            "bWFuZBgEIAEoCzIZLnBhbmRvcmEubWVzc2FnZXMuQ29tbWFuZEgAEjkKDm1h",
-            "dGNoX2ZpbmlzaGVkGAUgASgLMh8ucGFuZG9yYS5tZXNzYWdlcy5NYXRjaEZp",
-            "bmlzaGVkSABCCQoHbWVzc2FnZSJtCg5TZXJ2ZXJFbnZlbG9wZRIoCgVzdGFy",
-            "dBgBIAEoCzIXLnBhbmRvcmEubWVzc2FnZXMuU3RhcnRIABImCgRzdGVwGAMg",
-            "ASgLMhYucGFuZG9yYS5tZXNzYWdlcy5TdGVwSABCCQoHbWVzc2FnZWIGcHJv",
-            "dG8z"));
+            "dGVhbRgBIAEoBSI1Cg5FbmdpbmVTbmFwc2hvdBIQCghzbmFwc2hvdBgBIAEo",
+            "CRIRCgl0aW1lc3RhbXAYAiABKAQiggEKBFN0ZXASFgoOdGltZV9wYXNzZWRf",
+            "bXMYASABKA0SLwoIY29tbWFuZHMYAiADKAsyHS5wYW5kb3JhLm1lc3NhZ2Vz",
+            "LlN0ZXBDb21tYW5kEjEKC3BsYXllcl9pbmZvGAMgAygLMhwucGFuZG9yYS5t",
+            "ZXNzYWdlcy5QbGF5ZXJJbmZvIogBCgtTdGVwQ29tbWFuZBIRCgl0aW1lc3Rh",
+            "bXAYAiABKAQSKAoFc3Bhd24YASABKAsyFy5wYW5kb3JhLm1lc3NhZ2VzLlNw",
+            "YXduSAASMQoMdW5pdF9jb21tYW5kGAMgASgLMhkucGFuZG9yYS5tZXNzYWdl",
+            "cy5Db21tYW5kSABCCQoHY29tbWFuZCKiAgoOQ2xpZW50RW52ZWxvcGUSDQoF",
+            "dG9rZW4YAyABKAkSJgoEam9pbhgCIAEoCzIWLnBhbmRvcmEubWVzc2FnZXMu",
+            "Sm9pbkgAEigKBXNwYXduGAEgASgLMhcucGFuZG9yYS5tZXNzYWdlcy5TcGF3",
+            "bkgAEiwKB2NvbW1hbmQYBCABKAsyGS5wYW5kb3JhLm1lc3NhZ2VzLkNvbW1h",
+            "bmRIABI5Cg5tYXRjaF9maW5pc2hlZBgFIAEoCzIfLnBhbmRvcmEubWVzc2Fn",
+            "ZXMuTWF0Y2hGaW5pc2hlZEgAEjsKD2VuZ2luZV9zbmFwc2hvdBgGIAEoCzIg",
+            "LnBhbmRvcmEubWVzc2FnZXMuRW5naW5lU25hcHNob3RIAEIJCgdtZXNzYWdl",
+            "Im0KDlNlcnZlckVudmVsb3BlEigKBXN0YXJ0GAEgASgLMhcucGFuZG9yYS5t",
+            "ZXNzYWdlcy5TdGFydEgAEiYKBHN0ZXAYAyABKAsyFi5wYW5kb3JhLm1lc3Nh",
+            "Z2VzLlN0ZXBIAEIJCgdtZXNzYWdlYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -57,9 +59,10 @@ namespace Pandora.Messages {
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Spawn), global::Pandora.Messages.Spawn.Parser, new[]{ "PlayerId", "Team", "UnitId", "UnitName", "X", "Y", "ManaUsed" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Command), global::Pandora.Messages.Command.Parser, new[]{ "PlayerId", "Team", "UnitId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.MatchFinished), global::Pandora.Messages.MatchFinished.Parser, new[]{ "WinnerTeam" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.EngineSnapshot), global::Pandora.Messages.EngineSnapshot.Parser, new[]{ "Snapshot", "Timestamp" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Step), global::Pandora.Messages.Step.Parser, new[]{ "TimePassedMs", "Commands", "PlayerInfo" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.StepCommand), global::Pandora.Messages.StepCommand.Parser, new[]{ "Timestamp", "Spawn", "UnitCommand" }, new[]{ "Command" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.ClientEnvelope), global::Pandora.Messages.ClientEnvelope.Parser, new[]{ "Token", "Join", "Spawn", "Command", "MatchFinished" }, new[]{ "Message" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.ClientEnvelope), global::Pandora.Messages.ClientEnvelope.Parser, new[]{ "Token", "Join", "Spawn", "Command", "MatchFinished", "EngineSnapshot" }, new[]{ "Message" }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.ServerEnvelope), global::Pandora.Messages.ServerEnvelope.Parser, new[]{ "Start", "Step" }, new[]{ "Message" }, null, null)
           }));
     }
@@ -1247,6 +1250,167 @@ namespace Pandora.Messages {
   }
 
   /// <summary>
+  /// Used to send a snapshot of the engine
+  /// in a specific moment
+  /// </summary>
+  public sealed partial class EngineSnapshot : pb::IMessage<EngineSnapshot> {
+    private static readonly pb::MessageParser<EngineSnapshot> _parser = new pb::MessageParser<EngineSnapshot>(() => new EngineSnapshot());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<EngineSnapshot> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[6]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EngineSnapshot() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EngineSnapshot(EngineSnapshot other) : this() {
+      snapshot_ = other.snapshot_;
+      timestamp_ = other.timestamp_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EngineSnapshot Clone() {
+      return new EngineSnapshot(this);
+    }
+
+    /// <summary>Field number for the "snapshot" field.</summary>
+    public const int SnapshotFieldNumber = 1;
+    private string snapshot_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Snapshot {
+      get { return snapshot_; }
+      set {
+        snapshot_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "timestamp" field.</summary>
+    public const int TimestampFieldNumber = 2;
+    private ulong timestamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong Timestamp {
+      get { return timestamp_; }
+      set {
+        timestamp_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as EngineSnapshot);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(EngineSnapshot other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Snapshot != other.Snapshot) return false;
+      if (Timestamp != other.Timestamp) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Snapshot.Length != 0) hash ^= Snapshot.GetHashCode();
+      if (Timestamp != 0UL) hash ^= Timestamp.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Snapshot.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Snapshot);
+      }
+      if (Timestamp != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(Timestamp);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Snapshot.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Snapshot);
+      }
+      if (Timestamp != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(Timestamp);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(EngineSnapshot other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Snapshot.Length != 0) {
+        Snapshot = other.Snapshot;
+      }
+      if (other.Timestamp != 0UL) {
+        Timestamp = other.Timestamp;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Snapshot = input.ReadString();
+            break;
+          }
+          case 16: {
+            Timestamp = input.ReadUInt64();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
   /// Represents a LockStep step
   /// </summary>
   public sealed partial class Step : pb::IMessage<Step> {
@@ -1257,7 +1421,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[6]; }
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1432,7 +1596,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[7]; }
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1670,7 +1834,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[8]; }
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1700,6 +1864,9 @@ namespace Pandora.Messages {
           break;
         case MessageOneofCase.MatchFinished:
           MatchFinished = other.MatchFinished.Clone();
+          break;
+        case MessageOneofCase.EngineSnapshot:
+          EngineSnapshot = other.EngineSnapshot.Clone();
           break;
       }
 
@@ -1766,6 +1933,17 @@ namespace Pandora.Messages {
       }
     }
 
+    /// <summary>Field number for the "engine_snapshot" field.</summary>
+    public const int EngineSnapshotFieldNumber = 6;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Pandora.Messages.EngineSnapshot EngineSnapshot {
+      get { return messageCase_ == MessageOneofCase.EngineSnapshot ? (global::Pandora.Messages.EngineSnapshot) message_ : null; }
+      set {
+        message_ = value;
+        messageCase_ = value == null ? MessageOneofCase.None : MessageOneofCase.EngineSnapshot;
+      }
+    }
+
     private object message_;
     /// <summary>Enum of possible cases for the "message" oneof.</summary>
     public enum MessageOneofCase {
@@ -1774,6 +1952,7 @@ namespace Pandora.Messages {
       Spawn = 1,
       Command = 4,
       MatchFinished = 5,
+      EngineSnapshot = 6,
     }
     private MessageOneofCase messageCase_ = MessageOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1805,6 +1984,7 @@ namespace Pandora.Messages {
       if (!object.Equals(Spawn, other.Spawn)) return false;
       if (!object.Equals(Command, other.Command)) return false;
       if (!object.Equals(MatchFinished, other.MatchFinished)) return false;
+      if (!object.Equals(EngineSnapshot, other.EngineSnapshot)) return false;
       if (MessageCase != other.MessageCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1817,6 +1997,7 @@ namespace Pandora.Messages {
       if (messageCase_ == MessageOneofCase.Spawn) hash ^= Spawn.GetHashCode();
       if (messageCase_ == MessageOneofCase.Command) hash ^= Command.GetHashCode();
       if (messageCase_ == MessageOneofCase.MatchFinished) hash ^= MatchFinished.GetHashCode();
+      if (messageCase_ == MessageOneofCase.EngineSnapshot) hash ^= EngineSnapshot.GetHashCode();
       hash ^= (int) messageCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1851,6 +2032,10 @@ namespace Pandora.Messages {
         output.WriteRawTag(42);
         output.WriteMessage(MatchFinished);
       }
+      if (messageCase_ == MessageOneofCase.EngineSnapshot) {
+        output.WriteRawTag(50);
+        output.WriteMessage(EngineSnapshot);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1873,6 +2058,9 @@ namespace Pandora.Messages {
       }
       if (messageCase_ == MessageOneofCase.MatchFinished) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(MatchFinished);
+      }
+      if (messageCase_ == MessageOneofCase.EngineSnapshot) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(EngineSnapshot);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1912,6 +2100,12 @@ namespace Pandora.Messages {
             MatchFinished = new global::Pandora.Messages.MatchFinished();
           }
           MatchFinished.MergeFrom(other.MatchFinished);
+          break;
+        case MessageOneofCase.EngineSnapshot:
+          if (EngineSnapshot == null) {
+            EngineSnapshot = new global::Pandora.Messages.EngineSnapshot();
+          }
+          EngineSnapshot.MergeFrom(other.EngineSnapshot);
           break;
       }
 
@@ -1966,6 +2160,15 @@ namespace Pandora.Messages {
             MatchFinished = subBuilder;
             break;
           }
+          case 50: {
+            global::Pandora.Messages.EngineSnapshot subBuilder = new global::Pandora.Messages.EngineSnapshot();
+            if (messageCase_ == MessageOneofCase.EngineSnapshot) {
+              subBuilder.MergeFrom(EngineSnapshot);
+            }
+            input.ReadMessage(subBuilder);
+            EngineSnapshot = subBuilder;
+            break;
+          }
         }
       }
     }
@@ -1983,7 +2186,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[9]; }
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
