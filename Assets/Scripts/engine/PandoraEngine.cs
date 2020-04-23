@@ -213,7 +213,6 @@ namespace Pandora.Engine
 
             entity.IsEvading = false;
 
-
             foreach (var (bounds, _) in unitsBounds)
             {
                 ReturnBounds(bounds);

@@ -15,7 +15,7 @@ using System.Threading;
 
 namespace Pandora.Movement
 {
-    public class MovementComponent : MonoBehaviour, CollisionCallback, MovementBehaviour, AsyncEngineBehaviour
+    public class MovementComponent : MonoBehaviour, CollisionCallback, MovementBehaviour
     {
         Rigidbody2D body;
         GridCell currentTarget;
@@ -265,7 +265,6 @@ namespace Pandora.Movement
             if (pathCount >= 1) return;
 
             pathfindingSampler.Begin();
-            engineEntity.SetSpeed(Speed);
 
             var currentPosition = CurrentCellPosition();
             var target = targetEnemy.enemyCell;
@@ -320,12 +319,6 @@ namespace Pandora.Movement
                 lastCollisionPosition = engineEntity.Position;
             }
 
-        }
-
-        public Task AsyncTickUpdate(uint timeLapsed)
-        {
-            return factory.StartNew(() => {
-            });
         }
     }
 }

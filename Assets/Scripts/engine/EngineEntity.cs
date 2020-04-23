@@ -92,7 +92,6 @@ namespace Pandora.Engine
         public void SetEmptyPath()
         {
             Path = null;
-            Speed = 0;
         }
 
         // This method actually sets the target at the _current_ entity position,
