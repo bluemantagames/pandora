@@ -5,6 +5,7 @@ using System;
 namespace Pandora.Engine
 {
     // An entity inside the engine
+    [Serializable]
     public class EngineEntity
     {
         public int Speed; // units / tick

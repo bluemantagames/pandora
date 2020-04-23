@@ -6,11 +6,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Profiling;
 using Pandora.Engine.Grid;
+using Pandora.Network;
+using Pandora.Network.Messages;
 using System.Threading.Tasks;
 using System.Threading;
 
 namespace Pandora.Engine
 {
+    [Serializable]
     public class PandoraEngine : ScriptableObject
     {
         public uint TickTime = 40; // milliseconds in a tick
@@ -37,6 +40,14 @@ namespace Pandora.Engine
 
         // Debug settings
         float debugLinesDuration = 1f;
+
+        // Engine snapshow settinsg
+        static uint snapshotEveryNTick = 10;
+        uint snapshotTickCountdown = snapshotEveryNTick;
+
+        // This is used just to serialize the behaviours
+        [SerializeField]
+        List<SerializableEngineBehaviour> serializableBehaviours = new List<SerializableEngineBehaviour> { };
 
         public void Init(MapComponent map)
         {
@@ -501,6 +512,33 @@ namespace Pandora.Engine
             foreach (var behaviour in Behaviours)
             {
                 behaviour.TickUpdate(TickTime);
+            }
+
+            // Snapshot
+            snapshotTickCountdown = snapshotTickCountdown - 1;
+
+            if (snapshotTickCountdown >= 0)
+            {
+                serializableBehaviours.Clear();
+
+                foreach (var behaviour in Behaviours) 
+                {
+                    serializableBehaviours.Add(new SerializableEngineBehaviour(behaviour.ComponentName));
+                }
+
+                var engineSnapshot = JsonUtility.ToJson(this);
+
+                var snapshotMessage = new EngineSnapshotMessage
+                {
+                    Snapshot = engineSnapshot,
+                    Timestamp = DateTime.Now
+                };
+
+                Debug.Log($"[JSON] {engineSnapshot}");
+
+                NetworkControllerSingleton.instance.EnqueueMessage(snapshotMessage);
+                
+                snapshotTickCountdown = snapshotEveryNTick;
             }
         }
 
