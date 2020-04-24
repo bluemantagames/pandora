@@ -20,12 +20,12 @@ namespace Pandora.Engine
         public int UnitsPerCell = 400; // physics engine units per grid cell
         public List<EngineEntity> Entities = new List<EngineEntity> { };
         public List<EngineBehaviour> Behaviours = new List<EngineBehaviour> { };
-        public MapComponent Map;
+        [NonSerialized] public MapComponent Map;
         public uint totalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
         CustomSampler collisionsSampler, collisionsSolveSampler, collisionsCheckSampler, collisionsCallbackSampler, movementSampler, scriptSampler, gridSampler, enginePathfindingSampler;
 
-        public bool DebugEngine;
+        [NonSerialized] public bool DebugEngine;
 
         Decimal DPi = new Decimal(3.141592653589);
 
