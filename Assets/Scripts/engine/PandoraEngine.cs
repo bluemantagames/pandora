@@ -42,8 +42,7 @@ namespace Pandora.Engine
         float debugLinesDuration = 1f;
 
         // Engine snapshow settinsg
-        static uint snapshotEveryNTick = 10;
-        uint snapshotTickCountdown = snapshotEveryNTick;
+        static uint snapshotEvery = 200;
 
         // This is used just to serialize the behaviours
         [SerializeField]
@@ -515,31 +514,31 @@ namespace Pandora.Engine
             }
 
             // Snapshot
-            snapshotTickCountdown = snapshotTickCountdown - 1;
-
-            if (snapshotTickCountdown >= 0)
+            if (totalElapsed % snapshotEvery == 0)
             {
-                serializableBehaviours.Clear();
-
-                foreach (var behaviour in Behaviours) 
-                {
-                    serializableBehaviours.Add(new SerializableEngineBehaviour(behaviour.ComponentName));
-                }
-
-                var engineSnapshot = JsonUtility.ToJson(this);
-
-                var snapshotMessage = new EngineSnapshotMessage
-                {
-                    Snapshot = engineSnapshot,
-                    Timestamp = DateTime.Now
-                };
-
-                Debug.Log($"[JSON] {engineSnapshot}");
-
-                NetworkControllerSingleton.instance.EnqueueMessage(snapshotMessage);
-                
-                snapshotTickCountdown = snapshotEveryNTick;
+                sendEngineSnapshot();
             }
+        }
+
+        void sendEngineSnapshot()
+        {
+            serializableBehaviours.Clear();
+
+            foreach (var behaviour in Behaviours) 
+            {
+                serializableBehaviours.Add(new SerializableEngineBehaviour(behaviour.ComponentName));
+            }
+
+            var engineSnapshot = JsonUtility.ToJson(this);
+
+            var snapshotMessage = new EngineSnapshotMessage
+            {
+                Snapshot = engineSnapshot,
+                Timestamp = DateTime.Now,
+                ElapsedMs = totalElapsed
+            };
+
+            NetworkControllerSingleton.instance.EnqueueMessage(snapshotMessage);
         }
 
         public void DrawDebugGUI()

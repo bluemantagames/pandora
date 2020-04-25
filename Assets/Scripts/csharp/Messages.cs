@@ -33,23 +33,24 @@ namespace Pandora.Messages {
             "ASABKAkSCQoBeBgCIAEoBRIJCgF5GAMgASgFEhEKCW1hbmFfdXNlZBgGIAEo",
             "BSI7CgdDb21tYW5kEhEKCXBsYXllcl9pZBgFIAEoBRIMCgR0ZWFtGAQgASgF",
             "Eg8KB3VuaXRfaWQYByABKAkiJAoNTWF0Y2hGaW5pc2hlZBITCgt3aW5uZXJf",
-            "dGVhbRgBIAEoBSI1Cg5FbmdpbmVTbmFwc2hvdBIQCghzbmFwc2hvdBgBIAEo",
-            "CRIRCgl0aW1lc3RhbXAYAiABKAQiggEKBFN0ZXASFgoOdGltZV9wYXNzZWRf",
-            "bXMYASABKA0SLwoIY29tbWFuZHMYAiADKAsyHS5wYW5kb3JhLm1lc3NhZ2Vz",
-            "LlN0ZXBDb21tYW5kEjEKC3BsYXllcl9pbmZvGAMgAygLMhwucGFuZG9yYS5t",
-            "ZXNzYWdlcy5QbGF5ZXJJbmZvIogBCgtTdGVwQ29tbWFuZBIRCgl0aW1lc3Rh",
-            "bXAYAiABKAQSKAoFc3Bhd24YASABKAsyFy5wYW5kb3JhLm1lc3NhZ2VzLlNw",
-            "YXduSAASMQoMdW5pdF9jb21tYW5kGAMgASgLMhkucGFuZG9yYS5tZXNzYWdl",
-            "cy5Db21tYW5kSABCCQoHY29tbWFuZCKiAgoOQ2xpZW50RW52ZWxvcGUSDQoF",
-            "dG9rZW4YAyABKAkSJgoEam9pbhgCIAEoCzIWLnBhbmRvcmEubWVzc2FnZXMu",
-            "Sm9pbkgAEigKBXNwYXduGAEgASgLMhcucGFuZG9yYS5tZXNzYWdlcy5TcGF3",
-            "bkgAEiwKB2NvbW1hbmQYBCABKAsyGS5wYW5kb3JhLm1lc3NhZ2VzLkNvbW1h",
-            "bmRIABI5Cg5tYXRjaF9maW5pc2hlZBgFIAEoCzIfLnBhbmRvcmEubWVzc2Fn",
-            "ZXMuTWF0Y2hGaW5pc2hlZEgAEjsKD2VuZ2luZV9zbmFwc2hvdBgGIAEoCzIg",
-            "LnBhbmRvcmEubWVzc2FnZXMuRW5naW5lU25hcHNob3RIAEIJCgdtZXNzYWdl",
-            "Im0KDlNlcnZlckVudmVsb3BlEigKBXN0YXJ0GAEgASgLMhcucGFuZG9yYS5t",
-            "ZXNzYWdlcy5TdGFydEgAEiYKBHN0ZXAYAyABKAsyFi5wYW5kb3JhLm1lc3Nh",
-            "Z2VzLlN0ZXBIAEIJCgdtZXNzYWdlYgZwcm90bzM="));
+            "dGVhbRgBIAEoBSJJCg5FbmdpbmVTbmFwc2hvdBIQCghzbmFwc2hvdBgBIAEo",
+            "CRIRCgl0aW1lc3RhbXAYAiABKAQSEgoKZWxhcHNlZF9tcxgDIAEoBCKCAQoE",
+            "U3RlcBIWCg50aW1lX3Bhc3NlZF9tcxgBIAEoDRIvCghjb21tYW5kcxgCIAMo",
+            "CzIdLnBhbmRvcmEubWVzc2FnZXMuU3RlcENvbW1hbmQSMQoLcGxheWVyX2lu",
+            "Zm8YAyADKAsyHC5wYW5kb3JhLm1lc3NhZ2VzLlBsYXllckluZm8iiAEKC1N0",
+            "ZXBDb21tYW5kEhEKCXRpbWVzdGFtcBgCIAEoBBIoCgVzcGF3bhgBIAEoCzIX",
+            "LnBhbmRvcmEubWVzc2FnZXMuU3Bhd25IABIxCgx1bml0X2NvbW1hbmQYAyAB",
+            "KAsyGS5wYW5kb3JhLm1lc3NhZ2VzLkNvbW1hbmRIAEIJCgdjb21tYW5kIqIC",
+            "Cg5DbGllbnRFbnZlbG9wZRINCgV0b2tlbhgDIAEoCRImCgRqb2luGAIgASgL",
+            "MhYucGFuZG9yYS5tZXNzYWdlcy5Kb2luSAASKAoFc3Bhd24YASABKAsyFy5w",
+            "YW5kb3JhLm1lc3NhZ2VzLlNwYXduSAASLAoHY29tbWFuZBgEIAEoCzIZLnBh",
+            "bmRvcmEubWVzc2FnZXMuQ29tbWFuZEgAEjkKDm1hdGNoX2ZpbmlzaGVkGAUg",
+            "ASgLMh8ucGFuZG9yYS5tZXNzYWdlcy5NYXRjaEZpbmlzaGVkSAASOwoPZW5n",
+            "aW5lX3NuYXBzaG90GAYgASgLMiAucGFuZG9yYS5tZXNzYWdlcy5FbmdpbmVT",
+            "bmFwc2hvdEgAQgkKB21lc3NhZ2UibQoOU2VydmVyRW52ZWxvcGUSKAoFc3Rh",
+            "cnQYASABKAsyFy5wYW5kb3JhLm1lc3NhZ2VzLlN0YXJ0SAASJgoEc3RlcBgD",
+            "IAEoCzIWLnBhbmRvcmEubWVzc2FnZXMuU3RlcEgAQgkKB21lc3NhZ2ViBnBy",
+            "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -59,7 +60,7 @@ namespace Pandora.Messages {
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Spawn), global::Pandora.Messages.Spawn.Parser, new[]{ "PlayerId", "Team", "UnitId", "UnitName", "X", "Y", "ManaUsed" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Command), global::Pandora.Messages.Command.Parser, new[]{ "PlayerId", "Team", "UnitId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.MatchFinished), global::Pandora.Messages.MatchFinished.Parser, new[]{ "WinnerTeam" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.EngineSnapshot), global::Pandora.Messages.EngineSnapshot.Parser, new[]{ "Snapshot", "Timestamp" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.EngineSnapshot), global::Pandora.Messages.EngineSnapshot.Parser, new[]{ "Snapshot", "Timestamp", "ElapsedMs" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Step), global::Pandora.Messages.Step.Parser, new[]{ "TimePassedMs", "Commands", "PlayerInfo" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.StepCommand), global::Pandora.Messages.StepCommand.Parser, new[]{ "Timestamp", "Spawn", "UnitCommand" }, new[]{ "Command" }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.ClientEnvelope), global::Pandora.Messages.ClientEnvelope.Parser, new[]{ "Token", "Join", "Spawn", "Command", "MatchFinished", "EngineSnapshot" }, new[]{ "Message" }, null, null),
@@ -1280,6 +1281,7 @@ namespace Pandora.Messages {
     public EngineSnapshot(EngineSnapshot other) : this() {
       snapshot_ = other.snapshot_;
       timestamp_ = other.timestamp_;
+      elapsedMs_ = other.elapsedMs_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1310,6 +1312,17 @@ namespace Pandora.Messages {
       }
     }
 
+    /// <summary>Field number for the "elapsed_ms" field.</summary>
+    public const int ElapsedMsFieldNumber = 3;
+    private ulong elapsedMs_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong ElapsedMs {
+      get { return elapsedMs_; }
+      set {
+        elapsedMs_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as EngineSnapshot);
@@ -1325,6 +1338,7 @@ namespace Pandora.Messages {
       }
       if (Snapshot != other.Snapshot) return false;
       if (Timestamp != other.Timestamp) return false;
+      if (ElapsedMs != other.ElapsedMs) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1333,6 +1347,7 @@ namespace Pandora.Messages {
       int hash = 1;
       if (Snapshot.Length != 0) hash ^= Snapshot.GetHashCode();
       if (Timestamp != 0UL) hash ^= Timestamp.GetHashCode();
+      if (ElapsedMs != 0UL) hash ^= ElapsedMs.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1354,6 +1369,10 @@ namespace Pandora.Messages {
         output.WriteRawTag(16);
         output.WriteUInt64(Timestamp);
       }
+      if (ElapsedMs != 0UL) {
+        output.WriteRawTag(24);
+        output.WriteUInt64(ElapsedMs);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1367,6 +1386,9 @@ namespace Pandora.Messages {
       }
       if (Timestamp != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(Timestamp);
+      }
+      if (ElapsedMs != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(ElapsedMs);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1385,6 +1407,9 @@ namespace Pandora.Messages {
       if (other.Timestamp != 0UL) {
         Timestamp = other.Timestamp;
       }
+      if (other.ElapsedMs != 0UL) {
+        ElapsedMs = other.ElapsedMs;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1402,6 +1427,10 @@ namespace Pandora.Messages {
           }
           case 16: {
             Timestamp = input.ReadUInt64();
+            break;
+          }
+          case 24: {
+            ElapsedMs = input.ReadUInt64();
             break;
           }
         }
