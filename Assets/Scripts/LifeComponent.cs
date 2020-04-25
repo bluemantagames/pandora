@@ -16,7 +16,7 @@ namespace Pandora
         float maskOriginalSize;
         public int maxLife;
         public bool IsDead = false;
-        public Vector2Int? LastPosition = null;
+        public GridCell DeathPosition = null;
 
         // Start is called before the first frame update
         void Start()
@@ -69,10 +69,10 @@ namespace Pandora
             Destroy(gameObject, 1000);
         }
 
-        private void SetLastPosition()
+        private void SetDeathPosition()
         {
             var sourceEntity = GetComponent<EngineComponent>().Entity;
-            LastPosition = sourceEntity.GetCurrentCell().vector;
+            DeathPosition = sourceEntity.GetCurrentCell();
         }
 
         public void AssignDamage(int value)
@@ -105,7 +105,7 @@ namespace Pandora
                     CommandViewportBehaviour.Instance.RemoveCommand(idComponent.Id);
                 }
 
-                SetLastPosition();
+                SetDeathPosition();
                 Remove();
 
                 Logger.Debug("BB I'M DYING");
