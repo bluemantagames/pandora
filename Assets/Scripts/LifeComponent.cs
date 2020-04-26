@@ -28,7 +28,7 @@ namespace Pandora
 
             maskOriginalSize = mask.rectTransform.rect.width;
             maxLife = lifeValue;
-         
+
             healthbarBehaviour.DrawSeparators();
         }
 
@@ -58,8 +58,10 @@ namespace Pandora
                 engineComponent.Remove();
             }
 
-            foreach (var towerCombatBehaviour in MapComponent.Instance.gameObject.GetComponentsInChildren<TowerCombatBehaviour>()) {
-                if (towerCombatBehaviour.CurrentTarget == gameObject) {
+            foreach (var towerCombatBehaviour in MapComponent.Instance.gameObject.GetComponentsInChildren<TowerCombatBehaviour>())
+            {
+                if (towerCombatBehaviour.CurrentTarget == gameObject)
+                {
                     towerCombatBehaviour.StopAttacking();
                 }
             }
@@ -75,17 +77,29 @@ namespace Pandora
             DeathPosition = sourceEntity.GetCurrentCell();
         }
 
+        public void Heal(int amount)
+        {
+            lifeValue += amount;
+
+
+            if (lifeValue > maxLife)
+            {
+                lifeValue = maxLife;
+            }
+
+            RefreshHealthbar();
+        }
+
         public void AssignDamage(int value)
         {
             lifeValue -= value;
 
-            float lifePercent = (float)lifeValue / (float)maxLife;
-            var idComponent = GetComponent<UnitIdComponent>();
-
-            mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
+            RefreshHealthbar();
 
             if (lifeValue <= 0)
             {
+                var idComponent = GetComponent<UnitIdComponent>();
+
                 IsDead = true;
                 GetComponent<CombatBehaviour>().OnDead();
 
@@ -113,9 +127,9 @@ namespace Pandora
                 // Check if the component is a middle tower
                 var towerPositionComponent = GetComponent<TowerPositionComponent>();
 
-                if (towerPositionComponent != null) 
+                if (towerPositionComponent != null)
                 {
-                    switch(towerPositionComponent.WorldTowerPosition)
+                    switch (towerPositionComponent.WorldTowerPosition)
                     {
                         case TowerPosition.BottomMiddle:
                             EndGameSingleton.Instance.SetWinner(
@@ -128,13 +142,21 @@ namespace Pandora
                             EndGameSingleton.Instance.SetWinner(
                                 TeamComponent.assignedTeam
                             );
-                            break; 
+                            break;
                     }
                 }
 
                 // TODO: Play "die" animation
             }
         }
+
+        void RefreshHealthbar()
+        {
+            float lifePercent = (float)lifeValue / (float)maxLife;
+
+            mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
+        }
+
     }
 
 }
