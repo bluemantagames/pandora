@@ -1,6 +1,7 @@
 using UnityEditor;
 using System.Linq;
 using System;
+using System.Diagnostics;
 
 static class BuildCommand
 {
@@ -121,23 +122,25 @@ static class BuildCommand
     static void PerformBuild()
     {
         Console.WriteLine(":: Performing build");
-        EditorPrefs.SetString("AndroidSdkRoot", getEnv("ANDROID_HOME"));
-        string java_home = "/usr/lib/jvm/java-8-openjdk-amd64/" + "bin";
-        Console.WriteLine(":: JavaHome: {0}", java_home);
-        EditorPrefs.SetString("JdkPath", java_home);
-        EditorPrefs.SetString("AndroidNdkRoot", getEnv("ANDROID_NDK_HOME"));
 
-        //PlayerSettings.keystorePass = getEnv ("KEYSTORE_PASS", true);
-        //PlayerSettings.keyaliasPass = getEnv ("KEY_ALIAS_PASS", true);
-        //EditorSetup.AndroidSdkRoot = getEnv ("ANDROID_SDK_HOME");
-        //EditorSetup.JdkRoot = getEnv ("JAVA_HOME");
-        //EditorSetup.AndroidNdkRoot = getEnv ("ANDROID_NDK_HOME");
-        var buildTarget = GetBuildTarget();
-        var buildPath = GetBuildPath();
-        var buildName = GetBuildName();
-        var fixedBuildPath = GetFixedBuildPath(buildTarget, buildPath, buildName);
+        var path = EditorUtility.SaveFolderPanel("Choose Location of apk", "", "androidbuild");
+        var p = new Process();
 
-        BuildPipeline.BuildPlayer(GetEnabledScenes(), fixedBuildPath, buildTarget, GetBuildOptions());
+        p.StartInfo.UseShellExecute = false;
+        p.StartInfo.RedirectStandardOutput = true;
+        p.StartInfo.FileName = "cmd.exe";
+        p.StartInfo.Arguments = "/c git describe --tags";
+
+        p.Start();
+
+        var output = p.StandardOutput.ReadToEnd();
+
+        p.WaitForExit();
+
+        PlayerSettings.bundleVersion = output.Trim();
+
+        BuildPipeline.BuildPlayer(GetEnabledScenes(), path + "/pandora.apk", BuildTarget.Android, GetBuildOptions());
+
         Console.WriteLine(":: Done with build");
     }
 }
