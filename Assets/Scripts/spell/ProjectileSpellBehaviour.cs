@@ -41,14 +41,7 @@ namespace Pandora.Spell
         // Update is called once per frame
         void Update()
         {
-            if (TeamComponent.assignedTeam == TeamComponent.topTeam)
-            {
-                transform.position = entityComponent.Entity.GetFlippedWorldPosition();
-            }
-            else
-            {
-                transform.position = entityComponent.Entity.GetWorldPosition();
-            }
+            transform.position = entityComponent.Entity.GetWorldPosition();
         }
     }
 }

@@ -17,10 +17,12 @@ namespace Pandora.Engine
 
         public Bounds Bounds;
 
-        public GameObject GameObject {
+        public GameObject GameObject
+        {
             get => _gameObject;
 
-            set {
+            set
+            {
                 _gameObject = value;
 
                 Bounds = _gameObject.GetComponent<BoxCollider2D>().bounds;
@@ -60,7 +62,7 @@ namespace Pandora.Engine
                 Path = FindPath(Position, Target);
             }
         }
- 
+
         public IEnumerator<Vector2Int> FindPath(Vector2Int position, Vector2Int target)
         {
             if (IsEvading)
@@ -81,7 +83,8 @@ namespace Pandora.Engine
         {
             Target = target;
 
-            if (!IsEvading) {
+            if (!IsEvading)
+            {
                 Target.x += Engine.UnitsPerCell / 2;
                 Target.y += Engine.UnitsPerCell / 2;
             }
@@ -106,15 +109,10 @@ namespace Pandora.Engine
             return Engine.PhysicsToGridCell(Position);
         }
 
-        public Vector2 GetWorldPosition()
-        {
-            return Engine.PhysicsToMap(Position);
-        }
-
-        public Vector2 GetFlippedWorldPosition()
-        {
-            return Engine.FlippedPhysicsToMap(Position);
-        }
+        /// <summary>Calculates the world position already adjusted for the map
+        /// and the team</summary>
+        public Vector2 GetWorldPosition() =>
+            Engine.PhysicsToMapWorld(Position);
 
         public List<EngineEntity> FindInHitboxRange(int engineUnitsRange, bool countStructures)
         {

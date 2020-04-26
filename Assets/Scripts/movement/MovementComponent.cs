@@ -119,10 +119,7 @@ namespace Pandora.Movement
 
             var isTargetDead = targetEnemy?.enemy.GetComponent<LifeComponent>().IsDead ?? true;
 
-            transform.position =
-                (TeamComponent.assignedTeam == TeamComponent.bottomTeam) ?
-                    engineEntity.GetWorldPosition() :
-                    engineEntity.GetFlippedWorldPosition();
+            transform.position = engineEntity.GetWorldPosition();
 
             // if you're attacking an enemy: keep attacking
             if (targetEnemy != null && combatBehaviour.IsInAttackRange(targetEnemy) && !isTargetDead)

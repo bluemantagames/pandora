@@ -511,10 +511,10 @@ namespace Pandora.Engine
 
                 var rect = Rect.zero;
 
-                rect.xMin = Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.UpperLeft)).x;
-                rect.yMin = ScreenToGUISpace(Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.UpperLeft))).y;
-                rect.xMax = Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.UpperRight)).x;
-                rect.yMax = ScreenToGUISpace(Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.LowerLeft))).y;
+                rect.xMin = Camera.main.WorldToScreenPoint(PhysicsToMapWorldUnflipped(boxBounds.UpperLeft)).x;
+                rect.yMin = ScreenToGUISpace(Camera.main.WorldToScreenPoint(PhysicsToMapWorldUnflipped(boxBounds.UpperLeft))).y;
+                rect.xMax = Camera.main.WorldToScreenPoint(PhysicsToMapWorldUnflipped(boxBounds.UpperRight)).x;
+                rect.yMax = ScreenToGUISpace(Camera.main.WorldToScreenPoint(PhysicsToMapWorldUnflipped(boxBounds.LowerLeft))).y;
 
                 GUI.Box(rect, GUIContent.none);
 
@@ -720,14 +720,20 @@ namespace Pandora.Engine
             return new Rect(ScreenToGUISpace(rect.position), rect.size);
         }
 
-        public Vector2 PhysicsToMap(Vector2Int physics)
+        /// <summary>Returns the world position, already adjusted for the map and the team (flipped/non-flipped)</summary>
+        public Vector2 PhysicsToMapWorld(Vector2Int physics) =>
+            (TeamComponent.assignedTeam == TeamComponent.topTeam) ? PhysicsToMapWorldFlipped(physics) : PhysicsToMapWorldUnflipped(physics);
+
+
+        /// <summary>Returns the world position, adjusted for the map</summary>
+        Vector2 PhysicsToMapWorldUnflipped(Vector2Int physics)
         {
             return PhysicsToWorld(physics) + (Vector2)Map.transform.position;
         }
 
 
-        /// <summary>Flips the position around the map, used for e.g. render units when top team</summary>
-        public Vector2 FlippedPhysicsToMap(Vector2Int physics)
+        /// <summary>Returns the world position, adjusted for the map and flipped (used for e.g. top team position rendering)</summary>
+        Vector2 PhysicsToMapWorldFlipped(Vector2Int physics)
         {
             var yPhysicsBounds = UnitsPerCell * Map.mapSizeY;
 
@@ -735,7 +741,7 @@ namespace Pandora.Engine
 
             flippedPhysics.y = yPhysicsBounds - flippedPhysics.y;
 
-            return PhysicsToMap(flippedPhysics);
+            return PhysicsToMapWorldUnflipped(flippedPhysics);
         }
 
 

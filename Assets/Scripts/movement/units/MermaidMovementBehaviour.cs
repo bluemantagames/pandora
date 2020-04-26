@@ -48,10 +48,7 @@ namespace Pandora.Movement
                 return new MovementState(null, MovementStateEnum.Idle);
             }
 
-            transform.position =
-                (TeamComponent.assignedTeam == TeamComponent.bottomTeam) ?
-                    entity.GetWorldPosition() :
-                    entity.GetFlippedWorldPosition();
+            transform.position = entity.GetWorldPosition();
 
             var currentPosition = entity.GetCurrentCell();
 

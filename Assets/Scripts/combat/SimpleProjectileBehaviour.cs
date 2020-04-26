@@ -90,15 +90,13 @@ namespace Pandora.Combat
             var direction = (target.enemy.transform.position - transform.position).normalized;
             var angle = Vector2.SignedAngle(Vector2.up, direction) + StartRotationDegrees;
 
-            var shouldBeFlipped = TeamComponent.assignedTeam == TeamComponent.topTeam;
-
             Logger.Debug($"Angling projectiles at {angle}");
 
             // rotate the projectile towards the target
             transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
             // Move the projectile forward
-            transform.position = shouldBeFlipped ? engineEntity.GetFlippedWorldPosition() : engineEntity.GetWorldPosition();
+            transform.position = engineEntity.GetWorldPosition();
 
             // TODO: Play "miss" animation, and then remove the entity
             if (target.enemyEntity.GameObject.GetComponent<LifeComponent>().IsDead)

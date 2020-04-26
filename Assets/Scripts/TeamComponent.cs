@@ -8,6 +8,26 @@
 
     public class TeamComponent : MonoBehaviour
     {
+        static GameObject _teamGameObject;
+
+        static public TeamComponent assignedTeamComponent {
+            get {
+                if (_teamGameObject == null) {
+                    _teamGameObject = new GameObject();
+
+                    _teamGameObject.AddComponent<TeamComponent>();
+
+                    var teamComponent = _teamGameObject.GetComponent<TeamComponent>();
+
+                    teamComponent.team = assignedTeam;
+
+                    return teamComponent;
+                } else {
+                    return _teamGameObject.GetComponent<TeamComponent>();
+                }
+            }
+        }
+
         /// <summary>
         /// Team assigned to this client by the server. 
         /// 
