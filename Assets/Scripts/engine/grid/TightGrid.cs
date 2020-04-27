@@ -45,6 +45,29 @@ namespace Pandora.Engine.Grid
             }
         }
 
+        public bool Collide(Func<EngineEntity, EngineEntity, bool> isCollision,  EngineEntity entity, BoxBounds box)
+        {
+            var startX = Math.Min(box.LowerLeft.x / (mapWidth / rows), rows - 1);
+            var endX = Math.Min(box.LowerRight.x / (mapWidth / rows), rows - 1);
+
+            var startY = Math.Min(box.LowerLeft.y / (mapHeight / columns), columns - 1);
+            var endY = Math.Min(box.UpperLeft.y / (mapHeight / columns), columns - 1);
+
+            var processed = new HashSet<(EngineEntity, EngineEntity)> {};
+
+            for (var x = 0; x < rows; x++)
+            {
+                for (var y = 0; y < columns; y++)
+                {
+                    var collision = grid[x][y].Collide(isCollision, processed, entity, box);
+
+                    if (collision) return true;
+                }
+            }
+
+            return false;
+        }
+
         public LinkedList<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision)
         {
             processedCollisions.Clear();
@@ -53,7 +76,8 @@ namespace Pandora.Engine.Grid
 
             for (var x = 0; x < rows; x++)
             {
-                for (var y = 0; y < columns; y++) {
+                for (var y = 0; y < columns; y++)
+                {
                     grid[x][y].Collisions(isCollision, processedCollisions, collisions);
                 }
             }

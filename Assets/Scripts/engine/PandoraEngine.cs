@@ -167,23 +167,10 @@ namespace Pandora.Engine
                 position =>
                 {
                     if (position == target) return false;
-
+                    
                     entityBounds.Translate(position);
 
-                    var isCollision = false;
-
-                    foreach (var (bounds, unit) in unitsBounds)
-                    {
-                        isCollision = entityBounds.Collides(bounds);
-
-                        if (isCollision)
-                        {
-                            break;
-                        }
-
-                    }
-
-                    return isCollision;
+                    return grid.Collide(CanCollide, entity, entityBounds);
                 },
                 position =>
                 {

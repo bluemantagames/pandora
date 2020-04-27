@@ -296,7 +296,7 @@ namespace Pandora.Movement
                 collisionTotalElapsed = totalElapsed;
             }
 
-            if (lastCollisionPosition == engineEntity.Position && totalElapsed - (collisionTotalElapsed ?? 0) >= 400)
+            if (lastCollisionPosition == engineEntity.Position && totalElapsed - (collisionTotalElapsed ?? 0) >= 1000)
             {
                 Logger.Debug("Finally evading");
 

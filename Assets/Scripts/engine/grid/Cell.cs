@@ -10,13 +10,14 @@ namespace Pandora.Engine.Grid
     public class Cell
     {
         public LinkedList<EngineEntity> Items;
-        CustomSampler collisionCheck, hitboxCheck, itemAddCheck;
+        CustomSampler collisionCheck, hitboxCheck, itemAddCheck, collideCheck;
 
         public Cell(int x, int y, int w, int h)
         {
             Items = new LinkedList<EngineEntity> { };
 
             collisionCheck = CustomSampler.Create($"Check collision {x}, {y}");
+            collideCheck = CustomSampler.Create($"Check maybe collision {x}, {y}");
             hitboxCheck = CustomSampler.Create($"Check hitbox collision {x}, {y}");
             itemAddCheck = CustomSampler.Create($"Item added to {x}, {y}");
         }
@@ -31,6 +32,47 @@ namespace Pandora.Engine.Grid
         public void Clear()
         {
             Items.Clear();
+        }
+
+        public bool Collide(Func<EngineEntity, EngineEntity, bool> isCollision, HashSet<(EngineEntity, EngineEntity)> processed, EngineEntity entity, BoxBounds bounds)
+        {
+            collideCheck.Begin();
+
+            var b = entity;
+
+            foreach (var a in Items)
+            {
+                if (a == b || a.IsMapObstacle && b.IsMapObstacle) continue;
+
+                var first = (a.Timestamp > b.Timestamp) ? a : b;
+                var second = (first == a) ? b : a;
+                var pair = (first, second);
+
+                if (processed.Contains(pair))
+                    continue;
+                else
+                    processed.Add(pair);
+
+                hitboxCheck.Begin();
+
+                var aBox = a.Engine.GetPooledEntityBounds(a);
+                var bBox = bounds;
+
+                var collide = aBox.Collides(bBox) && isCollision(a, b);
+
+                a.Engine.ReturnBounds(aBox);
+
+                if (collide)
+                {
+                    return true;
+                }
+
+                hitboxCheck.End();
+            }
+
+            collideCheck.End();
+
+            return false;
         }
 
         public LinkedList<Collision> Collisions(Func<EngineEntity, EngineEntity, bool> isCollision, HashSet<(EngineEntity, EngineEntity)> processed, LinkedList<Collision> collisions)
