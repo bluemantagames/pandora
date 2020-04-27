@@ -28,11 +28,11 @@ namespace Pandora.Engine
 
         TightGrid grid;
 
-        Astar<Vector2Int> astar = new Astar<Vector2Int>(
-            PoolInstances.Vector2IntHashSetPool,
-            PoolInstances.Vector2IntQueueItemPool,
-            PoolInstances.Vector2IntPool,
-            PoolInstances.Vector2IntListPool
+        Astar<GridCell> astar = new Astar<GridCell>(
+            PoolInstances.GridCellHashSetPool,
+            PoolInstances.GridCellQueueItemPool,
+            PoolInstances.GridCellPool,
+            PoolInstances.GridCellListPool
         );
 
         // Debug settings
@@ -147,7 +147,7 @@ namespace Pandora.Engine
         public int GetSpeed(int engineUnitsPerSecond) =>
             Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * TickTime);
 
-        public IEnumerator<Vector2Int> FindPath(EngineEntity entity, Vector2Int target)
+        public IEnumerator<GridCell> FindPath(EngineEntity entity, Vector2Int target)
         {
             enginePathfindingSampler.Begin();
 
@@ -161,29 +161,47 @@ namespace Pandora.Engine
             var isFlying = entity.GameObject.layer == Constants.FLYING_LAYER;
             var team = entity.GameObject.GetComponent<TeamComponent>();
 
+            var currentGridCell = PooledPhysicsToGridCell(entity.Position);
+            var endGridCell = PooledPhysicsToGridCell(target);
+
             var path = astar.FindPathEnumerator(
-                entity.Position,
-                target,
+                currentGridCell,
+                endGridCell,
                 position =>
                 {
-                    if (position == target) return false;
-                    
-                    entityBounds.Translate(position);
+                    if (position == endGridCell) return false;
 
-                    return grid.Collide(CanCollide, entity, entityBounds);
+                    var physics = PooledGridCellToPhysics(position);
+
+                    entityBounds.Translate(physics);
+
+                    var isCollision = grid.Collide(
+                        (a, b) => {
+                            if (a.IsStructure || b.IsStructure)
+                                return false;
+                            else 
+                                return CanCollide(a, b);
+                        },
+                        entity,
+                        entityBounds
+                    );
+
+                    PoolInstances.Vector2IntPool.ReturnObject(physics);
+
+                    return isCollision;
                 },
                 position =>
                 {
-                    var surroundingPositions = PoolInstances.Vector2IntListPool.GetObject();
+                    var surroundingPositions = PoolInstances.GridCellListPool.GetObject();
 
                     for (var x = -1; x <= 1; x++)
                     {
                         for (var y = -1; y <= 1; y++)
                         {
-                            var advance = PoolInstances.Vector2IntPool.GetObject();
+                            var advance = PoolInstances.GridCellPool.GetObject();
 
-                            advance.x = position.x + x;
-                            advance.y = position.y + y;
+                            advance.vector.x = position.vector.x + x;
+                            advance.vector.y = position.vector.y + y;
 
                             surroundingPositions.Add(advance);
                         }
@@ -191,12 +209,12 @@ namespace Pandora.Engine
 
                     return surroundingPositions;
                 },
-                // the "+ a.x" part skewes pathfinding towards left-leaning paths, 
-                // (distance will be bigger if x is bigger)
-                // letting the algorithm converge faster
-                (a, b) => Vector2.Distance(a, b) + a.x,
-                true
+                (a, b) => Vector2.Distance(a.vector, b.vector),
+                false
             );
+
+            PoolInstances.GridCellPool.ReturnObject(currentGridCell);
+            PoolInstances.GridCellPool.ReturnObject(endGridCell);
 
             entity.IsEvading = false;
 
@@ -437,7 +455,7 @@ namespace Pandora.Engine
                         moved.CollisionSpeed++; // Give the moved entity some speed
 
                         if (unmoved.IsStructure)
-                        { // Give the moved entity even more speed if pushed by a structure (to avoid nasty loops)
+                        { // Give the moved entity even more speed if pushed by a structure or obstacle (to avoid nasty loops)
                             moved.CollisionSpeed++;
                         }
                     }
@@ -776,6 +794,17 @@ namespace Pandora.Engine
                 Mathf.RoundToInt(cell.vector.x * UnitsPerCell),
                 Mathf.RoundToInt(cell.vector.y * UnitsPerCell)
             );
+        }
+
+
+        public Vector2Int PooledGridCellToPhysics(GridCell cell)
+        {
+            var physics = PoolInstances.Vector2IntPool.GetObject();
+
+            physics.x = Mathf.RoundToInt(cell.vector.x * UnitsPerCell);
+            physics.y = Mathf.RoundToInt(cell.vector.y * UnitsPerCell);
+
+            return physics;
         }
 
         void SetPhysicsToGridCell(GridCell cell, Vector2Int physics)

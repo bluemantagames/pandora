@@ -71,7 +71,25 @@ namespace Pandora.Engine
 
                 IsEvading = false;
 
-                return path;
+                if (path.MoveNext()) {
+                    path.MoveNext();
+                }
+
+                if (path.Current != null) {
+                    Logger.Debug($"Pathfinding evading found next move {path.Current}");
+
+                    var targetCell = Engine.GridCellToPhysics(path.Current);
+
+                    targetCell.x += Engine.UnitsPerCell / 2;
+                    targetCell.y += Engine.UnitsPerCell / 2;
+
+                    return Bresenham.GetEnumerator(position, targetCell);
+                } else {
+                    Logger.DebugWarning($"Empty path found while evading for {position} -> {target}");
+
+                    return (new LinkedList<Vector2Int>() {}).GetEnumerator();
+                }
+
             }
             else
             {
