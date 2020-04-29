@@ -8,12 +8,32 @@
 
     public class TeamComponent : MonoBehaviour
     {
+        static GameObject _teamGameObject;
+
+        static public TeamComponent assignedTeamComponent {
+            get {
+                if (_teamGameObject == null) {
+                    _teamGameObject = new GameObject();
+
+                    _teamGameObject.AddComponent<TeamComponent>();
+
+                    var teamComponent = _teamGameObject.GetComponent<TeamComponent>();
+
+                    teamComponent.team = assignedTeam;
+
+                    return teamComponent;
+                } else {
+                    return _teamGameObject.GetComponent<TeamComponent>();
+                }
+            }
+        }
+
         /// <summary>
         /// Team assigned to this client by the server. 
         /// 
         /// 1 by default (e.g. when client is not connected)
         ///</summary>
-        static public int assignedTeam = 2;
+        static public int assignedTeam = 1;
 
         /// <summary>Team that occupies the top of the map</summary>
         static public int topTeam = 2;

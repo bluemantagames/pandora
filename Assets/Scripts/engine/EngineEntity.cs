@@ -18,10 +18,12 @@ namespace Pandora.Engine
 
         [NonSerialized] public Bounds Bounds;
 
-        public GameObject GameObject {
+        public GameObject GameObject
+        {
             get => _gameObject;
 
-            set {
+            set
+            {
                 _gameObject = value;
 
                 Bounds = _gameObject.GetComponent<BoxCollider2D>().bounds;
@@ -61,7 +63,7 @@ namespace Pandora.Engine
                 Path = FindPath(Position, Target);
             }
         }
- 
+
         public IEnumerator<Vector2Int> FindPath(Vector2Int position, Vector2Int target)
         {
             if (IsEvading)
@@ -70,7 +72,25 @@ namespace Pandora.Engine
 
                 IsEvading = false;
 
-                return path;
+                if (path.MoveNext()) {
+                    path.MoveNext();
+                }
+
+                if (path.Current != null) {
+                    Logger.Debug($"Pathfinding evading found next move {path.Current}");
+
+                    var targetCell = Engine.GridCellToPhysics(path.Current);
+
+                    targetCell.x += Engine.UnitsPerCell / 2;
+                    targetCell.y += Engine.UnitsPerCell / 2;
+
+                    return Bresenham.GetEnumerator(position, targetCell);
+                } else {
+                    Logger.DebugWarning($"Empty path found while evading for {position} -> {target}");
+
+                    return (new LinkedList<Vector2Int>() {}).GetEnumerator();
+                }
+
             }
             else
             {
@@ -82,7 +102,8 @@ namespace Pandora.Engine
         {
             Target = target;
 
-            if (!IsEvading) {
+            if (!IsEvading)
+            {
                 Target.x += Engine.UnitsPerCell / 2;
                 Target.y += Engine.UnitsPerCell / 2;
             }
@@ -93,7 +114,6 @@ namespace Pandora.Engine
         public void SetEmptyPath()
         {
             Path = null;
-            Speed = 0;
         }
 
         // This method actually sets the target at the _current_ entity position,
@@ -108,15 +128,10 @@ namespace Pandora.Engine
             return Engine.PhysicsToGridCell(Position);
         }
 
-        public Vector2 GetWorldPosition()
-        {
-            return Engine.PhysicsToMap(Position);
-        }
-
-        public Vector2 GetFlippedWorldPosition()
-        {
-            return Engine.FlippedPhysicsToMap(Position);
-        }
+        /// <summary>Calculates the world position already adjusted for the map
+        /// and the team</summary>
+        public Vector2 GetWorldPosition() =>
+            Engine.PhysicsToMapWorld(Position);
 
         public List<EngineEntity> FindInHitboxRange(int engineUnitsRange, bool countStructures)
         {

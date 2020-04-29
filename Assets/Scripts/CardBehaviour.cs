@@ -26,6 +26,8 @@ namespace Pandora
         public bool FixedInGame = false;
         public bool Global = false;
         public bool MulliganSelected = false;
+        public bool IsDevCard = false;
+
 
         Image imageComponent;
         GraphicRaycaster raycasterComponent;
@@ -180,7 +182,11 @@ namespace Pandora
 
         void Start()
         {
-            GetComponentInChildren<Text>().text = (RequiredMana / 10).ToString();
+            if (IsDevCard && !Debug.isDebugBuild) {
+                Destroy(gameObject);
+            } else {
+                GetComponentInChildren<Text>().text = (RequiredMana / 10).ToString();
+            }
         }
 
 

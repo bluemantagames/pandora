@@ -96,6 +96,12 @@ namespace Pandora.Pool
             profilingEnabled: false
         );
 
+        public static ConcurrentObjectPool<QueueItem<GridCell>> GridCellQueueItemPool = new ConcurrentObjectPool<QueueItem<GridCell>>(
+            createFunction: () => new QueueItem<GridCell>(),
+            resetFunction: v => {},
+            profilingEnabled: false
+        );
+
         public static ConcurrentObjectPool<Vector2Int> Vector2IntPool = new ConcurrentObjectPool<Vector2Int>(
             createFunction: () => new Vector2Int(),
             resetFunction: v => v.Set(0, 0),

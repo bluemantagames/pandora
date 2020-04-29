@@ -225,40 +225,7 @@ namespace Pandora.Engine
 
                 pass += 1;
 
-                // This priority queue dequeues FIFO, and LIFO has a better perf for us.
-                // To address this, we dequeue all the candidates with the same priority and consider the last one
-                // We then requeue all the items except this one
-                if (priorityQueue.Count > 1)
-                {
-                    var firstDequeued = priorityQueue.Dequeue();
-
-                    dequeueCandidates.Clear();
-
-                    dequeueCandidates.Add(firstDequeued);
-
-                    var dequeueCandidate = priorityQueue.Dequeue();
-
-                    while (fScore[dequeueCandidate.Item] == fScore[firstDequeued.Item])
-                    {
-                        dequeueCandidates.Add(dequeueCandidate);
-
-                        dequeueCandidate = priorityQueue.Dequeue();
-                    }
-
-                    // put back the first node with differing priority
-                    priorityQueue.Enqueue(dequeueCandidate, fScore[dequeueCandidate.Item]);
-
-                    evaluatingPosition = dequeueCandidates.Last();
-
-                    foreach (var queueItem in dequeueCandidates)
-                    {
-                        if (queueItem != evaluatingPosition)
-                        {
-                            priorityQueue.Enqueue(queueItem, fScore[queueItem.Item]);
-                        }
-                    }
-                }
-                else if (priorityQueue.Count > 0)
+                if (priorityQueue.Count > 0)
                 {
                     evaluatingPosition = priorityQueue.Dequeue();
                 }
@@ -269,7 +236,7 @@ namespace Pandora.Engine
                     return BuildPath(evaluatingPosition);
                 }
 
-                if (pass > 10)
+                if (pass > 2000)
                 {
                     Logger.DebugWarning($"Short circuiting after {pass} passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} nodes)");
 

@@ -15,7 +15,7 @@ using System.Threading;
 
 namespace Pandora.Movement
 {
-    public class MovementComponent : MonoBehaviour, CollisionCallback, MovementBehaviour, AsyncEngineBehaviour
+    public class MovementComponent : MonoBehaviour, CollisionCallback, MovementBehaviour
     {
         Rigidbody2D body;
         GridCell currentTarget;
@@ -119,10 +119,7 @@ namespace Pandora.Movement
 
             var isTargetDead = targetEnemy?.enemy.GetComponent<LifeComponent>().IsDead ?? true;
 
-            transform.position =
-                (TeamComponent.assignedTeam == TeamComponent.bottomTeam) ?
-                    engineEntity.GetWorldPosition() :
-                    engineEntity.GetFlippedWorldPosition();
+            transform.position = engineEntity.GetWorldPosition();
 
             // if you're attacking an enemy: keep attacking
             if (targetEnemy != null && combatBehaviour.IsInAttackRange(targetEnemy) && !isTargetDead)
@@ -265,7 +262,6 @@ namespace Pandora.Movement
             if (pathCount >= 1) return;
 
             pathfindingSampler.Begin();
-            engineEntity.SetSpeed(Speed);
 
             var currentPosition = CurrentCellPosition();
             var target = targetEnemy.enemyCell;
@@ -300,7 +296,7 @@ namespace Pandora.Movement
                 collisionTotalElapsed = totalElapsed;
             }
 
-            if (lastCollisionPosition == engineEntity.Position && totalElapsed - (collisionTotalElapsed ?? 0) >= 400)
+            if (lastCollisionPosition == engineEntity.Position && totalElapsed - (collisionTotalElapsed ?? 0) >= 1000)
             {
                 Logger.Debug("Finally evading");
 
@@ -320,12 +316,6 @@ namespace Pandora.Movement
                 lastCollisionPosition = engineEntity.Position;
             }
 
-        }
-
-        public Task AsyncTickUpdate(uint timeLapsed)
-        {
-            return factory.StartNew(() => {
-            });
         }
     }
 }

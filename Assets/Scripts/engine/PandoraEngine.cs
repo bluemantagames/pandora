@@ -32,11 +32,11 @@ namespace Pandora.Engine
 
         TightGrid grid;
 
-        Astar<Vector2Int> astar = new Astar<Vector2Int>(
-            PoolInstances.Vector2IntHashSetPool,
-            PoolInstances.Vector2IntQueueItemPool,
-            PoolInstances.Vector2IntPool,
-            PoolInstances.Vector2IntListPool
+        Astar<GridCell> astar = new Astar<GridCell>(
+            PoolInstances.GridCellHashSetPool,
+            PoolInstances.GridCellQueueItemPool,
+            PoolInstances.GridCellPool,
+            PoolInstances.GridCellListPool
         );
 
         // Debug settings
@@ -158,7 +158,7 @@ namespace Pandora.Engine
         public int GetSpeed(int engineUnitsPerSecond) =>
             Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * TickTime);
 
-        public IEnumerator<Vector2Int> FindPath(EngineEntity entity, Vector2Int target)
+        public IEnumerator<GridCell> FindPath(EngineEntity entity, Vector2Int target)
         {
             enginePathfindingSampler.Begin();
 
@@ -172,42 +172,47 @@ namespace Pandora.Engine
             var isFlying = entity.GameObject.layer == Constants.FLYING_LAYER;
             var team = entity.GameObject.GetComponent<TeamComponent>();
 
+            var currentGridCell = PooledPhysicsToGridCell(entity.Position);
+            var endGridCell = PooledPhysicsToGridCell(target);
+
             var path = astar.FindPathEnumerator(
-                entity.Position,
-                target,
+                currentGridCell,
+                endGridCell,
                 position =>
                 {
-                    if (position == target) return false;
+                    if (position == endGridCell) return false;
 
-                    entityBounds.Translate(position);
+                    var physics = PooledGridCellToPhysics(position);
 
-                    var isCollision = false;
+                    entityBounds.Translate(physics);
 
-                    foreach (var (bounds, unit) in unitsBounds)
-                    {
-                        isCollision = entityBounds.Collides(bounds);
+                    var isCollision = grid.Collide(
+                        (a, b) => {
+                            if (a.IsStructure || b.IsStructure)
+                                return false;
+                            else 
+                                return CanCollide(a, b);
+                        },
+                        entity,
+                        entityBounds
+                    );
 
-                        if (isCollision)
-                        {
-                            break;
-                        }
-
-                    }
+                    PoolInstances.Vector2IntPool.ReturnObject(physics);
 
                     return isCollision;
                 },
                 position =>
                 {
-                    var surroundingPositions = PoolInstances.Vector2IntListPool.GetObject();
+                    var surroundingPositions = PoolInstances.GridCellListPool.GetObject();
 
                     for (var x = -1; x <= 1; x++)
                     {
                         for (var y = -1; y <= 1; y++)
                         {
-                            var advance = PoolInstances.Vector2IntPool.GetObject();
+                            var advance = PoolInstances.GridCellPool.GetObject();
 
-                            advance.x = position.x + x;
-                            advance.y = position.y + y;
+                            advance.vector.x = position.vector.x + x;
+                            advance.vector.y = position.vector.y + y;
 
                             surroundingPositions.Add(advance);
                         }
@@ -215,15 +220,14 @@ namespace Pandora.Engine
 
                     return surroundingPositions;
                 },
-                // the "+ a.x" part skewes pathfinding towards left-leaning paths, 
-                // (distance will be bigger if x is bigger)
-                // letting the algorithm converge faster
-                (a, b) => Vector2.Distance(a, b) + a.x,
-                true
+                (a, b) => Vector2.Distance(a.vector, b.vector),
+                false
             );
 
-            entity.IsEvading = false;
+            PoolInstances.GridCellPool.ReturnObject(currentGridCell);
+            PoolInstances.GridCellPool.ReturnObject(endGridCell);
 
+            entity.IsEvading = false;
 
             foreach (var (bounds, _) in unitsBounds)
             {
@@ -471,7 +475,7 @@ namespace Pandora.Engine
                         moved.CollisionSpeed++; // Give the moved entity some speed
 
                         if (unmoved.IsStructure)
-                        { // Give the moved entity even more speed if pushed by a structure (to avoid nasty loops)
+                        { // Give the moved entity even more speed if pushed by a structure or obstacle (to avoid nasty loops)
                             moved.CollisionSpeed++;
                         }
                     }
@@ -561,10 +565,10 @@ namespace Pandora.Engine
 
                 var rect = Rect.zero;
 
-                rect.xMin = Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.UpperLeft)).x;
-                rect.yMin = ScreenToGUISpace(Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.UpperLeft))).y;
-                rect.xMax = Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.UpperRight)).x;
-                rect.yMax = ScreenToGUISpace(Camera.main.WorldToScreenPoint(PhysicsToMap(boxBounds.LowerLeft))).y;
+                rect.xMin = Camera.main.WorldToScreenPoint(PhysicsToMapWorldUnflipped(boxBounds.UpperLeft)).x;
+                rect.yMin = ScreenToGUISpace(Camera.main.WorldToScreenPoint(PhysicsToMapWorldUnflipped(boxBounds.UpperLeft))).y;
+                rect.xMax = Camera.main.WorldToScreenPoint(PhysicsToMapWorldUnflipped(boxBounds.UpperRight)).x;
+                rect.yMax = ScreenToGUISpace(Camera.main.WorldToScreenPoint(PhysicsToMapWorldUnflipped(boxBounds.LowerLeft))).y;
 
                 GUI.Box(rect, GUIContent.none);
 
@@ -770,14 +774,20 @@ namespace Pandora.Engine
             return new Rect(ScreenToGUISpace(rect.position), rect.size);
         }
 
-        public Vector2 PhysicsToMap(Vector2Int physics)
+        /// <summary>Returns the world position, already adjusted for the map and the team (flipped/non-flipped)</summary>
+        public Vector2 PhysicsToMapWorld(Vector2Int physics) =>
+            (TeamComponent.assignedTeam == TeamComponent.topTeam) ? PhysicsToMapWorldFlipped(physics) : PhysicsToMapWorldUnflipped(physics);
+
+
+        /// <summary>Returns the world position, adjusted for the map</summary>
+        Vector2 PhysicsToMapWorldUnflipped(Vector2Int physics)
         {
             return PhysicsToWorld(physics) + (Vector2)Map.transform.position;
         }
 
 
-        /// <summary>Flips the position around the map, used for e.g. render units when top team</summary>
-        public Vector2 FlippedPhysicsToMap(Vector2Int physics)
+        /// <summary>Returns the world position, adjusted for the map and flipped (used for e.g. top team position rendering)</summary>
+        Vector2 PhysicsToMapWorldFlipped(Vector2Int physics)
         {
             var yPhysicsBounds = UnitsPerCell * Map.mapSizeY;
 
@@ -785,7 +795,7 @@ namespace Pandora.Engine
 
             flippedPhysics.y = yPhysicsBounds - flippedPhysics.y;
 
-            return PhysicsToMap(flippedPhysics);
+            return PhysicsToMapWorldUnflipped(flippedPhysics);
         }
 
 
@@ -833,6 +843,17 @@ namespace Pandora.Engine
                 Mathf.RoundToInt(cell.vector.x * UnitsPerCell),
                 Mathf.RoundToInt(cell.vector.y * UnitsPerCell)
             );
+        }
+
+
+        public Vector2Int PooledGridCellToPhysics(GridCell cell)
+        {
+            var physics = PoolInstances.Vector2IntPool.GetObject();
+
+            physics.x = Mathf.RoundToInt(cell.vector.x * UnitsPerCell);
+            physics.y = Mathf.RoundToInt(cell.vector.y * UnitsPerCell);
+
+            return physics;
         }
 
         void SetPhysicsToGridCell(GridCell cell, Vector2Int physics)

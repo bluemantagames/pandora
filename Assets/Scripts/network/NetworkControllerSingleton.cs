@@ -16,16 +16,18 @@ namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {
-        bool isDebugBuild = true;
+        public bool isDebugBuild = Debug.isDebugBuild;
 
         string matchmakingHost
         {
             get
             {
+                Debug.Log($"Is debug build? {isDebugBuild}");
+
                 if (isDebugBuild)
                     return "http://localhost:8080";
                 else 
-                    return "http://pocket-adventures.com:8080";
+                    return "http://3bitpodcast.com:8080";
             }
         }
 
@@ -35,6 +37,7 @@ namespace Pandora.Network
         Thread networkThread = null;
         Thread receiveThread = null;
         ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
+        int matchStartTimeout = 3; // seconds
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
@@ -64,8 +67,6 @@ namespace Pandora.Network
 
             client.Timeout = int.MaxValue; // request is long-polling - do not timeout
 
-            GameObject.Find("MatchmakingButton").GetComponent<Button>().interactable = false;
-
             client.ExecuteAsync<MatchmakingResponse>(request, response =>
             {
                 Logger.Debug($"Match found, token: {response.Data.token}");
@@ -90,11 +91,13 @@ namespace Pandora.Network
                 return;
             }
 
-            Debug.Log("THREAD WORKING!");
+            Debug.Log($"Connecting to the game server with token {matchToken}");
+
+            var startTime = DateTime.Now;
 
             MatchParams matchParams = (MatchParams)data;
 
-            var matchHost = (isDebugBuild) ? "127.0.0.1" : "pocket-adventures.com";
+            var matchHost = (isDebugBuild) ? "127.0.0.1" : "3bitpodcast.com";
             var matchPort = 9090;
             var dns = Dns.GetHostEntry(matchHost);
 
@@ -139,7 +142,18 @@ namespace Pandora.Network
 
             while (true)
             {
-                // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+                // Return to matchmaking if match does not start in the predefined timeframe
+                if (!matchStarted && DateTime.Now.Subtract(startTime).Seconds > matchStartTimeout) {
+                    receiveThread.Abort();
+
+                    networkThread = null;
+
+                    StartMatchmaking(matchParams.Username, matchParams.Deck);
+
+                    Debug.LogWarning("Timeout while joining a match, back to matchmaking");
+
+                    break;
+                }
 
                 var isMessageDequeued = queue.TryDequeue(out message);
 

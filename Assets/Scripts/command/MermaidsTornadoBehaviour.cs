@@ -31,7 +31,7 @@ namespace Pandora.Command
             var entity = engineComponent.Entity;
             var engine = engineComponent.Engine;
 
-            transform.position = engine.PhysicsToMap(entity.Position);
+            transform.position = entity.GetWorldPosition();
 
             foreach (var target in engine.FindInRadius(entity.Position, EngineUnitsRadius, false))
             {

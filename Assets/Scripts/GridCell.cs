@@ -30,7 +30,7 @@ namespace Pandora
 
         public static bool operator !=(GridCell lhs, GridCell rhs)
         {
-            return !lhs.Equals(rhs);
+            return isNull(lhs) ? !isNull(rhs) : !lhs.Equals(rhs);
         }
 
         override public int GetHashCode()

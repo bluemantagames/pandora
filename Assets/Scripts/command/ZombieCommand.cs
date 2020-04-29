@@ -31,17 +31,18 @@ namespace Pandora.Command
                     commandListener.Used = true;
                 }
 
-                if (lifeComponent.LastPosition == null) {
+                if (lifeComponent.DeathPosition == null) {
                     continue;
                 }
 
-                var zombieCell = new GridCell(
-                    lifeComponent.LastPosition.Value
-                );
+                var spawnPosition = lifeComponent.DeathPosition;
+
+                if (team == TeamComponent.topTeam)
+                    spawnPosition = MapComponent.Instance.Flip(spawnPosition);
 
                 var zombieSpawn = new UnitSpawn(
                     "Zombie",
-                    zombieCell,
+                    spawnPosition,
                     team,
                     zombieId + "-resurrected",
                     sourceEntity.Timestamp
