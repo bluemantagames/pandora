@@ -2,6 +2,7 @@ using Pandora.Pool;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Profiling;
@@ -42,7 +43,7 @@ namespace Pandora.Engine
         float debugLinesDuration = 1f;
 
         // Engine snapshow settinsg
-        static uint snapshotEvery = 200;
+        static uint snapshotEvery = 1000;
 
         // This is used just to serialize the behaviours
         [SerializeField]
@@ -109,7 +110,7 @@ namespace Pandora.Engine
             var leftPosition = new Vector2Int(UnitsPerCell, 13 * UnitsPerCell + UnitsPerCell / 2);
 
             var leftEntity =
-                AddEntity(leftRiverObject, 0, leftPosition, true, DateTime.MinValue);
+                AddEntity(leftRiverObject, 0, leftPosition, true, SafeGenerateTimestamp(leftRiverObject));
 
             var rightRiverObject = GameObject.Find("arena_water_right");
 
@@ -119,14 +120,14 @@ namespace Pandora.Engine
             );
 
             var rightEntity =
-                AddEntity(rightRiverObject, 0, rightPosition, true, DateTime.MinValue);
+                AddEntity(rightRiverObject, 0, rightPosition, true, SafeGenerateTimestamp(rightRiverObject));
 
             var centerPosition = new Vector2Int(8 * UnitsPerCell, 13 * UnitsPerCell + (UnitsPerCell / 2));
 
             var centerRiverObject = GameObject.Find("arena_water_center");
 
             var centerEntity =
-                AddEntity(centerRiverObject, 0, centerPosition, true, DateTime.MinValue);
+                AddEntity(centerRiverObject, 0, centerPosition, true, SafeGenerateTimestamp(centerRiverObject));
 
             centerEntity.IsStructure = true;
             centerEntity.IsMapObstacle = true;
@@ -264,6 +265,15 @@ namespace Pandora.Engine
             Entities.Sort((a, b) => a.Timestamp.CompareTo(b.Timestamp));
 
             return entity;
+        }
+
+        public static DateTime SafeGenerateTimestamp(GameObject gameObject)
+        {
+            var name = gameObject.name;
+            var diff = Encoding.ASCII.GetBytes(name).Select(b => (int)b).Sum();
+            var epoch = System.DateTime.MinValue;
+
+            return epoch.AddSeconds(diff);
         }
 
         public void AddBehaviour(EngineBehaviour behaviour)
@@ -530,12 +540,14 @@ namespace Pandora.Engine
             }
 
             var engineSnapshot = JsonUtility.ToJson(this);
+            var team = TeamComponent.assignedTeam;
 
             var snapshotMessage = new EngineSnapshotMessage
             {
                 Snapshot = engineSnapshot,
                 Timestamp = DateTime.Now,
-                ElapsedMs = totalElapsed
+                ElapsedMs = totalElapsed,
+                Team = team
             };
 
             NetworkControllerSingleton.instance.EnqueueMessage(snapshotMessage);
