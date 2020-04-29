@@ -43,7 +43,7 @@ namespace Pandora.Engine
         float debugLinesDuration = 1f;
 
         // Engine snapshow settinsg
-        static uint snapshotEvery = 1000;
+        uint snapshotEvery = 1000;
 
         // This is used just to serialize the behaviours
         [SerializeField]
