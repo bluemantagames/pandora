@@ -22,6 +22,7 @@ namespace Pandora.Engine
         BoxBounds mapBounds, riverBounds;
         CustomSampler collisionsSampler, collisionsSolveSampler, collisionsCheckSampler, collisionsCallbackSampler, movementSampler, scriptSampler, gridSampler, enginePathfindingSampler;
         Dictionary<(EngineEntity, EngineEntity), int> collisionsCount = new Dictionary<(EngineEntity, EngineEntity), int>(4000);
+        public List<(long, Action)> DelayedJobs = new List<(long, Action)>(300);
 
         public bool DebugEngine;
 
@@ -518,6 +519,20 @@ namespace Pandora.Engine
             foreach (var behaviour in Behaviours)
             {
                 behaviour.TickUpdate(TickTime);
+            }
+
+            for (var i = 0; i < DelayedJobs.Count; i++) {
+                var (passed, job) = DelayedJobs[i];
+
+                var updatedPassed = passed - TickTime;
+
+                if (updatedPassed <= 0) {
+                    DelayedJobs.RemoveAt(i);
+
+                    job();
+                } else {
+                    DelayedJobs[i] = (updatedPassed, job);
+                }
             }
         }
 
