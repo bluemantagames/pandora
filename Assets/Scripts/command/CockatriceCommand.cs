@@ -13,7 +13,7 @@ namespace Pandora.Command
     /// </summary>
     public class CockatriceCommand : MonoBehaviour, CommandBehaviour
     {
-        public int FlyingTimeMs = 2000, EngineUnitsRange = 1200;
+        public int FlyingTimeMs = 7000, EngineUnitsRange = 1200;
         public bool TargetBuildings = false;
 
         TeamComponent team;
