@@ -94,6 +94,8 @@ namespace Pandora
                     handlers[i] = handler;
 
                     added = true;
+
+                    break;
                 }
             }
 
