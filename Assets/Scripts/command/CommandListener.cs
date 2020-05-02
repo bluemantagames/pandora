@@ -1,6 +1,7 @@
 using UnityEngine;
 using Pandora.Network;
 using Pandora.Network.Messages;
+using Pandora.Engine;
 
 namespace Pandora.Command
 {
@@ -35,11 +36,15 @@ namespace Pandora.Command
             var groupComponent = GetComponentInParent<GroupComponent>();
             var id = GetComponentInParent<UnitIdComponent>().Id;
 
+            var engine = GetComponentInParent<EngineComponent>().Engine;
+            var elapsedMs = engine.totalElapsed;
+
             NetworkControllerSingleton.instance.EnqueueMessage(
                 new CommandMessage
                 {
                     team = TeamComponent.assignedTeam,
-                    unitId = id
+                    unitId = id,
+                    elapsedMs = elapsedMs
                 }
             );
 

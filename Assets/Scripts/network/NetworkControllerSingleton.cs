@@ -222,7 +222,8 @@ namespace Pandora.Network
                                     cellY = command.Spawn.Y,
                                     team = command.Spawn.Team,
                                     timestamp = DateTimeOffset.FromUnixTimeMilliseconds((long)command.Timestamp).UtcDateTime,
-                                    unitId = command.Spawn.UnitId
+                                    unitId = command.Spawn.UnitId,
+                                    elapsedMs = command.Spawn.ElapsedMs
                                 };
 
                             commands.Add(spawnMessage);
@@ -230,7 +231,8 @@ namespace Pandora.Network
                             var commandMessage =
                                 new CommandMessage {
                                     team = command.UnitCommand.Team,
-                                    unitId = command.UnitCommand.UnitId
+                                    unitId = command.UnitCommand.UnitId,
+                                    elapsedMs = command.UnitCommand.ElapsedMs
                                 };
 
                             commands.Add(commandMessage);
