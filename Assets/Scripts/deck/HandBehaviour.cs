@@ -285,7 +285,7 @@ namespace Pandora.Deck
                 // select cards individually
                 if (!isMulligan)
                 {
-                    // Deselect the previus cards (it shoul be just one but whatev)
+                    // Deselect the previous cards
                     for (var i = 0; i <= SelectedCards.Count - 1; i++)
                         Deselect(i);
 

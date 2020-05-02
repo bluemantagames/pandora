@@ -10,7 +10,7 @@ namespace Pandora.Deck.UI
         {
             foreach (Transform child in transform)
             {
-                child.GetComponent<CardBehaviour>().IsUI = true;
+                child.GetComponent<CardBehaviour>().IsDeckBuilderUI = true;
             }
 
             GameObject.Find("Canvas").GetComponentInChildren<DeckSpotParentBehaviour>().LoadSavedDeck();
