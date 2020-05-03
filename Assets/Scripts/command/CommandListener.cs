@@ -37,7 +37,7 @@ namespace Pandora.Command
             var id = GetComponentInParent<UnitIdComponent>().Id;
 
             var engine = GetComponentInParent<EngineComponent>().Engine;
-            var elapsedMs = engine.totalElapsed;
+            var elapsedMs = engine.TotalElapsed;
 
             NetworkControllerSingleton.instance.EnqueueMessage(
                 new CommandMessage

@@ -134,7 +134,7 @@ namespace Pandora
                         case TowerPosition.BottomMiddle:
                             EndGameSingleton.Instance.SetWinner(
                                 TeamComponent.assignedTeam == 1 ? 2 : 1,
-                                engineComponent.Engine.totalElapsed
+                                engineComponent.Engine.TotalElapsed
                             );
 
                             break;
@@ -142,7 +142,7 @@ namespace Pandora
                         case TowerPosition.TopMiddle:
                             EndGameSingleton.Instance.SetWinner(
                                 TeamComponent.assignedTeam,
-                                engineComponent.Engine.totalElapsed
+                                engineComponent.Engine.TotalElapsed
                             );
                             break;
                     }

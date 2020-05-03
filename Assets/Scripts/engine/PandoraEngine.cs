@@ -22,7 +22,7 @@ namespace Pandora.Engine
         public List<EngineEntity> Entities = new List<EngineEntity> { };
         public List<EngineBehaviour> Behaviours = new List<EngineBehaviour> { };
         [NonSerialized] public MapComponent Map;
-        public uint totalElapsed = 0;
+        public uint TotalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
         CustomSampler collisionsSampler, collisionsSolveSampler, collisionsCheckSampler, collisionsCallbackSampler, movementSampler, scriptSampler, gridSampler, enginePathfindingSampler;
         Dictionary<(EngineEntity, EngineEntity), int> collisionsCount = new Dictionary<(EngineEntity, EngineEntity), int>(4000);
@@ -48,8 +48,7 @@ namespace Pandora.Engine
         uint snapshotEvery = 1000;
 
         // This is used just to serialize the behaviours
-        [SerializeField]
-        List<SerializableEngineBehaviour> serializableBehaviours = new List<SerializableEngineBehaviour> { };
+        public List<SerializableEngineBehaviour> SerializableBehaviours = new List<SerializableEngineBehaviour> { };
 
         public void Init(MapComponent map)
         {
@@ -95,9 +94,9 @@ namespace Pandora.Engine
         {
             var ticksNum = msLapsed / TickTime;
 
-            totalElapsed += msLapsed;
+            TotalElapsed += msLapsed;
 
-            GameObject.Find("MsElapsedText").GetComponent<Text>().text = $"Elapsed: {totalElapsed}";
+            GameObject.Find("MsElapsedText").GetComponent<Text>().text = $"Elapsed: {TotalElapsed}";
 
             for (var tick = 0; tick < ticksNum; tick++)
             {
@@ -395,12 +394,12 @@ namespace Pandora.Engine
                     collisionsCallbackSampler.Begin();
                     if (first.CollisionCallback != null)
                     {
-                        first.CollisionCallback.Collided(second, totalElapsed);
+                        first.CollisionCallback.Collided(second, TotalElapsed);
                     }
 
                     if (second.CollisionCallback != null)
                     {
-                        second.CollisionCallback.Collided(first, totalElapsed);
+                        second.CollisionCallback.Collided(first, TotalElapsed);
                     }
                     collisionsCallbackSampler.End();
 
@@ -556,7 +555,7 @@ namespace Pandora.Engine
             }
 
             // Snapshot
-            if (totalElapsed % snapshotEvery == 0)
+            if (TotalElapsed % snapshotEvery == 0)
             {
                 sendEngineSnapshot();
             }
@@ -564,11 +563,11 @@ namespace Pandora.Engine
 
         void sendEngineSnapshot()
         {
-            serializableBehaviours.Clear();
+            SerializableBehaviours.Clear();
 
             foreach (var behaviour in Behaviours) 
             {
-                serializableBehaviours.Add(new SerializableEngineBehaviour(behaviour.ComponentName));
+                SerializableBehaviours.Add(new SerializableEngineBehaviour(behaviour.ComponentName));
             }
 
             var engineSnapshot = JsonUtility.ToJson(this);
@@ -578,7 +577,7 @@ namespace Pandora.Engine
             {
                 Snapshot = engineSnapshot,
                 Timestamp = DateTime.Now,
-                ElapsedMs = totalElapsed,
+                ElapsedMs = TotalElapsed,
                 Team = team
             };
 

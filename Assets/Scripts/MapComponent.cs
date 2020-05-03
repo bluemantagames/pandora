@@ -307,7 +307,7 @@ namespace Pandora
             var spawnPosition = cell.vector;
             var id = System.Guid.NewGuid().ToString();
             var manaEnabled = GetComponent<LocalManaBehaviourScript>()?.Enabled ?? true;
-            var elapsedMs = engine.totalElapsed;
+            var elapsedMs = engine.TotalElapsed;
 
             // TODO: Notify player somehow if they lack mana
             if (manaEnabled && ManaSingleton.manaValue < requiredMana)

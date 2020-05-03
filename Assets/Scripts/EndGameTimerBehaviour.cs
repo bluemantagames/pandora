@@ -64,7 +64,7 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
 
             EndGameSingleton.Instance.SetWinner(
                 winnerTeam, 
-                engineComponent.Engine.totalElapsed
+                engineComponent.Engine.TotalElapsed
             );
         }
     }
