@@ -273,6 +273,17 @@ namespace Pandora.Engine
             return entity;
         }
 
+        /// <summary>
+        /// Generate a "safe", deterministic and unique-ish timestamp
+        /// using the GameObject informations.
+        /// 
+        /// (This method is mainly used to generate a unique timestamp value for 
+        /// static game objects. It must be deterministic since this timestamp 
+        /// will be used to sort the game objects inside the engine and we need
+        /// them in the same exact order across platforms)
+        /// </summary>
+        /// <param name="gameObject">GameObject used to generate the timestamp</param>
+        /// <returns>A valid DateTime</returns>
         public static DateTime SafeGenerateTimestamp(GameObject gameObject)
         {
             var name = gameObject.name;
