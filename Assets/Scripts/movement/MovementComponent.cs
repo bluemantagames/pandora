@@ -119,6 +119,8 @@ namespace Pandora.Movement
 
             var isTargetDead = targetEnemy?.enemy.GetComponent<LifeComponent>().IsDead ?? true;
 
+            var mapComponent = MapComponent.Instance;
+
             transform.position = engineEntity.GetWorldPosition();
 
             // if you're attacking an enemy: keep attacking
@@ -129,8 +131,8 @@ namespace Pandora.Movement
                 return new MovementState(targetEnemy, MovementStateEnum.EnemyApproached);
             }
 
-            // if you were attacking an enemy, but they are now out of attack range: forget them
-            if (targetEnemy != null && !combatBehaviour.IsInAttackRange(targetEnemy) && LastState == MovementStateEnum.EnemyApproached)
+            // if you were attacking an enemy, but they are now out of attack range or cannot fight them anymore: forget them
+            if (targetEnemy != null && ((!combatBehaviour.IsInAttackRange(targetEnemy) && LastState == MovementStateEnum.EnemyApproached) || !mapComponent.CanFight(gameObject, targetEnemy.enemy)))
             {
                 currentPath = null;
 
@@ -174,8 +176,10 @@ namespace Pandora.Movement
             if (!engineEntity.IsEvading)
             {
                 CalculatePath();
-            } else {
-                currentPath = new List<GridCell> {}; // Leave pathfinding to the engine when evading
+            }
+            else
+            {
+                currentPath = new List<GridCell> { }; // Leave pathfinding to the engine when evading
             }
 
             if (currentPath.Count < 1 && !engineEntity.IsEvading)
@@ -200,7 +204,7 @@ namespace Pandora.Movement
 
             engineEntity.SetTarget(currentTarget);
 
-            direction =  ((Vector2) currentTarget.vector - currentPosition.vector).normalized;
+            direction = ((Vector2)currentTarget.vector - currentPosition.vector).normalized;
         }
 
         List<GridCell> VectorsToGridCells(IEnumerable<Vector2Int> vectors) =>
@@ -253,7 +257,8 @@ namespace Pandora.Movement
         {
             var pathCount = 0;
 
-            if (currentPath != null) {
+            if (currentPath != null)
+            {
                 currentPath = currentPath.Skip(1).ToList();
 
                 pathCount = currentPath.Count;

@@ -36,7 +36,7 @@ namespace Pandora
         public bool Dragging = false;
         Vector2? lastMousePosition = null;
 
-        public bool IsUI
+        public bool IsDeckBuilderUI
         {
             get => _isUI;
 
@@ -85,6 +85,8 @@ namespace Pandora
             if (returnToPosition)
             {
                 transform.position = originalPosition.Value;
+
+                originalPosition = null;
 
                 SetChildrenActive(true);
             }

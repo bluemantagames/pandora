@@ -354,7 +354,7 @@ namespace Pandora
             var manaAnimationGridPosition = new Vector2Int(spawn.CellX, spawn.CellY);
 
             if (spawn.Team == TeamComponent.topTeam)
-            { 
+            {
                 // flip Y if top team
                 spawn.CellY = (mapSizeY - 1) - spawn.CellY;
             }
@@ -384,7 +384,7 @@ namespace Pandora
             }
             else
             {
-                InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp, spawn.UnitName); 
+                InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp, spawn.UnitName);
             }
 
             // This is tricky, we need the stuff below because the spawner and the units are actually
@@ -392,7 +392,7 @@ namespace Pandora
             // non-mirrored, while the single unit is created directly mirrored in the field.
             // This leads to unconcistencies in the ManaUsedAlert component position in the Team 2
             // (since the Team 2 field is mirrored).
-            if (spawner == null && TeamComponent.assignedTeam == TeamComponent.topTeam) 
+            if (spawner == null && TeamComponent.assignedTeam == TeamComponent.topTeam)
             {
                 ShowManaUsedAlert(cardObject, requiredMana, cardPosition);
             }
@@ -405,10 +405,6 @@ namespace Pandora
             {
                 CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
             }
-
-            /*UnityEngine.Profiling.Memory.Experimental.MemoryProfiler.TakeTempSnapshot((a, b) => {
-                Debug.Log($"Captured snapshot {a}, {b}, {Application.temporaryCachePath}");
-            });*/
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>
@@ -472,6 +468,15 @@ namespace Pandora
             }
         }
 
+        public bool CanFight(GameObject unit1, GameObject unit2)
+        {
+            return // Units can fight if:
+                (unit2.layer == unit1.layer) || // same layer (ground & ground, flying & flying, etc.)
+                (unit1.layer == Constants.SWIMMING_LAYER) ||
+                ((unit2.layer == Constants.FLYING_LAYER || unit2.layer == Constants.SWIMMING_LAYER) && unit1.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying/swimming and we are ranged
+                (unit1.layer == Constants.FLYING_LAYER); // we're flying
+        }
+
         public Enemy GetEnemy(GameObject unit, GridCell position, TeamComponent team)
         {
             int? minDistance = null;
@@ -499,11 +504,7 @@ namespace Pandora
 
                 if (lifeComponent == null || lifeComponent.IsDead) continue; // skip spells
 
-                var canUnitsFight = // Units can fight if:
-                    (targetGameObject.layer == unit.layer) || // same layer (ground & ground, flying & flying, etc.)
-                    (unit.layer == Constants.SWIMMING_LAYER) ||
-                    ((targetGameObject.layer == Constants.FLYING_LAYER || targetGameObject.layer == Constants.SWIMMING_LAYER) && unit.GetComponent<CombatBehaviour>().combatType == CombatType.Ranged) || // target is flying/swimming and we are ranged
-                    (unit.layer == Constants.FLYING_LAYER); // we're flying
+                var canUnitsFight = CanFight(unit, targetGameObject);
 
                 aggroSampler.Begin();
                 var isInRange = combatBehaviour.IsInAggroRange(new Enemy(targetGameObject));

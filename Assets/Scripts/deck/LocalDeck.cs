@@ -61,7 +61,7 @@ namespace Pandora.Deck
 
         public int HandSize { get => 4; }
 
-        public int MaxMulliganSize { get => 2; }
+        public int MaxMulliganSize { get => 1; }
 
         public EventBus<DeckEvent> EventBus
         {

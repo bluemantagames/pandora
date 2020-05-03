@@ -25,6 +25,8 @@ namespace Pandora.Engine
         public uint totalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
         CustomSampler collisionsSampler, collisionsSolveSampler, collisionsCheckSampler, collisionsCallbackSampler, movementSampler, scriptSampler, gridSampler, enginePathfindingSampler;
+        Dictionary<(EngineEntity, EngineEntity), int> collisionsCount = new Dictionary<(EngineEntity, EngineEntity), int>(4000);
+        public List<(long, Action)> DelayedJobs = new List<(long, Action)>(300);
 
         [NonSerialized] public bool DebugEngine;
 
@@ -187,10 +189,11 @@ namespace Pandora.Engine
                     entityBounds.Translate(physics);
 
                     var isCollision = grid.Collide(
-                        (a, b) => {
+                        (a, b) =>
+                        {
                             if (a.IsStructure || b.IsStructure)
                                 return false;
-                            else 
+                            else
                                 return CanCollide(a, b);
                         },
                         entity,
@@ -455,7 +458,11 @@ namespace Pandora.Engine
 
                     collisionsSolveSampler.Begin();
 
-                    if (moved.IsRigid && unmoved.IsRigid)
+                    var collisionKey = (moved, unmoved);
+
+                    var collisionCount = collisionsCount.ContainsKey(collisionKey) ? collisionsCount[collisionKey] : 0;
+
+                    if (moved.IsRigid && unmoved.IsRigid && collisionCount < 3)
                     {
                         var movedFirstBox = GetPooledEntityBounds(first);
                         var movedSecondBox = GetPooledEntityBounds(second);
@@ -478,6 +485,11 @@ namespace Pandora.Engine
                         { // Give the moved entity even more speed if pushed by a structure or obstacle (to avoid nasty loops)
                             moved.CollisionSpeed++;
                         }
+
+                        if (!collisionsCount.ContainsKey(collisionKey))
+                            collisionsCount[collisionKey] = 1;
+                        else
+                            collisionsCount[collisionKey]++;
                     }
                     else
                     {
@@ -488,7 +500,7 @@ namespace Pandora.Engine
                     collisionsSolveSampler.End();
                 }
 
-                if (collisionSolvedCount > 10)
+                if (collisionSolvedCount > 30)
                 {
                     Debug.LogError($"Cutting collision solving");
 
@@ -497,6 +509,8 @@ namespace Pandora.Engine
                     return;
                 }
             }
+
+            collisionsCount.Clear();
 
             if (DebugEngine) collisionsSampler.End();
 
@@ -525,6 +539,20 @@ namespace Pandora.Engine
             foreach (var behaviour in Behaviours)
             {
                 behaviour.TickUpdate(TickTime);
+            }
+
+            for (var i = 0; i < DelayedJobs.Count; i++) {
+                var (passed, job) = DelayedJobs[i];
+
+                var updatedPassed = passed - TickTime;
+
+                if (updatedPassed <= 0) {
+                    DelayedJobs.RemoveAt(i);
+
+                    job();
+                } else {
+                    DelayedJobs[i] = (updatedPassed, job);
+                }
             }
 
             // Snapshot

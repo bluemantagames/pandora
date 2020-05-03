@@ -74,6 +74,7 @@ namespace Pandora
         private void SetDeathPosition()
         {
             var sourceEntity = GetComponent<EngineComponent>().Entity;
+
             DeathPosition = sourceEntity.GetCurrentCell();
         }
 
@@ -121,8 +122,6 @@ namespace Pandora
 
                 SetDeathPosition();
                 Remove();
-
-                Logger.Debug("BB I'M DYING");
 
                 // Check if the component is a middle tower
                 var towerPositionComponent = GetComponent<TowerPositionComponent>();
