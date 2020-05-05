@@ -6,7 +6,8 @@ namespace Pandora {
         public Vector2Int EnginePosition;
 
         void Start() {
-            var entity = MapComponent.Instance.engine.AddEntity(gameObject, 0, EnginePosition, true, System.DateTime.MinValue);
+            var timestamp = PandoraEngine.SafeGenerateTimestamp(gameObject);
+            var entity = MapComponent.Instance.engine.AddEntity(gameObject, 0, EnginePosition, true, timestamp);
 
             entity.IsMapObstacle = true;
             entity.IsStructure = true;

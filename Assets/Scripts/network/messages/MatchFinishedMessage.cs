@@ -5,10 +5,12 @@ using Google.Protobuf;
 namespace Pandora.Network.Messages {
     public class MatchFinishedMessage: Message {
         public int WinnerTeam;
+        public ulong ElapsedMs;
 
         public byte[] ToBytes(string matchToken) {
             var matchFinished = new Pandora.Messages.MatchFinished {
-                WinnerTeam = WinnerTeam
+                WinnerTeam = WinnerTeam,
+                ElapsedMs = ElapsedMs
             };
 
             var envelope = new ClientEnvelope {

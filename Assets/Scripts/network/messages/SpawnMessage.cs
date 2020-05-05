@@ -11,6 +11,7 @@ namespace Pandora.Network.Messages {
         public string unitId;
         public DateTime timestamp;
         public int manaUsed;
+        public ulong elapsedMs;
 
         public byte[] ToBytes(string matchToken) {
             var spawn = new Spawn {
@@ -20,7 +21,8 @@ namespace Pandora.Network.Messages {
                 Team = team,
                 PlayerId = NetworkControllerSingleton.instance.PlayerId ?? throw new Exception("Could not find player id"),
                 UnitId = unitId,
-                ManaUsed = manaUsed
+                ManaUsed = manaUsed,
+                ElapsedMs = elapsedMs
             };
 
             var envelope = new ClientEnvelope {

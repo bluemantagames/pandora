@@ -19,7 +19,7 @@ class EndGameSingleton {
         }
     }
 
-    public void SetWinner(int winnerTeam)
+    public void SetWinner(int winnerTeam, ulong elapsedMs)
     {
         if (GameEnded) return;
 
@@ -30,7 +30,8 @@ class EndGameSingleton {
 
         var matchFinishedMessage = new MatchFinishedMessage 
         { 
-            WinnerTeam = winnerTeam 
+            WinnerTeam = winnerTeam,
+            ElapsedMs = elapsedMs
         };
 
         NetworkControllerSingleton.instance.EnqueueMessage(matchFinishedMessage);
