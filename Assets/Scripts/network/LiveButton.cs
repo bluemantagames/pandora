@@ -30,9 +30,6 @@ namespace Pandora.Network
         {
             if (GameSceneToLoad)
             {
-                // Setting the map component as `IsLive`
-                MapComponent.Instance.IsLive = true;
-
                 SceneManager.LoadScene("GameScene");
 
                 GameSceneToLoad = false;

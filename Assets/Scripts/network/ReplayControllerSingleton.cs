@@ -15,9 +15,10 @@ namespace Pandora.Network
         private Thread liveThread = null;
         private ClientWebSocket ws = new ClientWebSocket();
         private const int receiveChunkSize = 64;
-        private String baseUri = "ws://127.0.0.1:8080/live/";
+        private String baseUri = "ws://127.0.0.1:8080/live";
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool MatchStarted = true;
+        public Boolean IsActive = false;
 
         private static ReplayControllerSingleton privateInstance = null;
 
@@ -38,11 +39,13 @@ namespace Pandora.Network
 
         public void StartLive(String matchToken)
         {
+            IsActive = true;
+
             if (liveThread == null)
             {
                 liveThread = new Thread(new ParameterizedThreadStart(LiveExec));
 
-                liveThread.Start();
+                liveThread.Start(matchToken);
             }
         }
 
@@ -53,12 +56,12 @@ namespace Pandora.Network
             }
 
             var matchToken = (String)data;
-            var targetUri = new Uri($"{baseUri}{matchToken}");
+            var targetUri = new Uri($"{baseUri}/{matchToken}");
             
             try 
             {
                 await ws.ConnectAsync(targetUri, CancellationToken.None);
-                Debug.Log($"Connecting to {targetUri}...");
+                Debug.Log($"[REPLAY] Connecting to {targetUri}...");
 
                 await Task.WhenAll(Receive(ws));
             }
@@ -68,7 +71,7 @@ namespace Pandora.Network
             }
             finally
             {
-                Debug.Log("Closing WebSocket connection");
+                Debug.Log("[REPLAY] Closing WebSocket connection");
                 if (ws != null) ws.Dispose();
             }
         }
@@ -102,7 +105,8 @@ namespace Pandora.Network
                 }
 
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBuffer);
-                Logger.Debug($"Received {envelope}");
+                Logger.Debug($"[REPLAY] Received {messageBuffer}");
+                //Logger.Debug($"[REPLAY] Received {envelope}");
 
                 ParseServerEnvelope(envelope);
             }
@@ -143,7 +147,7 @@ namespace Pandora.Network
                     }
                 }
 
-                Logger.Debug("Enqueuing Step");
+                Logger.Debug("[REPLAY] Enqueuing Step");
                 stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
             }
         }

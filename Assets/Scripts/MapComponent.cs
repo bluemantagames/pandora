@@ -98,6 +98,8 @@ namespace Pandora
 
         public void Awake()
         {
+            IsLive = ReplayControllerSingleton.instance.IsActive == true;
+
             aggroSampler = CustomSampler.Create("Check aggro");
             targetValidSampler = CustomSampler.Create("Check target valid");
 

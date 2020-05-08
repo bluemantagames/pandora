@@ -42,6 +42,7 @@ namespace Pandora.Network
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
         public int? PlayerId = null;
+        public Boolean IsActive = false;
 
         private static NetworkControllerSingleton privateInstance = null;
 
@@ -62,6 +63,8 @@ namespace Pandora.Network
 
         public void StartMatchmaking(String username, List<String> deck)
         {
+            IsActive = true;
+
             var client = new RestClient(matchmakingHost);
             var request = new RestRequest(matchmakingUrl, Method.GET);
 
