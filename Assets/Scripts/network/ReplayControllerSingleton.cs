@@ -17,6 +17,7 @@ namespace Pandora.Network
         private const int receiveChunkSize = 64;
         private String baseUri = "ws://127.0.0.1:8080/live/";
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
+        public bool MatchStarted = true;
 
         private static ReplayControllerSingleton privateInstance = null;
 
@@ -75,6 +76,11 @@ namespace Pandora.Network
         {
             while (ws.State == WebSocketState.Open)
             {  
+                if (!MatchStarted) 
+                {
+                    MatchStarted = true;
+                }
+
                 var sizeBytes = new Byte[4];
 
                 await ws.ReceiveAsync(new ArraySegment<byte>(sizeBytes), CancellationToken.None);
@@ -97,7 +103,7 @@ namespace Pandora.Network
 
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBuffer);
                 Logger.Debug($"Received {envelope}");
-                
+
                 ParseServerEnvelope(envelope);
             }
         }
