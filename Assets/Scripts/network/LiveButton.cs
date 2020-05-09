@@ -26,7 +26,7 @@ namespace Pandora.Network
             // Here starts the live
             ReplayControllerSingleton.instance.StartLive(matchToken);
 
-            LoadGameScene();
+            SceneManager.LoadScene("GameScene");
         }
 
         public void Start() {
@@ -57,19 +57,9 @@ namespace Pandora.Network
             UpdateButtons();
         }
 
-        void LoadGameScene()
+        public void Cancel()
         {
-            GameSceneToLoad = true;
-        }
-
-        void Update()
-        {
-            if (GameSceneToLoad)
-            {
-                SceneManager.LoadScene("GameScene");
-
-                GameSceneToLoad = false;
-            }
+            SceneManager.LoadScene("MainMenuScene");
         }
     }
 }
