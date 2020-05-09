@@ -152,6 +152,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -232,7 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733e88c63e6713f4fa432c8e37a8f31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeValue: 750
+  lifeValue: 1250
   maxLife: 0
   IsDead: 0
 --- !u!95 &2040455867788288362
@@ -366,11 +367,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8076880815249732024}
     m_Modifications:
-    - target: {fileID: 885019136172078356, guid: b162e8ef05976444397a5b9c48018bb8,
-        type: 3}
-      propertyPath: m_Name
-      value: HealthbarCanvas
-      objectReference: {fileID: 0}
     - target: {fileID: 613300719426973332, guid: b162e8ef05976444397a5b9c48018bb8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -475,6 +471,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 885019136172078356, guid: b162e8ef05976444397a5b9c48018bb8,
+        type: 3}
+      propertyPath: m_Name
+      value: HealthbarCanvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b162e8ef05976444397a5b9c48018bb8, type: 3}

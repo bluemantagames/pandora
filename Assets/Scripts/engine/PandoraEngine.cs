@@ -191,7 +191,11 @@ namespace Pandora.Engine
 
                     PoolInstances.Vector2IntPool.ReturnObject(physics);
 
-                    return isCollision;
+                    return isCollision || MapComponent.Instance.IsObstacle(
+                        position,
+                        entity.GameObject.layer == Constants.FLYING_LAYER,
+                        entity.GameObject.GetComponent<TeamComponent>()
+                    );
                 },
                 position =>
                 {
@@ -521,16 +525,20 @@ namespace Pandora.Engine
                 behaviour.TickUpdate(TickTime);
             }
 
-            for (var i = 0; i < DelayedJobs.Count; i++) {
+            for (var i = 0; i < DelayedJobs.Count; i++)
+            {
                 var (passed, job) = DelayedJobs[i];
 
                 var updatedPassed = passed - TickTime;
 
-                if (updatedPassed <= 0) {
+                if (updatedPassed <= 0)
+                {
                     DelayedJobs.RemoveAt(i);
 
                     job();
-                } else {
+                }
+                else
+                {
                     DelayedJobs[i] = (updatedPassed, job);
                 }
             }
