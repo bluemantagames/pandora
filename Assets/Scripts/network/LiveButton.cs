@@ -48,13 +48,11 @@ namespace Pandora.Network
         }
 
         public void SetTeam1() {
-            Debug.Log("Set team 1");
             SelectedTeam = 1;
             UpdateButtons();
         }
 
         public void SetTeam2() {
-            Debug.Log("Set team 2");
             SelectedTeam = 2;
             UpdateButtons();
         }
