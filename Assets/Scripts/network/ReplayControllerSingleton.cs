@@ -15,16 +15,18 @@ namespace Pandora.Network
         private Thread liveThread = null;
         private ClientWebSocket ws = new ClientWebSocket();
         private const int receiveChunkSize = 64;
-        public String WsBaseUri
+        private bool isDebugBuild = Debug.isDebugBuild;
+
+        String WsBaseUri
         {
             get
             {
-                return Debug.isDebugBuild
-                    ? "ws://127.0.0.1:8080/live"
-                    : "ws://3bitpodcast.com:8080/live";
-            } 
+                if (isDebugBuild)
+                    return "ws://localhost:8080/live";
+                else 
+                    return "ws://3bitpodcast.com:8080/live";
+            }
         }
-        
         
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool MatchStarted = true;
