@@ -119,11 +119,11 @@ namespace Pandora.Network
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBuffer);
                 Logger.Debug($"[REPLAY] Received {envelope}");
 
-                ParseServerEnvelope(envelope);
+                EnqueueServerEnvelope(envelope);
             }
         }
 
-        private void ParseServerEnvelope(ServerEnvelope envelope) {
+        private void EnqueueServerEnvelope(ServerEnvelope envelope) {
             if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
             {
                 var commands = new List<Message> { };
