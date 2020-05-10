@@ -15,7 +15,17 @@ namespace Pandora.Network
         private Thread liveThread = null;
         private ClientWebSocket ws = new ClientWebSocket();
         private const int receiveChunkSize = 64;
-        private String baseUri = "ws://127.0.0.1:8080/live";
+        public String WsBaseUri
+        {
+            get
+            {
+                return Debug.isDebugBuild
+                    ? "ws://127.0.0.1:8080/live"
+                    : "ws://3bitpodcast.com:8080/live";
+            } 
+        }
+        
+        
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool MatchStarted = true;
         public Boolean IsActive = false;
@@ -56,7 +66,7 @@ namespace Pandora.Network
             }
 
             var matchToken = (String)data;
-            var targetUri = new Uri($"{baseUri}/{matchToken}");
+            var targetUri = new Uri($"{WsBaseUri}/{matchToken}");
             
             try 
             {
@@ -105,8 +115,7 @@ namespace Pandora.Network
                 }
 
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBuffer);
-                Logger.Debug($"[REPLAY] Received {messageBuffer}");
-                //Logger.Debug($"[REPLAY] Received {envelope}");
+                Logger.Debug($"[REPLAY] Received {envelope}");
 
                 ParseServerEnvelope(envelope);
             }
@@ -122,28 +131,13 @@ namespace Pandora.Network
                 {
                     if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
                     {
-                        var spawnMessage =
-                            new SpawnMessage
-                            {
-                                unitName = command.Spawn.UnitName,
-                                cellX = command.Spawn.X,
-                                cellY = command.Spawn.Y,
-                                team = command.Spawn.Team,
-                                timestamp = DateTimeOffset.FromUnixTimeMilliseconds((long)command.Timestamp).UtcDateTime,
-                                unitId = command.Spawn.UnitId,
-                                elapsedMs = command.Spawn.ElapsedMs
-                            };
-
-                        commands.Add(spawnMessage);
+                        commands.Add(
+                            NetworkControllerSingleton.GenerateSpawnMessage(command)
+                        );
                     } else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand) {
-                        var commandMessage =
-                            new CommandMessage {
-                                team = command.UnitCommand.Team,
-                                unitId = command.UnitCommand.UnitId,
-                                elapsedMs = command.UnitCommand.ElapsedMs
-                            };
-
-                        commands.Add(commandMessage);
+                        commands.Add(
+                            NetworkControllerSingleton.GenerateCommandMessage(command)
+                        );
                     }
                 }
 

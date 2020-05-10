@@ -217,28 +217,13 @@ namespace Pandora.Network
                     {
                         if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
                         {
-                            var spawnMessage =
-                                new SpawnMessage
-                                {
-                                    unitName = command.Spawn.UnitName,
-                                    cellX = command.Spawn.X,
-                                    cellY = command.Spawn.Y,
-                                    team = command.Spawn.Team,
-                                    timestamp = DateTimeOffset.FromUnixTimeMilliseconds((long)command.Timestamp).UtcDateTime,
-                                    unitId = command.Spawn.UnitId,
-                                    elapsedMs = command.Spawn.ElapsedMs
-                                };
-
-                            commands.Add(spawnMessage);
+                            commands.Add(
+                                GenerateSpawnMessage(command)
+                            );
                         } else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand) {
-                            var commandMessage =
-                                new CommandMessage {
-                                    team = command.UnitCommand.Team,
-                                    unitId = command.UnitCommand.UnitId,
-                                    elapsedMs = command.UnitCommand.ElapsedMs
-                                };
-
-                            commands.Add(commandMessage);
+                            commands.Add(
+                                GenerateCommandMessage(command)
+                            );
                         }
                     }
 
@@ -285,6 +270,30 @@ namespace Pandora.Network
         {
             receiveThread?.Abort();
             networkThread?.Abort();
+        }
+
+        public static SpawnMessage GenerateSpawnMessage(StepCommand command)
+        {
+            return new SpawnMessage
+            {
+                unitName = command.Spawn.UnitName,
+                cellX = command.Spawn.X,
+                cellY = command.Spawn.Y,
+                team = command.Spawn.Team,
+                timestamp = DateTimeOffset.FromUnixTimeMilliseconds((long)command.Timestamp).UtcDateTime,
+                unitId = command.Spawn.UnitId,
+                elapsedMs = command.Spawn.ElapsedMs
+            };
+        }
+
+        public static CommandMessage GenerateCommandMessage(StepCommand command)
+        {
+            return new CommandMessage
+            {
+                team = command.UnitCommand.Team,
+                unitId = command.UnitCommand.UnitId,
+                elapsedMs = command.UnitCommand.ElapsedMs
+            };
         }
     }
 
