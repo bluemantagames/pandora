@@ -23,13 +23,24 @@ namespace Pandora.Command
             int? minLife = null;
             EngineEntity targetEntity = null;
 
+            var isTopValid = groupComponent.Objects.Exists((cleric) => 
+                IsTopSide(cleric.GetComponent<EngineComponent>().Entity.GetCurrentCell())
+            );
+
+            var isBottomValid = groupComponent.Objects.Exists((cleric) => 
+                !IsTopSide(cleric.GetComponent<EngineComponent>().Entity.GetCurrentCell())
+            );
+
             foreach (var entity in engineComponent.Entity.FindInHitboxRange(EngineUnitsRange, false))
             {
                 if (entity.GameObject.GetComponent<TeamComponent>()?.team == team.team || !entity.IsRigid) continue;
 
                 var lifeValue = entity.GameObject.GetComponent<LifeComponent>().lifeValue;
 
-                if (minLife == null || minLife > lifeValue) {
+                var isSideValid = 
+                    IsTopSide(entity.GetCurrentCell()) ? isTopValid : isBottomValid;
+
+                if ((minLife == null || minLife > lifeValue) && isSideValid) {
                     minLife = lifeValue;
                     targetEntity = entity;
                 }
@@ -49,5 +60,7 @@ namespace Pandora.Command
                 Logger.DebugWarning("Somebody is dead or no valid targets, cannot convert");
             }
         }
+
+        private bool IsTopSide(GridCell cell) => cell.vector.y >= MapComponent.Instance.bottomMapSizeY + 1;
     }
 }

@@ -22,9 +22,13 @@ namespace Pandora.Spell {
                     targetPosition.y >= cellPosition.y - radius &&
                     targetPosition.y <= cellPosition.y + radius
                 ) {
+                    var towerComponent = lifeComponent.gameObject.GetComponent<TowerPositionComponent>();
+
+                    var isMiddleTower = towerComponent != null && towerComponent.EngineTowerPosition.IsMiddle();
+
                     Logger.Debug($"Hitting {lifeComponent.gameObject}");
 
-                    lifeComponent.AssignDamage(damage);
+                    lifeComponent.AssignDamage((!isMiddleTower) ? damage : damage / 4);
                 }
             }
         }
