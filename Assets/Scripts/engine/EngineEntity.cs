@@ -5,6 +5,7 @@ using System;
 namespace Pandora.Engine
 {
     // An entity inside the engine
+    [Serializable]
     public class EngineEntity
     {
         public int Speed; // units / tick
@@ -15,7 +16,7 @@ namespace Pandora.Engine
 
         GameObject _gameObject;
 
-        public Bounds Bounds;
+        [NonSerialized] public Bounds Bounds;
 
         public GameObject GameObject
         {
@@ -32,7 +33,7 @@ namespace Pandora.Engine
         // is a "map obstacle" (e.g. river)
         public bool IsRigid = true, IsStructure = false, IsMapObstacle = false;
         public CollisionCallback CollisionCallback;
-        public PandoraEngine Engine;
+        [NonSerialized] public PandoraEngine Engine;
         public int Layer = 1;
         public DateTime Timestamp;
         public Vector2Int Target;

@@ -125,21 +125,24 @@ namespace Pandora
 
                 // Check if the component is a middle tower
                 var towerPositionComponent = GetComponent<TowerPositionComponent>();
+                var engineComponent = GetComponentInParent<EngineComponent>();
 
-                if (towerPositionComponent != null)
+                if (towerPositionComponent != null && engineComponent != null)
                 {
                     switch (towerPositionComponent.WorldTowerPosition)
                     {
                         case TowerPosition.BottomMiddle:
                             EndGameSingleton.Instance.SetWinner(
-                                TeamComponent.assignedTeam == 1 ? 2 : 1
+                                TeamComponent.assignedTeam == 1 ? 2 : 1,
+                                engineComponent.Engine.TotalElapsed
                             );
 
                             break;
 
                         case TowerPosition.TopMiddle:
                             EndGameSingleton.Instance.SetWinner(
-                                TeamComponent.assignedTeam
+                                TeamComponent.assignedTeam,
+                                engineComponent.Engine.TotalElapsed
                             );
                             break;
                     }

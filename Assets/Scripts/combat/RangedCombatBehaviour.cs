@@ -86,7 +86,7 @@ namespace Pandora.Combat
 
             var engineEntity = GetComponent<EngineComponent>().Entity;
 
-            var timestamp = engineEntity.Timestamp.AddMilliseconds(map.engine.totalElapsed);
+            var timestamp = engineEntity.Timestamp.AddMilliseconds(map.engine.TotalElapsed);
 
             var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, engineEntity.Position, false, timestamp);
 

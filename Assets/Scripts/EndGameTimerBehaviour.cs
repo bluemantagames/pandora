@@ -18,12 +18,14 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
     private uint timePassed;
     private bool winnerTextSet = false;
 
+    EngineComponent engineComponent;
+
     void Start()
     {
         timePassed = 0;
         msDuration = GameDurationSeconds * 1000;
 
-        var engineComponent = GetComponent<EngineComponent>();
+        engineComponent = GetComponent<EngineComponent>();
 
         if (engineComponent != null) 
         {
@@ -55,11 +57,15 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
                 .ToString(@"mm\:ss\:ff");
         }
 
-        if (timePassed % msDuration <= 0) 
+        if (timePassed % msDuration <= 0 && engineComponent != null) 
         {
             // The game has ended
             var winnerTeam = GetWinnerTeam();
-            EndGameSingleton.Instance.SetWinner(winnerTeam);
+
+            EndGameSingleton.Instance.SetWinner(
+                winnerTeam, 
+                engineComponent.Engine.TotalElapsed
+            );
         }
     }
     

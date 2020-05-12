@@ -42,6 +42,7 @@ namespace Pandora.Network
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
         public int? PlayerId = null;
+        public Boolean IsActive = false;
 
         private static NetworkControllerSingleton privateInstance = null;
 
@@ -62,6 +63,8 @@ namespace Pandora.Network
 
         public void StartMatchmaking(String username, List<String> deck)
         {
+            IsActive = true;
+
             var client = new RestClient(matchmakingHost);
             var request = new RestRequest(matchmakingUrl, Method.GET);
 
@@ -214,26 +217,13 @@ namespace Pandora.Network
                     {
                         if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
                         {
-                            var spawnMessage =
-                                new SpawnMessage
-                                {
-                                    unitName = command.Spawn.UnitName,
-                                    cellX = command.Spawn.X,
-                                    cellY = command.Spawn.Y,
-                                    team = command.Spawn.Team,
-                                    timestamp = DateTimeOffset.FromUnixTimeMilliseconds((long)command.Timestamp).UtcDateTime,
-                                    unitId = command.Spawn.UnitId
-                                };
-
-                            commands.Add(spawnMessage);
+                            commands.Add(
+                                GenerateSpawnMessage(command)
+                            );
                         } else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand) {
-                            var commandMessage =
-                                new CommandMessage {
-                                    team = command.UnitCommand.Team,
-                                    unitId = command.UnitCommand.UnitId
-                                };
-
-                            commands.Add(commandMessage);
+                            commands.Add(
+                                GenerateCommandMessage(command)
+                            );
                         }
                     }
 
@@ -280,6 +270,30 @@ namespace Pandora.Network
         {
             receiveThread?.Abort();
             networkThread?.Abort();
+        }
+
+        public static SpawnMessage GenerateSpawnMessage(StepCommand command)
+        {
+            return new SpawnMessage
+            {
+                unitName = command.Spawn.UnitName,
+                cellX = command.Spawn.X,
+                cellY = command.Spawn.Y,
+                team = command.Spawn.Team,
+                timestamp = DateTimeOffset.FromUnixTimeMilliseconds((long)command.Timestamp).UtcDateTime,
+                unitId = command.Spawn.UnitId,
+                elapsedMs = command.Spawn.ElapsedMs
+            };
+        }
+
+        public static CommandMessage GenerateCommandMessage(StepCommand command)
+        {
+            return new CommandMessage
+            {
+                team = command.UnitCommand.Team,
+                unitId = command.UnitCommand.UnitId,
+                elapsedMs = command.UnitCommand.ElapsedMs
+            };
         }
     }
 

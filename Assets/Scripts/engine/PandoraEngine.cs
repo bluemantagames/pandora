@@ -2,29 +2,33 @@ using Pandora.Pool;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Profiling;
 using Pandora.Engine.Grid;
+using Pandora.Network;
+using Pandora.Network.Messages;
 using System.Threading.Tasks;
 using System.Threading;
 
 namespace Pandora.Engine
 {
+    [Serializable]
     public class PandoraEngine : ScriptableObject
     {
         public uint TickTime = 40; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         public List<EngineEntity> Entities = new List<EngineEntity> { };
         public List<EngineBehaviour> Behaviours = new List<EngineBehaviour> { };
-        public MapComponent Map;
-        public uint totalElapsed = 0;
+        [NonSerialized] public MapComponent Map;
+        public uint TotalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
         CustomSampler collisionsSampler, collisionsSolveSampler, collisionsCheckSampler, collisionsCallbackSampler, movementSampler, scriptSampler, gridSampler, enginePathfindingSampler;
         Dictionary<(EngineEntity, EngineEntity), int> collisionsCount = new Dictionary<(EngineEntity, EngineEntity), int>(4000);
         public List<(long, Action)> DelayedJobs = new List<(long, Action)>(300);
 
-        public bool DebugEngine;
+        [NonSerialized] public bool DebugEngine;
 
         Decimal DPi = new Decimal(3.141592653589);
 
@@ -39,6 +43,12 @@ namespace Pandora.Engine
 
         // Debug settings
         float debugLinesDuration = 1f;
+
+        // Engine snapshow settinsg
+        uint snapshotEvery = 1000;
+
+        // This is used just to serialize the behaviours
+        public List<SerializableEngineBehaviour> SerializableBehaviours = new List<SerializableEngineBehaviour> { };
 
         public void Init(MapComponent map)
         {
@@ -84,9 +94,9 @@ namespace Pandora.Engine
         {
             var ticksNum = msLapsed / TickTime;
 
-            totalElapsed += msLapsed;
+            TotalElapsed += msLapsed;
 
-            GameObject.Find("MsElapsedText").GetComponent<Text>().text = $"Elapsed: {totalElapsed}";
+            GameObject.Find("MsElapsedText").GetComponent<Text>().text = $"Elapsed: {TotalElapsed}";
 
             for (var tick = 0; tick < ticksNum; tick++)
             {
@@ -101,7 +111,7 @@ namespace Pandora.Engine
             var leftPosition = new Vector2Int(UnitsPerCell, 13 * UnitsPerCell + UnitsPerCell / 2);
 
             var leftEntity =
-                AddEntity(leftRiverObject, 0, leftPosition, true, DateTime.MinValue);
+                AddEntity(leftRiverObject, 0, leftPosition, true, SafeGenerateTimestamp(leftRiverObject));
 
             var rightRiverObject = GameObject.Find("arena_water_right");
 
@@ -111,14 +121,14 @@ namespace Pandora.Engine
             );
 
             var rightEntity =
-                AddEntity(rightRiverObject, 0, rightPosition, true, DateTime.MinValue);
+                AddEntity(rightRiverObject, 0, rightPosition, true, SafeGenerateTimestamp(rightRiverObject));
 
             var centerPosition = new Vector2Int(8 * UnitsPerCell, 13 * UnitsPerCell + (UnitsPerCell / 2));
 
             var centerRiverObject = GameObject.Find("arena_water_center");
 
             var centerEntity =
-                AddEntity(centerRiverObject, 0, centerPosition, true, DateTime.MinValue);
+                AddEntity(centerRiverObject, 0, centerPosition, true, SafeGenerateTimestamp(centerRiverObject));
 
             centerEntity.IsStructure = true;
             centerEntity.IsMapObstacle = true;
@@ -267,6 +277,26 @@ namespace Pandora.Engine
             return entity;
         }
 
+        /// <summary>
+        /// Generate a "safe", deterministic and unique-ish timestamp
+        /// using the GameObject informations.
+        /// 
+        /// (This method is mainly used to generate a unique timestamp value for 
+        /// static game objects. It must be deterministic since this timestamp 
+        /// will be used to sort the game objects inside the engine and we need
+        /// them in the same exact order across platforms)
+        /// </summary>
+        /// <param name="gameObject">GameObject used to generate the timestamp</param>
+        /// <returns>A valid DateTime</returns>
+        public static DateTime SafeGenerateTimestamp(GameObject gameObject)
+        {
+            var name = gameObject.name;
+            var diff = Encoding.ASCII.GetBytes(name).Select(b => (int)b).Sum();
+            var epoch = System.DateTime.MinValue;
+
+            return epoch.AddSeconds(diff);
+        }
+
         public void AddBehaviour(EngineBehaviour behaviour)
         {
             Behaviours.Add(behaviour);
@@ -379,12 +409,12 @@ namespace Pandora.Engine
                     collisionsCallbackSampler.Begin();
                     if (first.CollisionCallback != null)
                     {
-                        first.CollisionCallback.Collided(second, totalElapsed);
+                        first.CollisionCallback.Collided(second, TotalElapsed);
                     }
 
                     if (second.CollisionCallback != null)
                     {
-                        second.CollisionCallback.Collided(first, totalElapsed);
+                        second.CollisionCallback.Collided(first, TotalElapsed);
                     }
                     collisionsCallbackSampler.End();
 
@@ -542,6 +572,35 @@ namespace Pandora.Engine
                     DelayedJobs[i] = (updatedPassed, job);
                 }
             }
+
+            // Snapshot
+            if (TotalElapsed % snapshotEvery == 0)
+            {
+                sendEngineSnapshot();
+            }
+        }
+
+        void sendEngineSnapshot()
+        {
+            SerializableBehaviours.Clear();
+
+            foreach (var behaviour in Behaviours) 
+            {
+                SerializableBehaviours.Add(new SerializableEngineBehaviour(behaviour.ComponentName));
+            }
+
+            var engineSnapshot = JsonUtility.ToJson(this);
+            var team = TeamComponent.assignedTeam;
+
+            var snapshotMessage = new EngineSnapshotMessage
+            {
+                Snapshot = engineSnapshot,
+                Timestamp = DateTime.Now,
+                ElapsedMs = TotalElapsed,
+                Team = team
+            };
+
+            NetworkControllerSingleton.instance.EnqueueMessage(snapshotMessage);
         }
 
         public void DrawDebugGUI()
