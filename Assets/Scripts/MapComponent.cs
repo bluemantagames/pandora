@@ -74,6 +74,7 @@ namespace Pandora
             BottomLeftAggroOrigin, BottomLeftAggroEnd,
             BottomMiddleAggroOrigin, BottomMiddleAggroEnd,
             BottomRightAggroOrigin, BottomRightAggroEnd;
+        public Boolean IsLive = false;
 
         static MapComponent _instance = null;
 
@@ -97,6 +98,8 @@ namespace Pandora
 
         public void Awake()
         {
+            IsLive = ReplayControllerSingleton.instance.IsActive == true;
+
             aggroSampler = CustomSampler.Create("Check aggro");
             targetValidSampler = CustomSampler.Create("Check target valid");
 
@@ -226,7 +229,15 @@ namespace Pandora
 
             timeSinceLastStep += (uint)Mathf.FloorToInt(Time.deltaTime * 1000);
 
-            if (NetworkControllerSingleton.instance.stepsQueue.TryDequeue(out step))
+            var queue = IsLive 
+                ? ReplayControllerSingleton.instance.stepsQueue 
+                : NetworkControllerSingleton.instance.stepsQueue;
+
+            var matchStarted = IsLive
+                ? ReplayControllerSingleton.instance.MatchStarted
+                : NetworkControllerSingleton.instance.matchStarted;
+
+            if (queue.TryDequeue(out step))
             {
                 if (remainingStep > 0)
                 {
@@ -262,7 +273,7 @@ namespace Pandora
                 }
             }
 
-            if (!NetworkControllerSingleton.instance.matchStarted)
+            if (!matchStarted)
             {
                 localTime += Time.deltaTime;
 
@@ -302,6 +313,8 @@ namespace Pandora
 
         public bool SpawnCard(string cardName, int team, GridCell cell, int requiredMana = 0)
         {
+            if (IsLive) return false;
+
             ResetAggroPoints();
 
             var spawnPosition = cell.vector;

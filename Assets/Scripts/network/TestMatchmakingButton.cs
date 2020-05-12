@@ -83,6 +83,11 @@ namespace Pandora.Network
             }
         }
 
+        public void WatchLive()
+        {
+            SceneManager.LoadScene("LiveMenuScene");
+        }
+
     }
 
 }

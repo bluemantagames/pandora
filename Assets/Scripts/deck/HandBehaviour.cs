@@ -4,6 +4,7 @@ using UnityEngine.Playables;
 using System.Collections.Generic;
 using Pandora.Deck.Event;
 using Pandora.Events;
+using Pandora.Network;
 using UnityEngine.UI;
 using System;
 using System.Linq;
@@ -60,6 +61,13 @@ namespace Pandora.Deck
 
         void Start()
         {
+            // Check if it's a replay and disable the hand
+            if (ReplayControllerSingleton.instance.IsActive)
+            {
+                DisableMulliganUI();
+                return;
+            }
+
             rectTransform = GetComponent<RectTransform>();
             animator = GetComponent<Animator>();
 
