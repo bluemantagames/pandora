@@ -15,7 +15,7 @@ namespace Pandora.Network
         private Thread liveThread = null;
         private ClientWebSocket ws = new ClientWebSocket();
         private const int receiveChunkSize = 64;
-        private bool isDebugBuild = Debug.isDebugBuild;
+        private bool isDebugBuild = false;
 
         String WsBaseUri
         {

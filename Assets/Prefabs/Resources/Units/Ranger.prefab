@@ -58,6 +58,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -82,7 +83,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 19
-  m_Sprite: {fileID: 21300000, guid: 68182e65d0346784da74147c0815a686, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d6171605a6d5c7842aee37cab924e6fa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -190,6 +191,9 @@ MonoBehaviour:
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
+  AnimationStateName: WalkingRanger
+  WalkingAnimationEnabled: 1
+  WalkingAnimationEngineUnits: 200
 --- !u!114 &1881195754666818129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,18 +225,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.11620624, y: -0.09774679}
+  m_Offset: {x: 0.016822271, y: -0.09774679}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.93, y: 2.09}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 1.93, y: 2.09}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.33926877, y: 0.2974223}
+  m_Size: {x: 0.3806554, y: 0.2974223}
   m_EdgeRadius: 0
 --- !u!114 &7539184034064533125
 MonoBehaviour:
@@ -246,6 +250,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Entity:
+    Speed: 0
+    CollisionSpeed: 0
+    Position: {x: 0, y: 0}
+    Direction: {x: 0, y: 0}
+    IsRigid: 1
+    IsStructure: 0
+    IsMapObstacle: 0
+    Layer: 1
+    Target: {x: 0, y: 0}
+    IsEvading: 0
   DebugEntity: 0
 --- !u!114 &3810842992562522239
 MonoBehaviour:
@@ -328,7 +343,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.11232087, y: 0.15907866}
+  m_Offset: {x: -0.017722785, y: -0.027119994}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -339,7 +354,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.70001155, y: 1.0134274}
+  m_Size: {x: 0.5108155, y: 1.1612041}
   m_EdgeRadius: 0
 --- !u!114 &3429244827969936786
 MonoBehaviour:
@@ -362,6 +377,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1060352442105845637}
     m_Modifications:
+    - target: {fileID: 1327683189432707333, guid: a8a921cb43b0e499ea37ca7e61aadb51,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.00000026822
+      objectReference: {fileID: 0}
+    - target: {fileID: 1327683189432707333, guid: a8a921cb43b0e499ea37ca7e61aadb51,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2.629
+      objectReference: {fileID: 0}
+    - target: {fileID: 1327683189432707333, guid: a8a921cb43b0e499ea37ca7e61aadb51,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 7.972
+      objectReference: {fileID: 0}
+    - target: {fileID: 1327683189432707333, guid: a8a921cb43b0e499ea37ca7e61aadb51,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4622400506397244976, guid: a8a921cb43b0e499ea37ca7e61aadb51,
         type: 3}
       propertyPath: m_Name
@@ -472,26 +507,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1327683189432707333, guid: a8a921cb43b0e499ea37ca7e61aadb51,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.00000026822
-      objectReference: {fileID: 0}
-    - target: {fileID: 1327683189432707333, guid: a8a921cb43b0e499ea37ca7e61aadb51,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -2.629
-      objectReference: {fileID: 0}
-    - target: {fileID: 1327683189432707333, guid: a8a921cb43b0e499ea37ca7e61aadb51,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 7.972
-      objectReference: {fileID: 0}
-    - target: {fileID: 1327683189432707333, guid: a8a921cb43b0e499ea37ca7e61aadb51,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0.5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8a921cb43b0e499ea37ca7e61aadb51, type: 3}
 --- !u!224 &4721183690546122123 stripped
@@ -507,11 +522,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1060352442105845637}
     m_Modifications:
-    - target: {fileID: 885019136172078356, guid: b162e8ef05976444397a5b9c48018bb8,
-        type: 3}
-      propertyPath: m_Name
-      value: HealthbarCanvas
-      objectReference: {fileID: 0}
     - target: {fileID: 613300719426973332, guid: b162e8ef05976444397a5b9c48018bb8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -616,6 +626,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 885019136172078356, guid: b162e8ef05976444397a5b9c48018bb8,
+        type: 3}
+      propertyPath: m_Name
+      value: HealthbarCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 3263110296628745972, guid: b162e8ef05976444397a5b9c48018bb8,
         type: 3}
