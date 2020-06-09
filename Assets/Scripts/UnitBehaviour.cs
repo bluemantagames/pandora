@@ -84,7 +84,9 @@ namespace Pandora
                     animator.speed = 0;
                 }
 
-                walkingAnimationTime += engineComponent.Entity.Speed / WalkingAnimationEngineUnits;
+                var timePercent = engineComponent.Entity.Speed / ((float) WalkingAnimationEngineUnits);
+
+                walkingAnimationTime += timePercent;
 
                 if (walkingAnimationTime > 1f) {
                     walkingAnimationTime = 0f;
