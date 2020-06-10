@@ -2,22 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Pandora.Network;
 
 namespace Pandora.UI.Login
 {
     public class LoginButton : MonoBehaviour
     {
+        public Text LoginButtonText = null;
         public Text UsernameText = null;
         public Text PasswordText = null;
+        private APIControllerSingleton apiController = APIControllerSingleton.instance;
 
-        public void Login()
+        /*public async UniTaskVoid Login()
         {
             if (UsernameText == null || PasswordText == null) return;
             
             var username = UsernameText.text;
             var password = PasswordText.text;
 
+            if (username.Length == 0 || password.Length == 0) return;
 
-        }
+            var loginTask = apiController.Login(username, password);
+
+            //while (loginTask.)
+        }*/
     }
 }
