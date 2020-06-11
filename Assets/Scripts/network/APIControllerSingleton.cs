@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Pandora.Network
 {
-    public class APIControllerSingleton
+    public class ApiControllerSingleton
     {
         private bool isDebugBuild = Debug.isDebugBuild;
 
@@ -20,25 +20,37 @@ namespace Pandora.Network
             }
         }
 
-        private static APIControllerSingleton privateInstance = null;
+        private static ApiControllerSingleton privateInstance = null;
         private RestClient client = null;
 
-        private APIControllerSingleton()
+        private ApiControllerSingleton()
         {
             client = new RestClient(apiHost);
         }
 
-        public static APIControllerSingleton instance
+        public static ApiControllerSingleton instance
         {
             get
             {
                 if (privateInstance == null)
                 {
-                    privateInstance = new APIControllerSingleton();
+                    privateInstance = new ApiControllerSingleton();
                 }
 
                 return privateInstance;
             }
+        }
+
+        /// <summary>
+        /// Deserialize a Json response using the usual
+        /// deserializer used by RestSharp
+        /// </summary>
+        /// <param name="json">The Json string to deserialize</param>
+        /// <typeparam name="T">The generic type to obtain from the deserialization</typeparam>
+        /// <returns>An object T deserialized</returns>
+        public static T DeserializeJsonResponse<T>(string json)
+        {
+            return RestSharp.SimpleJson.DeserializeObject<T>(json);
         }
 
         /// <summary>

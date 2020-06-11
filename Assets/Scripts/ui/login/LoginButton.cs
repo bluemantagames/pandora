@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Pandora.Network;
+using Pandora.Network.Data;
 using Cysharp.Threading.Tasks;
 using System.Net;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,7 @@ namespace Pandora.UI.Login
     public class LoginButton : MonoBehaviour
     {
         public Text LoginButtonText = null;
+        public Text ErrorText = null;
         public InputField UsernameInput = null;
         public InputField PasswordInput = null;
         private string oldLoginButtonText = null;
@@ -17,7 +19,7 @@ namespace Pandora.UI.Login
 
         public async UniTaskVoid ExecuteLogin(string username, string password)
         {
-            var apiController = APIControllerSingleton.instance;
+            var apiController = ApiControllerSingleton.instance;
             var loginResponse = await apiController.Login(username, password);
 
             // Setting the token and redirect if logged in
@@ -33,10 +35,15 @@ namespace Pandora.UI.Login
             else
             {
                 Debug.Log($"Status code {loginResponse.StatusCode} while logging in: {loginResponse.Content}");
-                Debug.Log($"Credentials: {username} :: {password}");
 
                 // Restoring the button text
                 LoginButtonText.text = oldLoginButtonText;
+
+                if (ErrorText != null)
+                {
+                    var apiError = ApiControllerSingleton.DeserializeJsonResponse<ApiError>(loginResponse.Content);
+                    ErrorText.text = apiError.message;
+                }
             }
         }
 
