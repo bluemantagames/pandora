@@ -41,6 +41,12 @@ namespace Pandora.Network
             }
         }
 
+        /// <summary>
+        /// Make a login request
+        /// </summary>
+        /// <param name="username">The username / email string</param>
+        /// <param name="password">The password string</param>
+        /// <returns>A Task with a LoginResponse (the token)</returns>
         public Task<IRestResponse<LoginResponse>> Login(string username, string password)
         {
             var request = new RestRequest("/users/login", Method.POST);
