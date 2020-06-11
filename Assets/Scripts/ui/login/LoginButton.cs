@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Pandora.Network;
-using Pandora.Network.Data;
 using Cysharp.Threading.Tasks;
 using System.Net;
 using UnityEngine.SceneManagement;
@@ -21,11 +20,12 @@ namespace Pandora.UI.Login
         {
             var apiController = ApiControllerSingleton.instance;
             var loginResponse = await apiController.Login(username, password);
+            var responseStatus = loginResponse.RestResponse.StatusCode;
 
             // Setting the token and redirect if logged in
-            if (loginResponse.StatusCode == HttpStatusCode.OK)
+            if (responseStatus == HttpStatusCode.OK && loginResponse.Body != null)
             {
-                var token = loginResponse.Data.token;
+                var token = loginResponse.Body.token;
 
                 Debug.Log($"Logged in successfully with the token: {token}");
 
@@ -34,15 +34,14 @@ namespace Pandora.UI.Login
             }
             else
             {
-                Debug.Log($"Status code {loginResponse.StatusCode} while logging in: {loginResponse.Content}");
+                Debug.Log($"Status code {responseStatus} while logging in: {loginResponse.RestResponse.Content}");
 
                 // Restoring the button text
                 LoginButtonText.text = oldLoginButtonText;
 
                 if (ErrorText != null)
                 {
-                    var apiError = ApiControllerSingleton.DeserializeJsonResponse<ApiError>(loginResponse.Content);
-                    ErrorText.text = apiError.message;
+                    ErrorText.text = loginResponse.Error.message;
                 }
             }
         }
