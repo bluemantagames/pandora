@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.0.15",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.ads": "3.4.4",
@@ -55,5 +56,11 @@
         "com.google"
       ]
     }
-  ]
+  ],
+  "lock": {
+    "com.cysharp.unitask": {
+      "revision": "2.0.15",
+      "hash": "80704e489df82c35c70ff4f8908ab7fdbebf96c2"
+    }
+  }
 }
