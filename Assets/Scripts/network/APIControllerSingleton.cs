@@ -44,18 +44,6 @@ namespace Pandora.Network
         }
 
         /// <summary>
-        /// Deserialize a Json response using the usual
-        /// deserializer used by RestSharp
-        /// </summary>
-        /// <param name="json">The Json string to deserialize</param>
-        /// <typeparam name="T">The generic type to obtain from the deserialization</typeparam>
-        /// <returns>An object T deserialized</returns>
-        private T DeserializeJsonResponse<T>(string json)
-        {
-            return RestSharp.SimpleJson.DeserializeObject<T>(json);
-        }
-
-        /// <summary>
         /// Execute a RestSharp request and return an ApiResponse instead.
         /// ApiResponse can have a deserialized response object or an ApiError inside.
         /// </summary>
@@ -74,7 +62,7 @@ namespace Pandora.Network
                 }
                 else
                 {
-                    var deserializedError = DeserializeJsonResponse<ApiError>(response.Content);
+                    var deserializedError = RestSharp.SimpleJson.DeserializeObject<ApiError>(response.Content);
                     return new ApiResponse<T>(response, deserializedError);
                 }
             });
