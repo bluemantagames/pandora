@@ -1,6 +1,7 @@
-namespace Pandora.Network.Data.Users {
+namespace Pandora.Network.Data.Users
+{
     public class LoginResponse
     {
-        public string token;
+        public string token { get; set; }
     }
 }

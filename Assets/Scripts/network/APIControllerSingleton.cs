@@ -15,7 +15,7 @@ namespace Pandora.Network
             {
                 if (isDebugBuild)
                     return "http://localhost:8080/api";
-                else 
+                else
                     return "http://3bitpodcast.com:8080/api";
             }
         }
@@ -23,7 +23,7 @@ namespace Pandora.Network
         private static APIControllerSingleton privateInstance = null;
         private RestClient client = null;
 
-        private APIControllerSingleton() 
+        private APIControllerSingleton()
         {
             client = new RestClient(apiHost);
         }
