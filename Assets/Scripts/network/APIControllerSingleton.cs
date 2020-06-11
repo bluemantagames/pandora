@@ -44,7 +44,7 @@ namespace Pandora.Network
         public Task<IRestResponse<LoginResponse>> Login(string username, string password)
         {
             var request = new RestRequest("/users/login", Method.POST);
-            var param = new LoginRequest { Username = username, Password = password };
+            var param = new LoginRequest { username = username, password = password };
 
             request.AddJsonBody(param);
 

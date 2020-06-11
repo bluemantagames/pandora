@@ -1,7 +1,7 @@
 namespace Pandora.Network.Data.Users {
     public class LoginRequest
     {
-        public string Username;
-        public string Password;
+        public string username;
+        public string password;
     }
 }

@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using Pandora.Network;
+using Cysharp.Threading.Tasks;
 
 namespace Pandora.UI.Login
 {
@@ -13,8 +12,13 @@ namespace Pandora.UI.Login
         public Text PasswordText = null;
         private APIControllerSingleton apiController = APIControllerSingleton.instance;
 
-        /*public async UniTaskVoid Login()
+        public async UniTaskVoid ExecuteLogin(string username, string password)
         {
+            var loginResponse = await apiController.Login(username, password);
+            Debug.Log($"[LOGIN] Status: ${loginResponse.StatusCode}");
+        }
+
+        public void Login() {
             if (UsernameText == null || PasswordText == null) return;
             
             var username = UsernameText.text;
@@ -22,9 +26,7 @@ namespace Pandora.UI.Login
 
             if (username.Length == 0 || password.Length == 0) return;
 
-            var loginTask = apiController.Login(username, password);
-
-            //while (loginTask.)
-        }*/
+            ExecuteLogin(username, password);
+        }
     }
 }
