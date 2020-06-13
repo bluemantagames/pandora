@@ -19,7 +19,7 @@ namespace Pandora.Deck.UI
         public MenuCardBehaviour FindCard(string cardName) =>
             GetComponentsInChildren<MenuCardBehaviour>()
                 .ToList()
-                .Find(c => c.CardName == cardName);
+                .Find(c => c.CardName == cardName && !c.UiDisabled);
     }
 
 }

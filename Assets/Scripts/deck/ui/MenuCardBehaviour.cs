@@ -12,8 +12,11 @@ namespace Pandora.Deck.UI
 
         public GameObject Canvas;
         public string CardName;
+        public bool UiDisabled = false;
 
         DeckSpotBehaviour lastDeckSpot;
+        Image imageComponent;
+        Color imageColor;
 
         public void Load()
         {
@@ -30,8 +33,11 @@ namespace Pandora.Deck.UI
 
             transform.localPosition = originalPosition;
 
-            lastDeckSpot.Card = null;
-            lastDeckSpot.CardObject = null;
+            if (lastDeckSpot != null)
+            {
+                lastDeckSpot.Card = null;
+                lastDeckSpot.CardObject = null;
+            }
 
             GetComponent<RectTransform>().pivot = originalPivot;
         }
@@ -57,6 +63,8 @@ namespace Pandora.Deck.UI
 
         public void OnDrag(PointerEventData eventData)
         {
+            if (UiDisabled == true) return;
+
             if (transform.parent.gameObject == originalParent)
             {
                 gameObject.transform.SetParent(Canvas.transform);
@@ -67,6 +75,8 @@ namespace Pandora.Deck.UI
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (UiDisabled == true) return;
+
             var pointerData = new PointerEventData(null);
 
             pointerData.position = Input.mousePosition;
@@ -85,6 +95,19 @@ namespace Pandora.Deck.UI
             {
                 Reset();
             }
+        }
+
+        void Awake()
+        {
+            imageComponent = gameObject.GetComponent<Image>();
+            imageColor = imageComponent.color;
+        }
+
+        public void Update()
+        {
+            // Make it opaque if disabled
+            var opaqueColor = new Color(imageColor.r, imageColor.g, imageColor.b, 0.2f);
+            imageComponent.color = (UiDisabled == true) ? opaqueColor : imageColor;
         }
     }
 
