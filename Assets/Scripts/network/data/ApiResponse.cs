@@ -1,22 +1,23 @@
 using RestSharp;
+using System.Net;
 
 namespace Pandora.Network.Data
 {
     public class ApiResponse<T>
     {
-        public IRestResponse<T> RestResponse { get; private set; } = null;
+        public HttpStatusCode StatusCode { get; private set; }
         public T Body { get; private set; } = default(T);
         public ApiError Error { get; private set; } = null;
 
-        public ApiResponse(IRestResponse<T> restResponse, T body)
+        public ApiResponse(HttpStatusCode statusCode, T body)
         {
-            RestResponse = restResponse;
+            StatusCode = statusCode;
             Body = body;
         }
 
-        public ApiResponse(IRestResponse<T> restResponse, ApiError error)
+        public ApiResponse(HttpStatusCode statusCode, ApiError error)
         {
-            RestResponse = restResponse;
+            StatusCode = statusCode;
             Error = error;
         }
     }

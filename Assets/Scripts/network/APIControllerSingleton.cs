@@ -58,12 +58,12 @@ namespace Pandora.Network
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    return new ApiResponse<T>(response, response.Data);
+                    return new ApiResponse<T>(response.StatusCode, response.Data);
                 }
                 else
                 {
                     var deserializedError = RestSharp.SimpleJson.DeserializeObject<ApiError>(response.Content);
-                    return new ApiResponse<T>(response, deserializedError);
+                    return new ApiResponse<T>(response.StatusCode, deserializedError);
                 }
             });
         }
@@ -78,6 +78,23 @@ namespace Pandora.Network
         {
             var request = new RestRequest("/users/login", Method.POST);
             var param = new LoginRequest { username = username, password = password };
+
+            request.AddJsonBody(param);
+
+            return ExecuteApiRequest<LoginResponse>(request);
+        }
+
+        /// <summary>
+        /// Make a signup request
+        /// </summary>
+        /// <param name="username">The username string</param>
+        /// <param name="email">The email string</param>
+        /// <param name="password">The password string</param>
+        /// <returns>A Task with a LoginResponse (the token)</returns>
+        public Task<ApiResponse<LoginResponse>> Signup(string username, string email, string password)
+        {
+            var request = new RestRequest("/users/signup", Method.POST);
+            var param = new SignupRequest { username = username, email = email, password = password };
 
             request.AddJsonBody(param);
 

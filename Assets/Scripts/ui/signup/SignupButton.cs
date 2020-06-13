@@ -7,36 +7,37 @@ using UnityEngine.SceneManagement;
 
 namespace Pandora.UI.Login
 {
-    public class LoginButton : MonoBehaviour
+    public class SignupButton : MonoBehaviour
     {
-        public Text LoginButtonText = null;
+        public Text SignupButtonText = null;
         public Text ErrorText = null;
         public InputField UsernameInput = null;
+        public InputField EmailInput = null;
         public InputField PasswordInput = null;
         private string oldButtonText = null;
         private UserSingleton userSingleton = UserSingleton.instance;
 
-        public async UniTaskVoid ExecuteLogin(string username, string password)
+        public async UniTaskVoid ExecuteSignup(string username, string email, string password)
         {
             var apiController = ApiControllerSingleton.instance;
-            var loginResponse = await apiController.Login(username, password);
+            var loginResponse = await apiController.Signup(username, email, password);
 
             // Setting the token and redirect if logged in
             if (loginResponse.StatusCode == HttpStatusCode.OK && loginResponse.Body != null)
             {
                 var token = loginResponse.Body.token;
 
-                Debug.Log($"Logged in successfully with the token: {token}");
+                Debug.Log($"Signup successful with the token: {token}");
 
                 userSingleton.Token = token;
                 SceneManager.LoadScene("MainMenuScene");
             }
             else
             {
-                Debug.Log($"Status code {loginResponse.StatusCode} while logging in: {loginResponse.Error.message}");
+                Debug.Log($"Status code {loginResponse.StatusCode} while signup: {loginResponse.Error}");
 
                 // Restoring the button text
-                LoginButtonText.text = oldButtonText;
+                SignupButtonText.text = oldButtonText;
 
                 if (ErrorText != null)
                 {
@@ -45,19 +46,20 @@ namespace Pandora.UI.Login
             }
         }
 
-        public void Login()
+        public void Signup()
         {
-            if (UsernameInput == null || PasswordInput == null) return;
+            if (UsernameInput == null || EmailInput == null || PasswordInput == null) return;
 
             var username = UsernameInput.text;
+            var email = EmailInput.text;
             var password = PasswordInput.text;
 
-            if (username.Length == 0 || password.Length == 0) return;
+            if (username.Length == 0 || email.Length == 0 || password.Length == 0) return;
 
-            _ = ExecuteLogin(username, password);
+            _ = ExecuteSignup(username, email, password);
 
-            oldButtonText = LoginButtonText.text;
-            LoginButtonText.text = "Loading...";
+            oldButtonText = SignupButtonText.text;
+            SignupButtonText.text = "Loading...";
         }
     }
 }
