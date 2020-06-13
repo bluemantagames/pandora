@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Pandora.Deck.UI
 {
-    public class MenuCardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
+    public class MenuCardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
     {
         GameObject originalParent;
         Vector2 originalPosition, originalPivot;
@@ -61,14 +61,15 @@ namespace Pandora.Deck.UI
             GetComponent<RectTransform>().pivot = deckSpot.GetComponent<RectTransform>().pivot;
         }
 
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (UiDisabled == true) return;
+            gameObject.transform.SetParent(Canvas.transform);
+        }
+
         public void OnDrag(PointerEventData eventData)
         {
             if (UiDisabled == true) return;
-
-            if (transform.parent.gameObject == originalParent)
-            {
-                gameObject.transform.SetParent(Canvas.transform);
-            }
 
             transform.position = Input.mousePosition;
         }
