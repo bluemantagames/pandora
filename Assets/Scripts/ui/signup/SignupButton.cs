@@ -15,7 +15,7 @@ namespace Pandora.UI.Signup
         public InputField EmailInput = null;
         public InputField PasswordInput = null;
         private string oldButtonText = null;
-        private UserSingleton userSingleton = UserSingleton.instance;
+        private ModelSingleton modelSingleton = ModelSingleton.instance;
 
         public async UniTaskVoid ExecuteSignup(string username, string email, string password)
         {
@@ -29,8 +29,8 @@ namespace Pandora.UI.Signup
 
                 Debug.Log($"Signup successful with the token: {token}");
 
-                userSingleton.Token = token;
-                SceneManager.LoadScene("MainMenuScene");
+                modelSingleton.Token = token;
+                _ = LoaderSingleton.instance.LoadMainMenu();
             }
             else
             {

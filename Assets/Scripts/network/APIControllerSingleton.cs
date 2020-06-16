@@ -50,8 +50,14 @@ namespace Pandora.Network
         /// <param name="request"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private Task<ApiResponse<T>> ExecuteApiRequest<T>(RestRequest request)
+        private Task<ApiResponse<T>> ExecuteApiRequest<T>(RestRequest request, string token = null)
         {
+            if (token != null)
+            {
+                // Add an authorization header
+                request.AddHeader("Authorization", $"Bearer {token}");
+            }
+
             return client.ExecuteTaskAsync<T>(request).ContinueWith<ApiResponse<T>>(reqTask =>
             {
                 var response = reqTask.Result;
@@ -99,6 +105,18 @@ namespace Pandora.Network
             request.AddJsonBody(param);
 
             return ExecuteApiRequest<LoginResponse>(request);
+        }
+
+        /// <summary>
+        /// Get my info
+        /// </summary>
+        /// <param name="token">The token string</param>
+        /// <returns>A Task with a MeResponse</returns>
+        public Task<ApiResponse<MeResponse>> GetMe(string token)
+        {
+            var request = new RestRequest("/users/me", Method.GET);
+
+            return ExecuteApiRequest<MeResponse>(request, token);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Pandora.UI.Login
         public InputField UsernameInput = null;
         public InputField PasswordInput = null;
         private string oldButtonText = null;
-        private UserSingleton userSingleton = UserSingleton.instance;
+        private ModelSingleton modelSingleton = ModelSingleton.instance;
 
         public async UniTaskVoid ExecuteLogin(string username, string password)
         {
@@ -28,8 +28,8 @@ namespace Pandora.UI.Login
 
                 Debug.Log($"Logged in successfully with the token: {token}");
 
-                userSingleton.Token = token;
-                SceneManager.LoadScene("MainMenuScene");
+                modelSingleton.Token = token;
+                _ = LoaderSingleton.instance.LoadMainMenu();
             }
             else
             {
