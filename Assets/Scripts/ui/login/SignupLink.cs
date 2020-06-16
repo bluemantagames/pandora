@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SignupLink : MonoBehaviour
+namespace Pandora.UI.Login
 {
-    public void GoToSignup()
+    public class SignupLink : MonoBehaviour
     {
-        SceneManager.LoadScene("SignupScene");
+        public void GoToSignup()
+        {
+            SceneManager.LoadScene("SignupScene");
+        }
     }
 }

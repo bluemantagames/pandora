@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using System.Net;
 using UnityEngine.SceneManagement;
 
-namespace Pandora.UI.Login
+namespace Pandora.UI.Signup
 {
     public class SignupButton : MonoBehaviour
     {
