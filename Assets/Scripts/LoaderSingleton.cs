@@ -29,6 +29,11 @@ namespace Pandora
             }
         }
 
+        /// <summary>
+        /// Retrieve data from the APIs and load
+        /// the MainMenu scene
+        /// </summary>
+        /// <returns>A UniTaskVoid</returns>
         public async UniTaskVoid LoadMainMenu()
         {
             IsLoading = true;
