@@ -15,13 +15,13 @@ namespace Pandora.Network
         private Thread liveThread = null;
         private ClientWebSocket ws = new ClientWebSocket();
         private const int receiveChunkSize = 64;
-        private bool isDebugBuild = false;
+        public bool IsDebugBuild = Debug.isDebugBuild;
 
         String WsBaseUri
         {
             get
             {
-                if (isDebugBuild)
+                if (IsDebugBuild)
                     return "ws://localhost:8080/live";
                 else 
                     return "ws://3bitpodcast.com:8080/live";

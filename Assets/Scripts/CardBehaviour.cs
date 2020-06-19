@@ -147,12 +147,20 @@ namespace Pandora
             var movement = Card.GetComponent<MovementBehaviour>();
             var projectileSpell = Card.GetComponent<ProjectileSpellBehaviour>();
 
+
             if (map != null && canBeSpawned)
             {
                 if (movement != null) movement.map = map;
                 if (projectileSpell != null) projectileSpell.map = map;
+                
+                var pointed = GetPointed();
 
-                var spawned = map.SpawnCard(UnitName, Team, GetPointed(), RequiredMana);
+                var mapComponent = MapComponent.Instance;
+
+                pointed.vector.x = System.Math.Max(0, System.Math.Min(mapComponent.mapSizeX, pointed.vector.x));
+                pointed.vector.y = System.Math.Max(0, System.Math.Min(mapComponent.mapSizeY, pointed.vector.y));
+
+                var spawned = map.SpawnCard(UnitName, Team, pointed, RequiredMana);
 
                 if (spawned)
                 {
