@@ -1,12 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Pandora.Deck;
+using Cysharp.Threading.Tasks;
+using System.Linq;
+using System.Net;
+using Pandora.Network;
 
 namespace Pandora.Deck.UI
 {
     public class DeckSpotParentBehaviour : MonoBehaviour
     {
         private ModelSingleton modelSingleton = ModelSingleton.instance;
+        ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
 
         public List<Card> Deck
         {
@@ -16,16 +21,31 @@ namespace Pandora.Deck.UI
 
                 foreach (Transform child in transform)
                 {
-                    var card = child.GetComponent<DeckSpotBehaviour>()?.Card;
+                    var deckSpot = child.GetComponent<DeckSpotBehaviour>();
 
-                    if (card != null)
-                    {
-                        deck.Add(card);
-                    }
+                    if (deckSpot != null)
+                        deck.Add(deckSpot.Card);
                 }
 
                 return deck;
             }
+        }
+
+        public async UniTaskVoid SaveDeck()
+        {
+            var deck = Deck.Select(d => d != null ? d.Name : null).ToList();
+            var slotId = modelSingleton.DeckSlots[0].id;
+            var token = modelSingleton.Token;
+
+            Debug.Log($"Saving deck slot {slotId} with deck");
+            Debug.Log(deck);
+
+            var response = await apiControllerSingleton.DeckSlotUpdate(slotId, deck, token);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+                Debug.Log($"Updated deck slot {slotId}");
+            else
+                Debug.Log(response.Error.message);
         }
 
         public void LoadSavedDeck()
@@ -34,21 +54,23 @@ namespace Pandora.Deck.UI
 
             if (deckSlot == null) return;
 
-            var deck = JsonUtility.FromJson<List<string>>(deckSlot.deck);
-
-            if (deck == null) return;
-
             var menuCardsParent = transform.parent.GetComponentInChildren<MenuCardsParentBehaviour>();
-
             var spots = new Queue<DeckSpotBehaviour>(GetComponentsInChildren<DeckSpotBehaviour>());
 
-            foreach (var cardName in deck)
+            Debug.Log(deckSlot.deck);
+
+            if (deckSlot.deck == null) return;
+
+            foreach (var cardName in deckSlot.deck)
             {
+                Debug.Log(cardName);
                 var spot = spots.Dequeue();
 
-                var card = menuCardsParent.FindCard(cardName);
-
-                card.SetSpot(spot.gameObject);
+                if (cardName != null)
+                {
+                    var card = menuCardsParent.FindCard(cardName);
+                    card.SetSpot(spot.gameObject);
+                }
             }
         }
     }

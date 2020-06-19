@@ -4,6 +4,7 @@ using Pandora.Network.Data;
 using Pandora.Network.Data.Users;
 using System.Threading.Tasks;
 using System.Net;
+using System.Collections.Generic;
 
 namespace Pandora.Network
 {
@@ -62,6 +63,8 @@ namespace Pandora.Network
             {
                 var response = reqTask.Result;
 
+                // Debug.Log(response.Content);
+
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     return new ApiResponse<T>(response.StatusCode, response.Data);
@@ -117,6 +120,23 @@ namespace Pandora.Network
             var request = new RestRequest("/users/me", Method.GET);
 
             return ExecuteApiRequest<MeResponse>(request, token);
+        }
+
+        /// <summary>
+        /// Update a deck slot
+        /// </summary>
+        /// <param name="deckSlotId">The deck slot's id</param>
+        /// <param name="deck">The deck as a Json list</param>
+        /// <param name="token">The token string</param>
+        /// <returns>A Task with a MeResponse</returns>
+        public Task<ApiResponse<string>> DeckSlotUpdate(long deckSlotId, List<string> deck, string token)
+        {
+            var request = new RestRequest($"/users/me/deckSlots/{deckSlotId}", Method.PUT);
+            var param = new DeckSlotUpdateRequest { deck = deck };
+
+            request.AddJsonBody(param);
+
+            return ExecuteApiRequest<string>(request, token);
         }
     }
 }

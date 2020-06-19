@@ -152,9 +152,9 @@ RectTransform:
   - {fileID: 1446476732}
   - {fileID: 1156988369}
   - {fileID: 1975610881}
-  - {fileID: 378748000}
   - {fileID: 680740543}
   - {fileID: 1077555181}
+  - {fileID: 378748000}
   m_Father: {fileID: 626448526}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -799,7 +799,7 @@ PrefabInstance:
     - target: {fileID: 3655288778422677244, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
       propertyPath: m_Name
-      value: CardSpot (3)
+      value: CardSpot (5)
       objectReference: {fileID: 0}
     - target: {fileID: 3655288778422677245, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
@@ -839,7 +839,7 @@ PrefabInstance:
     - target: {fileID: 3655288778422677245, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3655288778422677245, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
@@ -1640,7 +1640,7 @@ PrefabInstance:
     - target: {fileID: 3655288778422677244, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
       propertyPath: m_Name
-      value: CardSpot (4)
+      value: CardSpot (3)
       objectReference: {fileID: 0}
     - target: {fileID: 3655288778422677245, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
@@ -1680,7 +1680,7 @@ PrefabInstance:
     - target: {fileID: 3655288778422677245, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3655288778422677245, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
@@ -2589,7 +2589,7 @@ PrefabInstance:
     - target: {fileID: 3655288778422677244, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
       propertyPath: m_Name
-      value: CardSpot (5)
+      value: CardSpot (4)
       objectReference: {fileID: 0}
     - target: {fileID: 3655288778422677245, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
@@ -2629,7 +2629,7 @@ PrefabInstance:
     - target: {fileID: 3655288778422677245, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3655288778422677245, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
@@ -3558,7 +3558,7 @@ PrefabInstance:
     - target: {fileID: 3655288778422677244, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}
       propertyPath: m_Name
-      value: CardSpot
+      value: CardSpot (0)
       objectReference: {fileID: 0}
     - target: {fileID: 3655288778422677245, guid: a5388dbec96beb7489ed7dd344aca613,
         type: 3}

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using Pandora.Network;
 
 namespace Pandora.Deck.UI
 {
@@ -14,6 +15,7 @@ namespace Pandora.Deck.UI
         public string CardName;
         public bool UiDisabled = false;
 
+        DeckSpotParentBehaviour deckSpotParentBehaviour;
         DeckSpotBehaviour lastDeckSpot;
         Image imageComponent;
         Color imageColor;
@@ -23,6 +25,7 @@ namespace Pandora.Deck.UI
             originalParent = transform.parent.gameObject;
             originalPosition = transform.localPosition;
             originalPivot = GetComponent<RectTransform>().pivot;
+            deckSpotParentBehaviour = GameObject.Find("Canvas").GetComponentInChildren<DeckSpotParentBehaviour>();
         }
 
         public void Reset()
@@ -96,6 +99,8 @@ namespace Pandora.Deck.UI
             {
                 Reset();
             }
+
+            _ = deckSpotParentBehaviour.SaveDeck();
         }
 
         void Awake()
