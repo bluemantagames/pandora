@@ -2,8 +2,12 @@ using UnityEngine;
 using System.Collections.Generic;
 using Pandora.Deck;
 
-namespace Pandora.Deck.UI {
-    public class DeckSpotParentBehaviour: MonoBehaviour {
+namespace Pandora.Deck.UI
+{
+    public class DeckSpotParentBehaviour : MonoBehaviour
+    {
+        private ModelSingleton modelSingleton = ModelSingleton.instance;
+
         public List<Card> Deck
         {
             get
@@ -24,22 +28,22 @@ namespace Pandora.Deck.UI {
             }
         }
 
-        public void LoadSavedDeck() {
-            var serializedDeckWrapper = PlayerPrefs.GetString("DeckWrapper");
+        public void LoadSavedDeck()
+        {
+            var deckSlot = modelSingleton.DeckSlots[0];
 
-            Logger.Debug($"Loaded {serializedDeckWrapper}");
+            if (deckSlot == null) return;
 
-            if (serializedDeckWrapper == null) return;
+            var deck = JsonUtility.FromJson<List<string>>(deckSlot.deck);
 
-            var deckWrapper = ScriptableObject.CreateInstance<DeckWrapper>();
-
-            JsonUtility.FromJsonOverwrite(serializedDeckWrapper, deckWrapper);
+            if (deck == null) return;
 
             var menuCardsParent = transform.parent.GetComponentInChildren<MenuCardsParentBehaviour>();
 
             var spots = new Queue<DeckSpotBehaviour>(GetComponentsInChildren<DeckSpotBehaviour>());
 
-            foreach (var cardName in deckWrapper.Cards) {
+            foreach (var cardName in deck)
+            {
                 var spot = spots.Dequeue();
 
                 var card = menuCardsParent.FindCard(cardName);
