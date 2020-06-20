@@ -14,8 +14,9 @@ namespace Pandora.Network
     {
         private Thread liveThread = null;
         private ClientWebSocket ws = new ClientWebSocket();
-        private const int receiveChunkSize = 64;
         public bool IsDebugBuild = Debug.isDebugBuild;
+
+        int messageCount = 0;
 
         String WsBaseUri
         {
@@ -116,8 +117,10 @@ namespace Pandora.Network
                     continue;
                 }
 
+                messageCount += 1;
+
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBuffer);
-                Logger.Debug($"[REPLAY] Received {envelope}");
+                Logger.Debug($"[REPLAY] Received {envelope}, message count is {messageCount}");
 
                 EnqueueServerEnvelope(envelope);
             }
