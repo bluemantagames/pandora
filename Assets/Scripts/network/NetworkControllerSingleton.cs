@@ -26,7 +26,7 @@ namespace Pandora.Network
 
                 if (isDebugBuild)
                     return "http://localhost:8080";
-                else 
+                else
                     return "http://3bitpodcast.com:8080";
             }
         }
@@ -89,7 +89,7 @@ namespace Pandora.Network
 
         public void StartMatch(object data)
         {
-            if (data.GetType() != typeof(MatchParams)) 
+            if (data.GetType() != typeof(MatchParams))
             {
                 return;
             }
@@ -120,7 +120,7 @@ namespace Pandora.Network
                 Token = matchToken,
                 Username = matchParams.Username
             };
-            
+
             join.Deck.Add(matchParams.Deck);
 
             var envelope = new ClientEnvelope
@@ -146,7 +146,8 @@ namespace Pandora.Network
             while (true)
             {
                 // Return to matchmaking if match does not start in the predefined timeframe
-                if (!matchStarted && DateTime.Now.Subtract(startTime).Seconds > matchStartTimeout) {
+                if (!matchStarted && DateTime.Now.Subtract(startTime).Seconds > matchStartTimeout)
+                {
                     receiveThread.Abort();
 
                     networkThread = null;
@@ -194,53 +195,60 @@ namespace Pandora.Network
 
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBytes);
 
-                Logger.Debug($"Received {envelope}");
+                HandleServerEnvelope(envelope);
+            }
+        }
 
-                if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Start)
+        public void HandleServerEnvelope(ServerEnvelope envelope)
+        {
+            Debug.Log($"Received {envelope}");
+
+            if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Start)
+            {
+                matchStarted = true;
+
+                TeamComponent.assignedTeam = envelope.Start.Team;
+                PlayerId = envelope.Start.Id;
+
+                Debug.Log($"We're team {TeamComponent.assignedTeam}");
+
+                matchStartEvent.Invoke();
+            }
+
+            if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
+            { // enqueue spawns and let the main thread handle it
+                var commands = new List<Message> { };
+                float? mana = null;
+
+                foreach (var command in envelope.Step.Commands)
                 {
-                    matchStarted = true;
-
-                    TeamComponent.assignedTeam = envelope.Start.Team;
-                    PlayerId = envelope.Start.Id;
-
-                    Logger.Debug($"We're team {TeamComponent.assignedTeam}");
-
-                    matchStartEvent.Invoke();
+                    if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
+                    {
+                        commands.Add(
+                            GenerateSpawnMessage(command)
+                        );
+                    }
+                    else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand)
+                    {
+                        commands.Add(
+                            GenerateCommandMessage(command)
+                        );
+                    }
                 }
 
-                if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
-                { // enqueue spawns and let the main thread handle it
-                    var commands = new List<Message> { };
-                    float? mana = null;
-
-                    foreach (var command in envelope.Step.Commands)
+                // (I don't really like the foreach here...)
+                foreach (var playerInfo in envelope.Step.PlayerInfo)
+                {
+                    if (playerInfo.Id == PlayerId)
                     {
-                        if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
-                        {
-                            commands.Add(
-                                GenerateSpawnMessage(command)
-                            );
-                        } else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand) {
-                            commands.Add(
-                                GenerateCommandMessage(command)
-                            );
-                        }
+                        mana = playerInfo.Mana;
+                        Debug.Log($"Player ({PlayerId}) received mana: {mana}");
                     }
-
-                    // (I don't really like the foreach here...)
-                    foreach (var playerInfo in envelope.Step.PlayerInfo)
-                    {
-                        if (playerInfo.Id == PlayerId)
-                        {
-                            mana = playerInfo.Mana;
-                            Logger.Debug($"Player ({PlayerId}) received mana: {mana}");
-                        }
-                    }
-
-                    Logger.Debug("Enqueuing Step");
-
-                    stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
                 }
+
+                Debug.Log("Enqueuing Step");
+
+                stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
             }
         }
 

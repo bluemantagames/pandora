@@ -34,6 +34,7 @@ namespace Pandora.Network
         public Boolean IsActive = false;
 
         private static ReplayControllerSingleton privateInstance = null;
+        private static NetworkControllerSingleton networkSingleton = null;
 
         public static ReplayControllerSingleton instance
         {
@@ -42,6 +43,8 @@ namespace Pandora.Network
                 if (privateInstance == null)
                 {
                     privateInstance = new ReplayControllerSingleton();
+
+                    networkSingleton = NetworkControllerSingleton.instance;
                 }
 
                 return privateInstance;
@@ -94,6 +97,7 @@ namespace Pandora.Network
             {  
                 if (!MatchStarted) 
                 {
+                    networkSingleton.matchStarted = true;
                     MatchStarted = true;
                 }
 
@@ -122,32 +126,7 @@ namespace Pandora.Network
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBuffer);
                 Logger.Debug($"[REPLAY] Received {envelope}, message count is {messageCount}");
 
-                EnqueueServerEnvelope(envelope);
-            }
-        }
-
-        private void EnqueueServerEnvelope(ServerEnvelope envelope) {
-            if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
-            {
-                var commands = new List<Message> { };
-                float? mana = null;
-
-                foreach (var command in envelope.Step.Commands)
-                {
-                    if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
-                    {
-                        commands.Add(
-                            NetworkControllerSingleton.GenerateSpawnMessage(command)
-                        );
-                    } else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand) {
-                        commands.Add(
-                            NetworkControllerSingleton.GenerateCommandMessage(command)
-                        );
-                    }
-                }
-
-                Logger.Debug("[REPLAY] Enqueuing Step");
-                stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
+                networkSingleton.HandleServerEnvelope(envelope);
             }
         }
     }

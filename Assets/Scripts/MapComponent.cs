@@ -229,13 +229,9 @@ namespace Pandora
 
             timeSinceLastStep += (uint)Mathf.FloorToInt(Time.deltaTime * 1000);
 
-            var queue = IsLive 
-                ? ReplayControllerSingleton.instance.stepsQueue 
-                : NetworkControllerSingleton.instance.stepsQueue;
+            var queue = NetworkControllerSingleton.instance.stepsQueue;
 
-            var matchStarted = IsLive
-                ? ReplayControllerSingleton.instance.MatchStarted
-                : NetworkControllerSingleton.instance.matchStarted;
+            var matchStarted = NetworkControllerSingleton.instance.matchStarted;
 
             if (queue.TryDequeue(out step))
             {
