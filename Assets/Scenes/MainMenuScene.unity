@@ -2554,7 +2554,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d71435e9a90644b4b29cd09fab95870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DeckSlotButton: {fileID: 1974573161}
 --- !u!114 &945548709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2607,7 +2606,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DeckSpotsParent: {fileID: 33595755}
-  MenuCardsParent: {fileID: 728018211}
   DeckSlotButton: {fileID: 1974573161}
 --- !u!224 &950893939 stripped
 RectTransform:
@@ -4706,7 +4704,7 @@ MonoBehaviour:
   DeckSlotId: 0
   DeckSlotIndex: 0
   Active: 0
-  ActiveColor: {r: 255, g: 0, b: 0, a: 1}
+  ActiveColor: {r: 0.76862746, g: 0.36862746, b: 0.43137255, a: 1}
 --- !u!114 &1974573161
 MonoBehaviour:
   m_ObjectHideFlags: 0

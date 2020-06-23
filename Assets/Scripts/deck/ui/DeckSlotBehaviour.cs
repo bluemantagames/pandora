@@ -11,7 +11,7 @@ public class DeckSlotBehaviour : MonoBehaviour
     public long DeckSlotId;
     public int DeckSlotIndex;
     public bool Active = false;
-    public Color ActiveColor = new Color(255, 0, 0);
+    public Color ActiveColor = new Color(196, 94, 110);
     Color oldColor;
 
     public void ChangeDeckSlot()
