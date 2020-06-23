@@ -48,9 +48,9 @@ namespace Pandora.Deck.UI
                 Debug.Log(response.Error.message);
         }
 
-        public void LoadSavedDeck()
+        public void LoadSavedDeck(int deckSlotIndex)
         {
-            var deckSlot = modelSingleton.DeckSlots[0];
+            var deckSlot = modelSingleton.DeckSlots[deckSlotIndex];
 
             if (deckSlot == null) return;
 

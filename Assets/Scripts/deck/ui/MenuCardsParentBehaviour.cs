@@ -12,14 +12,25 @@ namespace Pandora.Deck.UI
             {
                 child.GetComponent<CardBehaviour>().IsDeckBuilderUI = true;
             }
-
-            GameObject.Find("Canvas").GetComponentInChildren<DeckSpotParentBehaviour>().LoadSavedDeck();
         }
 
         public MenuCardBehaviour FindCard(string cardName) =>
             GetComponentsInChildren<MenuCardBehaviour>()
                 .ToList()
                 .Find(c => c.CardName == cardName && !c.UiDisabled);
+
+        public void Reset()
+        {
+            foreach (Transform child in transform)
+            {
+                var menuCardBehaviour = child.GetComponent<MenuCardBehaviour>();
+
+                if (menuCardBehaviour != null)
+                {
+                    menuCardBehaviour.Reset();
+                }
+            }
+        }
     }
 
 }

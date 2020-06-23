@@ -1773,7 +1773,7 @@ GameObject:
   - component: {fileID: 728018212}
   - component: {fileID: 728018213}
   m_Layer: 5
-  m_Name: Content
+  m_Name: MenuCardsParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2514,6 +2514,7 @@ GameObject:
   - component: {fileID: 945548708}
   - component: {fileID: 945548710}
   - component: {fileID: 945548709}
+  - component: {fileID: 945548711}
   m_Layer: 5
   m_Name: DeckSlotsParent
   m_TagString: Untagged
@@ -2593,6 +2594,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 0
+--- !u!114 &945548711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945548706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a3e68c5e910c49ccac21e45cbacd428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DeckSpotsParent: {fileID: 33595755}
+  MenuCardsParent: {fileID: 728018211}
+  DeckSlotButton: {fileID: 1974573161}
 --- !u!224 &950893939 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 812671481729146879, guid: 383dbce5e9e950c408f0e052724f4f43,
@@ -4688,6 +4704,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DeckSlotId: 0
+  DeckSlotIndex: 0
+  Active: 0
+  ActiveColor: {r: 255, g: 0, b: 0, a: 1}
 --- !u!114 &1974573161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4730,7 +4749,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1974573162}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1974573160}
+        m_MethodName: ChangeDeckSlot
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1974573162
 MonoBehaviour:
   m_ObjectHideFlags: 0

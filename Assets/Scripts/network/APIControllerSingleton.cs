@@ -128,11 +128,27 @@ namespace Pandora.Network
         /// <param name="deckSlotId">The deck slot's id</param>
         /// <param name="deck">The deck as a Json list</param>
         /// <param name="token">The token string</param>
-        /// <returns>A Task with a MeResponse</returns>
+        /// <returns>A Task with a string</returns>
         public Task<ApiResponse<string>> DeckSlotUpdate(long deckSlotId, List<string> deck, string token)
         {
             var request = new RestRequest($"/users/me/deckSlots/{deckSlotId}", Method.PUT);
             var param = new DeckSlotUpdateRequest { deck = deck };
+
+            request.AddJsonBody(param);
+
+            return ExecuteApiRequest<string>(request, token);
+        }
+
+        /// <summary>
+        /// Update the active deck slot
+        /// </summary>
+        /// <param name="deckSlotId">The deck slot's id</param>
+        /// <param name="token">The token string</param>
+        /// <returns>A Task with a string</returns>
+        public Task<ApiResponse<string>> ActiveDeckSlotUpdate(long deckSlotId, string token)
+        {
+            var request = new RestRequest($"/users/me/activeDeckSlot", Method.PUT);
+            var param = new ActiveDeckSlotUpdateRequest { deckSlot = deckSlotId };
 
             request.AddJsonBody(param);
 
