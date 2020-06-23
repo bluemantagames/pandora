@@ -22,11 +22,6 @@ public class BeckSlotParentBehaviour : MonoBehaviour
             deckSlotButton.transform.SetParent(gameObject.transform);
             var buttonRect = deckSlotButton.GetComponent<RectTransform>();
 
-            // Change position
-            var buttonPosition = buttonRect.position;
-            buttonPosition.x += 75 * index;
-            buttonRect.position = buttonPosition;
-
             // Change value
             deckSlotButton.GetComponentInChildren<Text>().text = $"{index}";
 
@@ -35,6 +30,6 @@ public class BeckSlotParentBehaviour : MonoBehaviour
         }
 
         // Remove first button
-        Destroy(DeckSlotButton);
+        Destroy(DeckSlotButton.gameObject);
     }
 }
