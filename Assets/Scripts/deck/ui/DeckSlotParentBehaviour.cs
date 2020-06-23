@@ -9,7 +9,6 @@ using System.Net;
 public class DeckSlotParentBehaviour : MonoBehaviour
 {
     public GameObject DeckSpotsParent;
-    public GameObject MenuCardsParent;
     public Button DeckSlotButton;
     ModelSingleton modelSingleton = ModelSingleton.instance;
     ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
@@ -18,8 +17,12 @@ public class DeckSlotParentBehaviour : MonoBehaviour
     {
         if (modelSingleton.DeckSlots == null) return;
         if (DeckSlotButton == null) return;
+        if (DeckSpotsParent == null) return;
 
+        var deckSpotParentBehaviour = DeckSpotsParent.GetComponent<DeckSpotParentBehaviour>();
         var activeDeckSlot = modelSingleton.User.activeDeckSlot;
+
+        if (deckSpotParentBehaviour == null) return;
 
         for (var index = 0; index < modelSingleton.DeckSlots.Count; index++)
         {
@@ -39,10 +42,12 @@ public class DeckSlotParentBehaviour : MonoBehaviour
                 deckSlotBehaviour.DeckSlotId = deckSlot.id;
                 deckSlotBehaviour.DeckSlotIndex = index;
 
-                // Activate if necessary
+                // Activate and load the
+                // relative deck if necessary
                 if (deckSlot.id == activeDeckSlot)
                 {
                     deckSlotBehaviour.Activate();
+                    deckSpotParentBehaviour.LoadSavedDeck(index);
                 }
             }
         }
@@ -53,12 +58,11 @@ public class DeckSlotParentBehaviour : MonoBehaviour
 
     public async UniTaskVoid ExecuteChangeDeckSlot(long deckSlotId, int deckSlotIndex)
     {
-        if (DeckSpotsParent == null || MenuCardsParent == null) return;
+        if (DeckSpotsParent == null) return;
 
         var deckSpotParentBehaviour = DeckSpotsParent.GetComponent<DeckSpotParentBehaviour>();
-        var menuCardsParentBehaviour = MenuCardsParent.GetComponent<MenuCardsParentBehaviour>();
 
-        if (deckSpotParentBehaviour == null || menuCardsParentBehaviour == null) return;
+        if (deckSpotParentBehaviour == null) return;
 
         var token = modelSingleton.Token;
 
@@ -68,7 +72,7 @@ public class DeckSlotParentBehaviour : MonoBehaviour
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            menuCardsParentBehaviour.Reset();
+            deckSpotParentBehaviour.Reset();
             deckSpotParentBehaviour.LoadSavedDeck(deckSlotIndex);
 
             // Update the model

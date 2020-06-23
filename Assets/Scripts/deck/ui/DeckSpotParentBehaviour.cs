@@ -18,13 +18,11 @@ namespace Pandora.Deck.UI
             get
             {
                 var deck = new List<Card> { };
+                var spots = gameObject.GetComponentsInChildren<DeckSpotBehaviour>();
 
-                foreach (Transform child in transform)
+                foreach (var deckSpotBehaviour in spots)
                 {
-                    var deckSpot = child.GetComponent<DeckSpotBehaviour>();
-
-                    if (deckSpot != null)
-                        deck.Add(deckSpot.Card);
+                    deck.Add(deckSpotBehaviour.Card);
                 }
 
                 return deck;
@@ -33,17 +31,31 @@ namespace Pandora.Deck.UI
 
         public async UniTaskVoid SaveDeck()
         {
+            var activeDeckSlot = modelSingleton.User.activeDeckSlot;
+
+            if (activeDeckSlot == null) return;
+
             var deck = Deck.Select(d => d != null ? d.Name : null).ToList();
-            var slotId = modelSingleton.DeckSlots[0].id;
             var token = modelSingleton.Token;
 
-            Debug.Log($"Saving deck slot {slotId} with deck");
+            Debug.Log($"Saving deck slot {activeDeckSlot} with deck");
             Debug.Log(deck);
 
-            var response = await apiControllerSingleton.DeckSlotUpdate(slotId, deck, token);
+            var response = await apiControllerSingleton.DeckSlotUpdate((long)activeDeckSlot, deck, token);
 
             if (response.StatusCode == HttpStatusCode.OK)
-                Debug.Log($"Updated deck slot {slotId}");
+            {
+                Debug.Log($"Updated deck slot {activeDeckSlot}");
+
+                // Updating the model
+                modelSingleton.DeckSlots = modelSingleton.DeckSlots.Select(deckSlot =>
+                {
+                    if (deckSlot.id == activeDeckSlot)
+                        deckSlot.deck = deck;
+
+                    return deckSlot;
+                }).ToList();
+            }
             else
                 Debug.Log(response.Error.message);
         }
@@ -63,14 +75,27 @@ namespace Pandora.Deck.UI
 
             foreach (var cardName in deckSlot.deck)
             {
-                Debug.Log(cardName);
+                Debug.Log($"Loading {cardName}");
+
                 var spot = spots.Dequeue();
 
                 if (cardName != null)
                 {
                     var card = menuCardsParent.FindCard(cardName);
-                    card.SetSpot(spot.gameObject);
+
+                    if (card != null)
+                        card.SetSpot(spot.gameObject);
                 }
+            }
+        }
+
+        public void Reset()
+        {
+            var cards = gameObject.GetComponentsInChildren<MenuCardBehaviour>();
+
+            foreach (var menuCardBehaviour in cards)
+            {
+                menuCardBehaviour.Reset();
             }
         }
     }
