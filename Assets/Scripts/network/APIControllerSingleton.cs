@@ -2,6 +2,7 @@ using RestSharp;
 using UnityEngine;
 using Pandora.Network.Data;
 using Pandora.Network.Data.Users;
+using Pandora.Network.Data.Matchmaking;
 using System.Threading.Tasks;
 using System.Net;
 using System.Collections.Generic;
@@ -147,12 +148,25 @@ namespace Pandora.Network
         /// <returns>A Task with a string</returns>
         public Task<ApiResponse<string>> ActiveDeckSlotUpdate(long deckSlotId, string token)
         {
-            var request = new RestRequest($"/users/me/activeDeckSlot", Method.PUT);
+            var request = new RestRequest("/users/me/activeDeckSlot", Method.PUT);
             var param = new ActiveDeckSlotUpdateRequest { deckSlot = deckSlotId };
 
             request.AddJsonBody(param);
 
             return ExecuteApiRequest<string>(request, token);
+        }
+
+        /// <summary>
+        /// Start the matchmaking (long polling)
+        /// </summary>
+        /// <param name="token">The token string</param>
+        /// <returns>A Task with a MatchmakingResponse</returns>
+        public Task<ApiResponse<MatchmakingResponse>> StartMatchmaking(string token)
+        {
+            var request = new RestRequest("/matchmaking", Method.GET);
+            request.Timeout = int.MaxValue;
+
+            return ExecuteApiRequest<MatchmakingResponse>(request, token);
         }
     }
 }

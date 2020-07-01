@@ -37,10 +37,7 @@ namespace Pandora.Network
                 username = UsernameObject.text;
             }
 
-            NetworkControllerSingleton.instance.StartMatchmaking(
-                username,
-                deck.ConvertAll(card => card.Name)
-            );
+            NetworkControllerSingleton.instance.StartMatchmaking();
 
             GameObject.Find("MatchmakingButton").GetComponent<Button>().interactable = false;
 
@@ -64,9 +61,7 @@ namespace Pandora.Network
 
         public void StartMatch(string username, List<string> deck)
         {
-            NetworkControllerSingleton.instance.StartMatch(
-                new MatchParams(username, deck)
-            );
+            NetworkControllerSingleton.instance.StartMatch();
         }
         void LoadGameScene()
         {

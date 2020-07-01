@@ -11,6 +11,8 @@ using Google.Protobuf;
 using UnityEngine.Events;
 using Pandora.Network.Messages;
 using System.Collections.Concurrent;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 namespace Pandora.Network
 {
@@ -31,12 +33,13 @@ namespace Pandora.Network
             }
         }
 
-        string matchmakingUrl = "/matchmaking";
         string userMatchToken = null;
         Socket matchSocket = null;
         Thread networkThread = null;
         Thread receiveThread = null;
         ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
+        ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
+        ModelSingleton modelSingleton = ModelSingleton.instance;
         int matchStartTimeout = 3; // seconds
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
@@ -61,28 +64,26 @@ namespace Pandora.Network
 
         private NetworkControllerSingleton() { }
 
-        public void StartMatchmaking(String username, List<String> deck)
+        public async void StartMatchmaking()
         {
+            if (modelSingleton.Token == null) return;
+
             IsActive = true;
 
-            var client = new RestClient(matchmakingHost);
-            var request = new RestRequest(matchmakingUrl, Method.GET);
+            var response = await apiControllerSingleton.StartMatchmaking(modelSingleton.Token);
 
-            client.Timeout = int.MaxValue; // request is long-polling - do not timeout
-
-            client.ExecuteAsync<MatchmakingResponse>(request, response =>
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                Logger.Debug($"Match found, token: {response.Data.token}");
-
-                userMatchToken = response.Data.token;
+                userMatchToken = response.Body.token;
 
                 if (networkThread == null)
                 {
-                    networkThread = new Thread(new ThreadStart(StartMatch));
+                    Logger.Debug($"Match found, token: {userMatchToken}");
 
+                    networkThread = new Thread(new ThreadStart(StartMatch));
                     networkThread.Start();
                 }
-            });
+            }
         }
 
         public void StartMatch()
@@ -100,6 +101,11 @@ namespace Pandora.Network
             var address = dns.AddressList[0];
             var ipe = new IPEndPoint(address, matchPort);
 
+            var decodedToken = new JwtSecurityToken(userMatchToken);
+            var matchToken = decodedToken.Claims.First(c => c.Type == "matchToken").Value;
+
+            Debug.Log($"Decoded user match JWT, match token is: {matchToken}");
+
             matchSocket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
             Logger.Debug($"Connecting to {matchHost}:{matchPort}");
@@ -113,7 +119,7 @@ namespace Pandora.Network
 
             var envelope = new ClientEnvelope
             {
-                Token = ,
+                Token = matchToken,
                 Join = join
             };
 
@@ -140,7 +146,7 @@ namespace Pandora.Network
 
                     networkThread = null;
 
-                    StartMatchmaking(matchParams.Username, matchParams.Deck);
+                    StartMatchmaking();
 
                     Debug.LogWarning("Timeout while joining a match, back to matchmaking");
 
