@@ -26,13 +26,13 @@ namespace Pandora.Network
 
                 if (isDebugBuild)
                     return "http://localhost:8080";
-                else 
+                else
                     return "http://3bitpodcast.com:8080";
             }
         }
 
         string matchmakingUrl = "/matchmaking";
-        string matchToken = null;
+        string userMatchToken = null;
         Socket matchSocket = null;
         Thread networkThread = null;
         Thread receiveThread = null;
@@ -74,31 +74,22 @@ namespace Pandora.Network
             {
                 Logger.Debug($"Match found, token: {response.Data.token}");
 
-                matchToken = response.Data.token;
+                userMatchToken = response.Data.token;
 
                 if (networkThread == null)
                 {
-                    networkThread = new Thread(new ParameterizedThreadStart(StartMatch));
+                    networkThread = new Thread(new ThreadStart(StartMatch));
 
-                    networkThread.Start(
-                        new MatchParams(username, deck)
-                    );
+                    networkThread.Start();
                 }
             });
         }
 
-        public void StartMatch(object data)
+        public void StartMatch()
         {
-            if (data.GetType() != typeof(MatchParams)) 
-            {
-                return;
-            }
-
-            Debug.Log($"Connecting to the game server with token {matchToken}");
+            Debug.Log($"Connecting to the game server with token {userMatchToken}");
 
             var startTime = DateTime.Now;
-
-            MatchParams matchParams = (MatchParams)data;
 
             var matchHost = (isDebugBuild) ? "127.0.0.1" : "3bitpodcast.com";
             var matchPort = 9090;
@@ -117,15 +108,12 @@ namespace Pandora.Network
 
             var join = new Join
             {
-                Token = matchToken,
-                Username = matchParams.Username
+                UserMatchToken = userMatchToken
             };
-            
-            join.Deck.Add(matchParams.Deck);
 
             var envelope = new ClientEnvelope
             {
-                Token = matchToken,
+                Token = ,
                 Join = join
             };
 
@@ -146,7 +134,8 @@ namespace Pandora.Network
             while (true)
             {
                 // Return to matchmaking if match does not start in the predefined timeframe
-                if (!matchStarted && DateTime.Now.Subtract(startTime).Seconds > matchStartTimeout) {
+                if (!matchStarted && DateTime.Now.Subtract(startTime).Seconds > matchStartTimeout)
+                {
                     receiveThread.Abort();
 
                     networkThread = null;
@@ -220,7 +209,9 @@ namespace Pandora.Network
                             commands.Add(
                                 GenerateSpawnMessage(command)
                             );
-                        } else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand) {
+                        }
+                        else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand)
+                        {
                             commands.Add(
                                 GenerateCommandMessage(command)
                             );

@@ -24,39 +24,38 @@ namespace Pandora.Messages {
     static MessagesReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg5tZXNzYWdlcy5wcm90bxIQcGFuZG9yYS5tZXNzYWdlcyI1CgRKb2luEg0K",
-            "BXRva2VuGAEgASgJEgwKBGRlY2sYAiADKAkSEAoIdXNlcm5hbWUYAyABKAki",
-            "NAoFU3RhcnQSDAoEdGVhbRgBIAEoBRIRCgl0aW1lc3RhbXAYAiABKAQSCgoC",
-            "aWQYAyABKAUiNAoKUGxheWVySW5mbxIKCgJpZBgBIAEoBRIMCgR0ZWFtGAIg",
-            "ASgFEgwKBG1hbmEYAyABKAIiiQEKBVNwYXduEhEKCXBsYXllcl9pZBgFIAEo",
-            "BRIMCgR0ZWFtGAQgASgFEg8KB3VuaXRfaWQYByABKAkSEQoJdW5pdF9uYW1l",
-            "GAEgASgJEgkKAXgYAiABKAUSCQoBeRgDIAEoBRIRCgltYW5hX3VzZWQYBiAB",
-            "KAUSEgoKZWxhcHNlZF9tcxgIIAEoBCJPCgdDb21tYW5kEhEKCXBsYXllcl9p",
-            "ZBgFIAEoBRIMCgR0ZWFtGAQgASgFEg8KB3VuaXRfaWQYByABKAkSEgoKZWxh",
-            "cHNlZF9tcxgIIAEoBCI4Cg1NYXRjaEZpbmlzaGVkEhMKC3dpbm5lcl90ZWFt",
-            "GAEgASgFEhIKCmVsYXBzZWRfbXMYAiABKAQiagoORW5naW5lU25hcHNob3QS",
-            "EAoIc25hcHNob3QYASABKAkSEQoJdGltZXN0YW1wGAIgASgEEhIKCmVsYXBz",
-            "ZWRfbXMYAyABKAQSEQoJcGxheWVyX2lkGAUgASgFEgwKBHRlYW0YBCABKAUi",
-            "ggEKBFN0ZXASFgoOdGltZV9wYXNzZWRfbXMYASABKA0SLwoIY29tbWFuZHMY",
-            "AiADKAsyHS5wYW5kb3JhLm1lc3NhZ2VzLlN0ZXBDb21tYW5kEjEKC3BsYXll",
-            "cl9pbmZvGAMgAygLMhwucGFuZG9yYS5tZXNzYWdlcy5QbGF5ZXJJbmZvIogB",
-            "CgtTdGVwQ29tbWFuZBIRCgl0aW1lc3RhbXAYAiABKAQSKAoFc3Bhd24YASAB",
-            "KAsyFy5wYW5kb3JhLm1lc3NhZ2VzLlNwYXduSAASMQoMdW5pdF9jb21tYW5k",
-            "GAMgASgLMhkucGFuZG9yYS5tZXNzYWdlcy5Db21tYW5kSABCCQoHY29tbWFu",
-            "ZCKiAgoOQ2xpZW50RW52ZWxvcGUSDQoFdG9rZW4YAyABKAkSJgoEam9pbhgC",
-            "IAEoCzIWLnBhbmRvcmEubWVzc2FnZXMuSm9pbkgAEigKBXNwYXduGAEgASgL",
-            "MhcucGFuZG9yYS5tZXNzYWdlcy5TcGF3bkgAEiwKB2NvbW1hbmQYBCABKAsy",
-            "GS5wYW5kb3JhLm1lc3NhZ2VzLkNvbW1hbmRIABI5Cg5tYXRjaF9maW5pc2hl",
-            "ZBgFIAEoCzIfLnBhbmRvcmEubWVzc2FnZXMuTWF0Y2hGaW5pc2hlZEgAEjsK",
-            "D2VuZ2luZV9zbmFwc2hvdBgGIAEoCzIgLnBhbmRvcmEubWVzc2FnZXMuRW5n",
-            "aW5lU25hcHNob3RIAEIJCgdtZXNzYWdlIm0KDlNlcnZlckVudmVsb3BlEigK",
-            "BXN0YXJ0GAEgASgLMhcucGFuZG9yYS5tZXNzYWdlcy5TdGFydEgAEiYKBHN0",
-            "ZXAYAyABKAsyFi5wYW5kb3JhLm1lc3NhZ2VzLlN0ZXBIAEIJCgdtZXNzYWdl",
-            "YgZwcm90bzM="));
+            "Cg5tZXNzYWdlcy5wcm90bxIQcGFuZG9yYS5tZXNzYWdlcyIeCgRKb2luEhYK",
+            "DnVzZXJNYXRjaFRva2VuGAQgASgJIjQKBVN0YXJ0EgwKBHRlYW0YASABKAUS",
+            "EQoJdGltZXN0YW1wGAIgASgEEgoKAmlkGAMgASgFIjQKClBsYXllckluZm8S",
+            "CgoCaWQYASABKAUSDAoEdGVhbRgCIAEoBRIMCgRtYW5hGAMgASgCIokBCgVT",
+            "cGF3bhIRCglwbGF5ZXJfaWQYBSABKAUSDAoEdGVhbRgEIAEoBRIPCgd1bml0",
+            "X2lkGAcgASgJEhEKCXVuaXRfbmFtZRgBIAEoCRIJCgF4GAIgASgFEgkKAXkY",
+            "AyABKAUSEQoJbWFuYV91c2VkGAYgASgFEhIKCmVsYXBzZWRfbXMYCCABKAQi",
+            "TwoHQ29tbWFuZBIRCglwbGF5ZXJfaWQYBSABKAUSDAoEdGVhbRgEIAEoBRIP",
+            "Cgd1bml0X2lkGAcgASgJEhIKCmVsYXBzZWRfbXMYCCABKAQiOAoNTWF0Y2hG",
+            "aW5pc2hlZBITCgt3aW5uZXJfdGVhbRgBIAEoBRISCgplbGFwc2VkX21zGAIg",
+            "ASgEImoKDkVuZ2luZVNuYXBzaG90EhAKCHNuYXBzaG90GAEgASgJEhEKCXRp",
+            "bWVzdGFtcBgCIAEoBBISCgplbGFwc2VkX21zGAMgASgEEhEKCXBsYXllcl9p",
+            "ZBgFIAEoBRIMCgR0ZWFtGAQgASgFIoIBCgRTdGVwEhYKDnRpbWVfcGFzc2Vk",
+            "X21zGAEgASgNEi8KCGNvbW1hbmRzGAIgAygLMh0ucGFuZG9yYS5tZXNzYWdl",
+            "cy5TdGVwQ29tbWFuZBIxCgtwbGF5ZXJfaW5mbxgDIAMoCzIcLnBhbmRvcmEu",
+            "bWVzc2FnZXMuUGxheWVySW5mbyKIAQoLU3RlcENvbW1hbmQSEQoJdGltZXN0",
+            "YW1wGAIgASgEEigKBXNwYXduGAEgASgLMhcucGFuZG9yYS5tZXNzYWdlcy5T",
+            "cGF3bkgAEjEKDHVuaXRfY29tbWFuZBgDIAEoCzIZLnBhbmRvcmEubWVzc2Fn",
+            "ZXMuQ29tbWFuZEgAQgkKB2NvbW1hbmQiogIKDkNsaWVudEVudmVsb3BlEg0K",
+            "BXRva2VuGAMgASgJEiYKBGpvaW4YAiABKAsyFi5wYW5kb3JhLm1lc3NhZ2Vz",
+            "LkpvaW5IABIoCgVzcGF3bhgBIAEoCzIXLnBhbmRvcmEubWVzc2FnZXMuU3Bh",
+            "d25IABIsCgdjb21tYW5kGAQgASgLMhkucGFuZG9yYS5tZXNzYWdlcy5Db21t",
+            "YW5kSAASOQoObWF0Y2hfZmluaXNoZWQYBSABKAsyHy5wYW5kb3JhLm1lc3Nh",
+            "Z2VzLk1hdGNoRmluaXNoZWRIABI7Cg9lbmdpbmVfc25hcHNob3QYBiABKAsy",
+            "IC5wYW5kb3JhLm1lc3NhZ2VzLkVuZ2luZVNuYXBzaG90SABCCQoHbWVzc2Fn",
+            "ZSJtCg5TZXJ2ZXJFbnZlbG9wZRIoCgVzdGFydBgBIAEoCzIXLnBhbmRvcmEu",
+            "bWVzc2FnZXMuU3RhcnRIABImCgRzdGVwGAMgASgLMhYucGFuZG9yYS5tZXNz",
+            "YWdlcy5TdGVwSABCCQoHbWVzc2FnZWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Join), global::Pandora.Messages.Join.Parser, new[]{ "Token", "Deck", "Username" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Join), global::Pandora.Messages.Join.Parser, new[]{ "UserMatchToken" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Start), global::Pandora.Messages.Start.Parser, new[]{ "Team", "Timestamp", "Id" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.PlayerInfo), global::Pandora.Messages.PlayerInfo.Parser, new[]{ "Id", "Team", "Mana" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Spawn), global::Pandora.Messages.Spawn.Parser, new[]{ "PlayerId", "Team", "UnitId", "UnitName", "X", "Y", "ManaUsed", "ElapsedMs" }, null, null, null),
@@ -101,9 +100,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public Join(Join other) : this() {
-      token_ = other.token_;
-      deck_ = other.deck_.Clone();
-      username_ = other.username_;
+      userMatchToken_ = other.userMatchToken_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -112,35 +109,14 @@ namespace Pandora.Messages {
       return new Join(this);
     }
 
-    /// <summary>Field number for the "token" field.</summary>
-    public const int TokenFieldNumber = 1;
-    private string token_ = "";
+    /// <summary>Field number for the "userMatchToken" field.</summary>
+    public const int UserMatchTokenFieldNumber = 4;
+    private string userMatchToken_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Token {
-      get { return token_; }
+    public string UserMatchToken {
+      get { return userMatchToken_; }
       set {
-        token_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "deck" field.</summary>
-    public const int DeckFieldNumber = 2;
-    private static readonly pb::FieldCodec<string> _repeated_deck_codec
-        = pb::FieldCodec.ForString(18);
-    private readonly pbc::RepeatedField<string> deck_ = new pbc::RepeatedField<string>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<string> Deck {
-      get { return deck_; }
-    }
-
-    /// <summary>Field number for the "username" field.</summary>
-    public const int UsernameFieldNumber = 3;
-    private string username_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Username {
-      get { return username_; }
-      set {
-        username_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        userMatchToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -157,18 +133,14 @@ namespace Pandora.Messages {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Token != other.Token) return false;
-      if(!deck_.Equals(other.deck_)) return false;
-      if (Username != other.Username) return false;
+      if (UserMatchToken != other.UserMatchToken) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Token.Length != 0) hash ^= Token.GetHashCode();
-      hash ^= deck_.GetHashCode();
-      if (Username.Length != 0) hash ^= Username.GetHashCode();
+      if (UserMatchToken.Length != 0) hash ^= UserMatchToken.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -182,14 +154,9 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Token.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Token);
-      }
-      deck_.WriteTo(output, _repeated_deck_codec);
-      if (Username.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(Username);
+      if (UserMatchToken.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(UserMatchToken);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -199,12 +166,8 @@ namespace Pandora.Messages {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Token.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Token);
-      }
-      size += deck_.CalculateSize(_repeated_deck_codec);
-      if (Username.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Username);
+      if (UserMatchToken.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserMatchToken);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -217,12 +180,8 @@ namespace Pandora.Messages {
       if (other == null) {
         return;
       }
-      if (other.Token.Length != 0) {
-        Token = other.Token;
-      }
-      deck_.Add(other.deck_);
-      if (other.Username.Length != 0) {
-        Username = other.Username;
+      if (other.UserMatchToken.Length != 0) {
+        UserMatchToken = other.UserMatchToken;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -235,16 +194,8 @@ namespace Pandora.Messages {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            Token = input.ReadString();
-            break;
-          }
-          case 18: {
-            deck_.AddEntriesFrom(input, _repeated_deck_codec);
-            break;
-          }
-          case 26: {
-            Username = input.ReadString();
+          case 34: {
+            UserMatchToken = input.ReadString();
             break;
           }
         }
