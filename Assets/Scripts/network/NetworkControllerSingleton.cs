@@ -13,25 +13,13 @@ using Pandora.Network.Messages;
 using System.Collections.Concurrent;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using Pandora.Network.Data.Matchmaking;
 
 namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {
         public bool isDebugBuild = Debug.isDebugBuild;
-
-        string matchmakingHost
-        {
-            get
-            {
-                Debug.Log($"Is debug build? {isDebugBuild}");
-
-                if (isDebugBuild)
-                    return "http://localhost:8080";
-                else
-                    return "http://3bitpodcast.com:8080";
-            }
-        }
 
         string userMatchToken = null;
         Socket matchSocket = null;
@@ -101,8 +89,10 @@ namespace Pandora.Network
             var address = dns.AddressList[0];
             var ipe = new IPEndPoint(address, matchPort);
 
-            var decodedToken = new JwtSecurityToken(userMatchToken);
-            var matchToken = decodedToken.Claims.First(c => c.Type == "matchToken").Value;
+            var decodedUserMatchToken = new JwtSecurityToken(userMatchToken);
+            var userMatchTokenPayload = decodedUserMatchToken.Claims.First(c => c.Type == "payload").Value;
+            var decodedPayload = JsonUtility.FromJson<UserMatchTokenPayload>(userMatchTokenPayload);
+            var matchToken = decodedPayload.matchToken;
 
             Debug.Log($"Decoded user match JWT, match token is: {matchToken}");
 
