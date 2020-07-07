@@ -177,26 +177,40 @@ namespace Pandora.Network
 
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBytes);
 
-                Logger.Debug($"Received {envelope}");
+                HandleServerEnvelope(envelope);
+            }
+        }
 
-                if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Start)
+        public void HandleServerEnvelope(ServerEnvelope envelope)
+        {
+            Debug.Log($"Received {envelope}");
+
+            if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Start)
+            {
+                matchStarted = true;
+
+                TeamComponent.assignedTeam = envelope.Start.Team;
+                PlayerId = envelope.Start.Id;
+
+                Debug.Log($"We're team {TeamComponent.assignedTeam}");
+
+                matchStartEvent.Invoke();
+            }
+
+            if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
+            { // enqueue spawns and let the main thread handle it
+                var commands = new List<Message> { };
+                float? mana = null;
+
+                foreach (var command in envelope.Step.Commands)
                 {
-                    matchStarted = true;
-
-                    TeamComponent.assignedTeam = envelope.Start.Team;
-                    PlayerId = envelope.Start.Id;
-
-                    Logger.Debug($"We're team {TeamComponent.assignedTeam}");
-
-                    matchStartEvent.Invoke();
-                }
-
-                if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
-                { // enqueue spawns and let the main thread handle it
-                    var commands = new List<Message> { };
-                    float? mana = null;
-
-                    foreach (var command in envelope.Step.Commands)
+                    if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
+                    {
+                        commands.Add(
+                            GenerateSpawnMessage(command)
+                        );
+                    }
+                    else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand)
                     {
                         if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
                         {
@@ -211,21 +225,21 @@ namespace Pandora.Network
                             );
                         }
                     }
-
-                    // (I don't really like the foreach here...)
-                    foreach (var playerInfo in envelope.Step.PlayerInfo)
-                    {
-                        if (playerInfo.Id == PlayerId)
-                        {
-                            mana = playerInfo.Mana;
-                            Logger.Debug($"Player ({PlayerId}) received mana: {mana}");
-                        }
-                    }
-
-                    Logger.Debug("Enqueuing Step");
-
-                    stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
                 }
+
+                // (I don't really like the foreach here...)
+                foreach (var playerInfo in envelope.Step.PlayerInfo)
+                {
+                    if (playerInfo.Id == PlayerId)
+                    {
+                        mana = playerInfo.Mana;
+                        Debug.Log($"Player ({PlayerId}) received mana: {mana}");
+                    }
+                }
+
+                Debug.Log("Enqueuing Step");
+
+                stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
             }
         }
 

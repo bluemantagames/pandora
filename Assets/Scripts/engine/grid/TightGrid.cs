@@ -99,6 +99,18 @@ namespace Pandora.Engine.Grid
             {
                 for (var y = startY; y <= endY; y++)
                 {
+                    var isIndexInvalid = 
+                        x < 0 ||
+                        grid.Length - 1 < x ||
+                        y < 0 ||
+                        grid[x].Length - 1 < y;
+
+                    if (isIndexInvalid) {
+                        Logger.DebugWarning($"Received invalid index {x}, {y} while inserting {item.GameObject.name}");
+
+                        continue;
+                    }
+
                     grid[x][y].Insert(item);
                 }
             }

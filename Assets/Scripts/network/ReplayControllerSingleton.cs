@@ -14,25 +14,27 @@ namespace Pandora.Network
     {
         private Thread liveThread = null;
         private ClientWebSocket ws = new ClientWebSocket();
-        private const int receiveChunkSize = 64;
-        private bool isDebugBuild = false;
+        public bool IsDebugBuild = Debug.isDebugBuild;
+
+        int messageCount = 0;
 
         String WsBaseUri
         {
             get
             {
-                if (isDebugBuild)
+                if (IsDebugBuild)
                     return "ws://localhost:8080/live";
-                else 
+                else
                     return "ws://3bitpodcast.com:8080/live";
             }
         }
-        
+
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool MatchStarted = true;
         public Boolean IsActive = false;
 
         private static ReplayControllerSingleton privateInstance = null;
+        private static NetworkControllerSingleton networkSingleton = null;
 
         public static ReplayControllerSingleton instance
         {
@@ -41,13 +43,18 @@ namespace Pandora.Network
                 if (privateInstance == null)
                 {
                     privateInstance = new ReplayControllerSingleton();
+
+                    networkSingleton = NetworkControllerSingleton.instance;
                 }
 
                 return privateInstance;
             }
         }
 
-        private ReplayControllerSingleton() { }
+        private ReplayControllerSingleton()
+        {
+            ws.Options.SetBuffer(125000, 1);
+        }
 
         public void StartLive(String matchToken)
         {
@@ -61,16 +68,17 @@ namespace Pandora.Network
             }
         }
 
-        public async void LiveExec(object data) {
-            if (data.GetType() != typeof(String)) 
+        public async void LiveExec(object data)
+        {
+            if (data.GetType() != typeof(String))
             {
                 return;
             }
 
             var matchToken = (String)data;
             var targetUri = new Uri($"{WsBaseUri}/{matchToken}");
-            
-            try 
+
+            try
             {
                 await ws.ConnectAsync(targetUri, CancellationToken.None);
                 Debug.Log($"[REPLAY] Connecting to {targetUri}...");
@@ -90,9 +98,10 @@ namespace Pandora.Network
         private async Task Receive(ClientWebSocket ws)
         {
             while (ws.State == WebSocketState.Open)
-            {  
-                if (!MatchStarted) 
+            {
+                if (!MatchStarted)
                 {
+                    networkSingleton.matchStarted = true;
                     MatchStarted = true;
                 }
 
@@ -105,7 +114,7 @@ namespace Pandora.Network
                     Array.Reverse(sizeBytes);
                 }
 
-                var size = BitConverter.ToInt32(sizeBytes, 0);     
+                var size = BitConverter.ToInt32(sizeBytes, 0);
                 var messageBuffer = new Byte[size];
 
                 var result = await ws.ReceiveAsync(new ArraySegment<byte>(messageBuffer), CancellationToken.None);
@@ -116,35 +125,12 @@ namespace Pandora.Network
                     continue;
                 }
 
+                messageCount += 1;
+
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBuffer);
-                Logger.Debug($"[REPLAY] Received {envelope}");
+                Logger.Debug($"[REPLAY] Received {envelope}, message count is {messageCount}");
 
-                EnqueueServerEnvelope(envelope);
-            }
-        }
-
-        private void EnqueueServerEnvelope(ServerEnvelope envelope) {
-            if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
-            {
-                var commands = new List<Message> { };
-                float? mana = null;
-
-                foreach (var command in envelope.Step.Commands)
-                {
-                    if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
-                    {
-                        commands.Add(
-                            NetworkControllerSingleton.GenerateSpawnMessage(command)
-                        );
-                    } else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand) {
-                        commands.Add(
-                            NetworkControllerSingleton.GenerateCommandMessage(command)
-                        );
-                    }
-                }
-
-                Logger.Debug("[REPLAY] Enqueuing Step");
-                stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
+                networkSingleton.HandleServerEnvelope(envelope);
             }
         }
     }

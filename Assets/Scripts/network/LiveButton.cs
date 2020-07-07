@@ -13,12 +13,17 @@ namespace Pandora.Network
         Color team1ButtonColor;
         Color team2ButtonColor;
         public Text MatchTokenObject;
+        public bool UseProdServer = false;
 
         public void Connect()
         {
             var matchToken = MatchTokenObject.text;
 
             if (matchToken.Length <= 0) return;
+
+            if (UseProdServer) {
+                ReplayControllerSingleton.instance.IsDebugBuild = false;
+            }
 
             // Assign the team
             TeamComponent.assignedTeam = SelectedTeam;
