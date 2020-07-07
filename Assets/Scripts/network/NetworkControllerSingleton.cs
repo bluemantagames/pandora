@@ -115,8 +115,6 @@ namespace Pandora.Network
 
             var bytes = envelope.ToByteArray();
 
-            var lengthBytes = bytes.Length;
-
             SendMessage(
                 envelope.ToByteArray()
             );

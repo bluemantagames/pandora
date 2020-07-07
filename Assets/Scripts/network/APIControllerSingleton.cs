@@ -64,7 +64,7 @@ namespace Pandora.Network
             {
                 var response = reqTask.Result;
 
-                Debug.Log(response.Content);
+                // Debug.Log(response.Content);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {

@@ -25,7 +25,7 @@ namespace Pandora.Messages {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Cg5tZXNzYWdlcy5wcm90bxIQcGFuZG9yYS5tZXNzYWdlcyIeCgRKb2luEhYK",
-            "DnVzZXJNYXRjaFRva2VuGAQgASgJIjQKBVN0YXJ0EgwKBHRlYW0YASABKAUS",
+            "DnVzZXJNYXRjaFRva2VuGAUgASgJIjQKBVN0YXJ0EgwKBHRlYW0YASABKAUS",
             "EQoJdGltZXN0YW1wGAIgASgEEgoKAmlkGAMgASgFIjQKClBsYXllckluZm8S",
             "CgoCaWQYASABKAUSDAoEdGVhbRgCIAEoBRIMCgRtYW5hGAMgASgCIokBCgVT",
             "cGF3bhIRCglwbGF5ZXJfaWQYBSABKAUSDAoEdGVhbRgEIAEoBRIPCgd1bml0",
@@ -110,7 +110,7 @@ namespace Pandora.Messages {
     }
 
     /// <summary>Field number for the "userMatchToken" field.</summary>
-    public const int UserMatchTokenFieldNumber = 4;
+    public const int UserMatchTokenFieldNumber = 5;
     private string userMatchToken_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string UserMatchToken {
@@ -155,7 +155,7 @@ namespace Pandora.Messages {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (UserMatchToken.Length != 0) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(42);
         output.WriteString(UserMatchToken);
       }
       if (_unknownFields != null) {
@@ -194,7 +194,7 @@ namespace Pandora.Messages {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 34: {
+          case 42: {
             UserMatchToken = input.ReadString();
             break;
           }
