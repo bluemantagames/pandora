@@ -9,9 +9,9 @@ namespace Pandora.Resource.Gold
         /// <description>Amount of gold after earnings are added in</description>
         public int CurrentAmount;
 
-        public GoldEarned(int amountEarned, int currentAmount) {
-            AmountEarned = amountEarned;
+        public GoldEarned(int currentAmount, int amountEarned) {
             CurrentAmount = currentAmount;
+            AmountEarned = amountEarned;
         }
     }
 
@@ -21,9 +21,9 @@ namespace Pandora.Resource.Gold
         /// <description>Amount of gold after earnings are added in</description>
         public int CurrentAmount;
 
-        public GoldSpent(int amountSpent, int currentAmount) {
-            AmountSpent = amountSpent;
+        public GoldSpent(int currentAmount, int amountSpent) {
             CurrentAmount = currentAmount;
+            AmountSpent = amountSpent;
         }
     }
 }

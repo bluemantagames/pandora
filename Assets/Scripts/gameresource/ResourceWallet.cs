@@ -26,7 +26,7 @@ namespace Pandora.Resource
         /// The first argument of the factory is always the current amount of resource after the event happened 
         /// (e.g. after a sum of gold is earned)
         /// </summary>
-        ResourceWallet(
+        public ResourceWallet(
             Func<int, int, T> resourceEarnedEventFactory,
             Func<int, int, T> resourceLostEventFactory
         )
