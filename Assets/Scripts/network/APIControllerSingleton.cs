@@ -161,10 +161,13 @@ namespace Pandora.Network
         /// </summary>
         /// <param name="token">The token string</param>
         /// <returns>A Task with a MatchmakingResponse</returns>
-        public Task<ApiResponse<MatchmakingResponse>> StartMatchmaking(string token)
+        public Task<ApiResponse<MatchmakingResponse>> StartMatchmaking(List<string> deck, string token)
         {
-            var request = new RestRequest("/matchmaking", Method.GET);
+            var request = new RestRequest("/matchmaking", Method.POST);
+            var param = new MatchmakingRequest { deck = deck };
+
             request.Timeout = int.MaxValue;
+            request.AddJsonBody(param);
 
             return ExecuteApiRequest<MatchmakingResponse>(request, token);
         }
