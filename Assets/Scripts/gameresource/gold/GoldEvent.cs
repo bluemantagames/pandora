@@ -1,4 +1,4 @@
-namespace Pandora.Gold
+namespace Pandora.Resource.Gold
 {
     public class GoldEvent {}
 
