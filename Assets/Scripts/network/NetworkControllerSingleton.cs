@@ -54,20 +54,15 @@ namespace Pandora.Network
 
         public async void StartMatchmaking()
         {
-            if (
-                modelSingleton.Token == null ||
-                modelSingleton.User == null ||
-                modelSingleton.DeckSlots == null
-            ) return;
+            if (modelSingleton.Token == null) return;
 
-            var activeDeckSlot =
-                modelSingleton.DeckSlots.Find(slot => slot.id == modelSingleton.User.activeDeckSlot);
+            var deck = modelSingleton.GetActiveDeck();
 
-            if (activeDeckSlot == null) return;
+            if (deck == null) return;
 
             IsActive = true;
 
-            var response = await apiControllerSingleton.StartMatchmaking(activeDeckSlot.deck, modelSingleton.Token);
+            var response = await apiControllerSingleton.StartMatchmaking(deck, modelSingleton.Token);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {

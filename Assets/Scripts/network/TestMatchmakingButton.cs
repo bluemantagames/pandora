@@ -15,8 +15,7 @@ namespace Pandora.Network
         /// <summary>Forces matchmaking in prod server if enabled</summary>
         public bool ProdMatchmaking = false;
 
-        List<Card> deck;
-        string username;
+        ModelSingleton modelSingleton = ModelSingleton.instance;
 
         public void Connect()
         {
@@ -32,6 +31,11 @@ namespace Pandora.Network
             GameObject.Find("MatchmakingButton").GetComponent<Button>().interactable = false;
 
             NetworkControllerSingleton.instance.matchStartEvent.AddListener(LoadGameScene);
+
+            var deckStr = modelSingleton.GetActiveDeck();
+            var deck = deckStr.Select(cardName => new Card(cardName)).ToList();
+
+            HandBehaviour.Deck = deck;
         }
 
         public void StartMatch(string username, List<string> deck)

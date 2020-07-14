@@ -25,5 +25,14 @@ namespace Pandora
                 return privateInstance;
             }
         }
+
+        public List<string> GetActiveDeck()
+        {
+            if (User == null || DeckSlots == null) return null;
+
+            var activeDeckSlot = DeckSlots.Find(deckSlot => deckSlot.id == User.activeDeckSlot);
+
+            return activeDeckSlot.deck;
+        }
     }
 }
