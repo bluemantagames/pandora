@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace Pandora.Combat {
-    public class DamageSource {}
+    public interface DamageSource {}
 
     /// <summary>Damage incoming from base attack</summary>
     public class BaseAttack: DamageSource {
