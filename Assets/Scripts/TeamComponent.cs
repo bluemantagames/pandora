@@ -19,7 +19,7 @@
 
                     var teamComponent = _teamGameObject.GetComponent<TeamComponent>();
 
-                    teamComponent.team = assignedTeam;
+                    teamComponent.Team = assignedTeam;
 
                     return teamComponent;
                 } else {
@@ -42,21 +42,21 @@
         static public int bottomTeam = 1;
 
         /// <summary>Team for this object</summary>
-        public virtual int team { get; set; }
+        public virtual int Team { get; set; }
 
         public virtual bool IsOpponent()
         {
-            return team != assignedTeam;
+            return Team != assignedTeam;
         }
 
         public bool IsTop()
         {
-            return team == topTeam;
+            return Team == topTeam;
         }
 
         public bool IsBottom()
         {
-            return team == bottomTeam;
+            return Team == bottomTeam;
         }
 
         public void Convert(int newTeam)
@@ -72,7 +72,7 @@
 
                 var name = GetComponent<UnitIdComponent>().UnitName;
 
-                if (team == TeamComponent.assignedTeam)
+                if (Team == TeamComponent.assignedTeam)
                 {
                     CommandViewportBehaviour.Instance.RemoveCommand(id);
                 }
@@ -83,7 +83,7 @@
 
             }
 
-            team = newTeam;
+            Team = newTeam;
 
             GetComponentInChildren<HealthbarBehaviour>()?.RefreshColor();
         }

@@ -67,7 +67,7 @@ namespace Pandora.Combat.Effects
             {
                 var lifeComponent = gameObject.GetComponent<LifeComponent>();
 
-                lifeComponent.AssignDamage((int)DamagePerTick);
+                lifeComponent.AssignDamage((int)DamagePerTick, new Debuff(Origin, this));
 
                 if (lifeComponent.IsDead) Unapply(gameObject);
             }

@@ -7,7 +7,7 @@ namespace Pandora
         /// <summary>
         /// Engine entity team
         /// </summary>
-        public int engineTeam
+        public int EngineTeam
         {
             get
             {
@@ -31,7 +31,7 @@ namespace Pandora
         /// <summary>
         /// Rendered-world tower team
         /// </summary>
-        public override int team 
+        public override int Team 
         {
             get
             {
@@ -53,7 +53,7 @@ namespace Pandora
 
 
         public override bool IsOpponent() {
-            return engineTeam != assignedTeam;
+            return EngineTeam != assignedTeam;
         }
     }
 }

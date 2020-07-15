@@ -38,7 +38,7 @@ namespace Pandora.Command
                 if (
                     target == entity || 
                     !target.IsRigid || 
-                    target.GameObject.GetComponent<TeamComponent>().team == GetComponent<TeamComponent>().team
+                    target.GameObject.GetComponent<TeamComponent>().Team == GetComponent<TeamComponent>().Team
                 ) continue;
 
                 var effect = TornadoEffectObject.GetComponent<MermaidsTornadoEffect>().Apply(gameObject, target.GameObject) as MermaidsTornadoEffect;
@@ -54,9 +54,9 @@ namespace Pandora.Command
 
                 foreach (var tower in MapComponent.Instance.gameObject.GetComponentsInChildren<TowerPositionComponent>())
                 {
-                    Logger.Debug($"Inspecting {tower.EngineTowerPosition.IsMiddle()} {tower.GetComponent<TowerTeamComponent>().engineTeam} {teamComponent.team}");
+                    Logger.Debug($"Inspecting {tower.EngineTowerPosition.IsMiddle()} {tower.GetComponent<TowerTeamComponent>().EngineTeam} {teamComponent.Team}");
 
-                    if (tower.EngineTowerPosition.IsMiddle() && tower.GetComponent<TowerTeamComponent>().engineTeam == teamComponent.team)
+                    if (tower.EngineTowerPosition.IsMiddle() && tower.GetComponent<TowerTeamComponent>().EngineTeam == teamComponent.Team)
                     {
                         middleTower = tower.GetComponent<EngineComponent>().Entity;
 
@@ -74,7 +74,7 @@ namespace Pandora.Command
                 var target = engine.FindClosest(middleTower.Position, foundEntity =>
                     !foundEntity.IsStructure &&
                     !foundEntity.IsMapObstacle &&
-                    foundEntity.GameObject.GetComponent<TeamComponent>()?.team != teamComponent.team &&
+                    foundEntity.GameObject.GetComponent<TeamComponent>()?.Team != teamComponent.Team &&
                     foundEntity.GameObject.GetComponent<MermaidsTornadoEffect>() == null
                 );
 

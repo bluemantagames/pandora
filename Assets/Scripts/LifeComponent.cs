@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using Pandora.Engine;
 using Pandora.Combat;
 using Pandora.Network;
+using Pandora.Resource;
+using Pandora.Resource.Mana;
 
 namespace Pandora
 {
@@ -17,6 +19,11 @@ namespace Pandora
         public int maxLife;
         public bool IsDead = false;
         public GridCell DeathPosition = null;
+        WalletsComponent walletsComponent;
+        TeamComponent teamComponent;
+        ManaCostComponent manaCostComponent;
+
+        bool isTower;
 
         // Start is called before the first frame update
         void Start()
@@ -30,6 +37,12 @@ namespace Pandora
             maxLife = lifeValue;
 
             healthbarBehaviour.DrawSeparators();
+
+            walletsComponent = MapComponent.Instance.GetComponent<WalletsComponent>();
+            teamComponent = GetComponent<TeamComponent>();
+            manaCostComponent = GetComponent<ManaCostComponent>();
+
+            isTower = GetComponent<TowerPositionComponent>() != null;
         }
 
         public void Remove()
@@ -91,15 +104,30 @@ namespace Pandora
             RefreshHealthbar();
         }
 
-        public void AssignDamage(int value)
+        public void AssignDamage(int value, DamageSource source)
         {
             lifeValue -= value;
 
             RefreshHealthbar();
 
+            var sourceTeam =
+                (source is TowerBaseAttack) ? 
+                    source.GameObject.GetComponent<TowerTeamComponent>().EngineTeam :
+                    source.GameObject.GetComponent<TeamComponent>().Team;
+
             if (lifeValue <= 0)
             {
                 var idComponent = GetComponent<UnitIdComponent>();
+
+                // should earn gold if we killed another unit
+                var shouldEarnGold =
+                    teamComponent.Team != TeamComponent.assignedTeam &&
+                    sourceTeam == TeamComponent.assignedTeam &&
+                    manaCostComponent != null;
+
+                if (shouldEarnGold) {
+                    walletsComponent.GoldWallet.AddResource(manaCostComponent.ManaCost);
+                }
 
                 IsDead = true;
                 GetComponent<CombatBehaviour>().OnDead();

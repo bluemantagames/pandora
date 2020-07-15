@@ -21,7 +21,7 @@ namespace Pandora.Command
         {
             var sourceEntity = GetComponent<EngineComponent>().Entity;
             var engine = sourceEntity.Engine;
-            var team = GetComponent<TeamComponent>().team;
+            var team = GetComponent<TeamComponent>().Team;
             var groupComponent = GetComponent<GroupComponent>();
 
             engine.DelayedJobs.Add(
@@ -60,7 +60,7 @@ namespace Pandora.Command
             }
 
             var sourceEntity = GetComponent<EngineComponent>().Entity;
-            var team = GetComponent<TeamComponent>().team;
+            var team = GetComponent<TeamComponent>().Team;
             var groupComponent = GetComponent<GroupComponent>();
 
             if (groupComponent == null)

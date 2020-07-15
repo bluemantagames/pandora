@@ -16,7 +16,7 @@ namespace Pandora.Command
             Logger.Debug("[Bard] Command invoked");
 
             var sourceEntity = GetComponent<EngineComponent>().Entity;
-            var sourceTeam = GetComponent<TeamComponent>().team;
+            var sourceTeam = GetComponent<TeamComponent>().Team;
             var sourceAnimator = GetComponent<Animator>();
 
             // Execute the attack animation
@@ -26,7 +26,7 @@ namespace Pandora.Command
             {
                 var targetGameObject = targetLifeComponent.gameObject;
                 var targetEntity = targetGameObject.GetComponent<EngineComponent>().Entity;
-                var targetTeam = targetGameObject.GetComponent<TeamComponent>().team;
+                var targetTeam = targetGameObject.GetComponent<TeamComponent>().Team;
 
                 if (sourceTeam != targetTeam) continue;
 

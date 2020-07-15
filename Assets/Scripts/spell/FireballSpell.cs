@@ -1,4 +1,5 @@
 using Pandora;
+using Pandora.Combat;
 using UnityEngine;
 
 namespace Pandora.Spell {
@@ -28,7 +29,7 @@ namespace Pandora.Spell {
 
                     Logger.Debug($"Hitting {lifeComponent.gameObject}");
 
-                    lifeComponent.AssignDamage((!isMiddleTower) ? damage : damage / 4);
+                    lifeComponent.AssignDamage((!isMiddleTower) ? damage : damage / 4, new SpellDamage(gameObject));
                 }
             }
         }

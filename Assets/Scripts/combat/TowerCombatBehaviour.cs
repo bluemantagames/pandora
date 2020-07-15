@@ -109,9 +109,9 @@ namespace Pandora.Combat
 
                 foreach (var unit in units)
                 {
-                    var team = unit.GetComponent<TeamComponent>().team;
+                    var team = unit.GetComponent<TeamComponent>().Team;
 
-                    var shouldAttack = teamComponent.engineTeam != team;
+                    var shouldAttack = teamComponent.EngineTeam != team;
 
                     if (!shouldAttack) continue;
 
@@ -207,7 +207,7 @@ namespace Pandora.Combat
             Logger.Debug($"Assigning damage {targetLifeComponent} {CurrentTarget}");
 
             if (targetLifeComponent != null)
-                targetLifeComponent.AssignDamage(damage);
+                targetLifeComponent.AssignDamage(damage, new TowerBaseAttack(gameObject));
         }
 
         public void OnDead()

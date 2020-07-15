@@ -43,7 +43,7 @@ namespace Pandora.Command
 
                 if (!isInRange) continue;
 
-                if ((hp == null || hp.Value < lifeComponent.lifeValue) && teamComponent.team != targetTeamComponent.team)
+                if ((hp == null || hp.Value < lifeComponent.lifeValue) && teamComponent.Team != targetTeamComponent.Team)
                 {
                     hp = Mathf.FloorToInt(lifeComponent.lifeValue);
 

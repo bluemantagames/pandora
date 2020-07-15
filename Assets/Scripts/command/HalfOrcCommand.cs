@@ -14,7 +14,7 @@ namespace Pandora.Command
             var sourceEntity = GetComponent<EngineComponent>().Entity;
             var sourceId = GetComponent<UnitIdComponent>();
             var sourceLife = GetComponent<LifeComponent>();
-            var sourceTeam = GetComponent<TeamComponent>().team;
+            var sourceTeam = GetComponent<TeamComponent>().Team;
             var currentCell = sourceEntity.GetCurrentCell().vector;
 
             int wolfOffset = -1, riderOffset = 1;

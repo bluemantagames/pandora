@@ -118,7 +118,7 @@ namespace Pandora.Combat
         {
             var lifeComponent = target?.enemy.GetComponent<LifeComponent>();
 
-            lifeComponent?.AssignDamage(Damage);
+            lifeComponent?.AssignDamage(Damage, new BaseAttack(gameObject));
 
             foreach (var effectObject in EffectObjects)
             {

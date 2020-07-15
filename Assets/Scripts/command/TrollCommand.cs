@@ -18,7 +18,7 @@ namespace Pandora.Command
             Logger.Debug("[Troll] Command invoked");
 
             var sourceEntity = GetComponent<EngineComponent>().Entity;
-            var sourceTeam = GetComponent<TeamComponent>().team;
+            var sourceTeam = GetComponent<TeamComponent>().Team;
             var sourceAnimator = GetComponent<Animator>();
 
             // Execute the attack animation
@@ -28,14 +28,14 @@ namespace Pandora.Command
             {
                 var targetGameObject = targetLifeComponent.gameObject;
                 var targetEntity = targetGameObject.GetComponent<EngineComponent>().Entity;
-                var targetTeam = targetGameObject.GetComponent<TeamComponent>().team;
+                var targetTeam = targetGameObject.GetComponent<TeamComponent>().Team;
 
                 if (sourceTeam == targetTeam) continue;
 
                 if (sourceEntity.Engine.IsInConicRange(sourceEntity, targetEntity, Width, Height, 20, DebugLines))
                 {
                     // Assign damage
-                    targetLifeComponent.AssignDamage(Damage);
+                    targetLifeComponent.AssignDamage(Damage, new UnitCommand(gameObject));
 
                     // Assign effects to non-structure units
                     if (!targetEntity.IsStructure && targetEntity.GameObject.layer != Constants.SWIMMING_LAYER) {
