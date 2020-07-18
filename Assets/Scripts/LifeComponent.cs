@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,11 +22,15 @@ namespace Pandora
         public GridCell DeathPosition = null;
         WalletsComponent walletsComponent;
         TeamComponent teamComponent;
+        TowerTeamComponent towerTeamComponent;
         ManaCostComponent manaCostComponent;
 
         bool isTower;
+        public int TowerGoldRewards = 4, GoldReward = 7;
 
-        // Start is called before the first frame update
+
+        int currentGoldReward = 1;
+
         void Start()
         {
             var healthbarBehaviour = GetComponentInChildren<HealthbarBehaviour>();
@@ -39,10 +44,12 @@ namespace Pandora
             healthbarBehaviour.DrawSeparators();
 
             walletsComponent = MapComponent.Instance.GetComponent<WalletsComponent>();
-            teamComponent = GetComponent<TeamComponent>();
             manaCostComponent = GetComponent<ManaCostComponent>();
 
-            isTower = GetComponent<TowerPositionComponent>() != null;
+            towerTeamComponent = GetComponent<TowerTeamComponent>();
+            teamComponent = GetComponent<TeamComponent>();
+
+            isTower = towerTeamComponent != null;
         }
 
         public void Remove()
@@ -110,14 +117,26 @@ namespace Pandora
 
             RefreshHealthbar();
 
-            var sourceTeam =
-                (source is TowerBaseAttack) ? 
-                    source.GameObject.GetComponent<TowerTeamComponent>().EngineTeam :
-                    source.GameObject.GetComponent<TeamComponent>().Team;
+            if (isTower && towerTeamComponent.EngineTeam != TeamComponent.assignedTeam)
+            {
+                var currentRewardLifeTarget = maxLife - (currentGoldReward * (new Decimal(maxLife) / new Decimal(TowerGoldRewards)));
+
+                if (lifeValue <= currentRewardLifeTarget)
+                {
+                    currentGoldReward++;
+
+                    walletsComponent.GoldWallet.AddResource(GoldReward);
+                }
+            }
 
             if (lifeValue <= 0)
             {
                 var idComponent = GetComponent<UnitIdComponent>();
+
+                var sourceTeam =
+                    (source is TowerBaseAttack) ?
+                        source.GameObject.GetComponent<TowerTeamComponent>().EngineTeam :
+                        source.GameObject.GetComponent<TeamComponent>().Team;
 
                 // should earn gold if we killed another unit
                 var shouldEarnGold =
@@ -125,7 +144,8 @@ namespace Pandora
                     sourceTeam == TeamComponent.assignedTeam &&
                     manaCostComponent != null;
 
-                if (shouldEarnGold) {
+                if (shouldEarnGold)
+                {
                     walletsComponent.GoldWallet.AddResource(manaCostComponent.ManaCost);
                 }
 
