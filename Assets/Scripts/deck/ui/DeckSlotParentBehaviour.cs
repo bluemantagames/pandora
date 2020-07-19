@@ -10,11 +10,14 @@ public class DeckSlotParentBehaviour : MonoBehaviour
 {
     public GameObject DeckSpotsParent;
     public Button DeckSlotButton;
-    ModelSingleton modelSingleton = ModelSingleton.instance;
-    ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
+    ModelSingleton modelSingleton;
+    ApiControllerSingleton apiControllerSingleton;
 
     void Awake()
     {
+        modelSingleton = ModelSingleton.instance;
+        apiControllerSingleton = ApiControllerSingleton.instance;
+
         if (modelSingleton.DeckSlots == null) return;
         if (DeckSlotButton == null) return;
         if (DeckSpotsParent == null) return;

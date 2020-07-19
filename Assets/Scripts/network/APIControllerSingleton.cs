@@ -11,7 +11,7 @@ namespace Pandora.Network
 {
     public class ApiControllerSingleton
     {
-        private bool isDebugBuild = Debug.isDebugBuild;
+        private bool isDebugBuild;
 
         private string apiHost
         {
@@ -29,6 +29,7 @@ namespace Pandora.Network
 
         private ApiControllerSingleton()
         {
+            isDebugBuild = Debug.isDebugBuild;
             client = new RestClient(apiHost);
         }
 

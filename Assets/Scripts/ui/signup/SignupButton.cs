@@ -15,7 +15,12 @@ namespace Pandora.UI.Signup
         public InputField EmailInput = null;
         public InputField PasswordInput = null;
         private string oldButtonText = null;
-        private ModelSingleton modelSingleton = ModelSingleton.instance;
+        private ModelSingleton modelSingleton;
+
+        void Awake()
+        {
+            modelSingleton = ModelSingleton.instance;
+        }
 
         public async UniTaskVoid ExecuteSignup(string username, string email, string password)
         {

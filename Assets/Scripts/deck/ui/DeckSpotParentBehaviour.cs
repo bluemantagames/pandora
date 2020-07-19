@@ -10,8 +10,14 @@ namespace Pandora.Deck.UI
 {
     public class DeckSpotParentBehaviour : MonoBehaviour
     {
-        private ModelSingleton modelSingleton = ModelSingleton.instance;
-        ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
+        private ModelSingleton modelSingleton;
+        private ApiControllerSingleton apiControllerSingleton;
+
+        void Awake()
+        {
+            modelSingleton = ModelSingleton.instance;
+            apiControllerSingleton = ApiControllerSingleton.instance;
+        }
 
         public List<Card> Deck
         {
