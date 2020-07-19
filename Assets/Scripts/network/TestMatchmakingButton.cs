@@ -15,6 +15,11 @@ namespace Pandora.Network
         /// <summary>Forces matchmaking in prod server if enabled</summary>
         public bool ProdMatchmaking = false;
 
+        /// <summary>Forces a game without authentication</summary>
+        public bool BypassAuth = false;
+
+        public DeckSpotParentBehaviour DeckSpotParent = null;
+
         ModelSingleton modelSingleton = ModelSingleton.instance;
 
         public void Connect()
@@ -26,14 +31,17 @@ namespace Pandora.Network
                 NetworkControllerSingleton.instance.isDebugBuild = false;
             }
 
-            NetworkControllerSingleton.instance.StartMatchmaking();
+            var deck = BypassAuth && DeckSpotParent != null ?
+                DeckSpotParent.Deck :
+                modelSingleton.GetActiveDeck().Select(cardName => new Card(cardName)).ToList();
+
+            var deckStr = deck.Select(card => card.Name).ToList();
+
+            NetworkControllerSingleton.instance.StartMatchmaking(deckStr);
 
             GameObject.Find("MatchmakingButton").GetComponent<Button>().interactable = false;
 
             NetworkControllerSingleton.instance.matchStartEvent.AddListener(LoadGameScene);
-
-            var deckStr = modelSingleton.GetActiveDeck();
-            var deck = deckStr.Select(cardName => new Card(cardName)).ToList();
 
             HandBehaviour.Deck = deck;
         }

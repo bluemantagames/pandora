@@ -52,14 +52,20 @@ namespace Pandora.Network
 
         private NetworkControllerSingleton() { }
 
-        public async void StartMatchmaking()
+        public void StartMatchmaking()
         {
-            if (modelSingleton.Token == null) return;
-
             var deck = modelSingleton.GetActiveDeck();
 
-            if (deck == null) return;
+            if (deck != null) ExecMatchmaking(deck);
+        }
 
+        public void StartMatchmaking(List<string> deck)
+        {
+            if (deck != null) ExecMatchmaking(deck);
+        }
+
+        public async void ExecMatchmaking(List<string> deck)
+        {
             IsActive = true;
 
             var response = await apiControllerSingleton.StartMatchmaking(deck, modelSingleton.Token);

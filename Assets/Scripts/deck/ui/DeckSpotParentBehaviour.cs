@@ -37,7 +37,7 @@ namespace Pandora.Deck.UI
 
         public async UniTaskVoid SaveDeck()
         {
-            var activeDeckSlot = modelSingleton.User.activeDeckSlot;
+            var activeDeckSlot = modelSingleton?.User?.activeDeckSlot;
 
             if (activeDeckSlot == null) return;
 

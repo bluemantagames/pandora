@@ -431,6 +431,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameSceneToLoad: 0
   ProdMatchmaking: 0
+  BypassAuth: 0
+  DeckSpotParent: {fileID: 33595757}
 --- !u!114 &186685742
 MonoBehaviour:
   m_ObjectHideFlags: 0
