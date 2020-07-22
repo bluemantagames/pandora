@@ -73,8 +73,16 @@ namespace Pandora.Network
                 }
                 else
                 {
-                    var deserializedError = RestSharp.SimpleJson.DeserializeObject<ApiError>(response.Content);
-                    return new ApiResponse<T>(response.StatusCode, deserializedError);
+                    if (response.ContentType == "application/json")
+                    {
+                        var deserializedError = RestSharp.SimpleJson.DeserializeObject<ApiError>(response.Content);
+                        return new ApiResponse<T>(response.StatusCode, deserializedError);
+                    }
+                    else
+                    {
+                        var genericApiError = new ApiError { message = response.Content };
+                        return new ApiResponse<T>(response.StatusCode, genericApiError);
+                    }
                 }
             });
         }
