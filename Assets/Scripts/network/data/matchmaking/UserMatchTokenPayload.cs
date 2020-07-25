@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace Pandora.Network.Data.Matchmaking
 {
+    [System.Serializable]
     public class UserMatchTokenPayload
     {
         public long userId;

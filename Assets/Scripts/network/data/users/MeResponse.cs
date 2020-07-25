@@ -2,9 +2,10 @@ using System.Collections.Generic;
 
 namespace Pandora.Network.Data.Users
 {
+    [System.Serializable]
     public class MeResponse
     {
-        public User user { get; set; }
-        public List<DeckSlot> deckSlots { get; set; }
+        public User user;
+        public List<DeckSlot> deckSlots;
     }
 }

@@ -1,9 +1,10 @@
 namespace Pandora.Network.Data.Users
 {
+    [System.Serializable]
     public class User
     {
-        public long id { get; set; }
-        public string username { get; set; }
-        public long? activeDeckSlot { get; set; }
+        public long id;
+        public string username;
+        public long activeDeckSlot;
     }
 }

@@ -1,4 +1,6 @@
-namespace Pandora.Network.Data.Users {
+namespace Pandora.Network.Data.Users
+{
+    [System.Serializable]
     public class LoginRequest
     {
         public string username;

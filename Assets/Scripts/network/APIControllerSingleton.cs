@@ -18,9 +18,9 @@ namespace Pandora.Network
             get
             {
                 if (isDebugBuild)
-                    return "http://localhost:8080/api";
+                    return "http://192.168.1.21:8080/api";
                 else
-                    return "http://3bitpodcast.com:8080/api";
+                    return "http://192.168.1.21:8080/api";
             }
         }
 
@@ -31,6 +31,10 @@ namespace Pandora.Network
         {
             isDebugBuild = Debug.isDebugBuild;
             client = new RestClient(apiHost);
+
+            // Using the unity serializer
+            var customSerializer = new UnityJsonSerializer();
+            client.UseSerializer(() => customSerializer);
         }
 
         public static ApiControllerSingleton instance
