@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Pandora.Engine;
 using Pandora.Network;
+using Pandora.Resource.Mana;
 
 namespace Pandora.Command
 {
@@ -37,7 +38,8 @@ namespace Pandora.Command
                 wolfCell,
                 sourceTeam,
                 sourceId.Id + "-wolf",
-                sourceEntity.Timestamp.AddSeconds(-1)
+                sourceEntity.Timestamp.AddSeconds(-1),
+                sourceEntity.GameObject.GetComponent<ManaCostComponent>().ManaCost
             );
 
             var riderSpawn = new UnitSpawn(
@@ -45,10 +47,12 @@ namespace Pandora.Command
                 riderCell,
                 sourceTeam,
                 sourceId.Id + "-rider",
-                sourceEntity.Timestamp
+                sourceEntity.Timestamp,
+                sourceEntity.GameObject.GetComponent<ManaCostComponent>().ManaCost
             );
                 
             sourceLife.Remove();
+
             MapComponent.Instance.SpawnUnit(wolfSpawn);
             MapComponent.Instance.SpawnUnit(riderSpawn);
         }

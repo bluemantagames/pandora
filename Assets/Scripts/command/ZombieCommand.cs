@@ -2,6 +2,7 @@
 using Pandora.Network;
 using Pandora.Engine;
 using Pandora.Combat;
+using Pandora.Resource.Mana;
 using System.Collections.Generic;
 
 namespace Pandora.Command
@@ -95,7 +96,8 @@ namespace Pandora.Command
                     spawnPosition,
                     team,
                     zombieId + "-resurrected",
-                    sourceEntity.Timestamp
+                    sourceEntity.Timestamp,
+                    zombie.GetComponent<ManaCostComponent>().ManaCost
                 );
 
                 MapComponent.Instance.SpawnUnit(zombieSpawn);

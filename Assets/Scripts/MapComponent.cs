@@ -251,7 +251,7 @@ namespace Pandora
                     {
                         Logger.Debug($"Received {spawn} - spawning unit");
 
-                        SpawnUnit(new UnitSpawn(spawn), spawn.manaUsed);
+                        SpawnUnit(new UnitSpawn(spawn));
                     }
 
                     if (command is CommandMessage commandMessage)
@@ -344,7 +344,7 @@ namespace Pandora
                 message.team = team;
                 message.timestamp = DateTime.Now;
 
-                SpawnUnit(new UnitSpawn(message), requiredMana);
+                SpawnUnit(new UnitSpawn(message));
 
                 ManaSingleton.UpdateMana(ManaSingleton.manaValue - requiredMana);
                 ManaSingleton.manaUnit -= requiredMana;
@@ -356,7 +356,7 @@ namespace Pandora
         public GameObject LoadCard(string unitName) => Resources.Load($"Units/{unitName}") as GameObject;
 
         /// <summary>Spawns a unit</summary>
-        public void SpawnUnit(UnitSpawn spawn, int requiredMana = 0)
+        public void SpawnUnit(UnitSpawn spawn)
         {
             Logger.Debug($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY} Team {spawn.Team}");
 
@@ -386,10 +386,6 @@ namespace Pandora
 
             unitObject.name += $"-{spawn.Id}";
 
-            var manaCostComponent = unitObject.AddComponent<ManaCostComponent>();
-
-            manaCostComponent.ManaCost = requiredMana;
-
             var spawner = unitObject.GetComponent<Spawner>();
 
             if (spawner != null)
@@ -398,21 +394,21 @@ namespace Pandora
             }
             else
             {
-                InitializeComponents(unitObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp, spawn.UnitName);
+                InitializeComponents(unitObject, unitGridCell, spawn);
             }
 
             // This is tricky, we need the stuff below because the spawner and the units are actually
             // created in different positions. The spawner element (NOT THE UNITS) is created 
             // non-mirrored, while the single unit is created directly mirrored in the field.
-            // This leads to unconcistencies in the ManaUsedAlert component position in the Team 2
+            // This leads to inconcistencies in the ManaUsedAlert component position in the Team 2
             // (since the Team 2 field is mirrored).
             if (spawner == null && TeamComponent.assignedTeam == TeamComponent.topTeam)
             {
-                ShowManaUsedAlert(unitObject, requiredMana, cardPosition);
+                ShowManaUsedAlert(unitObject, spawn.ManaUsed, cardPosition);
             }
             else
             {
-                ShowManaUsedAlert(unitObject, requiredMana, manaAnimationPosition);
+                ShowManaUsedAlert(unitObject, spawn.ManaUsed, manaAnimationPosition);
             }
 
             if (spawn.Team == TeamComponent.assignedTeam && unitObject.GetComponent<ProjectileSpellBehaviour>() == null)
@@ -422,9 +418,9 @@ namespace Pandora
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>
-        public void InitializeComponents(GameObject unit, GridCell cell, int team, string id, DateTime timestamp, string unitName)
+        public void InitializeComponents(GameObject unit, GridCell cell, UnitSpawn unitSpawn)
         {
-            unit.GetComponent<TeamComponent>().Team = team;
+            unit.GetComponent<TeamComponent>().Team = unitSpawn.Team;
 
             var movement = unit.GetComponent<MovementComponent>();
             var movementBehaviour = unit.GetComponent<MovementBehaviour>();
@@ -436,14 +432,20 @@ namespace Pandora
             {
                 projectileSpell.StartCell =
                     new GridCell(
-                        ((team == TeamComponent.assignedTeam) ?
+                        ((unitSpawn.Team == TeamComponent.assignedTeam) ?
                             GetTowerPositionComponent(TowerPosition.BottomMiddle) : GetTowerPositionComponent(TowerPosition.TopMiddle)).Position
                     );
 
                 projectileSpell.map = this;
             }
 
-            var engineEntity = engine.AddEntity(unit, movementBehaviour?.Speed ?? projectileSpell.Speed, projectileSpell?.StartCell ?? cell, projectileSpell == null, timestamp);
+            var engineEntity = engine.AddEntity(
+                unit, 
+                movementBehaviour?.Speed ?? projectileSpell.Speed,
+                projectileSpell?.StartCell ?? cell,
+                projectileSpell == null,
+                unitSpawn.Timestamp
+            );
 
             if (movement != null) engineEntity.CollisionCallback = movement;
 
@@ -458,12 +460,16 @@ namespace Pandora
 
             var idComponent = unit.AddComponent<UnitIdComponent>();
 
-            idComponent.Id = id;
-            idComponent.UnitName = unitName;
+            idComponent.Id = unitSpawn.Id;
+            idComponent.UnitName = unitSpawn.UnitName;
 
             unit.GetComponentInChildren<HealthbarBehaviour>()?.RefreshColor();
 
-            Units.Add(id, unit);
+            Units.Add(unitSpawn.Id, unit);
+
+            var manaCostComponent = unit.AddComponent<ManaCostComponent>();
+
+            manaCostComponent.ManaCost = unitSpawn.ManaUsed;
         }
 
         public void ShowManaUsedAlert(GameObject unit, int manaUsed, Vector2 position)

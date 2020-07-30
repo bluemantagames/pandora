@@ -24,6 +24,7 @@ namespace Pandora
         TeamComponent teamComponent;
         TowerTeamComponent towerTeamComponent;
         ManaCostComponent manaCostComponent;
+        GroupComponent groupComponent;
 
         bool isTower;
         public int TowerGoldRewards = 4, GoldReward = 7;
@@ -48,6 +49,8 @@ namespace Pandora
 
             towerTeamComponent = GetComponent<TowerTeamComponent>();
             teamComponent = GetComponent<TeamComponent>();
+
+            var groupComponent = GetComponent<GroupComponent>();
 
             isTower = towerTeamComponent != null;
         }
@@ -132,27 +135,12 @@ namespace Pandora
             if (lifeValue <= 0)
             {
                 var idComponent = GetComponent<UnitIdComponent>();
+                var isEverybodyDead = false;
 
-                var sourceTeam =
-                    (source is TowerBaseAttack) ?
-                        source.GameObject.GetComponent<TowerTeamComponent>().EngineTeam :
-                        source.GameObject.GetComponent<TeamComponent>().Team;
-
-                // should earn gold if we killed another unit
-                var shouldEarnGold =
-                    teamComponent.Team != TeamComponent.assignedTeam &&
-                    sourceTeam == TeamComponent.assignedTeam &&
-                    manaCostComponent != null;
-
-                if (shouldEarnGold)
-                {
-                    walletsComponent.GoldWallet.AddResource(manaCostComponent.ManaCost);
-                }
+                var groupComponent = GetComponent<GroupComponent>();
 
                 IsDead = true;
                 GetComponent<CombatBehaviour>().OnDead();
-
-                var groupComponent = GetComponent<GroupComponent>();
 
                 if (groupComponent != null)
                 {
@@ -161,11 +149,32 @@ namespace Pandora
                     if (groupComponent.AliveObjects.Count == 0)
                     {
                         CommandViewportBehaviour.Instance.RemoveCommand(groupComponent.OriginalId);
+
+                        isEverybodyDead = true;
                     }
                 }
                 else if (idComponent != null)
                 {
                     CommandViewportBehaviour.Instance.RemoveCommand(idComponent.Id);
+
+                    isEverybodyDead = true;
+                }
+
+                var sourceTeam =
+                    (source is TowerBaseAttack) ?
+                        source.GameObject.GetComponent<TowerTeamComponent>().EngineTeam :
+                        source.GameObject.GetComponent<TeamComponent>().Team;
+
+                // should earn gold if we killed the last unit of the group
+                var shouldEarnGold =
+                    teamComponent.Team != TeamComponent.assignedTeam &&
+                    sourceTeam == TeamComponent.assignedTeam &&
+                    manaCostComponent != null &&
+                    isEverybodyDead;
+
+                if (shouldEarnGold)
+                {
+                    walletsComponent.GoldWallet.AddResource(manaCostComponent.ManaCost);
                 }
 
                 SetDeathPosition();
