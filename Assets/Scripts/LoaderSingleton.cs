@@ -11,7 +11,7 @@ namespace Pandora
         public bool IsLoading = false;
 
         private static LoaderSingleton privateInstance = null;
-        private ModelSingleton modelSingleton = ModelSingleton.instance;
+        private PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
         private ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
 
         private LoaderSingleton() { }
@@ -39,13 +39,13 @@ namespace Pandora
             IsLoading = true;
             SceneManager.LoadScene("LoadingScene");
 
-            var token = modelSingleton.Token;
+            var token = playerModelSingleton.Token;
             var meResponse = await apiControllerSingleton.GetMe(token);
 
             if (meResponse.StatusCode == HttpStatusCode.OK)
             {
-                modelSingleton.User = meResponse.Body.user;
-                modelSingleton.DeckSlots = meResponse.Body.deckSlots;
+                playerModelSingleton.User = meResponse.Body.user;
+                playerModelSingleton.DeckSlots = meResponse.Body.deckSlots;
 
                 IsLoading = false;
                 SceneManager.LoadScene("MainMenuScene");

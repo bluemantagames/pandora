@@ -10,12 +10,12 @@ namespace Pandora.Deck.UI
 {
     public class DeckSpotParentBehaviour : MonoBehaviour
     {
-        private ModelSingleton modelSingleton;
+        private PlayerModelSingleton playerModelSingleton;
         private ApiControllerSingleton apiControllerSingleton;
 
         void Awake()
         {
-            modelSingleton = ModelSingleton.instance;
+            playerModelSingleton = PlayerModelSingleton.instance;
             apiControllerSingleton = ApiControllerSingleton.instance;
         }
 
@@ -37,12 +37,12 @@ namespace Pandora.Deck.UI
 
         public async UniTaskVoid SaveDeck()
         {
-            var activeDeckSlot = modelSingleton?.User?.activeDeckSlot;
+            var activeDeckSlot = playerModelSingleton?.User?.activeDeckSlot;
 
             if (activeDeckSlot == null) return;
 
             var deck = Deck.Select(d => d != null ? d.Name : null).ToList();
-            var token = modelSingleton.Token;
+            var token = playerModelSingleton.Token;
 
             Debug.Log($"Saving deck slot {activeDeckSlot} with deck");
             Debug.Log(deck);
@@ -54,7 +54,7 @@ namespace Pandora.Deck.UI
                 Debug.Log($"Updated deck slot {activeDeckSlot}");
 
                 // Updating the model
-                modelSingleton.DeckSlots = modelSingleton.DeckSlots.Select(deckSlot =>
+                playerModelSingleton.DeckSlots = playerModelSingleton.DeckSlots.Select(deckSlot =>
                 {
                     if (deckSlot.id == activeDeckSlot)
                         deckSlot.deck = deck;
@@ -68,7 +68,7 @@ namespace Pandora.Deck.UI
 
         public void LoadSavedDeck(int deckSlotIndex)
         {
-            var deckSlot = modelSingleton.DeckSlots[deckSlotIndex];
+            var deckSlot = playerModelSingleton.DeckSlots[deckSlotIndex];
 
             if (deckSlot == null) return;
 

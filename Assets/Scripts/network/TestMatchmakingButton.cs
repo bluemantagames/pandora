@@ -20,7 +20,7 @@ namespace Pandora.Network
 
         public DeckSpotParentBehaviour DeckSpotParent = null;
 
-        ModelSingleton modelSingleton = ModelSingleton.instance;
+        PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
 
         public void Connect()
         {
@@ -33,7 +33,7 @@ namespace Pandora.Network
 
             var deck = BypassAuth && DeckSpotParent != null ?
                 DeckSpotParent.Deck :
-                modelSingleton.GetActiveDeck().Select(cardName => new Card(cardName)).ToList();
+                playerModelSingleton.GetActiveDeck().Select(cardName => new Card(cardName)).ToList();
 
             var deckStr = deck.Select(card => card.Name).ToList();
 

@@ -10,26 +10,26 @@ public class DeckSlotParentBehaviour : MonoBehaviour
 {
     public GameObject DeckSpotsParent;
     public Button DeckSlotButton;
-    ModelSingleton modelSingleton;
+    PlayerModelSingleton playerModelSingleton;
     ApiControllerSingleton apiControllerSingleton;
 
     void Awake()
     {
-        modelSingleton = ModelSingleton.instance;
+        playerModelSingleton = PlayerModelSingleton.instance;
         apiControllerSingleton = ApiControllerSingleton.instance;
 
-        if (modelSingleton.DeckSlots == null) return;
+        if (playerModelSingleton.DeckSlots == null) return;
         if (DeckSlotButton == null) return;
         if (DeckSpotsParent == null) return;
 
         var deckSpotParentBehaviour = DeckSpotsParent.GetComponent<DeckSpotParentBehaviour>();
-        var activeDeckSlot = modelSingleton.User.activeDeckSlot;
+        var activeDeckSlot = playerModelSingleton.User.activeDeckSlot;
 
         if (deckSpotParentBehaviour == null) return;
 
-        for (var index = 0; index < modelSingleton.DeckSlots.Count; index++)
+        for (var index = 0; index < playerModelSingleton.DeckSlots.Count; index++)
         {
-            var deckSlot = modelSingleton.DeckSlots[index];
+            var deckSlot = playerModelSingleton.DeckSlots[index];
             var deckSlotButton = Instantiate(DeckSlotButton, DeckSlotButton.transform.position, DeckSlotButton.transform.rotation);
             deckSlotButton.transform.SetParent(gameObject.transform);
             var buttonRect = deckSlotButton.GetComponent<RectTransform>();
@@ -67,7 +67,7 @@ public class DeckSlotParentBehaviour : MonoBehaviour
 
         if (deckSpotParentBehaviour == null) return;
 
-        var token = modelSingleton.Token;
+        var token = playerModelSingleton.Token;
 
         if (token == null) return;
 
@@ -79,7 +79,7 @@ public class DeckSlotParentBehaviour : MonoBehaviour
             deckSpotParentBehaviour.LoadSavedDeck(deckSlotIndex);
 
             // Update the model
-            modelSingleton.User.activeDeckSlot = deckSlotId;
+            playerModelSingleton.User.activeDeckSlot = deckSlotId;
 
             UpdateActiveSlot();
         }
@@ -87,7 +87,7 @@ public class DeckSlotParentBehaviour : MonoBehaviour
 
     public void UpdateActiveSlot()
     {
-        var activeDeckSlot = modelSingleton.User.activeDeckSlot;
+        var activeDeckSlot = playerModelSingleton.User.activeDeckSlot;
 
         foreach (Transform child in transform)
         {

@@ -27,7 +27,7 @@ namespace Pandora.Network
         Thread receiveThread = null;
         ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
         ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
-        ModelSingleton modelSingleton = ModelSingleton.instance;
+        PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
         int matchStartTimeout = 3; // seconds
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
@@ -54,7 +54,7 @@ namespace Pandora.Network
 
         public void StartMatchmaking()
         {
-            var deck = modelSingleton.GetActiveDeck();
+            var deck = playerModelSingleton.GetActiveDeck();
 
             if (deck != null) ExecMatchmaking(deck);
         }
@@ -68,7 +68,7 @@ namespace Pandora.Network
         {
             IsActive = true;
 
-            var response = await apiControllerSingleton.StartMatchmaking(deck, modelSingleton.Token);
+            var response = await apiControllerSingleton.StartMatchmaking(deck, playerModelSingleton.Token);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
