@@ -50,6 +50,14 @@ namespace Pandora.UI.Login
             }
         }
 
+        private bool ValidateLoginForm(string username, string password)
+        {
+            var isValidUsername = username.Length > 0;
+            var isValidPassword = password.Length > 0;
+
+            return isValidUsername && isValidPassword;
+        }
+
         public void Login()
         {
             if (UsernameInput == null || PasswordInput == null) return;
@@ -57,7 +65,7 @@ namespace Pandora.UI.Login
             var username = UsernameInput.text;
             var password = PasswordInput.text;
 
-            if (username.Length == 0 || password.Length == 0) return;
+            if (!ValidateLoginForm(username, password)) return;
 
             _ = ExecuteLogin(username, password);
 

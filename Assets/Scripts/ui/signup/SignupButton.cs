@@ -51,6 +51,15 @@ namespace Pandora.UI.Signup
             }
         }
 
+        private bool ValidateSignupForm(string username, string email, string password)
+        {
+            var isValidUsername = username.Length > 0;
+            var isValidEmail = email.Length > 0;
+            var isValidPassword = password.Length > 0;
+
+            return isValidUsername && isValidEmail && isValidPassword;
+        }
+
         public void Signup()
         {
             if (UsernameInput == null || EmailInput == null || PasswordInput == null) return;
@@ -59,7 +68,7 @@ namespace Pandora.UI.Signup
             var email = EmailInput.text;
             var password = PasswordInput.text;
 
-            if (username.Length == 0 || email.Length == 0 || password.Length == 0) return;
+            if (!ValidateSignupForm(username, email, password)) return;
 
             _ = ExecuteSignup(username, email, password);
 
