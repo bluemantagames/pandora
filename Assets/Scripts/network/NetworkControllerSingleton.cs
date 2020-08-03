@@ -90,7 +90,7 @@ namespace Pandora.Network
 
             var startTime = DateTime.Now;
 
-            var matchHost = (isDebugBuild) ? "127.0.0.1" : "3bitpodcast.com";
+            var matchHost = (isDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
             var matchPort = 9090;
             var dns = Dns.GetHostEntry(matchHost);
 
