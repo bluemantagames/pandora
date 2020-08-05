@@ -16,7 +16,7 @@ namespace Pandora.Network
         public bool ProdMatchmaking = false;
 
         /// <summary>Forces a game without authentication</summary>
-        public bool BypassAuth = false;
+        public bool DevMatchmaking = false;
 
         public DeckSpotParentBehaviour DeckSpotParent = null;
 
@@ -31,13 +31,20 @@ namespace Pandora.Network
                 NetworkControllerSingleton.instance.isDebugBuild = false;
             }
 
-            var deck = BypassAuth && DeckSpotParent != null ?
+            var deck = DevMatchmaking && DeckSpotParent != null ?
                 DeckSpotParent.Deck :
                 playerModelSingleton.GetActiveDeck().Select(cardName => new Card(cardName)).ToList();
 
             var deckStr = deck.Select(card => card.Name).ToList();
 
-            NetworkControllerSingleton.instance.StartMatchmaking(deckStr);
+            if (DevMatchmaking)
+            {
+                NetworkControllerSingleton.instance.StartDevMatchmaking(deckStr);
+            }
+            else
+            {
+                NetworkControllerSingleton.instance.StartMatchmaking(deckStr);
+            }
 
             GameObject.Find("MatchmakingButton").GetComponent<Button>().interactable = false;
 

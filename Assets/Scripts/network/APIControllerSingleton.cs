@@ -184,5 +184,21 @@ namespace Pandora.Network
 
             return ExecuteApiRequest<MatchmakingResponse>(request, token);
         }
+
+        /// <summary>
+        /// Start the matchmaking in dev mode (long polling)
+        /// </summary>
+        /// <param name="token">The token string</param>
+        /// <returns>A Task with a MatchmakingResponse</returns>
+        public Task<ApiResponse<MatchmakingResponse>> StartDevMatchmaking(List<string> deck, string token)
+        {
+            var request = new RestRequest("/dev-matchmaking", Method.POST);
+            var param = new MatchmakingRequest { deck = deck };
+
+            request.Timeout = int.MaxValue;
+            request.AddJsonBody(param);
+
+            return ExecuteApiRequest<MatchmakingResponse>(request, token);
+        }
     }
 }

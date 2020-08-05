@@ -56,19 +56,26 @@ namespace Pandora.Network
         {
             var deck = playerModelSingleton.GetActiveDeck();
 
-            if (deck != null) ExecMatchmaking(deck);
+            if (deck != null) ExecMatchmaking(deck, false);
         }
 
         public void StartMatchmaking(List<string> deck)
         {
-            if (deck != null) ExecMatchmaking(deck);
+            if (deck != null) ExecMatchmaking(deck, false);
         }
 
-        public async void ExecMatchmaking(List<string> deck)
+        public void StartDevMatchmaking(List<string> deck)
+        {
+            if (deck != null) ExecMatchmaking(deck, true);
+        }
+
+        public async void ExecMatchmaking(List<string> deck, bool isDev)
         {
             IsActive = true;
 
-            var response = await apiControllerSingleton.StartMatchmaking(deck, playerModelSingleton.Token);
+            var response = isDev
+                ? await apiControllerSingleton.StartDevMatchmaking(deck, playerModelSingleton.Token)
+                : await apiControllerSingleton.StartMatchmaking(deck, playerModelSingleton.Token);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
