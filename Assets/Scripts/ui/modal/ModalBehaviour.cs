@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 
 namespace Pandora.UI.Modal {
-    public class ModalPanelBehaviour : MonoBehaviour, IPointerClickHandler
+    public class ModalBehaviour : MonoBehaviour, IPointerClickHandler
     {
         GameObject modalCanvas;
 
@@ -16,6 +16,10 @@ namespace Pandora.UI.Modal {
             Logger.Debug("Destroying modal");
 
             Destroy(modalCanvas);
+        }
+
+        public void AddContent(GameObject content) {
+            Instantiate(content, transform.parent);
         }
     }
 
