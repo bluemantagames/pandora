@@ -2064,6 +2064,8 @@ GameObject:
   - component: {fileID: 996488289}
   - component: {fileID: 996488292}
   - component: {fileID: 996488293}
+  - component: {fileID: 996488295}
+  - component: {fileID: 996488294}
   m_Layer: 13
   m_Name: Arena
   m_TagString: Untagged
@@ -2217,6 +2219,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475a9c1c48c9d8f40a596c9954fa6040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &996488294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996488287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 655f16c6ff234254e85a54a1ac8553b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &996488295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996488287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3893075511e7c6a45879df0d08b3d325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BuffObject: {fileID: 0}
 --- !u!1 &1115094349
 GameObject:
   m_ObjectHideFlags: 0

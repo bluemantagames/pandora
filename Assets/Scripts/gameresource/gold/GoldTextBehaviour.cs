@@ -14,7 +14,8 @@ namespace Pandora.Resource.Gold
         {
             walletsComponent = MapComponent.Instance.GetComponent<WalletsComponent>();
 
-            walletsComponent.GoldWallet.Bus.Subscribe<GoldEarned>(new EventSubscriber<GoldEvent>(ProcessEvent, "GoldTextBehaviour"));
+            walletsComponent.GoldWallet.Bus.Subscribe<GoldEarned>(new EventSubscriber<GoldEvent>(ProcessEvent, "GoldEarnedTextBehaviour"));
+            walletsComponent.GoldWallet.Bus.Subscribe<GoldSpent>(new EventSubscriber<GoldEvent>(ProcessEvent, "GoldSpentTextBehaviour"));
         }
 
         void ProcessEvent(GoldEvent ev)

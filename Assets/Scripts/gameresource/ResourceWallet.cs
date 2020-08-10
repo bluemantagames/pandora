@@ -45,6 +45,15 @@ namespace Pandora.Resource
 
             Bus.Dispatch(ev);
         }
+
+        public void SpendResource(int amount)
+        {
+            _resource -= amount;
+
+            var ev = resourceLostEventFactory(_resource, amount);
+
+            Bus.Dispatch(ev);
+        }
     }
 
 }

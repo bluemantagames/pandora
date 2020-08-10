@@ -31,26 +31,30 @@ namespace Pandora.Messages {
             "GAEgASgJEgkKAXgYAiABKAUSCQoBeRgDIAEoBRIRCgltYW5hX3VzZWQYBiAB",
             "KAUSEgoKZWxhcHNlZF9tcxgIIAEoBCJPCgdDb21tYW5kEhEKCXBsYXllcl9p",
             "ZBgFIAEoBRIMCgR0ZWFtGAQgASgFEg8KB3VuaXRfaWQYByABKAkSEgoKZWxh",
-            "cHNlZF9tcxgIIAEoBCI4Cg1NYXRjaEZpbmlzaGVkEhMKC3dpbm5lcl90ZWFt",
-            "GAEgASgFEhIKCmVsYXBzZWRfbXMYAiABKAQiagoORW5naW5lU25hcHNob3QS",
-            "EAoIc25hcHNob3QYASABKAkSEQoJdGltZXN0YW1wGAIgASgEEhIKCmVsYXBz",
-            "ZWRfbXMYAyABKAQSEQoJcGxheWVyX2lkGAUgASgFEgwKBHRlYW0YBCABKAUi",
-            "ggEKBFN0ZXASFgoOdGltZV9wYXNzZWRfbXMYASABKA0SLwoIY29tbWFuZHMY",
-            "AiADKAsyHS5wYW5kb3JhLm1lc3NhZ2VzLlN0ZXBDb21tYW5kEjEKC3BsYXll",
-            "cl9pbmZvGAMgAygLMhwucGFuZG9yYS5tZXNzYWdlcy5QbGF5ZXJJbmZvIogB",
-            "CgtTdGVwQ29tbWFuZBIRCgl0aW1lc3RhbXAYAiABKAQSKAoFc3Bhd24YASAB",
-            "KAsyFy5wYW5kb3JhLm1lc3NhZ2VzLlNwYXduSAASMQoMdW5pdF9jb21tYW5k",
-            "GAMgASgLMhkucGFuZG9yYS5tZXNzYWdlcy5Db21tYW5kSABCCQoHY29tbWFu",
-            "ZCKiAgoOQ2xpZW50RW52ZWxvcGUSDQoFdG9rZW4YAyABKAkSJgoEam9pbhgC",
-            "IAEoCzIWLnBhbmRvcmEubWVzc2FnZXMuSm9pbkgAEigKBXNwYXduGAEgASgL",
-            "MhcucGFuZG9yYS5tZXNzYWdlcy5TcGF3bkgAEiwKB2NvbW1hbmQYBCABKAsy",
-            "GS5wYW5kb3JhLm1lc3NhZ2VzLkNvbW1hbmRIABI5Cg5tYXRjaF9maW5pc2hl",
-            "ZBgFIAEoCzIfLnBhbmRvcmEubWVzc2FnZXMuTWF0Y2hGaW5pc2hlZEgAEjsK",
-            "D2VuZ2luZV9zbmFwc2hvdBgGIAEoCzIgLnBhbmRvcmEubWVzc2FnZXMuRW5n",
-            "aW5lU25hcHNob3RIAEIJCgdtZXNzYWdlIm0KDlNlcnZlckVudmVsb3BlEigK",
-            "BXN0YXJ0GAEgASgLMhcucGFuZG9yYS5tZXNzYWdlcy5TdGFydEgAEiYKBHN0",
-            "ZXAYAyABKAsyFi5wYW5kb3JhLm1lc3NhZ2VzLlN0ZXBIAEIJCgdtZXNzYWdl",
-            "YgZwcm90bzM="));
+            "cHNlZF9tcxgIIAEoBCJoCgpHb2xkUmV3YXJkEhEKCXBsYXllcl9pZBgBIAEo",
+            "BRIMCgR0ZWFtGAIgASgFEhIKCmdvbGRfc3BlbnQYAyABKAUSEQoJcmV3YXJk",
+            "X2lkGAQgASgJEhIKCmVsYXBzZWRfbXMYBSABKAQiOAoNTWF0Y2hGaW5pc2hl",
+            "ZBITCgt3aW5uZXJfdGVhbRgBIAEoBRISCgplbGFwc2VkX21zGAIgASgEImoK",
+            "DkVuZ2luZVNuYXBzaG90EhAKCHNuYXBzaG90GAEgASgJEhEKCXRpbWVzdGFt",
+            "cBgCIAEoBBISCgplbGFwc2VkX21zGAMgASgEEhEKCXBsYXllcl9pZBgFIAEo",
+            "BRIMCgR0ZWFtGAQgASgFIoIBCgRTdGVwEhYKDnRpbWVfcGFzc2VkX21zGAEg",
+            "ASgNEi8KCGNvbW1hbmRzGAIgAygLMh0ucGFuZG9yYS5tZXNzYWdlcy5TdGVw",
+            "Q29tbWFuZBIxCgtwbGF5ZXJfaW5mbxgDIAMoCzIcLnBhbmRvcmEubWVzc2Fn",
+            "ZXMuUGxheWVySW5mbyK9AQoLU3RlcENvbW1hbmQSEQoJdGltZXN0YW1wGAIg",
+            "ASgEEigKBXNwYXduGAEgASgLMhcucGFuZG9yYS5tZXNzYWdlcy5TcGF3bkgA",
+            "EjEKDHVuaXRfY29tbWFuZBgDIAEoCzIZLnBhbmRvcmEubWVzc2FnZXMuQ29t",
+            "bWFuZEgAEjMKC2dvbGRfUmV3YXJkGAQgASgLMhwucGFuZG9yYS5tZXNzYWdl",
+            "cy5Hb2xkUmV3YXJkSABCCQoHY29tbWFuZCLXAgoOQ2xpZW50RW52ZWxvcGUS",
+            "DQoFdG9rZW4YAyABKAkSJgoEam9pbhgCIAEoCzIWLnBhbmRvcmEubWVzc2Fn",
+            "ZXMuSm9pbkgAEigKBXNwYXduGAEgASgLMhcucGFuZG9yYS5tZXNzYWdlcy5T",
+            "cGF3bkgAEiwKB2NvbW1hbmQYBCABKAsyGS5wYW5kb3JhLm1lc3NhZ2VzLkNv",
+            "bW1hbmRIABIzCgtnb2xkX3Jld2FyZBgHIAEoCzIcLnBhbmRvcmEubWVzc2Fn",
+            "ZXMuR29sZFJld2FyZEgAEjkKDm1hdGNoX2ZpbmlzaGVkGAUgASgLMh8ucGFu",
+            "ZG9yYS5tZXNzYWdlcy5NYXRjaEZpbmlzaGVkSAASOwoPZW5naW5lX3NuYXBz",
+            "aG90GAYgASgLMiAucGFuZG9yYS5tZXNzYWdlcy5FbmdpbmVTbmFwc2hvdEgA",
+            "QgkKB21lc3NhZ2UibQoOU2VydmVyRW52ZWxvcGUSKAoFc3RhcnQYASABKAsy",
+            "Fy5wYW5kb3JhLm1lc3NhZ2VzLlN0YXJ0SAASJgoEc3RlcBgDIAEoCzIWLnBh",
+            "bmRvcmEubWVzc2FnZXMuU3RlcEgAQgkKB21lc3NhZ2ViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -59,11 +63,12 @@ namespace Pandora.Messages {
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.PlayerInfo), global::Pandora.Messages.PlayerInfo.Parser, new[]{ "Id", "Team", "Mana" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Spawn), global::Pandora.Messages.Spawn.Parser, new[]{ "PlayerId", "Team", "UnitId", "UnitName", "X", "Y", "ManaUsed", "ElapsedMs" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Command), global::Pandora.Messages.Command.Parser, new[]{ "PlayerId", "Team", "UnitId", "ElapsedMs" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.GoldReward), global::Pandora.Messages.GoldReward.Parser, new[]{ "PlayerId", "Team", "GoldSpent", "RewardId", "ElapsedMs" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.MatchFinished), global::Pandora.Messages.MatchFinished.Parser, new[]{ "WinnerTeam", "ElapsedMs" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.EngineSnapshot), global::Pandora.Messages.EngineSnapshot.Parser, new[]{ "Snapshot", "Timestamp", "ElapsedMs", "PlayerId", "Team" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Step), global::Pandora.Messages.Step.Parser, new[]{ "TimePassedMs", "Commands", "PlayerInfo" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.StepCommand), global::Pandora.Messages.StepCommand.Parser, new[]{ "Timestamp", "Spawn", "UnitCommand" }, new[]{ "Command" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.ClientEnvelope), global::Pandora.Messages.ClientEnvelope.Parser, new[]{ "Token", "Join", "Spawn", "Command", "MatchFinished", "EngineSnapshot" }, new[]{ "Message" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.StepCommand), global::Pandora.Messages.StepCommand.Parser, new[]{ "Timestamp", "Spawn", "UnitCommand", "GoldReward" }, new[]{ "Command" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.ClientEnvelope), global::Pandora.Messages.ClientEnvelope.Parser, new[]{ "Token", "Join", "Spawn", "Command", "GoldReward", "MatchFinished", "EngineSnapshot" }, new[]{ "Message" }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.ServerEnvelope), global::Pandora.Messages.ServerEnvelope.Parser, new[]{ "Start", "Step" }, new[]{ "Message" }, null, null)
           }));
     }
@@ -1115,6 +1120,238 @@ namespace Pandora.Messages {
   }
 
   /// <summary>
+  ///  Used for gold rewards 
+  /// </summary>
+  public sealed partial class GoldReward : pb::IMessage<GoldReward> {
+    private static readonly pb::MessageParser<GoldReward> _parser = new pb::MessageParser<GoldReward>(() => new GoldReward());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GoldReward> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GoldReward() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GoldReward(GoldReward other) : this() {
+      playerId_ = other.playerId_;
+      team_ = other.team_;
+      goldSpent_ = other.goldSpent_;
+      rewardId_ = other.rewardId_;
+      elapsedMs_ = other.elapsedMs_;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GoldReward Clone() {
+      return new GoldReward(this);
+    }
+
+    /// <summary>Field number for the "player_id" field.</summary>
+    public const int PlayerIdFieldNumber = 1;
+    private int playerId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int PlayerId {
+      get { return playerId_; }
+      set {
+        playerId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "team" field.</summary>
+    public const int TeamFieldNumber = 2;
+    private int team_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Team {
+      get { return team_; }
+      set {
+        team_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "gold_spent" field.</summary>
+    public const int GoldSpentFieldNumber = 3;
+    private int goldSpent_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int GoldSpent {
+      get { return goldSpent_; }
+      set {
+        goldSpent_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "reward_id" field.</summary>
+    public const int RewardIdFieldNumber = 4;
+    private string rewardId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string RewardId {
+      get { return rewardId_; }
+      set {
+        rewardId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "elapsed_ms" field.</summary>
+    public const int ElapsedMsFieldNumber = 5;
+    private ulong elapsedMs_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong ElapsedMs {
+      get { return elapsedMs_; }
+      set {
+        elapsedMs_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GoldReward);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GoldReward other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (PlayerId != other.PlayerId) return false;
+      if (Team != other.Team) return false;
+      if (GoldSpent != other.GoldSpent) return false;
+      if (RewardId != other.RewardId) return false;
+      if (ElapsedMs != other.ElapsedMs) return false;
+      return true;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
+      if (Team != 0) hash ^= Team.GetHashCode();
+      if (GoldSpent != 0) hash ^= GoldSpent.GetHashCode();
+      if (RewardId.Length != 0) hash ^= RewardId.GetHashCode();
+      if (ElapsedMs != 0UL) hash ^= ElapsedMs.GetHashCode();
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (PlayerId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(PlayerId);
+      }
+      if (Team != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(Team);
+      }
+      if (GoldSpent != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(GoldSpent);
+      }
+      if (RewardId.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(RewardId);
+      }
+      if (ElapsedMs != 0UL) {
+        output.WriteRawTag(40);
+        output.WriteUInt64(ElapsedMs);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (PlayerId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
+      }
+      if (Team != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Team);
+      }
+      if (GoldSpent != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GoldSpent);
+      }
+      if (RewardId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RewardId);
+      }
+      if (ElapsedMs != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(ElapsedMs);
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GoldReward other) {
+      if (other == null) {
+        return;
+      }
+      if (other.PlayerId != 0) {
+        PlayerId = other.PlayerId;
+      }
+      if (other.Team != 0) {
+        Team = other.Team;
+      }
+      if (other.GoldSpent != 0) {
+        GoldSpent = other.GoldSpent;
+      }
+      if (other.RewardId.Length != 0) {
+        RewardId = other.RewardId;
+      }
+      if (other.ElapsedMs != 0UL) {
+        ElapsedMs = other.ElapsedMs;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            input.SkipLastField();
+            break;
+          case 8: {
+            PlayerId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            Team = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            GoldSpent = input.ReadInt32();
+            break;
+          }
+          case 34: {
+            RewardId = input.ReadString();
+            break;
+          }
+          case 40: {
+            ElapsedMs = input.ReadUInt64();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
   ///  Used when the match is finished 
   /// </summary>
   public sealed partial class MatchFinished : pb::IMessage<MatchFinished> {
@@ -1124,7 +1361,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1273,7 +1510,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[6]; }
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1505,7 +1742,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[7]; }
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1668,7 +1905,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[8]; }
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1692,6 +1929,9 @@ namespace Pandora.Messages {
           break;
         case CommandOneofCase.UnitCommand:
           UnitCommand = other.UnitCommand.Clone();
+          break;
+        case CommandOneofCase.GoldReward:
+          GoldReward = other.GoldReward.Clone();
           break;
       }
 
@@ -1738,12 +1978,24 @@ namespace Pandora.Messages {
       }
     }
 
+    /// <summary>Field number for the "gold_Reward" field.</summary>
+    public const int GoldRewardFieldNumber = 4;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Pandora.Messages.GoldReward GoldReward {
+      get { return commandCase_ == CommandOneofCase.GoldReward ? (global::Pandora.Messages.GoldReward) command_ : null; }
+      set {
+        command_ = value;
+        commandCase_ = value == null ? CommandOneofCase.None : CommandOneofCase.GoldReward;
+      }
+    }
+
     private object command_;
     /// <summary>Enum of possible cases for the "command" oneof.</summary>
     public enum CommandOneofCase {
       None = 0,
       Spawn = 1,
       UnitCommand = 3,
+      GoldReward = 4,
     }
     private CommandOneofCase commandCase_ = CommandOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1773,6 +2025,7 @@ namespace Pandora.Messages {
       if (Timestamp != other.Timestamp) return false;
       if (!object.Equals(Spawn, other.Spawn)) return false;
       if (!object.Equals(UnitCommand, other.UnitCommand)) return false;
+      if (!object.Equals(GoldReward, other.GoldReward)) return false;
       if (CommandCase != other.CommandCase) return false;
       return true;
     }
@@ -1783,6 +2036,7 @@ namespace Pandora.Messages {
       if (Timestamp != 0UL) hash ^= Timestamp.GetHashCode();
       if (commandCase_ == CommandOneofCase.Spawn) hash ^= Spawn.GetHashCode();
       if (commandCase_ == CommandOneofCase.UnitCommand) hash ^= UnitCommand.GetHashCode();
+      if (commandCase_ == CommandOneofCase.GoldReward) hash ^= GoldReward.GetHashCode();
       hash ^= (int) commandCase_;
       return hash;
     }
@@ -1806,6 +2060,10 @@ namespace Pandora.Messages {
         output.WriteRawTag(26);
         output.WriteMessage(UnitCommand);
       }
+      if (commandCase_ == CommandOneofCase.GoldReward) {
+        output.WriteRawTag(34);
+        output.WriteMessage(GoldReward);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1819,6 +2077,9 @@ namespace Pandora.Messages {
       }
       if (commandCase_ == CommandOneofCase.UnitCommand) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(UnitCommand);
+      }
+      if (commandCase_ == CommandOneofCase.GoldReward) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GoldReward);
       }
       return size;
     }
@@ -1837,6 +2098,9 @@ namespace Pandora.Messages {
           break;
         case CommandOneofCase.UnitCommand:
           UnitCommand = other.UnitCommand;
+          break;
+        case CommandOneofCase.GoldReward:
+          GoldReward = other.GoldReward;
           break;
       }
 
@@ -1872,6 +2136,15 @@ namespace Pandora.Messages {
             UnitCommand = subBuilder;
             break;
           }
+          case 34: {
+            global::Pandora.Messages.GoldReward subBuilder = new global::Pandora.Messages.GoldReward();
+            if (commandCase_ == CommandOneofCase.GoldReward) {
+              subBuilder.MergeFrom(GoldReward);
+            }
+            input.ReadMessage(subBuilder);
+            GoldReward = subBuilder;
+            break;
+          }
         }
       }
     }
@@ -1888,7 +2161,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[9]; }
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1915,6 +2188,9 @@ namespace Pandora.Messages {
           break;
         case MessageOneofCase.Command:
           Command = other.Command.Clone();
+          break;
+        case MessageOneofCase.GoldReward:
+          GoldReward = other.GoldReward.Clone();
           break;
         case MessageOneofCase.MatchFinished:
           MatchFinished = other.MatchFinished.Clone();
@@ -1975,6 +2251,17 @@ namespace Pandora.Messages {
       }
     }
 
+    /// <summary>Field number for the "gold_reward" field.</summary>
+    public const int GoldRewardFieldNumber = 7;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Pandora.Messages.GoldReward GoldReward {
+      get { return messageCase_ == MessageOneofCase.GoldReward ? (global::Pandora.Messages.GoldReward) message_ : null; }
+      set {
+        message_ = value;
+        messageCase_ = value == null ? MessageOneofCase.None : MessageOneofCase.GoldReward;
+      }
+    }
+
     /// <summary>Field number for the "match_finished" field.</summary>
     public const int MatchFinishedFieldNumber = 5;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2004,6 +2291,7 @@ namespace Pandora.Messages {
       Join = 2,
       Spawn = 1,
       Command = 4,
+      GoldReward = 7,
       MatchFinished = 5,
       EngineSnapshot = 6,
     }
@@ -2036,6 +2324,7 @@ namespace Pandora.Messages {
       if (!object.Equals(Join, other.Join)) return false;
       if (!object.Equals(Spawn, other.Spawn)) return false;
       if (!object.Equals(Command, other.Command)) return false;
+      if (!object.Equals(GoldReward, other.GoldReward)) return false;
       if (!object.Equals(MatchFinished, other.MatchFinished)) return false;
       if (!object.Equals(EngineSnapshot, other.EngineSnapshot)) return false;
       if (MessageCase != other.MessageCase) return false;
@@ -2049,6 +2338,7 @@ namespace Pandora.Messages {
       if (messageCase_ == MessageOneofCase.Join) hash ^= Join.GetHashCode();
       if (messageCase_ == MessageOneofCase.Spawn) hash ^= Spawn.GetHashCode();
       if (messageCase_ == MessageOneofCase.Command) hash ^= Command.GetHashCode();
+      if (messageCase_ == MessageOneofCase.GoldReward) hash ^= GoldReward.GetHashCode();
       if (messageCase_ == MessageOneofCase.MatchFinished) hash ^= MatchFinished.GetHashCode();
       if (messageCase_ == MessageOneofCase.EngineSnapshot) hash ^= EngineSnapshot.GetHashCode();
       hash ^= (int) messageCase_;
@@ -2086,6 +2376,10 @@ namespace Pandora.Messages {
         output.WriteRawTag(50);
         output.WriteMessage(EngineSnapshot);
       }
+      if (messageCase_ == MessageOneofCase.GoldReward) {
+        output.WriteRawTag(58);
+        output.WriteMessage(GoldReward);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2102,6 +2396,9 @@ namespace Pandora.Messages {
       }
       if (messageCase_ == MessageOneofCase.Command) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Command);
+      }
+      if (messageCase_ == MessageOneofCase.GoldReward) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GoldReward);
       }
       if (messageCase_ == MessageOneofCase.MatchFinished) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(MatchFinished);
@@ -2129,6 +2426,9 @@ namespace Pandora.Messages {
           break;
         case MessageOneofCase.Command:
           Command = other.Command;
+          break;
+        case MessageOneofCase.GoldReward:
+          GoldReward = other.GoldReward;
           break;
         case MessageOneofCase.MatchFinished:
           MatchFinished = other.MatchFinished;
@@ -2197,6 +2497,15 @@ namespace Pandora.Messages {
             EngineSnapshot = subBuilder;
             break;
           }
+          case 58: {
+            global::Pandora.Messages.GoldReward subBuilder = new global::Pandora.Messages.GoldReward();
+            if (messageCase_ == MessageOneofCase.GoldReward) {
+              subBuilder.MergeFrom(GoldReward);
+            }
+            input.ReadMessage(subBuilder);
+            GoldReward = subBuilder;
+            break;
+          }
         }
       }
     }
@@ -2213,7 +2522,7 @@ namespace Pandora.Messages {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[10]; }
+      get { return global::Pandora.Messages.MessagesReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

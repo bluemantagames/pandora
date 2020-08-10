@@ -10,6 +10,7 @@ using Pandora.Spell;
 using Pandora.Combat;
 using Pandora.Deck;
 using Pandora.Resource.Mana;
+using Pandora.Resource.Gold.Rewards;
 using Pandora.Network;
 using Pandora.Network.Messages;
 using Pandora.Engine;
@@ -262,6 +263,12 @@ namespace Pandora
 
                         unit.GetComponent<CommandBehaviour>().InvokeCommand();
                     }
+
+                    if (command is GoldRewardMessage goldRewardMessage) {
+                        var goldReward = RewardsRepository.Instance.GetReward(goldRewardMessage.rewardId);
+
+                        goldReward.RewardApply(this, goldRewardMessage.team, goldRewardMessage.playerId);
+                    }
                 }
 
                 if (step.mana != null)
@@ -306,6 +313,28 @@ namespace Pandora
                 Destroy(lastPuppet);
 
             ResetAggroPoints();
+        }
+
+        public void ApplyGoldReward(string rewardId, int goldCost) {
+            var maybePlayerId = NetworkControllerSingleton.instance.PlayerId;
+            var playerId = maybePlayerId.HasValue ? maybePlayerId.Value : 0;
+
+            var message = new GoldRewardMessage {
+                rewardId = rewardId,
+                team = TeamComponent.assignedTeam,
+                elapsedMs = (int) engine.TotalElapsed,
+                goldSpent = goldCost,
+                playerId = playerId
+            };
+
+            NetworkControllerSingleton.instance.EnqueueMessage(message);
+
+            if (!NetworkControllerSingleton.instance.matchStarted)
+            {
+                var goldReward = RewardsRepository.Instance.GetReward(rewardId);
+
+                goldReward.RewardApply(this, message.team, message.playerId);
+            }
         }
 
         public bool SpawnCard(string cardName, int team, GridCell cell, int requiredMana = 0)

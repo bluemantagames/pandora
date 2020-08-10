@@ -14,6 +14,14 @@ namespace Pandora.Combat {
         }
     }
 
+    public class GoldRewardEffect: DamageSource {
+        public GameObject GameObject { get; private set; }
+
+        public GoldRewardEffect(GameObject rewardObject) {
+            GameObject = rewardObject;
+        }
+    }
+
     /// <summary>Damage incoming from tower base attack</summary>
     public class TowerBaseAttack: DamageSource {
         public GameObject GameObject { get; private set; }

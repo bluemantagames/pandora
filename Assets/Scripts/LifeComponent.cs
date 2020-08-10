@@ -101,6 +101,10 @@ namespace Pandora
             DeathPosition = sourceEntity.GetCurrentCell();
         }
 
+        public void Kill(DamageSource source) {
+            AssignDamage(lifeValue, source);
+        }
+
         public void Heal(int amount)
         {
             lifeValue += amount;
