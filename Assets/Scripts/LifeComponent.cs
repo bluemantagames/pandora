@@ -163,15 +163,22 @@ namespace Pandora
 
                     isEverybodyDead = true;
                 }
+                
+                var sourceTeamComponent = source.GameObject.GetComponent<TeamComponent>();
 
-                var sourceTeam =
-                    (source is TowerBaseAttack) ?
-                        source.GameObject.GetComponent<TowerTeamComponent>().EngineTeam :
-                        source.GameObject.GetComponent<TeamComponent>().Team;
+                int? sourceTeam = null;
+
+                if (sourceTeamComponent != null) {
+                    sourceTeam =
+                        (source is TowerBaseAttack) ?
+                            ((TowerTeamComponent) sourceTeamComponent).EngineTeam :
+                            sourceTeamComponent.Team;
+                }
 
                 // should earn gold if we killed the last unit of the group
                 var shouldEarnGold =
                     teamComponent.Team != TeamComponent.assignedTeam &&
+                    sourceTeam != null &&
                     sourceTeam == TeamComponent.assignedTeam &&
                     manaCostComponent != null &&
                     isEverybodyDead;
