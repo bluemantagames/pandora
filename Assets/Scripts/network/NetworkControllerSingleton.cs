@@ -297,6 +297,7 @@ namespace Pandora.Network
                 team = command.Spawn.Team,
                 timestamp = DateTimeOffset.FromUnixTimeMilliseconds((long)command.Timestamp).UtcDateTime,
                 unitId = command.Spawn.UnitId,
+                manaUsed = command.Spawn.ManaUsed,
                 elapsedMs = command.Spawn.ElapsedMs
             };
         }

@@ -498,6 +498,8 @@ namespace Pandora
 
             var manaCostComponent = unit.AddComponent<ManaCostComponent>();
 
+            Debug.Log($"Gold earn mana cost {unitSpawn.ManaUsed}");
+
             manaCostComponent.ManaCost = unitSpawn.ManaUsed;
         }
 

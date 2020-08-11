@@ -23,7 +23,6 @@ namespace Pandora
         WalletsComponent walletsComponent;
         TeamComponent teamComponent;
         TowerTeamComponent towerTeamComponent;
-        ManaCostComponent manaCostComponent;
         GroupComponent groupComponent;
 
         bool isTower;
@@ -45,7 +44,6 @@ namespace Pandora
             healthbarBehaviour.DrawSeparators();
 
             walletsComponent = MapComponent.Instance.GetComponent<WalletsComponent>();
-            manaCostComponent = GetComponent<ManaCostComponent>();
 
             towerTeamComponent = GetComponent<TowerTeamComponent>();
             teamComponent = GetComponent<TeamComponent>();
@@ -138,6 +136,8 @@ namespace Pandora
 
             if (lifeValue <= 0)
             {
+                var manaCostComponent = GetComponent<ManaCostComponent>();
+
                 var idComponent = GetComponent<UnitIdComponent>();
                 var isEverybodyDead = false;
 
@@ -183,9 +183,11 @@ namespace Pandora
                     manaCostComponent != null &&
                     isEverybodyDead;
 
+                Debug.Log($"Should earn gold {shouldEarnGold} {manaCostComponent.ManaCost}");
+
                 if (shouldEarnGold)
                 {
-                    walletsComponent.GoldWallet.AddResource(manaCostComponent.ManaCost);
+                    walletsComponent.GoldWallet.AddResource(manaCostComponent.ManaCost / 10);
                 }
 
                 SetDeathPosition();

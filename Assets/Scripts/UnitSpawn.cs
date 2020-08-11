@@ -35,7 +35,7 @@ namespace Pandora
 
         public object Clone()
         {
-            return MemberwiseClone();
+            return new UnitSpawn(UnitName, new GridCell(CellX, CellY), Team, Id, Timestamp, ManaUsed);
         }
     }
 }
