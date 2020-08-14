@@ -27,7 +27,7 @@ namespace Pandora.Network
                 if (isDebugBuild)
                     return "http://localhost:8080";
                 else
-                    return "http://3bitpodcast.com:8080";
+                    return "http://pandora.bluemanta.games:8080";
             }
         }
 
@@ -100,7 +100,7 @@ namespace Pandora.Network
 
             MatchParams matchParams = (MatchParams)data;
 
-            var matchHost = (isDebugBuild) ? "127.0.0.1" : "3bitpodcast.com";
+            var matchHost = (isDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
             var matchPort = 9090;
             var dns = Dns.GetHostEntry(matchHost);
 
