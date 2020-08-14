@@ -3,6 +3,7 @@ using System.Linq;
 using System;
 using System.Diagnostics;
 
+/// <summary>Pretty much from the unity gitlab CI scripts, with some modifications</summary>
 static class BuildCommand
 {
     static string GetArgument(string name)
@@ -128,8 +129,8 @@ static class BuildCommand
 
         p.StartInfo.UseShellExecute = false;
         p.StartInfo.RedirectStandardOutput = true;
-        p.StartInfo.FileName = "cmd.exe";
-        p.StartInfo.Arguments = "/c git describe --tags";
+        p.StartInfo.FileName = "/bin/bash";
+        p.StartInfo.Arguments = "-c 'git describe --tags'";
 
         p.Start();
 
