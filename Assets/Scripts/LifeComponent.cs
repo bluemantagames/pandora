@@ -183,8 +183,6 @@ namespace Pandora
                     manaCostComponent != null &&
                     isEverybodyDead;
 
-                Debug.Log($"Should earn gold {shouldEarnGold} {manaCostComponent.ManaCost}");
-
                 if (shouldEarnGold)
                 {
                     walletsComponent.GoldWallet.AddResource(manaCostComponent.ManaCost / 10);

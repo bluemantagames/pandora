@@ -26,6 +26,7 @@ namespace Pandora
         public int bottomMapSizeY = 13;
         public int mapSizeX;
         public int mapSizeY;
+        public int RiverY = 13;
         bool isLockedOnMiddle = false;
         public Vector2 worldMapSize;
         public bool debugHitboxes = false;
@@ -47,13 +48,11 @@ namespace Pandora
             {
                 if (_riverPositions.Count == 0)
                 {
-                    var riverY = 13;
-
                     for (var x = 0; x < bottomMapSize.x; x++)
                     {
                         if (x != firstLaneX && x != secondLaneX)
                         {
-                            _riverPositions.Add(new GridCell(x, riverY));
+                            _riverPositions.Add(new GridCell(x, RiverY));
                         }
                     }
                 }
