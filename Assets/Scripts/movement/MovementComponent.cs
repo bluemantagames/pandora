@@ -243,7 +243,7 @@ namespace Pandora.Movement
                             var downAdvance = PoolInstances.Vector2IntPool.GetObject();
 
                             downAdvance.x = position.x;
-                            downAdvance.y = position.y + 1;
+                            downAdvance.y = position.y - 1;
                             
                             surroundingPositions.Add(upAdvance);
                             surroundingPositions.Add(downAdvance);
