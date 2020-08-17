@@ -29,7 +29,7 @@ namespace Pandora
         {
             var teamComponent = GetComponentInParent<TeamComponent>();
 
-            if (teamComponent?.team != TeamComponent.assignedTeam)
+            if (teamComponent?.Team != TeamComponent.assignedTeam)
             {
                 imageComponent.sprite = OpponentSprite;
             }

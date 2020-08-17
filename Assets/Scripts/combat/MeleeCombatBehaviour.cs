@@ -71,7 +71,7 @@ namespace Pandora.Combat
             isAttacking = false;
             target = null;
 
-            Logger.Debug($"Combat: Stop attacking {GetComponent<TeamComponent>().team}");
+            Logger.Debug($"Combat: Stop attacking {GetComponent<TeamComponent>().Team}");
 
             var animator = GetComponent<Animator>();
 
@@ -84,13 +84,13 @@ namespace Pandora.Combat
             if (target == null)
                 return;
 
-            Logger.Debug($"Combat: Dealing damage {GetComponent<TeamComponent>().team}");
+            Logger.Debug($"Combat: Dealing damage {GetComponent<TeamComponent>().Team}");
 
             var lifeComponent = target.GetComponent<LifeComponent>();
 
             var assignedDamage = NextAttackMultiplier.HasValue ? damage * NextAttackMultiplier.Value : damage;
 
-            lifeComponent.AssignDamage(assignedDamage);
+            lifeComponent.AssignDamage(assignedDamage, new BaseAttack(gameObject));
 
             NextAttackMultiplier = null;
 

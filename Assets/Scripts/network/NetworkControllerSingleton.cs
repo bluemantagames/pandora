@@ -221,10 +221,18 @@ namespace Pandora.Network
 
                 foreach (var command in envelope.Step.Commands)
                 {
+
+
                     if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
                     {
                         commands.Add(
                             GenerateSpawnMessage(command)
+                        );
+                    }
+                    else if (command.CommandCase == StepCommand.CommandOneofCase.GoldReward)
+                    {
+                        commands.Add(
+                            GenerateGoldRewardMessage(command)
                         );
                     }
                     else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand)
@@ -298,6 +306,7 @@ namespace Pandora.Network
                 team = command.Spawn.Team,
                 timestamp = DateTimeOffset.FromUnixTimeMilliseconds((long)command.Timestamp).UtcDateTime,
                 unitId = command.Spawn.UnitId,
+                manaUsed = command.Spawn.ManaUsed,
                 elapsedMs = command.Spawn.ElapsedMs
             };
         }
@@ -311,6 +320,19 @@ namespace Pandora.Network
                 elapsedMs = command.UnitCommand.ElapsedMs
             };
         }
+
+        public static GoldRewardMessage GenerateGoldRewardMessage(StepCommand command)
+        {
+            return new GoldRewardMessage
+            {
+                playerId = command.GoldReward.PlayerId,
+                team = command.GoldReward.Team,
+                goldSpent = command.GoldReward.GoldSpent,
+                rewardId = command.GoldReward.RewardId,
+                elapsedMs = (int)command.GoldReward.ElapsedMs
+            };
+        }
+
     }
 
 }

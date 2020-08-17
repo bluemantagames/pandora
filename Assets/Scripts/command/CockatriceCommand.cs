@@ -40,7 +40,7 @@ namespace Pandora.Command
 
             foreach (var entity in engineComponent.Entity.FindInHitboxRange(EngineUnitsRange, TargetBuildings))
             {
-                if (entity.GameObject.GetComponent<TeamComponent>()?.team == team.team) continue;
+                if (entity.GameObject.GetComponent<TeamComponent>()?.Team == team.Team) continue;
 
                 var distance = engineComponent.Engine.SquaredDistance(entity.Position, cockatrice.Position);
 
@@ -55,7 +55,7 @@ namespace Pandora.Command
                 var lifeComponent = target.GameObject.GetComponent<LifeComponent>();
                 var damage = (lifeComponent.maxLife / 10) * 9;
 
-                lifeComponent.AssignDamage(damage);
+                lifeComponent.AssignDamage(damage, new UnitCommand(gameObject));
             }
         }
     }

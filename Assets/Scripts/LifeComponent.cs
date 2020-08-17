@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Pandora.Engine;
 using Pandora.Combat;
 using Pandora.Network;
+using Pandora.Resource;
+using Pandora.Resource.Mana;
 
 namespace Pandora
 {
@@ -17,8 +20,17 @@ namespace Pandora
         public int maxLife;
         public bool IsDead = false;
         public GridCell DeathPosition = null;
+        WalletsComponent walletsComponent;
+        TeamComponent teamComponent;
+        TowerTeamComponent towerTeamComponent;
+        GroupComponent groupComponent;
 
-        // Start is called before the first frame update
+        bool isTower;
+        public int TowerGoldRewards = 4, GoldReward = 7;
+
+
+        int currentGoldReward = 1;
+
         void Start()
         {
             var healthbarBehaviour = GetComponentInChildren<HealthbarBehaviour>();
@@ -30,6 +42,15 @@ namespace Pandora
             maxLife = lifeValue;
 
             healthbarBehaviour.DrawSeparators();
+
+            walletsComponent = MapComponent.Instance.GetComponent<WalletsComponent>();
+
+            towerTeamComponent = GetComponent<TowerTeamComponent>();
+            teamComponent = GetComponent<TeamComponent>();
+
+            var groupComponent = GetComponent<GroupComponent>();
+
+            isTower = towerTeamComponent != null;
         }
 
         public void Remove()
@@ -78,6 +99,10 @@ namespace Pandora
             DeathPosition = sourceEntity.GetCurrentCell();
         }
 
+        public void Kill(DamageSource source) {
+            AssignDamage(lifeValue, source);
+        }
+
         public void Heal(int amount)
         {
             lifeValue += amount;
@@ -91,20 +116,35 @@ namespace Pandora
             RefreshHealthbar();
         }
 
-        public void AssignDamage(int value)
+        public void AssignDamage(int value, DamageSource source)
         {
             lifeValue -= value;
 
             RefreshHealthbar();
 
+            if (isTower && towerTeamComponent.EngineTeam != TeamComponent.assignedTeam)
+            {
+                var currentRewardLifeTarget = maxLife - (currentGoldReward * (new Decimal(maxLife) / new Decimal(TowerGoldRewards)));
+
+                if (lifeValue <= currentRewardLifeTarget)
+                {
+                    currentGoldReward++;
+
+                    walletsComponent.GoldWallet.AddResource(GoldReward);
+                }
+            }
+
             if (lifeValue <= 0)
             {
+                var manaCostComponent = GetComponent<ManaCostComponent>();
+
                 var idComponent = GetComponent<UnitIdComponent>();
+                var isEverybodyDead = false;
+
+                var groupComponent = GetComponent<GroupComponent>();
 
                 IsDead = true;
                 GetComponent<CombatBehaviour>().OnDead();
-
-                var groupComponent = GetComponent<GroupComponent>();
 
                 if (groupComponent != null)
                 {
@@ -113,11 +153,39 @@ namespace Pandora
                     if (groupComponent.AliveObjects.Count == 0)
                     {
                         CommandViewportBehaviour.Instance.RemoveCommand(groupComponent.OriginalId);
+
+                        isEverybodyDead = true;
                     }
                 }
                 else if (idComponent != null)
                 {
                     CommandViewportBehaviour.Instance.RemoveCommand(idComponent.Id);
+
+                    isEverybodyDead = true;
+                }
+                
+                var sourceTeamComponent = source.GameObject.GetComponent<TeamComponent>();
+
+                int? sourceTeam = null;
+
+                if (sourceTeamComponent != null) {
+                    sourceTeam =
+                        (source is TowerBaseAttack) ?
+                            ((TowerTeamComponent) sourceTeamComponent).EngineTeam :
+                            sourceTeamComponent.Team;
+                }
+
+                // should earn gold if we killed the last unit of the group
+                var shouldEarnGold =
+                    teamComponent.Team != TeamComponent.assignedTeam &&
+                    sourceTeam != null &&
+                    sourceTeam == TeamComponent.assignedTeam &&
+                    manaCostComponent != null &&
+                    isEverybodyDead;
+
+                if (shouldEarnGold)
+                {
+                    walletsComponent.GoldWallet.AddResource(manaCostComponent.ManaCost / 10);
                 }
 
                 SetDeathPosition();

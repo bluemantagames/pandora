@@ -8,7 +8,8 @@ namespace Pandora
         public GameObject Unit;
         public Vector2Int[] Positions;
 
-        public Vector2Int[] CellPositions {
+        public Vector2Int[] CellPositions
+        {
             get => Positions;
         }
 
@@ -18,16 +19,20 @@ namespace Pandora
             var yIncrement = (spawn.Team == TeamComponent.topTeam) ? -1 : 1;
             var unitNumber = 1;
 
+
             foreach (var position in Positions)
             {
                 var unit = Instantiate(Unit, map.gameObject.transform);
+                var singleUnitSpawn = spawn.Clone() as UnitSpawn;
+
                 var id = $"{spawn.Id}-{unitNumber}";
 
+                singleUnitSpawn.Id = id;
                 unit.name += $"-{id}";
 
-                var timestamp = spawn.Timestamp.AddSeconds(unitNumber);
+                singleUnitSpawn.Timestamp = singleUnitSpawn.Timestamp.AddSeconds(unitNumber);
 
-                map.InitializeComponents(unit, new GridCell(spawn.CellX + position.x, spawn.CellY + position.y), spawn.Team, id, timestamp, spawn.UnitName);
+                map.InitializeComponents(unit, new GridCell(spawn.CellX + position.x, spawn.CellY + position.y), singleUnitSpawn);
 
                 units.Add(unit);
 
@@ -41,7 +46,8 @@ namespace Pandora
 
             var unitList = new List<GameObject>(units);
 
-            foreach (var unit in units) {
+            foreach (var unit in units)
+            {
                 unit.GetComponent<GroupComponent>().AliveObjects = unitList;
             }
 

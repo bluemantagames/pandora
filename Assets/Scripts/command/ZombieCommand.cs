@@ -2,6 +2,7 @@
 using Pandora.Network;
 using Pandora.Engine;
 using Pandora.Combat;
+using Pandora.Resource.Mana;
 using System.Collections.Generic;
 
 namespace Pandora.Command
@@ -21,7 +22,7 @@ namespace Pandora.Command
         {
             var sourceEntity = GetComponent<EngineComponent>().Entity;
             var engine = sourceEntity.Engine;
-            var team = GetComponent<TeamComponent>().team;
+            var team = GetComponent<TeamComponent>().Team;
             var groupComponent = GetComponent<GroupComponent>();
 
             engine.DelayedJobs.Add(
@@ -60,7 +61,7 @@ namespace Pandora.Command
             }
 
             var sourceEntity = GetComponent<EngineComponent>().Entity;
-            var team = GetComponent<TeamComponent>().team;
+            var team = GetComponent<TeamComponent>().Team;
             var groupComponent = GetComponent<GroupComponent>();
 
             if (groupComponent == null)
@@ -95,7 +96,8 @@ namespace Pandora.Command
                     spawnPosition,
                     team,
                     zombieId + "-resurrected",
-                    sourceEntity.Timestamp
+                    sourceEntity.Timestamp,
+                    zombie.GetComponent<ManaCostComponent>().ManaCost
                 );
 
                 MapComponent.Instance.SpawnUnit(zombieSpawn);

@@ -96,8 +96,6 @@ namespace Pandora.Engine
 
             TotalElapsed += msLapsed;
 
-            GameObject.Find("MsElapsedText").GetComponent<Text>().text = $"Elapsed: {TotalElapsed}";
-
             for (var tick = 0; tick < ticksNum; tick++)
             {
                 NextTick();

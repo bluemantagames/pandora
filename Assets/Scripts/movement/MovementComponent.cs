@@ -232,6 +232,25 @@ namespace Pandora.Movement
                     {
                         var surroundingPositions = PoolInstances.Vector2IntListPool.GetObject();
 
+                        // Only advances possible from bridges are up and down
+                        // to avoid units trying to pass on top of the river
+                        if (position.y == MapComponent.Instance.RiverY) {
+                            var upAdvance = PoolInstances.Vector2IntPool.GetObject();
+
+                            upAdvance.x = position.x;
+                            upAdvance.y = position.y + 1;
+
+                            var downAdvance = PoolInstances.Vector2IntPool.GetObject();
+
+                            downAdvance.x = position.x;
+                            downAdvance.y = position.y - 1;
+                            
+                            surroundingPositions.Add(upAdvance);
+                            surroundingPositions.Add(downAdvance);
+
+                            return surroundingPositions;
+                        }
+
                         for (var x = -1; x <= 1; x++)
                         {
                             for (var y = -1; y <= 1; y++)

@@ -33,7 +33,7 @@ namespace Pandora.Command
 
             foreach (var entity in engineComponent.Entity.FindInHitboxRange(EngineUnitsRange, false))
             {
-                if (entity.GameObject.GetComponent<TeamComponent>()?.team == team.team || !entity.IsRigid) continue;
+                if (entity.GameObject.GetComponent<TeamComponent>()?.Team == team.Team || !entity.IsRigid) continue;
 
                 var lifeValue = entity.GameObject.GetComponent<LifeComponent>().lifeValue;
 
@@ -49,12 +49,12 @@ namespace Pandora.Command
             var isEveryoneAlive = groupComponent.Objects.TrueForAll(unit => !unit.GetComponent<LifeComponent>().IsDead);
 
             if (isEveryoneAlive && targetEntity != null) {
-                targetEntity.GameObject.GetComponent<TeamComponent>().Convert(team.team);
+                targetEntity.GameObject.GetComponent<TeamComponent>().Convert(team.Team);
 
                 foreach (var cleric in groupComponent.Objects) {
                     var lifeComponent = cleric.GetComponent<LifeComponent>();
 
-                    lifeComponent.AssignDamage(lifeComponent.lifeValue);
+                    lifeComponent.AssignDamage(lifeComponent.lifeValue, new UnitCommand(gameObject));
                 }
             } else {
                 Logger.DebugWarning("Somebody is dead or no valid targets, cannot convert");

@@ -54,14 +54,14 @@ namespace Pandora.Combat
 
                     var hitEntities = engineEntity.Engine.FindInRadius(hitbox.Center, EngineUnitsRadius + maxDimension, true);
 
-                    var alliedTeam = parent.GetComponent<TeamComponent>().team;
+                    var alliedTeam = parent.GetComponent<TeamComponent>().Team;
 
                     Logger.Debug($"Searching in {EngineUnitsRadius + maxDimension}");
 
                     foreach (var entity in hitEntities)
                     {
                         if (entity.GameObject == target.enemy || entity.GameObject == gameObject || !entity.IsRigid) continue;
-                        if (entity.GameObject.GetComponent<TeamComponent>().team == alliedTeam && !ShouldHitAllies) continue;
+                        if (entity.GameObject.GetComponent<TeamComponent>().Team == alliedTeam && !ShouldHitAllies) continue;
 
                         Logger.Debug($"Hit {entity}");
 

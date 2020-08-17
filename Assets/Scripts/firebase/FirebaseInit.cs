@@ -1,12 +1,12 @@
 using UnityEngine;
-using Firebase;
+//using Firebase;
 
 namespace Pandora.Analytics
 {
     public class FirebaseInit : MonoBehaviour
     {
         void Start()
-        {
+        {/*
             Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
             {
                 var dependencyStatus = task.Result;
@@ -19,7 +19,7 @@ namespace Pandora.Analytics
                     UnityEngine.Debug.LogError(System.String.Format(
                       "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
                 }
-            });
+            });*/
         }
 
 

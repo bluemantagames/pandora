@@ -9,6 +9,8 @@ using Pandora.Movement;
 using Pandora.Spell;
 using Pandora.Combat;
 using Pandora.Deck;
+using Pandora.Resource.Mana;
+using Pandora.Resource.Gold.Rewards;
 using Pandora.Network;
 using Pandora.Network.Messages;
 using Pandora.Engine;
@@ -24,6 +26,7 @@ namespace Pandora
         public int bottomMapSizeY = 13;
         public int mapSizeX;
         public int mapSizeY;
+        public int RiverY = 13;
         bool isLockedOnMiddle = false;
         public Vector2 worldMapSize;
         public bool debugHitboxes = false;
@@ -45,13 +48,11 @@ namespace Pandora
             {
                 if (_riverPositions.Count == 0)
                 {
-                    var riverY = 13;
-
                     for (var x = 0; x < bottomMapSize.x; x++)
                     {
                         if (x != firstLaneX && x != secondLaneX)
                         {
-                            _riverPositions.Add(new GridCell(x, riverY));
+                            _riverPositions.Add(new GridCell(x, RiverY));
                         }
                     }
                 }
@@ -162,11 +163,11 @@ namespace Pandora
             foreach (var position in GetComponentsInChildren<TowerPositionComponent>())
             {
                 // Count them as obstacles only for allied structures
-                if (position.gameObject.GetComponent<TeamComponent>().team == team.team)
+                if (position.gameObject.GetComponent<TeamComponent>().Team == team.Team)
                     hashSet.UnionWith(position.GetTowerPositions());
             }
 
-            TowerPositionsDictionary[team.team] = hashSet;
+            TowerPositionsDictionary[team.Team] = hashSet;
         }
 
         /**
@@ -178,12 +179,12 @@ namespace Pandora
 
             var isOutOfBounds = (cellVector.x < 0 && cellVector.y < 0 && cellVector.x >= bottomMapSize.x && cellVector.y >= mapSizeY);
 
-            if (!TowerPositionsDictionary.ContainsKey(team.team))
+            if (!TowerPositionsDictionary.ContainsKey(team.Team))
             {
                 RefreshTowerHash(team);
             }
 
-            var isTower = TowerPositionsDictionary[team.team].Contains(cell);
+            var isTower = TowerPositionsDictionary[team.Team].Contains(cell);
 
             var isRiver = riverPositions.Contains(cell);
 
@@ -250,7 +251,7 @@ namespace Pandora
                     {
                         Logger.Debug($"Received {spawn} - spawning unit");
 
-                        SpawnUnit(new UnitSpawn(spawn), spawn.manaUsed);
+                        SpawnUnit(new UnitSpawn(spawn));
                     }
 
                     if (command is CommandMessage commandMessage)
@@ -260,6 +261,12 @@ namespace Pandora
                         Debug.Log($"Commanded {commandMessage.unitId}");
 
                         unit.GetComponent<CommandBehaviour>().InvokeCommand();
+                    }
+
+                    if (command is GoldRewardMessage goldRewardMessage) {
+                        var goldReward = RewardsRepository.Instance.GetReward(goldRewardMessage.rewardId);
+
+                        goldReward.RewardApply(this, goldRewardMessage.team, goldRewardMessage.playerId);
                     }
                 }
 
@@ -307,6 +314,28 @@ namespace Pandora
             ResetAggroPoints();
         }
 
+        public void ApplyGoldReward(string rewardId, int goldCost) {
+            var maybePlayerId = NetworkControllerSingleton.instance.PlayerId;
+            var playerId = maybePlayerId.HasValue ? maybePlayerId.Value : 0;
+
+            var message = new GoldRewardMessage {
+                rewardId = rewardId,
+                team = TeamComponent.assignedTeam,
+                elapsedMs = (int) engine.TotalElapsed,
+                goldSpent = goldCost,
+                playerId = playerId
+            };
+
+            NetworkControllerSingleton.instance.EnqueueMessage(message);
+
+            if (!NetworkControllerSingleton.instance.matchStarted)
+            {
+                var goldReward = RewardsRepository.Instance.GetReward(rewardId);
+
+                goldReward.RewardApply(this, message.team, message.playerId);
+            }
+        }
+
         public bool SpawnCard(string cardName, int team, GridCell cell, int requiredMana = 0)
         {
             if (IsLive) return false;
@@ -343,7 +372,7 @@ namespace Pandora
                 message.team = team;
                 message.timestamp = DateTime.Now;
 
-                SpawnUnit(new UnitSpawn(message), requiredMana);
+                SpawnUnit(new UnitSpawn(message));
 
                 ManaSingleton.UpdateMana(ManaSingleton.manaValue - requiredMana);
                 ManaSingleton.manaUnit -= requiredMana;
@@ -355,7 +384,7 @@ namespace Pandora
         public GameObject LoadCard(string unitName) => Resources.Load($"Units/{unitName}") as GameObject;
 
         /// <summary>Spawns a unit</summary>
-        public void SpawnUnit(UnitSpawn spawn, int requiredMana = 0)
+        public void SpawnUnit(UnitSpawn spawn)
         {
             Logger.Debug($"Spawning {spawn.UnitName} in {spawn.CellX}, {spawn.CellY} Team {spawn.Team}");
 
@@ -381,11 +410,11 @@ namespace Pandora
             var cardPosition = GridCellToWorldPosition(unitGridCell);
             var manaAnimationPosition = GridCellToWorldPosition(manaAnimationGridCell);
 
-            var cardObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
+            var unitObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
 
-            cardObject.name += $"-{spawn.Id}";
+            unitObject.name += $"-{spawn.Id}";
 
-            var spawner = cardObject.GetComponent<Spawner>();
+            var spawner = unitObject.GetComponent<Spawner>();
 
             if (spawner != null)
             {
@@ -393,33 +422,33 @@ namespace Pandora
             }
             else
             {
-                InitializeComponents(cardObject, unitGridCell, spawn.Team, spawn.Id, spawn.Timestamp, spawn.UnitName);
+                InitializeComponents(unitObject, unitGridCell, spawn);
             }
 
             // This is tricky, we need the stuff below because the spawner and the units are actually
             // created in different positions. The spawner element (NOT THE UNITS) is created 
             // non-mirrored, while the single unit is created directly mirrored in the field.
-            // This leads to unconcistencies in the ManaUsedAlert component position in the Team 2
+            // This leads to inconcistencies in the ManaUsedAlert component position in the Team 2
             // (since the Team 2 field is mirrored).
             if (spawner == null && TeamComponent.assignedTeam == TeamComponent.topTeam)
             {
-                ShowManaUsedAlert(cardObject, requiredMana, cardPosition);
+                ShowManaUsedAlert(unitObject, spawn.ManaUsed, cardPosition);
             }
             else
             {
-                ShowManaUsedAlert(cardObject, requiredMana, manaAnimationPosition);
+                ShowManaUsedAlert(unitObject, spawn.ManaUsed, manaAnimationPosition);
             }
 
-            if (spawn.Team == TeamComponent.assignedTeam && cardObject.GetComponent<ProjectileSpellBehaviour>() == null)
+            if (spawn.Team == TeamComponent.assignedTeam && unitObject.GetComponent<ProjectileSpellBehaviour>() == null)
             {
                 CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
             }
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>
-        public void InitializeComponents(GameObject unit, GridCell cell, int team, string id, DateTime timestamp, string unitName)
+        public void InitializeComponents(GameObject unit, GridCell cell, UnitSpawn unitSpawn)
         {
-            unit.GetComponent<TeamComponent>().team = team;
+            unit.GetComponent<TeamComponent>().Team = unitSpawn.Team;
 
             var movement = unit.GetComponent<MovementComponent>();
             var movementBehaviour = unit.GetComponent<MovementBehaviour>();
@@ -431,14 +460,20 @@ namespace Pandora
             {
                 projectileSpell.StartCell =
                     new GridCell(
-                        ((team == TeamComponent.assignedTeam) ?
+                        ((unitSpawn.Team == TeamComponent.assignedTeam) ?
                             GetTowerPositionComponent(TowerPosition.BottomMiddle) : GetTowerPositionComponent(TowerPosition.TopMiddle)).Position
                     );
 
                 projectileSpell.map = this;
             }
 
-            var engineEntity = engine.AddEntity(unit, movementBehaviour?.Speed ?? projectileSpell.Speed, projectileSpell?.StartCell ?? cell, projectileSpell == null, timestamp);
+            var engineEntity = engine.AddEntity(
+                unit, 
+                movementBehaviour?.Speed ?? projectileSpell.Speed,
+                projectileSpell?.StartCell ?? cell,
+                projectileSpell == null,
+                unitSpawn.Timestamp
+            );
 
             if (movement != null) engineEntity.CollisionCallback = movement;
 
@@ -453,12 +488,18 @@ namespace Pandora
 
             var idComponent = unit.AddComponent<UnitIdComponent>();
 
-            idComponent.Id = id;
-            idComponent.UnitName = unitName;
+            idComponent.Id = unitSpawn.Id;
+            idComponent.UnitName = unitSpawn.UnitName;
 
             unit.GetComponentInChildren<HealthbarBehaviour>()?.RefreshColor();
 
-            Units.Add(id, unit);
+            Units.Add(unitSpawn.Id, unit);
+
+            var manaCostComponent = unit.AddComponent<ManaCostComponent>();
+
+            Debug.Log($"Gold earn mana cost {unitSpawn.ManaUsed}");
+
+            manaCostComponent.ManaCost = unitSpawn.ManaUsed;
         }
 
         public void ShowManaUsedAlert(GameObject unit, int manaUsed, Vector2 position)
@@ -507,7 +548,7 @@ namespace Pandora
                 var distance = engine.SquaredDistance(engineEntity.Position, entity.Position);
 
                 if (minDistance != null && minDistance < distance) continue;
-                if (component.team == unitTeam.team) continue;
+                if (component.Team == unitTeam.Team) continue;
 
                 var lifeComponent = targetGameObject.GetComponent<LifeComponent>();
 
@@ -558,7 +599,7 @@ namespace Pandora
                 var towerCombatBehaviour = component.gameObject.GetComponent<TowerCombatBehaviour>();
                 var towerTeamComponent = component.gameObject.GetComponent<TowerTeamComponent>();
 
-                if (towerCombatBehaviour.isMiddle && towerTeamComponent.engineTeam != team.team)
+                if (towerCombatBehaviour.isMiddle && towerTeamComponent.EngineTeam != team.Team)
                 {
                     middleTowerPositionComponent = component;
                 }
@@ -622,7 +663,7 @@ namespace Pandora
                 from component in GetComponentsInChildren<CombatBehaviour>()
                 where
                     !(component is TowerCombatBehaviour) &&
-                    (component as MonoBehaviour).gameObject.GetComponent<TeamComponent>().team != TeamComponent.assignedTeam
+                    (component as MonoBehaviour).gameObject.GetComponent<TeamComponent>().Team != TeamComponent.assignedTeam
                 select component;
 
             foreach (var combatBehaviour in combatBehaviours)
@@ -650,7 +691,7 @@ namespace Pandora
                 from component in GetComponentsInChildren<CombatBehaviour>()
                 where
                     !(component is TowerCombatBehaviour) &&
-                    (component as MonoBehaviour).gameObject.GetComponent<TeamComponent>().team != TeamComponent.assignedTeam
+                    (component as MonoBehaviour).gameObject.GetComponent<TeamComponent>().Team != TeamComponent.assignedTeam
                 select component;
 
             foreach (var combatBehaviour in combatBehaviours)

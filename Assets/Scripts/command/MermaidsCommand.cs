@@ -40,7 +40,7 @@ namespace Pandora.Command
 
             var tornadoTeamComponent = tornado.GetComponent<TeamComponent>();
 
-            tornadoTeamComponent.team = teamComponent.team;
+            tornadoTeamComponent.Team = teamComponent.Team;
         }
     }
 }
