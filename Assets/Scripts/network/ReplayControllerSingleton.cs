@@ -25,7 +25,7 @@ namespace Pandora.Network
                 if (IsDebugBuild)
                     return "ws://localhost:8080/live";
                 else
-                    return "ws://3bitpodcast.com:8080/live";
+                    return "ws://pandora.bluemanta.games:8080/live";
             }
         }
 
