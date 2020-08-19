@@ -607,11 +607,16 @@ namespace Pandora.Engine
                 }
             }
 
-            enqueueSnapshot();
 
             // Snapshot
             if (TotalElapsed % snapshotEvery == 0)
             {
+                // In case you need _all_ the snapshots to be sent to the server
+                // e.g. in case of debugging desync issues
+                // you can move this call on top of the if clause, and they will accumulate and
+                // be sent in batches
+                enqueueSnapshot();
+
                 sendEngineSnapshots();
             }
         }
