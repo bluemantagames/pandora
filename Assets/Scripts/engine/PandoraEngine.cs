@@ -99,10 +99,11 @@ namespace Pandora.Engine
         {
             var ticksNum = msLapsed / TickTime;
 
-            TotalElapsed += msLapsed;
 
             for (var tick = 0; tick < ticksNum; tick++)
             {
+                TotalElapsed += TickTime;
+
                 NextTick();
             }
         }
@@ -639,7 +640,7 @@ namespace Pandora.Engine
 
         void sendEngineSnapshots()
         {
-            var engineSnapshots = new EngineSnapshotsMessage(snapshotMessages);
+            var engineSnapshots = new EngineSnapshotsMessage(new List<EngineSnapshotMessage>(snapshotMessages));
 
             NetworkControllerSingleton.instance.EnqueueMessage(engineSnapshots);
 
