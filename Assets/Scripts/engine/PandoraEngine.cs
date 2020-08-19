@@ -54,7 +54,8 @@ namespace Pandora.Engine
 
         public void Init(MapComponent map)
         {
-            this.Map = map;
+            Map = map;
+            HitboxLoader = HitboxLoader.Instance;
 
             AddRiverEntities();
 
@@ -90,8 +91,6 @@ namespace Pandora.Engine
             enginePathfindingSampler = CustomSampler.Create("PandoraEngine pathfinding");
 
             grid = new TightGrid(yBounds, xBounds, 19, 32);
-
-            HitboxLoader = HitboxLoader.Instance;
         }
 
         public void Process(uint msLapsed)
@@ -274,6 +273,32 @@ namespace Pandora.Engine
                 Timestamp = timestamp,
                 UnitName = (idComponent != null) ? idComponent.UnitName : null
             };
+
+            var hitboxComponent = gameObject.GetComponent<DiscreteHitboxComponent>();
+
+            if (hitboxComponent != null) hitboxComponent.Load();
+
+            if (hitboxComponent != null && hitboxComponent.Hitbox == null)
+            {
+                var bounds = GetPooledEntityBounds(entity);
+
+                var hitbox = new EngineHitbox
+                {
+                    HitboxSizeX = bounds.Width,
+                    HitboxSizeY = bounds.Height
+                };
+
+                HitboxLoader.Hitboxes[gameObject.name] = hitbox;
+
+                hitboxComponent.Hitbox = new Vector2Int(hitbox.HitboxSizeX, hitbox.HitboxSizeY);
+                entity.discreteHitbox = hitboxComponent;
+
+                Logger.DebugWarning($"Recalculating hitbox for {gameObject.name}");
+
+#if UNITY_EDITOR
+                HitboxLoader.Save();
+#endif
+            }
 
             Entities.Add(entity);
 
@@ -589,7 +614,7 @@ namespace Pandora.Engine
         {
             SerializableBehaviours.Clear();
 
-            foreach (var behaviour in Behaviours) 
+            foreach (var behaviour in Behaviours)
             {
                 SerializableBehaviours.Add(new SerializableEngineBehaviour(behaviour.ComponentName));
             }
@@ -1028,15 +1053,22 @@ namespace Pandora.Engine
         {
             var worldBounds = entity.Bounds;
 
-            Vector2Int? savedHitbox = null;
+            var physicsExtents = PooledWorldToPhysics(worldBounds.size);
 
-            if (entity.UnitName != null && HitboxLoader.Hitboxes.ContainsKey(entity.UnitName)) {
+            if (entity.UnitName != null && HitboxLoader.Hitboxes.ContainsKey(entity.UnitName))
+            {
                 var hitbox = HitboxLoader.Hitboxes[entity.UnitName];
 
-                savedHitbox = new Vector2Int(hitbox.HitboxSizeX, hitbox.HitboxSizeY);
-            }
+                var pooledHitbox = PoolInstances.Vector2IntPool.GetObject();
 
-            var physicsExtents = savedHitbox ?? PooledWorldToPhysics(worldBounds.size);
+                physicsExtents.x = hitbox.HitboxSizeX;
+                physicsExtents.y = hitbox.HitboxSizeY;
+            }
+            else if (entity.discreteHitbox != null)
+            {
+                physicsExtents.x = entity.discreteHitbox.Hitbox.Value.x;
+                physicsExtents.y = entity.discreteHitbox.Hitbox.Value.y;
+            }
 
             var physicsUpperLeftBounds = entity.Position;
 
@@ -1064,10 +1096,12 @@ namespace Pandora.Engine
             bounds.LowerRight = physicsLowerRightBounds;
             bounds.Center = entity.Position;
 
- #if UNITY_EDITOR
+#if UNITY_EDITOR
             // If running in editor and spawning a unit for the first time, save the discrete hitbox up
-            if (entity.UnitName != null && !HitboxLoader.Hitboxes.ContainsKey(entity.UnitName)) {
-                HitboxLoader.Hitboxes[entity.UnitName] = new EngineHitbox {
+            if (entity.UnitName != null && !HitboxLoader.Hitboxes.ContainsKey(entity.UnitName))
+            {
+                HitboxLoader.Hitboxes[entity.UnitName] = new EngineHitbox
+                {
                     HitboxSizeX = physicsExtents.x,
                     HitboxSizeY = physicsExtents.y
                 };
