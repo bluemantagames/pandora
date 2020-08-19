@@ -46,7 +46,8 @@ namespace Pandora.Engine
         }
 
         public string UnitName = null;
-        public DiscreteHitboxComponent discreteHitbox = null;
+        public string UnitId = null;
+        [NonSerialized] public DiscreteHitboxComponent DiscreteHitbox = null;
 
         public void SetSpeed(int engineUnitsPerSecond)
         {

@@ -21,6 +21,8 @@ namespace Pandora.Engine
         public int UnitsPerCell = 400; // physics engine units per grid cell
         public List<EngineEntity> Entities = new List<EngineEntity> { };
         public List<EngineBehaviour> Behaviours = new List<EngineBehaviour> { };
+
+        List<EngineSnapshotMessage> snapshotMessages = new List<EngineSnapshotMessage>() {};
         [NonSerialized] public MapComponent Map;
         public uint TotalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
@@ -271,7 +273,8 @@ namespace Pandora.Engine
                 IsRigid = isRigid,
                 Layer = gameObject.layer,
                 Timestamp = timestamp,
-                UnitName = (idComponent != null) ? idComponent.UnitName : null
+                UnitName = (idComponent != null) ? idComponent.UnitName : null,
+                UnitId = (idComponent != null) ? idComponent.Id : null
             };
 
             var hitboxComponent = gameObject.GetComponent<DiscreteHitboxComponent>();
@@ -291,7 +294,7 @@ namespace Pandora.Engine
                 HitboxLoader.Hitboxes[gameObject.name] = hitbox;
 
                 hitboxComponent.Hitbox = new Vector2Int(hitbox.HitboxSizeX, hitbox.HitboxSizeY);
-                entity.discreteHitbox = hitboxComponent;
+                entity.DiscreteHitbox = hitboxComponent;
 
                 Logger.DebugWarning($"Recalculating hitbox for {gameObject.name}");
 
@@ -603,15 +606,16 @@ namespace Pandora.Engine
                 }
             }
 
+            enqueueSnapshot();
+
             // Snapshot
             if (TotalElapsed % snapshotEvery == 0)
             {
-                sendEngineSnapshot();
+                sendEngineSnapshots();
             }
         }
 
-        void sendEngineSnapshot()
-        {
+        void enqueueSnapshot() {
             SerializableBehaviours.Clear();
 
             foreach (var behaviour in Behaviours)
@@ -630,7 +634,16 @@ namespace Pandora.Engine
                 Team = team
             };
 
-            NetworkControllerSingleton.instance.EnqueueMessage(snapshotMessage);
+            snapshotMessages.Add(snapshotMessage);
+        }
+
+        void sendEngineSnapshots()
+        {
+            var engineSnapshots = new EngineSnapshotsMessage(snapshotMessages);
+
+            NetworkControllerSingleton.instance.EnqueueMessage(engineSnapshots);
+
+            snapshotMessages.Clear();
         }
 
         public void DrawDebugGUI()
@@ -1064,10 +1077,10 @@ namespace Pandora.Engine
                 physicsExtents.x = hitbox.HitboxSizeX;
                 physicsExtents.y = hitbox.HitboxSizeY;
             }
-            else if (entity.discreteHitbox != null)
+            else if (entity.DiscreteHitbox != null)
             {
-                physicsExtents.x = entity.discreteHitbox.Hitbox.Value.x;
-                physicsExtents.y = entity.discreteHitbox.Hitbox.Value.y;
+                physicsExtents.x = entity.DiscreteHitbox.Hitbox.Value.x;
+                physicsExtents.y = entity.DiscreteHitbox.Hitbox.Value.y;
             }
 
             var physicsUpperLeftBounds = entity.Position;
