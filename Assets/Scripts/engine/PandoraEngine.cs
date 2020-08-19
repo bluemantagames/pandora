@@ -28,6 +28,8 @@ namespace Pandora.Engine
         Dictionary<(EngineEntity, EngineEntity), int> collisionsCount = new Dictionary<(EngineEntity, EngineEntity), int>(4000);
         public List<(long, Action)> DelayedJobs = new List<(long, Action)>(300);
 
+        HitboxLoader HitboxLoader;
+
         [NonSerialized] public bool DebugEngine;
 
         Decimal DPi = new Decimal(3.141592653589);
@@ -88,6 +90,8 @@ namespace Pandora.Engine
             enginePathfindingSampler = CustomSampler.Create("PandoraEngine pathfinding");
 
             grid = new TightGrid(yBounds, xBounds, 19, 32);
+
+            HitboxLoader = HitboxLoader.Instance;
         }
 
         public void Process(uint msLapsed)
@@ -256,6 +260,8 @@ namespace Pandora.Engine
 
             Logger.Debug($"Assigning speed {speed} in {position}");
 
+            var idComponent = gameObject.GetComponent<UnitIdComponent>();
+
             var entity = new EngineEntity
             {
                 Speed = speed,
@@ -265,7 +271,8 @@ namespace Pandora.Engine
                 Engine = this,
                 IsRigid = isRigid,
                 Layer = gameObject.layer,
-                Timestamp = timestamp
+                Timestamp = timestamp,
+                UnitName = (idComponent != null) ? idComponent.UnitName : null
             };
 
             Entities.Add(entity);
@@ -1021,7 +1028,15 @@ namespace Pandora.Engine
         {
             var worldBounds = entity.Bounds;
 
-            var physicsExtents = PooledWorldToPhysics(worldBounds.size);
+            Vector2Int? savedHitbox = null;
+
+            if (entity.UnitName != null && HitboxLoader.Hitboxes.ContainsKey(entity.UnitName)) {
+                var hitbox = HitboxLoader.Hitboxes[entity.UnitName];
+
+                savedHitbox = new Vector2Int(hitbox.HitboxSizeX, hitbox.HitboxSizeY);
+            }
+
+            var physicsExtents = savedHitbox ?? PooledWorldToPhysics(worldBounds.size);
 
             var physicsUpperLeftBounds = entity.Position;
 
@@ -1048,6 +1063,18 @@ namespace Pandora.Engine
             bounds.LowerLeft = physicsLowerLeftBounds;
             bounds.LowerRight = physicsLowerRightBounds;
             bounds.Center = entity.Position;
+
+ #if UNITY_EDITOR
+            // If running in editor and spawning a unit for the first time, save the discrete hitbox up
+            if (entity.UnitName != null && !HitboxLoader.Hitboxes.ContainsKey(entity.UnitName)) {
+                HitboxLoader.Hitboxes[entity.UnitName] = new EngineHitbox {
+                    HitboxSizeX = physicsExtents.x,
+                    HitboxSizeY = physicsExtents.y
+                };
+
+                HitboxLoader.Save();
+            }
+#endif
 
             PoolInstances.Vector2Pool.ReturnObject(physicsExtents);
         }

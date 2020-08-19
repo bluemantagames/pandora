@@ -19,7 +19,6 @@ namespace Pandora
             var yIncrement = (spawn.Team == TeamComponent.topTeam) ? -1 : 1;
             var unitNumber = 1;
 
-
             foreach (var position in Positions)
             {
                 var unit = Instantiate(Unit, map.gameObject.transform);
@@ -31,6 +30,7 @@ namespace Pandora
                 unit.name += $"-{id}";
 
                 singleUnitSpawn.Timestamp = singleUnitSpawn.Timestamp.AddSeconds(unitNumber);
+                singleUnitSpawn.UnitName = Unit.name;
 
                 map.InitializeComponents(unit, new GridCell(spawn.CellX + position.x, spawn.CellY + position.y), singleUnitSpawn);
 

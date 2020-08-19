@@ -41,6 +41,12 @@ namespace Pandora.Engine
         public bool IsEvading = false;
         public EngineEntity EvadedUnit = null;
 
+        public string Name {
+            get => GameObject.name;
+        }
+
+        public string UnitName = null;
+
         public void SetSpeed(int engineUnitsPerSecond)
         {
             Speed = Engine.GetSpeed(engineUnitsPerSecond);

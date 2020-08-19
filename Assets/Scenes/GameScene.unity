@@ -2117,6 +2117,7 @@ MonoBehaviour:
   bottomMapSizeY: 13
   mapSizeX: 0
   mapSizeY: 0
+  RiverY: 13
   worldMapSize: {x: 0, y: 0}
   debugHitboxes: 0
   localTime: 0
@@ -4111,7 +4112,7 @@ PrefabInstance:
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: CardName
-      value: Clerics
+      value: ZombiesSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
@@ -4133,7 +4134,7 @@ PrefabInstance:
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
       propertyPath: UnitName
-      value: Cockatrice
+      value: Zombie
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617280, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
@@ -4170,6 +4171,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.b
       value: 0.21306321
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968370716324617281, guid: 27421fb6b693f7049b807a5040ece799,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5968370716324617282, guid: 27421fb6b693f7049b807a5040ece799,
         type: 3}
