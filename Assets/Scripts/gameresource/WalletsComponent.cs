@@ -10,7 +10,8 @@ namespace Pandora.Resource
     {
         public ResourceWallet<GoldEvent> GoldWallet = new ResourceWallet<GoldEvent>(
             (resource, amount) => new GoldEarned(resource, amount),
-            (resource, amount) => new GoldSpent(resource, amount)
+            (resource, amount) => new GoldSpent(resource, amount),
+            50
         );
     }
 }

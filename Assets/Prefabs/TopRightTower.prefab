@@ -45,6 +45,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -95,6 +96,7 @@ GameObject:
   - component: {fileID: 2693967325251540130}
   - component: {fileID: 2693967325251540128}
   - component: {fileID: 7401213829841409867}
+  - component: {fileID: 3530516629579255577}
   m_Layer: 9
   m_Name: TopRightTower
   m_TagString: Untagged
@@ -139,6 +141,7 @@ MonoBehaviour:
   cooldownMs: 500
   isFrontTowerDestroyed: 0
   middleTower: {fileID: 0}
+  CurrentTarget: {fileID: 0}
 --- !u!114 &2693967325251540129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +155,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorldTowerPosition: 0
+  TowerEntity:
+    Speed: 0
+    CollisionSpeed: 0
+    Position: {x: 0, y: 0}
+    Direction: {x: 0, y: 0}
+    IsRigid: 1
+    IsStructure: 0
+    IsMapObstacle: 0
+    Layer: 1
+    Target: {x: 0, y: 0}
+    IsEvading: 0
+    UnitName: 
 --- !u!114 &2693967325251540130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,6 +182,8 @@ MonoBehaviour:
   lifeValue: 1500
   maxLife: 0
   IsDead: 0
+  TowerGoldRewards: 4
+  GoldReward: 13
 --- !u!114 &2693967325251540128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,7 +208,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Entity:
+    Speed: 0
+    CollisionSpeed: 0
+    Position: {x: 0, y: 0}
+    Direction: {x: 0, y: 0}
+    IsRigid: 1
+    IsStructure: 0
+    IsMapObstacle: 0
+    Layer: 1
+    Target: {x: 0, y: 0}
+    IsEvading: 0
+    UnitName: 
   DebugEntity: 0
+--- !u!114 &3530516629579255577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2693967325251540133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cd17ee6a3bfc413682d0a662b1be9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2693967325692397651
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,6 +278,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -280,11 +322,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2693967325251540134}
     m_Modifications:
-    - target: {fileID: 885019136172078356, guid: b162e8ef05976444397a5b9c48018bb8,
-        type: 3}
-      propertyPath: m_Name
-      value: HealthbarCanvas
-      objectReference: {fileID: 0}
     - target: {fileID: 613300719426973332, guid: b162e8ef05976444397a5b9c48018bb8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -389,6 +426,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 885019136172078356, guid: b162e8ef05976444397a5b9c48018bb8,
+        type: 3}
+      propertyPath: m_Name
+      value: HealthbarCanvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b162e8ef05976444397a5b9c48018bb8, type: 3}

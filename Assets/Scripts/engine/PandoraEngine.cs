@@ -21,12 +21,16 @@ namespace Pandora.Engine
         public int UnitsPerCell = 400; // physics engine units per grid cell
         public List<EngineEntity> Entities = new List<EngineEntity> { };
         public List<EngineBehaviour> Behaviours = new List<EngineBehaviour> { };
+
+        List<EngineSnapshotMessage> snapshotMessages = new List<EngineSnapshotMessage>() {};
         [NonSerialized] public MapComponent Map;
         public uint TotalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
         CustomSampler collisionsSampler, collisionsSolveSampler, collisionsCheckSampler, collisionsCallbackSampler, movementSampler, scriptSampler, gridSampler, enginePathfindingSampler;
         Dictionary<(EngineEntity, EngineEntity), int> collisionsCount = new Dictionary<(EngineEntity, EngineEntity), int>(4000);
         public List<(long, Action)> DelayedJobs = new List<(long, Action)>(300);
+
+        HitboxLoader HitboxLoader;
 
         [NonSerialized] public bool DebugEngine;
 
@@ -52,7 +56,8 @@ namespace Pandora.Engine
 
         public void Init(MapComponent map)
         {
-            this.Map = map;
+            Map = map;
+            HitboxLoader = HitboxLoader.Instance;
 
             AddRiverEntities();
 
@@ -94,10 +99,11 @@ namespace Pandora.Engine
         {
             var ticksNum = msLapsed / TickTime;
 
-            TotalElapsed += msLapsed;
 
             for (var tick = 0; tick < ticksNum; tick++)
             {
+                TotalElapsed += TickTime;
+
                 NextTick();
             }
         }
@@ -256,6 +262,8 @@ namespace Pandora.Engine
 
             Logger.Debug($"Assigning speed {speed} in {position}");
 
+            var idComponent = gameObject.GetComponent<UnitIdComponent>();
+
             var entity = new EngineEntity
             {
                 Speed = speed,
@@ -265,8 +273,36 @@ namespace Pandora.Engine
                 Engine = this,
                 IsRigid = isRigid,
                 Layer = gameObject.layer,
-                Timestamp = timestamp
+                Timestamp = timestamp,
+                UnitName = (idComponent != null) ? idComponent.UnitName : null,
+                UnitId = (idComponent != null) ? idComponent.Id : null
             };
+
+            var hitboxComponent = gameObject.GetComponent<DiscreteHitboxComponent>();
+
+            if (hitboxComponent != null) hitboxComponent.Load();
+
+            if (hitboxComponent != null && hitboxComponent.Hitbox == null)
+            {
+                var bounds = GetPooledEntityBounds(entity);
+
+                var hitbox = new EngineHitbox
+                {
+                    HitboxSizeX = bounds.Width,
+                    HitboxSizeY = bounds.Height
+                };
+
+                HitboxLoader.Hitboxes[gameObject.name] = hitbox;
+
+                hitboxComponent.Hitbox = new Vector2Int(hitbox.HitboxSizeX, hitbox.HitboxSizeY);
+                entity.DiscreteHitbox = hitboxComponent;
+
+                Logger.DebugWarning($"Recalculating hitbox for {gameObject.name}");
+
+#if UNITY_EDITOR
+                HitboxLoader.Save();
+#endif
+            }
 
             Entities.Add(entity);
 
@@ -571,18 +607,24 @@ namespace Pandora.Engine
                 }
             }
 
+
             // Snapshot
             if (TotalElapsed % snapshotEvery == 0)
             {
-                sendEngineSnapshot();
+                // In case you need _all_ the snapshots to be sent to the server
+                // e.g. in case of debugging desync issues
+                // you can move this call on top of the if clause, and they will accumulate and
+                // be sent in batches
+                enqueueSnapshot();
+
+                sendEngineSnapshots();
             }
         }
 
-        void sendEngineSnapshot()
-        {
+        void enqueueSnapshot() {
             SerializableBehaviours.Clear();
 
-            foreach (var behaviour in Behaviours) 
+            foreach (var behaviour in Behaviours)
             {
                 SerializableBehaviours.Add(new SerializableEngineBehaviour(behaviour.ComponentName));
             }
@@ -598,7 +640,16 @@ namespace Pandora.Engine
                 Team = team
             };
 
-            NetworkControllerSingleton.instance.EnqueueMessage(snapshotMessage);
+            snapshotMessages.Add(snapshotMessage);
+        }
+
+        void sendEngineSnapshots()
+        {
+            var engineSnapshots = new EngineSnapshotsMessage(new List<EngineSnapshotMessage>(snapshotMessages));
+
+            NetworkControllerSingleton.instance.EnqueueMessage(engineSnapshots);
+
+            snapshotMessages.Clear();
         }
 
         public void DrawDebugGUI()
@@ -1023,6 +1074,21 @@ namespace Pandora.Engine
 
             var physicsExtents = PooledWorldToPhysics(worldBounds.size);
 
+            if (entity.UnitName != null && HitboxLoader.Hitboxes.ContainsKey(entity.UnitName))
+            {
+                var hitbox = HitboxLoader.Hitboxes[entity.UnitName];
+
+                var pooledHitbox = PoolInstances.Vector2IntPool.GetObject();
+
+                physicsExtents.x = hitbox.HitboxSizeX;
+                physicsExtents.y = hitbox.HitboxSizeY;
+            }
+            else if (entity.DiscreteHitbox != null)
+            {
+                physicsExtents.x = entity.DiscreteHitbox.Hitbox.Value.x;
+                physicsExtents.y = entity.DiscreteHitbox.Hitbox.Value.y;
+            }
+
             var physicsUpperLeftBounds = entity.Position;
 
             physicsUpperLeftBounds.x -= Mathf.FloorToInt(physicsExtents.x / 2);
@@ -1048,6 +1114,20 @@ namespace Pandora.Engine
             bounds.LowerLeft = physicsLowerLeftBounds;
             bounds.LowerRight = physicsLowerRightBounds;
             bounds.Center = entity.Position;
+
+#if UNITY_EDITOR
+            // If running in editor and spawning a unit for the first time, save the discrete hitbox up
+            if (entity.UnitName != null && !HitboxLoader.Hitboxes.ContainsKey(entity.UnitName))
+            {
+                HitboxLoader.Hitboxes[entity.UnitName] = new EngineHitbox
+                {
+                    HitboxSizeX = physicsExtents.x,
+                    HitboxSizeY = physicsExtents.y
+                };
+
+                HitboxLoader.Save();
+            }
+#endif
 
             PoolInstances.Vector2Pool.ReturnObject(physicsExtents);
         }

@@ -10,6 +10,8 @@ namespace Pandora.Resource
         private Func<int, int, T> resourceEarnedEventFactory;
         private Func<int, int, T> resourceLostEventFactory;
 
+        public int? ResourceCap { get; private set; }
+
         public int Resource
         {
             get => _resource;
@@ -28,17 +30,24 @@ namespace Pandora.Resource
         /// </summary>
         public ResourceWallet(
             Func<int, int, T> resourceEarnedEventFactory,
-            Func<int, int, T> resourceLostEventFactory
+            Func<int, int, T> resourceLostEventFactory,
+            int? cap
         )
         {
             this.resourceEarnedEventFactory = resourceEarnedEventFactory;
             this.resourceLostEventFactory = resourceLostEventFactory;
+
+            ResourceCap = cap;
 
             Bus = new EventBus<T>();
         }
 
         public void AddResource(int amount)
         {
+            if (ResourceCap != null && Resource + amount > ResourceCap.Value) {
+                amount = ResourceCap.Value - Resource;
+            }
+
             _resource += amount;
 
             var ev = resourceEarnedEventFactory(_resource, amount);
@@ -54,6 +63,7 @@ namespace Pandora.Resource
 
             Bus.Dispatch(ev);
         }
+
     }
 
 }

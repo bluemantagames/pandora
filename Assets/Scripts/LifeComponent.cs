@@ -26,7 +26,7 @@ namespace Pandora
         GroupComponent groupComponent;
 
         bool isTower;
-        public int TowerGoldRewards = 4, GoldReward = 7;
+        public int TowerGoldRewards = 4, GoldReward = 13;
 
 
         int currentGoldReward = 1;

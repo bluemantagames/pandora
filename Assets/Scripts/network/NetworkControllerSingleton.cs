@@ -262,7 +262,7 @@ namespace Pandora.Network
                     }
                 }
 
-                Debug.Log("Enqueuing Step");
+                Debug.Log($"Enqueuing Step {envelope.Step.TimePassedMs}");
 
                 stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
             }

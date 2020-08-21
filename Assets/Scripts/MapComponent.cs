@@ -454,6 +454,11 @@ namespace Pandora
             var movementBehaviour = unit.GetComponent<MovementBehaviour>();
             var projectileSpell = unit.GetComponent<ProjectileSpellBehaviour>();
 
+            var idComponent = unit.AddComponent<UnitIdComponent>();
+
+            idComponent.Id = unitSpawn.Id;
+            idComponent.UnitName = unitSpawn.UnitName;
+
             if (movementBehaviour != null) movementBehaviour.map = this;
 
             if (projectileSpell != null)
@@ -485,11 +490,6 @@ namespace Pandora
             }
 
             unit.GetComponent<EngineComponent>().Entity = engineEntity;
-
-            var idComponent = unit.AddComponent<UnitIdComponent>();
-
-            idComponent.Id = unitSpawn.Id;
-            idComponent.UnitName = unitSpawn.UnitName;
 
             unit.GetComponentInChildren<HealthbarBehaviour>()?.RefreshColor();
 
