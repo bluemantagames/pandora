@@ -2,30 +2,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using Pandora.Network;
 
 namespace Pandora.Deck.UI
 {
-    public class MenuCardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
+    public class MenuCardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         GameObject originalParent;
         Vector2 originalPosition, originalPivot;
 
         public GameObject Canvas;
         public string CardName;
-        public bool UiDisabled = false;
 
-        DeckSpotParentBehaviour deckSpotParentBehaviour;
         DeckSpotBehaviour lastDeckSpot;
-        Image imageComponent;
-        Color imageColor;
 
         public void Load()
         {
             originalParent = transform.parent.gameObject;
             originalPosition = transform.localPosition;
             originalPivot = GetComponent<RectTransform>().pivot;
-            deckSpotParentBehaviour = GameObject.Find("Canvas").GetComponentInChildren<DeckSpotParentBehaviour>();
         }
 
         public void Reset()
@@ -36,11 +30,8 @@ namespace Pandora.Deck.UI
 
             transform.localPosition = originalPosition;
 
-            if (lastDeckSpot != null)
-            {
-                lastDeckSpot.Card = null;
-                lastDeckSpot.CardObject = null;
-            }
+            lastDeckSpot.Card = null;
+            lastDeckSpot.CardObject = null;
 
             GetComponent<RectTransform>().pivot = originalPivot;
         }
@@ -64,23 +55,18 @@ namespace Pandora.Deck.UI
             GetComponent<RectTransform>().pivot = deckSpot.GetComponent<RectTransform>().pivot;
         }
 
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            if (UiDisabled == true) return;
-            gameObject.transform.SetParent(Canvas.transform);
-        }
-
         public void OnDrag(PointerEventData eventData)
         {
-            if (UiDisabled == true) return;
+            if (transform.parent.gameObject == originalParent)
+            {
+                gameObject.transform.SetParent(Canvas.transform);
+            }
 
             transform.position = Input.mousePosition;
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (UiDisabled == true) return;
-
             var pointerData = new PointerEventData(null);
 
             pointerData.position = Input.mousePosition;
@@ -99,21 +85,6 @@ namespace Pandora.Deck.UI
             {
                 Reset();
             }
-
-            _ = deckSpotParentBehaviour.SaveDeck();
-        }
-
-        void Awake()
-        {
-            imageComponent = gameObject.GetComponent<Image>();
-            imageColor = imageComponent.color;
-        }
-
-        public void Update()
-        {
-            // Make it opaque if disabled
-            var opaqueColor = new Color(imageColor.r, imageColor.g, imageColor.b, 0.2f);
-            imageComponent.color = (UiDisabled == true) ? opaqueColor : imageColor;
         }
     }
 
