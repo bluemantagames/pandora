@@ -11,6 +11,9 @@ using Google.Protobuf;
 using UnityEngine.Events;
 using Pandora.Network.Messages;
 using System.Collections.Concurrent;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using Pandora.Network.Data.Matchmaking;
 
 namespace Pandora.Network
 {
@@ -18,25 +21,13 @@ namespace Pandora.Network
     {
         public bool isDebugBuild = Debug.isDebugBuild;
 
-        string matchmakingHost
-        {
-            get
-            {
-                Debug.Log($"Is debug build? {isDebugBuild}");
-
-                if (isDebugBuild)
-                    return "http://localhost:8080";
-                else
-                    return "http://pandora.bluemanta.games:8080";
-            }
-        }
-
-        string matchmakingUrl = "/matchmaking";
-        string matchToken = null;
+        string userMatchToken = null;
         Socket matchSocket = null;
         Thread networkThread = null;
         Thread receiveThread = null;
         ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
+        ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
+        PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
         int matchStartTimeout = 3; // seconds
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
@@ -61,44 +52,50 @@ namespace Pandora.Network
 
         private NetworkControllerSingleton() { }
 
-        public void StartMatchmaking(String username, List<String> deck)
+        public void StartMatchmaking()
+        {
+            var deck = playerModelSingleton.GetActiveDeck();
+
+            if (deck != null) ExecMatchmaking(deck, false);
+        }
+
+        public void StartMatchmaking(List<string> deck)
+        {
+            if (deck != null) ExecMatchmaking(deck, false);
+        }
+
+        public void StartDevMatchmaking(List<string> deck)
+        {
+            if (deck != null) ExecMatchmaking(deck, true);
+        }
+
+        public async void ExecMatchmaking(List<string> deck, bool isDev)
         {
             IsActive = true;
 
-            var client = new RestClient(matchmakingHost);
-            var request = new RestRequest(matchmakingUrl, Method.GET);
+            var response = isDev
+                ? await apiControllerSingleton.StartDevMatchmaking(deck, playerModelSingleton.Token)
+                : await apiControllerSingleton.StartMatchmaking(deck, playerModelSingleton.Token);
 
-            client.Timeout = int.MaxValue; // request is long-polling - do not timeout
-
-            client.ExecuteAsync<MatchmakingResponse>(request, response =>
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                Logger.Debug($"Match found, token: {response.Data.token}");
-
-                matchToken = response.Data.token;
+                userMatchToken = response.Body.token;
 
                 if (networkThread == null)
                 {
-                    networkThread = new Thread(new ParameterizedThreadStart(StartMatch));
+                    Logger.Debug($"Match found, token: {userMatchToken}");
 
-                    networkThread.Start(
-                        new MatchParams(username, deck)
-                    );
+                    networkThread = new Thread(new ThreadStart(StartMatch));
+                    networkThread.Start();
                 }
-            });
+            }
         }
 
-        public void StartMatch(object data)
+        public void StartMatch()
         {
-            if (data.GetType() != typeof(MatchParams))
-            {
-                return;
-            }
-
-            Debug.Log($"Connecting to the game server with token {matchToken}");
+            Debug.Log($"Connecting to the game server with token {userMatchToken}");
 
             var startTime = DateTime.Now;
-
-            MatchParams matchParams = (MatchParams)data;
 
             var matchHost = (isDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
             var matchPort = 9090;
@@ -109,6 +106,13 @@ namespace Pandora.Network
             var address = dns.AddressList[0];
             var ipe = new IPEndPoint(address, matchPort);
 
+            var decodedUserMatchToken = new JwtSecurityToken(userMatchToken);
+            var userMatchTokenPayload = decodedUserMatchToken.Claims.First(c => c.Type == "payload").Value;
+            var decodedPayload = JsonUtility.FromJson<UserMatchTokenPayload>(userMatchTokenPayload);
+            var matchToken = decodedPayload.matchToken;
+
+            Debug.Log($"Decoded user match JWT, match token is: {matchToken}");
+
             matchSocket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
             Logger.Debug($"Connecting to {matchHost}:{matchPort}");
@@ -117,11 +121,8 @@ namespace Pandora.Network
 
             var join = new Join
             {
-                Token = matchToken,
-                Username = matchParams.Username
+                UserMatchToken = userMatchToken
             };
-
-            join.Deck.Add(matchParams.Deck);
 
             var envelope = new ClientEnvelope
             {
@@ -130,8 +131,6 @@ namespace Pandora.Network
             };
 
             var bytes = envelope.ToByteArray();
-
-            var lengthBytes = bytes.Length;
 
             SendMessage(
                 envelope.ToByteArray()
@@ -152,7 +151,7 @@ namespace Pandora.Network
 
                     networkThread = null;
 
-                    StartMatchmaking(matchParams.Username, matchParams.Deck);
+                    StartMatchmaking();
 
                     Debug.LogWarning("Timeout while joining a match, back to matchmaking");
 
@@ -230,16 +229,26 @@ namespace Pandora.Network
                             GenerateSpawnMessage(command)
                         );
                     }
-                    else if (command.CommandCase == StepCommand.CommandOneofCase.GoldReward) {
+                    else if (command.CommandCase == StepCommand.CommandOneofCase.GoldReward)
+                    {
                         commands.Add(
                             GenerateGoldRewardMessage(command)
                         );
                     }
                     else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand)
                     {
-                        commands.Add(
-                            GenerateCommandMessage(command)
-                        );
+                        if (command.CommandCase == StepCommand.CommandOneofCase.Spawn)
+                        {
+                            commands.Add(
+                                GenerateSpawnMessage(command)
+                            );
+                        }
+                        else if (command.CommandCase == StepCommand.CommandOneofCase.UnitCommand)
+                        {
+                            commands.Add(
+                                GenerateCommandMessage(command)
+                            );
+                        }
                     }
                 }
 
@@ -320,7 +329,7 @@ namespace Pandora.Network
                 team = command.GoldReward.Team,
                 goldSpent = command.GoldReward.GoldSpent,
                 rewardId = command.GoldReward.RewardId,
-                elapsedMs = (int) command.GoldReward.ElapsedMs
+                elapsedMs = (int)command.GoldReward.ElapsedMs
             };
         }
 

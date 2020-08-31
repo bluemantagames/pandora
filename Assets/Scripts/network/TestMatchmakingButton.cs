@@ -11,14 +11,16 @@ namespace Pandora.Network
     public class TestMatchmakingButton : MonoBehaviour
     {
         public bool GameSceneToLoad = false;
-        public string DefaultUsername = "Anon";
 
         /// <summary>Forces matchmaking in prod server if enabled</summary>
         public bool ProdMatchmaking = false;
 
-        public Text UsernameObject;
-        List<Card> deck;
-        string username;
+        /// <summary>Forces a game without authentication</summary>
+        public bool DevMatchmaking = false;
+
+        public DeckSpotParentBehaviour DeckSpotParent = null;
+
+        PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
 
         public void Connect()
         {
@@ -29,44 +31,31 @@ namespace Pandora.Network
                 NetworkControllerSingleton.instance.isDebugBuild = false;
             }
 
-            deck = transform.parent.GetComponentInChildren<DeckSpotParentBehaviour>().Deck;
-            username = DefaultUsername;
+            var deck = DevMatchmaking && DeckSpotParent != null ?
+                DeckSpotParent.Deck :
+                playerModelSingleton.GetActiveDeck().Select(cardName => new Card(cardName)).ToList();
 
-            if (UsernameObject.text.Length > 0)
+            var deckStr = deck.Select(card => card.Name).ToList();
+
+            if (DevMatchmaking)
             {
-                username = UsernameObject.text;
+                NetworkControllerSingleton.instance.StartDevMatchmaking(deckStr);
             }
-
-            NetworkControllerSingleton.instance.StartMatchmaking(
-                username,
-                deck.ConvertAll(card => card.Name)
-            );
+            else
+            {
+                NetworkControllerSingleton.instance.StartMatchmaking(deckStr);
+            }
 
             GameObject.Find("MatchmakingButton").GetComponent<Button>().interactable = false;
 
             NetworkControllerSingleton.instance.matchStartEvent.AddListener(LoadGameScene);
-
-            var deckWrapper = ScriptableObject.CreateInstance<DeckWrapper>();
-
-            deckWrapper.Cards =
-                (from card in deck
-                 select card.Name).ToList();
-
-            var serializedWrapper = JsonUtility.ToJson(deckWrapper);
-
-            Logger.Debug($"Saving {serializedWrapper}");
-
-            PlayerPrefs.SetString("DeckWrapper", serializedWrapper);
-            PlayerPrefs.Save();
 
             HandBehaviour.Deck = deck;
         }
 
         public void StartMatch(string username, List<string> deck)
         {
-            NetworkControllerSingleton.instance.StartMatch(
-                new MatchParams(username, deck)
-            );
+            NetworkControllerSingleton.instance.StartMatch();
         }
         void LoadGameScene()
         {
