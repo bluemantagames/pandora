@@ -27,7 +27,7 @@ namespace Pandora
         public bool Global = false;
         public bool MulliganSelected = false;
         public bool IsDevCard = false;
-        public bool UiDisabled = false;
+
 
         Image imageComponent;
         GraphicRaycaster raycasterComponent;
@@ -52,7 +52,6 @@ namespace Pandora
 
                     menuCardBehaviour.Canvas = GameObject.Find("Canvas");
                     menuCardBehaviour.CardName = CardName;
-                    menuCardBehaviour.UiDisabled = UiDisabled;
 
                     menuCardBehaviour.Load();
 
@@ -193,12 +192,9 @@ namespace Pandora
 
         void Start()
         {
-            if (IsDevCard && !Debug.isDebugBuild)
-            {
+            if (IsDevCard && !Debug.isDebugBuild) {
                 Destroy(gameObject);
-            }
-            else
-            {
+            } else {
                 GetComponentInChildren<Text>().text = (RequiredMana / 10).ToString();
             }
         }
