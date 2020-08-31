@@ -8,18 +8,18 @@ namespace Pandora.Deck.UI
     {
         void Awake()
         {
-            foreach (Transform child in transform)
-            {
-                child.GetComponent<CardBehaviour>().IsDeckBuilderUI = true;
-            }
+            var cards = gameObject.GetComponentsInChildren<CardBehaviour>();
 
-            GameObject.Find("Canvas").GetComponentInChildren<DeckSpotParentBehaviour>().LoadSavedDeck();
+            foreach (var cardBehaviour in cards)
+            {
+                cardBehaviour.IsDeckBuilderUI = true;
+            }
         }
 
         public MenuCardBehaviour FindCard(string cardName) =>
             GetComponentsInChildren<MenuCardBehaviour>()
                 .ToList()
-                .Find(c => c.CardName == cardName);
+                .Find(c => c.CardName == cardName && !c.UiDisabled);
     }
 
 }

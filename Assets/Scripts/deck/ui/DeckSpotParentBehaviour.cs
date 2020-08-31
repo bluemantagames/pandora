@@ -1,50 +1,107 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Pandora.Deck;
+using Cysharp.Threading.Tasks;
+using System.Linq;
+using System.Net;
+using Pandora.Network;
 
-namespace Pandora.Deck.UI {
-    public class DeckSpotParentBehaviour: MonoBehaviour {
+namespace Pandora.Deck.UI
+{
+    public class DeckSpotParentBehaviour : MonoBehaviour
+    {
+        private PlayerModelSingleton playerModelSingleton;
+        private ApiControllerSingleton apiControllerSingleton;
+
+        void Awake()
+        {
+            playerModelSingleton = PlayerModelSingleton.instance;
+            apiControllerSingleton = ApiControllerSingleton.instance;
+        }
+
         public List<Card> Deck
         {
             get
             {
                 var deck = new List<Card> { };
+                var spots = gameObject.GetComponentsInChildren<DeckSpotBehaviour>();
 
-                foreach (Transform child in transform)
+                foreach (var deckSpotBehaviour in spots)
                 {
-                    var card = child.GetComponent<DeckSpotBehaviour>()?.Card;
-
-                    if (card != null)
-                    {
-                        deck.Add(card);
-                    }
+                    deck.Add(deckSpotBehaviour.Card);
                 }
 
                 return deck;
             }
         }
 
-        public void LoadSavedDeck() {
-            var serializedDeckWrapper = PlayerPrefs.GetString("DeckWrapper");
+        public async UniTaskVoid SaveDeck()
+        {
+            var activeDeckSlot = playerModelSingleton?.User?.activeDeckSlot;
 
-            Logger.Debug($"Loaded {serializedDeckWrapper}");
+            if (activeDeckSlot == null) return;
 
-            if (serializedDeckWrapper == null) return;
+            var deck = Deck.Select(d => d != null ? d.Name : null).ToList();
+            var token = playerModelSingleton.Token;
 
-            var deckWrapper = ScriptableObject.CreateInstance<DeckWrapper>();
+            Debug.Log($"Saving deck slot {activeDeckSlot} with deck");
+            Debug.Log(deck);
 
-            JsonUtility.FromJsonOverwrite(serializedDeckWrapper, deckWrapper);
+            var response = await apiControllerSingleton.DeckSlotUpdate((long)activeDeckSlot, deck, token);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                Debug.Log($"Updated deck slot {activeDeckSlot}");
+
+                // Updating the model
+                playerModelSingleton.DeckSlots = playerModelSingleton.DeckSlots.Select(deckSlot =>
+                {
+                    if (deckSlot.id == activeDeckSlot)
+                        deckSlot.deck = deck;
+
+                    return deckSlot;
+                }).ToList();
+            }
+            else
+                Debug.Log(response.Error.message);
+        }
+
+        public void LoadSavedDeck(int deckSlotIndex)
+        {
+            var deckSlot = playerModelSingleton.DeckSlots[deckSlotIndex];
+
+            if (deckSlot == null) return;
 
             var menuCardsParent = transform.parent.GetComponentInChildren<MenuCardsParentBehaviour>();
-
             var spots = new Queue<DeckSpotBehaviour>(GetComponentsInChildren<DeckSpotBehaviour>());
 
-            foreach (var cardName in deckWrapper.Cards) {
+            Debug.Log(deckSlot.deck);
+
+            if (deckSlot.deck == null) return;
+
+            foreach (var cardName in deckSlot.deck)
+            {
+                Debug.Log($"Loading {cardName}");
+
                 var spot = spots.Dequeue();
 
-                var card = menuCardsParent.FindCard(cardName);
+                if (cardName != null)
+                {
+                    var card = menuCardsParent.FindCard(cardName);
 
-                card.SetSpot(spot.gameObject);
+                    if (card != null)
+                        card.SetSpot(spot.gameObject);
+                }
+            }
+        }
+
+        public void Reset()
+        {
+            var cards = gameObject.GetComponentsInChildren<MenuCardBehaviour>();
+
+            foreach (var menuCardBehaviour in cards)
+            {
+                menuCardBehaviour.Reset();
             }
         }
     }
