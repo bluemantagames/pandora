@@ -13,12 +13,19 @@ namespace Pandora.UI.Login
         public Text ErrorText = null;
         public InputField UsernameInput = null;
         public InputField PasswordInput = null;
-        private string oldButtonText = null;
+        private string oldButtonText = null, usernameKey = "username", passwordKey = "password";
         private PlayerModelSingleton playerModelSingleton;
 
         void Awake()
         {
             playerModelSingleton = PlayerModelSingleton.instance;
+
+            if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey)) {
+                UsernameInput.text = PlayerPrefs.GetString(usernameKey);
+                PasswordInput.text = PlayerPrefs.GetString(passwordKey);
+
+                Login();
+            }
         }
 
         public async UniTaskVoid ExecuteLogin(string username, string password)
@@ -30,6 +37,9 @@ namespace Pandora.UI.Login
             if (loginResponse.StatusCode == HttpStatusCode.OK && loginResponse.Body != null)
             {
                 var token = loginResponse.Body.token;
+
+                PlayerPrefs.SetString(usernameKey, username);
+                PlayerPrefs.SetString(passwordKey, password);
 
                 Debug.Log($"Logged in successfully with the token: {token}");
 
