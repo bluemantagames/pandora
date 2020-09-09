@@ -1,4 +1,3 @@
-using RestSharp;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,14 +5,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Pandora.Messages;
-using UnityEngine.UI;
 using Google.Protobuf;
 using UnityEngine.Events;
 using Pandora.Network.Messages;
 using System.Collections.Concurrent;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+using Pandora.Network.Data;
 using Pandora.Network.Data.Matchmaking;
+using JWT;
 
 namespace Pandora.Network
 {
@@ -28,6 +26,7 @@ namespace Pandora.Network
         ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
         ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
+        IJwtDecoder jwtDecoder;
         int matchStartTimeout = 3; // seconds
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
@@ -50,7 +49,13 @@ namespace Pandora.Network
             }
         }
 
-        private NetworkControllerSingleton() { }
+        private NetworkControllerSingleton()
+        {
+            IJsonSerializer serializer = new UnityJsonSerializer();
+            IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
+
+            jwtDecoder = new JwtDecoder(serializer, urlEncoder);
+        }
 
         public void StartMatchmaking()
         {
@@ -97,7 +102,7 @@ namespace Pandora.Network
 
             var startTime = DateTime.Now;
 
-            var matchHost = (isDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
+            var matchHost = (isDebugBuild) ? "192.168.1.21" : "pandora.bluemanta.games";
             var matchPort = 9090;
             var dns = Dns.GetHostEntry(matchHost);
 
@@ -106,10 +111,13 @@ namespace Pandora.Network
             var address = dns.AddressList[0];
             var ipe = new IPEndPoint(address, matchPort);
 
-            var decodedUserMatchToken = new JwtSecurityToken(userMatchToken);
-            var userMatchTokenPayload = decodedUserMatchToken.Claims.First(c => c.Type == "payload").Value;
-            var decodedPayload = JsonUtility.FromJson<UserMatchTokenPayload>(userMatchTokenPayload);
-            var matchToken = decodedPayload.matchToken;
+            var decodedUserMatchToken = jwtDecoder.Decode(userMatchToken);
+            var userMatchTokenClaims = JsonUtility.FromJson<GenericJwtPayload<UserMatchTokenPayload>>(decodedUserMatchToken);
+
+            Debug.Log("Decoding base JWT...");
+            Debug.Log(JsonUtility.ToJson(userMatchTokenClaims));
+
+            var matchToken = userMatchTokenClaims.payload.matchToken;
 
             Debug.Log($"Decoded user match JWT, match token is: {matchToken}");
 

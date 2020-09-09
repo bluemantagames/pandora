@@ -18,7 +18,7 @@ namespace Pandora.Network
             get
             {
                 if (isDebugBuild)
-                    return "http://127.0.0.1:8080/api";
+                    return "http://192.168.1.21:8080/api";
                 else
                     return "http://pandora.bluemanta.games:8080/api";
             }

@@ -1,8 +1,10 @@
 using RestSharp;
 using RestSharp.Serialization;
 using UnityEngine;
+using JWT;
+using JWT.Serializers;
 
-public class UnityJsonSerializer : IRestSerializer
+public class UnityJsonSerializer : IRestSerializer, IJsonSerializer
 {
     private string UnitySerialize(object obj)
     {
@@ -21,6 +23,8 @@ public class UnityJsonSerializer : IRestSerializer
     public string Serialize(Parameter bodyParameter) => Serialize(bodyParameter.Value);
 
     public T Deserialize<T>(IRestResponse response) => UnityDeserialize<T>(response.Content);
+
+    public T Deserialize<T>(string encoded) => UnityDeserialize<T>(encoded);
 
     public string[] SupportedContentTypes { get; } =
     {
