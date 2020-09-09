@@ -1,10 +1,8 @@
 using RestSharp;
 using RestSharp.Serialization;
 using UnityEngine;
-using JWT;
-using JWT.Serializers;
 
-public class UnityJsonSerializer : IRestSerializer, IJsonSerializer
+public class UnityJsonSerializer : IRestSerializer
 {
     private string UnitySerialize(object obj)
     {
