@@ -97,7 +97,7 @@ namespace Pandora.Network
 
             var startTime = DateTime.Now;
 
-            var matchHost = (isDebugBuild) ? "192.168.1.21" : "pandora.bluemanta.games";
+            var matchHost = (isDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
             var matchPort = 9090;
             var dns = Dns.GetHostEntry(matchHost);
 
