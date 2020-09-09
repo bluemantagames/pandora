@@ -113,10 +113,6 @@ namespace Pandora.Network
 
             var decodedUserMatchToken = jwtDecoder.Decode(userMatchToken);
             var userMatchTokenClaims = JsonUtility.FromJson<GenericJwtPayload<UserMatchTokenPayload>>(decodedUserMatchToken);
-
-            Debug.Log("Decoding base JWT...");
-            Debug.Log(JsonUtility.ToJson(userMatchTokenClaims));
-
             var matchToken = userMatchTokenClaims.payload.matchToken;
 
             Debug.Log($"Decoded user match JWT, match token is: {matchToken}");
