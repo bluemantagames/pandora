@@ -17,6 +17,13 @@ namespace Pandora.Network
             return claims;
         }
 
+        /// <summary>
+        /// Decode the JWT JSON payload.
+        /// This method does not handle validation.
+        /// </summary>
+        /// <param name="jwt">The jwt string</param>
+        /// <typeparam name="T">The payload structure to deserialize</typeparam>
+        /// <returns></returns>
         public T DecodeJwtPayload<T>(string jwt)
         {
             var claims = GetClaims(jwt);
