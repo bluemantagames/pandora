@@ -1,4 +1,3 @@
-using RestSharp;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,13 +5,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Pandora.Messages;
-using UnityEngine.UI;
 using Google.Protobuf;
 using UnityEngine.Events;
 using Pandora.Network.Messages;
 using System.Collections.Concurrent;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using Pandora.Network.Data.Matchmaking;
 
 namespace Pandora.Network
@@ -28,6 +24,7 @@ namespace Pandora.Network
         ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
         ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
+        JWT jwt;
         int matchStartTimeout = 3; // seconds
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
@@ -50,7 +47,10 @@ namespace Pandora.Network
             }
         }
 
-        private NetworkControllerSingleton() { }
+        private NetworkControllerSingleton()
+        {
+            jwt = new JWT();
+        }
 
         public void StartMatchmaking()
         {
@@ -106,10 +106,8 @@ namespace Pandora.Network
             var address = dns.AddressList[0];
             var ipe = new IPEndPoint(address, matchPort);
 
-            var decodedUserMatchToken = new JwtSecurityToken(userMatchToken);
-            var userMatchTokenPayload = decodedUserMatchToken.Claims.First(c => c.Type == "payload").Value;
-            var decodedPayload = JsonUtility.FromJson<UserMatchTokenPayload>(userMatchTokenPayload);
-            var matchToken = decodedPayload.matchToken;
+            var userMatchTokenClaims = jwt.DecodeJwtPayload<UserMatchTokenPayload>(userMatchToken);
+            var matchToken = userMatchTokenClaims.matchToken;
 
             Debug.Log($"Decoded user match JWT, match token is: {matchToken}");
 

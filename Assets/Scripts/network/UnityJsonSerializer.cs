@@ -22,6 +22,8 @@ public class UnityJsonSerializer : IRestSerializer
 
     public T Deserialize<T>(IRestResponse response) => UnityDeserialize<T>(response.Content);
 
+    public T Deserialize<T>(string encoded) => UnityDeserialize<T>(encoded);
+
     public string[] SupportedContentTypes { get; } =
     {
         "application/json", "text/json", "text/x-json", "text/javascript", "*+json"
