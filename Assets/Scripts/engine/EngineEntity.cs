@@ -136,6 +136,11 @@ namespace Pandora.Engine
             return Engine.PhysicsToGridCell(Position);
         }
 
+        public GridCell GetPooledCurrentCell()
+        {
+            return Engine.PooledPhysicsToGridCell(Position);
+        }
+
         /// <summary>Calculates the world position already adjusted for the map
         /// and the team</summary>
         public Vector2 GetWorldPosition() =>
