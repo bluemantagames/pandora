@@ -28,7 +28,7 @@ namespace Pandora.Network
 
             if (ProdMatchmaking)
             {
-                NetworkControllerSingleton.instance.isDebugBuild = false;
+                NetworkControllerSingleton.instance.IsDebugBuild = false;
             }
 
             var deck = DevMatchmaking && DeckSpotParent != null ?

@@ -15,8 +15,9 @@ namespace Pandora.UI.Login
         public InputField PasswordInput = null;
         private string oldButtonText = null, usernameKey = "username", passwordKey = "password";
         private PlayerModelSingleton playerModelSingleton;
+        public bool UseProdMatchmaking = false;
 
-        void Awake()
+        void Start()
         {
             playerModelSingleton = PlayerModelSingleton.instance;
 
@@ -31,6 +32,11 @@ namespace Pandora.UI.Login
         public async UniTaskVoid ExecuteLogin(string username, string password)
         {
             var apiController = ApiControllerSingleton.instance;
+
+            if (UseProdMatchmaking) {
+                ApiControllerSingleton.instance.IsDebugBuild = false;
+            }
+
             var loginResponse = await apiController.Login(username, password);
 
             // Setting the token and redirect if logged in

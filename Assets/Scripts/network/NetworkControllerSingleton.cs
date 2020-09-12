@@ -15,7 +15,7 @@ namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {
-        public bool isDebugBuild = Debug.isDebugBuild;
+        public bool IsDebugBuild = Debug.isDebugBuild;
 
         string userMatchToken = null;
         Socket matchSocket = null;
@@ -73,6 +73,8 @@ namespace Pandora.Network
         {
             IsActive = true;
 
+            apiControllerSingleton.IsDebugBuild = IsDebugBuild;
+
             var response = isDev
                 ? await apiControllerSingleton.StartDevMatchmaking(deck, playerModelSingleton.Token)
                 : await apiControllerSingleton.StartMatchmaking(deck, playerModelSingleton.Token);
@@ -97,7 +99,7 @@ namespace Pandora.Network
 
             var startTime = DateTime.Now;
 
-            var matchHost = (isDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
+            var matchHost = (IsDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
             var matchPort = 9090;
             var dns = Dns.GetHostEntry(matchHost);
 

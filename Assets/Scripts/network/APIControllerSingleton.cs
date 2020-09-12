@@ -11,27 +11,38 @@ namespace Pandora.Network
 {
     public class ApiControllerSingleton
     {
-        private bool isDebugBuild;
+        public bool IsDebugBuild = Debug.isDebugBuild;
 
         private string apiHost
         {
             get
             {
-                return "http://pandora.bluemanta.games:8080/api";
+                if (IsDebugBuild)
+                    return "http://127.0.0.1:8080/api";
+                else
+                    return "http://pandora.bluemanta.games:8080/api";
             }
         }
 
         private static ApiControllerSingleton privateInstance = null;
-        private RestClient client = null;
+        
+        private RestClient _client = null;
 
-        private ApiControllerSingleton()
-        {
-            isDebugBuild = Debug.isDebugBuild;
-            client = new RestClient(apiHost);
+        private RestClient client {
+            get {
+                if (_client == null) {
+                    Logger.Debug($"Connecting to API gateway: {apiHost}");
 
-            // Using the unity serializer
-            var customSerializer = new UnityJsonSerializer();
-            client.UseSerializer(() => customSerializer);
+                    _client = new RestClient(apiHost);
+
+                    // Using the unity serializer
+                    var customSerializer = new UnityJsonSerializer();
+
+                    _client.UseSerializer(() => customSerializer);
+                }
+
+                return _client;
+            }
         }
 
         public static ApiControllerSingleton instance
