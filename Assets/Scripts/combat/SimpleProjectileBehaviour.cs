@@ -9,9 +9,11 @@ using Pandora.Movement;
 
 namespace Pandora.Combat
 {
-    public class SimpleProjectileBehaviour : MonoBehaviour, ProjectileBehaviour, CollisionCallback
+    public class SimpleProjectileBehaviour : MonoBehaviour, ProjectileBehaviour, CollisionCallback, EngineBehaviour
     {
         Rigidbody2D body;
+
+        public string ComponentName { get => "SimpleProjectileBehaviour"; }
 
         public GameObject parent { get; set; }
         public int speed = 1800;
@@ -106,5 +108,10 @@ namespace Pandora.Combat
                 Destroy(this);
             }
         }
+
+        public void TickUpdate(uint timeLapsed) {
+            engineEntity.SetTarget(target.enemyEntity.Position);
+        }
     }
+
 }
