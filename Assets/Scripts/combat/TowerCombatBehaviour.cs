@@ -169,6 +169,11 @@ namespace Pandora.Combat
             var projectileObject = Instantiate(projectile, MapComponent.Instance.engine.PhysicsToWorld(towerEntity.Position), Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
+            projectileBehaviour.target = target;
+            projectileBehaviour.parent = gameObject;
+            projectileBehaviour.originalPrefab = projectile;
+            projectileBehaviour.map = map;
+
             var epoch = System.DateTime.MinValue;
 
             var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, towerEntity.Position, false, epoch.AddSeconds((int) towerPosition.EngineTowerPosition * 10));
@@ -178,10 +183,6 @@ namespace Pandora.Combat
             projectileEngineEntity.SetTarget(target.enemyEntity);
 
             Logger.Debug($"Spawning projectile targeting {target} - Setting map {map}");
-
-            projectileObject.GetComponent<ProjectileBehaviour>().target = target;
-            projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;
-            projectileObject.GetComponent<ProjectileBehaviour>().map = map;
 
             var engineComponent = projectileObject.AddComponent<EngineComponent>();
 

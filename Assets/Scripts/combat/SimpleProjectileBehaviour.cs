@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 using Pandora;
+using Pandora.Pool;
 using Pandora.Engine;
 using Pandora.Movement;
 
@@ -16,6 +17,7 @@ namespace Pandora.Combat
         public string ComponentName { get => "SimpleProjectileBehaviour"; }
 
         public GameObject parent { get; set; }
+        public GameObject originalPrefab { get; set; }
         public int speed = 1800;
 
         public int Speed {
@@ -110,7 +112,16 @@ namespace Pandora.Combat
         }
 
         public void TickUpdate(uint timeLapsed) {
-            engineEntity.SetTarget(target.enemyEntity.Position);
+            var bounds = engineEntity.Engine.GetPooledEntityBounds(target.enemyEntity);
+            var targetPosition = PoolInstances.Vector2IntPool.GetObject();
+
+            targetPosition.x = bounds.LowerLeft.x + (bounds.Width / 2);
+            targetPosition.y = bounds.LowerRight.y + (bounds.Height / 2);
+
+            engineEntity.SetTarget(targetPosition, true);
+
+            PoolInstances.BoxBoundsPool.ReturnObject(bounds);
+            PoolInstances.Vector2IntPool.ReturnObject(targetPosition);
         }
     }
 

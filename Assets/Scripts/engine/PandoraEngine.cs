@@ -264,6 +264,8 @@ namespace Pandora.Engine
 
             var idComponent = gameObject.GetComponent<UnitIdComponent>();
 
+            var hitboxComponent = gameObject.GetComponent<DiscreteHitboxComponent>();
+
             var entity = new EngineEntity
             {
                 Speed = speed,
@@ -274,11 +276,10 @@ namespace Pandora.Engine
                 IsRigid = isRigid,
                 Layer = gameObject.layer,
                 Timestamp = timestamp,
+                DiscreteHitbox = hitboxComponent,
                 UnitName = (idComponent != null) ? idComponent.UnitName : null,
                 UnitId = (idComponent != null) ? idComponent.Id : null
             };
-
-            var hitboxComponent = gameObject.GetComponent<DiscreteHitboxComponent>();
 
             if (hitboxComponent != null) hitboxComponent.Load();
 
@@ -292,7 +293,7 @@ namespace Pandora.Engine
                     HitboxSizeY = bounds.Height
                 };
 
-                HitboxLoader.Hitboxes[gameObject.name] = hitbox;
+                HitboxLoader.Hitboxes[hitboxComponent.HitboxName] = hitbox;
 
                 hitboxComponent.Hitbox = new Vector2Int(hitbox.HitboxSizeX, hitbox.HitboxSizeY);
                 entity.DiscreteHitbox = hitboxComponent;
@@ -1083,7 +1084,7 @@ namespace Pandora.Engine
                 physicsExtents.x = hitbox.HitboxSizeX;
                 physicsExtents.y = hitbox.HitboxSizeY;
             }
-            else if (entity.DiscreteHitbox != null)
+            else if (entity.DiscreteHitbox != null && entity.DiscreteHitbox.Hitbox != null)
             {
                 physicsExtents.x = entity.DiscreteHitbox.Hitbox.Value.x;
                 physicsExtents.y = entity.DiscreteHitbox.Hitbox.Value.y;

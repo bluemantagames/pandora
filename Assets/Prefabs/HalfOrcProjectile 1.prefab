@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5687362912629012031}
   - component: {fileID: 5687362912629012030}
   - component: {fileID: 5687362912629012029}
+  - component: {fileID: 773859902259290371}
   - component: {fileID: 5709001385554795573}
   - component: {fileID: 4061167875481412185}
   m_Layer: 11
@@ -48,6 +49,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -105,6 +107,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &773859902259290371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5687362912629012028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cd17ee6a3bfc413682d0a662b1be9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &5709001385554795573
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -144,3 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3600
+  StartRotationDegrees: 0
+  IsAoe: 0
+  ShouldHitAllies: 0
+  EngineUnitsRadius: 0

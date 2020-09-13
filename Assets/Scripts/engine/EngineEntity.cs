@@ -102,15 +102,25 @@ namespace Pandora.Engine
             }
             else
             {
-                return Bresenham.GetEnumerator(position, target);
+                var enumerator = Bresenham.GetEnumerator(position, target);
+
+                enumerator.MoveNext();
+
+                return enumerator;
             }
         }
 
         public void SetTarget(Vector2Int target)
         {
+            SetTarget(target, false);
+        }
+
+
+        public void SetTarget(Vector2Int target, bool isPrecise)
+        {
             Target = target;
 
-            if (!IsEvading)
+            if (!IsEvading && !isPrecise)
             {
                 Target.x += Engine.UnitsPerCell / 2;
                 Target.y += Engine.UnitsPerCell / 2;

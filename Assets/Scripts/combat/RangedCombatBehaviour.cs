@@ -78,11 +78,16 @@ namespace Pandora.Combat
         public void SpawnProjectile()
         {
             if (target == null) return;
+ 
+            var map = MapComponent.Instance;
 
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
-            var map = MapComponent.Instance;
+            projectileBehaviour.target = target;
+            projectileBehaviour.parent = gameObject;
+            projectileBehaviour.originalPrefab = projectile;
+            projectileBehaviour.map = map;
 
             var engineEntity = GetComponent<EngineComponent>().Entity;
 
@@ -95,10 +100,6 @@ namespace Pandora.Combat
             projectileEngineEntity.SetTarget(target.enemyEntity);
 
             Logger.Debug($"Spawning projectile targeting {target} - Setting map {map}");
-
-            projectileObject.GetComponent<ProjectileBehaviour>().target = target;
-            projectileObject.GetComponent<ProjectileBehaviour>().parent = gameObject;
-            projectileObject.GetComponent<ProjectileBehaviour>().map = map;
 
             var engineComponent = projectileObject.AddComponent<EngineComponent>();
 
