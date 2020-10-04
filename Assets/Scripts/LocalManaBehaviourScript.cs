@@ -26,6 +26,7 @@ public class LocalManaBehaviourScript : MonoBehaviour
         if (NetworkControllerSingleton.instance.matchStarted)
         {
             Destroy(this);
+
             return;
         }
 
