@@ -31,7 +31,7 @@ namespace Pandora.Network
         private RestClient client {
             get {
                 if (_client == null) {
-                    Logger.Debug($"Connecting to API gateway: {apiHost}");
+                    Debug.Log($"Connecting to API gateway: {apiHost}");
 
                     _client = new RestClient(apiHost);
 

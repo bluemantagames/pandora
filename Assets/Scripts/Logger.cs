@@ -26,20 +26,14 @@ public static class Logger
     }
 
 
-    [Conditional("UNITY_EDITOR")]
     public static void Debug(string logMsg)
     {
-        debugSampler.Begin();
         UnityEngine.Debug.Log(logMsg);
-        debugSampler.End();
     }
 
-    [Conditional("UNITY_EDITOR")]
     public static void DebugWarning(string logMsg)
     {
-        warningSampler.Begin();
         UnityEngine.Debug.LogWarning(logMsg);
-        warningSampler.End();
     }
 
 }
