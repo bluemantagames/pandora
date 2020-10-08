@@ -7,7 +7,7 @@ public class UnityJsonSerializer : IRestSerializer
     private string UnitySerialize(object obj)
     {
         var serialized = JsonUtility.ToJson(obj);
-        Logger.Debug($"Serializing using Unity serialized: {serialized}");
+        Logger.Debug($"Serializing using Unity serializer: {serialized}");
 
         return serialized;
     }
