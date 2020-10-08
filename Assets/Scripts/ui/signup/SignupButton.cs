@@ -32,14 +32,14 @@ namespace Pandora.UI.Signup
             {
                 var token = loginResponse.Body.token;
 
-                Debug.Log($"Signup successful with the token: {token}");
+                Logger.Debug($"Signup successful with the token: {token}");
 
                 playerModelSingleton.Token = token;
                 _ = LoaderSingleton.instance.LoadMainMenu();
             }
             else
             {
-                Debug.Log($"Status code {loginResponse.StatusCode} while signup: {loginResponse.Error}");
+                Logger.Debug($"Status code {loginResponse.StatusCode} while signup: {loginResponse.Error}");
 
                 // Restoring the button text
                 SignupButtonText.text = oldButtonText;

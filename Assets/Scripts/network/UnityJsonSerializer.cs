@@ -6,13 +6,15 @@ public class UnityJsonSerializer : IRestSerializer
 {
     private string UnitySerialize(object obj)
     {
-        Debug.Log("Serializing using Unity serializer...");
-        return JsonUtility.ToJson(obj);
+        var serialized = JsonUtility.ToJson(obj);
+        Logger.Debug($"Serializing using Unity serialized: {serialized}");
+
+        return serialized;
     }
 
     private T UnityDeserialize<T>(string json)
     {
-        Debug.Log($"Deserializing using Unity serializer... {json}");
+        Logger.Debug($"Deserializing using Unity serializer: {json}");
         return JsonUtility.FromJson<T>(json);
     }
 
