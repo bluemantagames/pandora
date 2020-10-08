@@ -25,13 +25,16 @@ namespace Pandora.Network
         }
 
         private static ApiControllerSingleton privateInstance = null;
-        
+
         private RestClient _client = null;
 
-        private RestClient client {
-            get {
-                if (_client == null) {
-                    Debug.Log($"Connecting to API gateway: {apiHost}");
+        private RestClient client
+        {
+            get
+            {
+                if (_client == null)
+                {
+                    Logger.Debug($"Connecting to API gateway: {apiHost}");
 
                     _client = new RestClient(apiHost);
 
@@ -73,11 +76,13 @@ namespace Pandora.Network
                 request.AddHeader("Authorization", $"Bearer {token}");
             }
 
+            Logger.Debug($"Executing {request.Method} {apiHost}{request.Resource}");
+
             return client.ExecuteTaskAsync<T>(request).ContinueWith<ApiResponse<T>>(reqTask =>
             {
                 var response = reqTask.Result;
 
-                // Debug.Log(response.Content);
+                Logger.Debug($"Response: {response.Content}");
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {

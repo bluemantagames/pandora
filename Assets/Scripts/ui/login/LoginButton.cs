@@ -21,7 +21,8 @@ namespace Pandora.UI.Login
         {
             playerModelSingleton = PlayerModelSingleton.instance;
 
-            if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey)) {
+            if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey))
+            {
                 UsernameInput.text = PlayerPrefs.GetString(usernameKey);
                 PasswordInput.text = PlayerPrefs.GetString(passwordKey);
 
@@ -33,7 +34,8 @@ namespace Pandora.UI.Login
         {
             var apiController = ApiControllerSingleton.instance;
 
-            if (UseProdMatchmaking) {
+            if (UseProdMatchmaking)
+            {
                 ApiControllerSingleton.instance.IsDebugBuild = false;
             }
 
@@ -47,14 +49,14 @@ namespace Pandora.UI.Login
                 PlayerPrefs.SetString(usernameKey, username);
                 PlayerPrefs.SetString(passwordKey, password);
 
-                Debug.Log($"Logged in successfully with the token: {token}");
+                Logger.Debug($"Logged in successfully with the token: {token}");
 
                 playerModelSingleton.Token = token;
                 _ = LoaderSingleton.instance.LoadMainMenu();
             }
             else
             {
-                Debug.Log($"Status code {loginResponse.StatusCode} while logging in: {loginResponse.Error.message}");
+                Logger.Debug($"Status code {loginResponse.StatusCode} while logging in: {loginResponse.Error.message}");
 
                 // Restoring the button text
                 LoginButtonText.text = oldButtonText;
