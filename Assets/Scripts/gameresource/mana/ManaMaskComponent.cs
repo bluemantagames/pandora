@@ -10,10 +10,13 @@ namespace Pandora.Resource.Mana {
             image = GetComponent<Image>();
             OriginalWidth = image.rectTransform.rect.width;
 
-            SetChildProperSize();
+            setChildProperSize();
         }
 
-        void SetPercent(float percent) {
+        public void SetPercent(float percent) {
+            var currentWidth = percent * OriginalWidth;
+
+            image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, currentWidth);
         }
 
         /// <summary>
@@ -24,13 +27,15 @@ namespace Pandora.Resource.Mana {
         /// size and position of the child. For this reason, here we rescale the child to fit the mask
         /// again
         /// </summary>
-        void SetChildProperSize() {
+        void setChildProperSize() {
             var manaImage = transform.GetChild(0);
             var childRectTransform = manaImage.GetComponent<Image>().rectTransform;
 
             childRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, image.rectTransform.rect.width);
             childRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, image.rectTransform.rect.height);
             childRectTransform.position = image.rectTransform.position;
+
+            image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0f);
         }
 
         void Update() {
