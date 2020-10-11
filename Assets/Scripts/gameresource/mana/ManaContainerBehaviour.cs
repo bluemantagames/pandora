@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Animations;
 using Pandora.Events;
 
 namespace Pandora.Resource.Mana
@@ -6,6 +7,11 @@ namespace Pandora.Resource.Mana
     public class ManaContainerBehaviour : MonoBehaviour
     {
         WalletsComponent walletsComponent;
+        AnimationCurve spentCurve = null;
+        public int TimePassed = 0;
+        public float SpentAnimationTime = 0.5f;
+
+        float? animationTimeEnd = null;
 
         void Start()
         {
@@ -19,35 +25,87 @@ namespace Pandora.Resource.Mana
         {
             var manaEarned = manaEvent as ManaEarned;
 
-            UpdateManaUI(manaEarned.CurrentAmount);
+            UpdateManaUI(manaEarned.CurrentAmount, false);
         }
 
         void OnManaSpent(ManaEvent manaEvent)
         {
-            var manaEarned = manaEvent as ManaSpent;
+            var manaSpent = manaEvent as ManaSpent;
 
-            UpdateManaUI(manaEarned.CurrentAmount);
+            UpdateManaUISpent(manaSpent.CurrentAmount, manaSpent.AmountSpent);
         }
 
-        void UpdateManaUI(int currentMana)
+        void UpdateManaUI(int currentMana, bool resync)
         {
-            int manaIndex = currentMana / 10;
-            int unitPercent = currentMana - (manaIndex * 10);
+            // Stop playing children if we're playing
+            if (spentCurve != null) return;
 
-            if (manaIndex < 0) return;
+            int manaIndex = ManaBarChildIndex(currentMana);
 
-            var childMask = transform.GetChild(manaIndex).GetComponentInChildren<ManaMaskComponent>();
+            var childMask = ChildMaskComponent(manaIndex);
 
-            var percent = (float)unitPercent / 10;
+            if (!childMask.IsPlaying)
+                childMask.PlayEarnAnimation();
 
-            Logger.Debug($"Setting percent as {percent}");
-
-            childMask.SetPercent(percent);
-
-            var prevIndex = manaIndex - 1;
-
-            if (prevIndex > 0)
-                transform.GetChild(prevIndex).GetComponentInChildren<ManaMaskComponent>().SetPercent(1f);
+            if (resync) Resync();
         }
+
+        void UpdateManaUISpent(int currentMana, int spent)
+        {
+            animationTimeEnd = Time.time + SpentAnimationTime;
+
+            spentCurve = AnimationCurve.Linear(Time.time, currentMana + spent, animationTimeEnd.Value, currentMana);
+        }
+
+        void Resync()
+        {
+            var currentMana = walletsComponent.ManaWallet.Resource;
+            var manaIndex = ManaBarChildIndex(currentMana);
+            var unitPercent = ManaBarChildPercent(currentMana, manaIndex);
+
+            for (var i = 0; i < manaIndex; i++)
+            {
+                ChildMaskComponent(i).Percent = 1f;
+            }
+
+            var manaMask = ChildMaskComponent(manaIndex);
+
+            manaMask.Reset();
+            manaMask.Percent = unitPercent;
+        }
+
+        void Update()
+        {
+            if (spentCurve != null)
+            {
+                var animationMana = Mathf.FloorToInt(spentCurve.Evaluate(Time.time));
+                var manaIndex = ManaBarChildIndex(animationMana);
+                var unitPercent = ManaBarChildPercent(animationMana, manaIndex);
+
+                for (var i = manaIndex + 1; i < 10; i++) {
+                    ChildMaskComponent(i).Reset();
+                }
+
+                Logger.Debug($"Spent animation: Setting index {manaIndex} percent {unitPercent} (Going at {1 / Time.deltaTime})");
+
+                var manaMask = ChildMaskComponent(manaIndex);
+
+                manaMask.Percent = unitPercent;
+
+                if (Time.time > animationTimeEnd)
+                {
+                    spentCurve = null;
+
+                    Resync();
+                }
+            }
+        }
+
+        int ManaBarChildIndex(int mana) => System.Math.Min(mana / 10, 9);
+
+        float ManaBarChildPercent(int currentMana, int childIndex) => ((float)currentMana - (childIndex * 10)) / 10f;
+
+        ManaMaskComponent ChildMaskComponent(int childIndex) => 
+            transform.GetChild(childIndex).GetComponent<ManaBarComponent>().MaskComponent;
     }
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 321866343797630789}
   - component: {fileID: 8458367642249246877}
   - component: {fileID: 7544510473468581267}
+  - component: {fileID: 6955273926052933027}
   m_Layer: 5
   m_Name: ManaMask
   m_TagString: Untagged
@@ -103,6 +104,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OriginalWidth: 0
+--- !u!111 &6955273926052933027
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124426253534237244}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1107180331318996609
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,6 +202,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 872768352205966369}
+  - component: {fileID: 8954732445076471223}
   m_Layer: 5
   m_Name: SingleManaBar
   m_TagString: Untagged
@@ -214,6 +231,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -980, y: -1820}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8954732445076471223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334510698461951139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98d9382718bb34f77a5f112fa9b7ff54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaskComponent: {fileID: 0}
 --- !u!1 &2604046797244938750
 GameObject:
   m_ObjectHideFlags: 0

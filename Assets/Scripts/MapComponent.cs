@@ -41,6 +41,7 @@ namespace Pandora
         List<GridCell> spawningCells;
 
         HashSet<GridCell> _riverPositions = new HashSet<GridCell>();
+        Dictionary<string, GameObject> loadedUnits = new Dictionary<string, GameObject> {};
 
         HashSet<GridCell> riverPositions
         {
@@ -154,6 +155,8 @@ namespace Pandora
             Logger.Debug($"Map y size: {cellHeight * mapSizeY}");
 
             engine.Init(this);
+
+            LoadCards();
         }
 
         void RefreshTowerHash(TeamComponent team)
@@ -381,7 +384,17 @@ namespace Pandora
             return true;
         }
 
-        public GameObject LoadCard(string unitName) => Resources.Load($"Units/{unitName}") as GameObject;
+        void LoadCards() {
+            var units = new List<UnityEngine.Object>(Resources.LoadAll("Units"));
+
+            foreach (var unit in units) {
+                Logger.Debug($"Loading unit {unit.name}");
+
+                loadedUnits.Add(unit.name, unit as GameObject);
+            }
+        }
+
+        public GameObject LoadCard(string unitName) => loadedUnits[unitName];
 
         /// <summary>Spawns a unit</summary>
         public void SpawnUnit(UnitSpawn spawn)
