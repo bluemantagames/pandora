@@ -44,6 +44,10 @@ namespace Pandora.Resource.Mana {
             earnCurve = null;
         }
 
+        public void StopEarnAnimation() {
+            earnCurve = null;
+        }
+
         public void SetPercent(float percent) {
             var currentWidth = percent * OriginalWidth;
 

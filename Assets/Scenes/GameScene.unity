@@ -1325,7 +1325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TimePassed: 0
-  SpentAnimationTime: 0.25
+  SpentAnimationTime: 0.35
 --- !u!1001 &492786445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6807,7 +6807,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1530874139}
   m_HandleRect: {fileID: 1530874138}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

@@ -54,7 +54,7 @@ namespace Pandora.Resource.Mana
         {
             animationTimeEnd = Time.time + SpentAnimationTime;
 
-            spentCurve = AnimationCurve.Linear(Time.time, currentMana + spent, animationTimeEnd.Value, currentMana);
+            spentCurve = AnimationCurve.EaseInOut(Time.time, currentMana + spent, animationTimeEnd.Value, currentMana);
         }
 
         void Resync()
@@ -88,11 +88,15 @@ namespace Pandora.Resource.Mana
 
                 var manaMask = ChildMaskComponent(manaIndex);
 
+                //Logger.Debug($"Setting percent {unitPercent} to index {manaIndex} going at {1 / Time.deltaTime}");
+
+                manaMask.StopEarnAnimation();
                 manaMask.Percent = unitPercent;
 
                 if (Time.time > animationTimeEnd)
                 {
                     spentCurve = null;
+                    animationTimeEnd = null;
 
                     Resync();
                 }
