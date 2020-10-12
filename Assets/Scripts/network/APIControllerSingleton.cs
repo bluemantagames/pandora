@@ -12,6 +12,7 @@ namespace Pandora.Network
     public class ApiControllerSingleton
     {
         public bool IsDebugBuild = Debug.isDebugBuild;
+        UnityJsonSerializer customSerializer = new UnityJsonSerializer();
 
         private string apiHost
         {
@@ -39,8 +40,6 @@ namespace Pandora.Network
                     _client = new RestClient(apiHost);
 
                     // Using the unity serializer
-                    var customSerializer = new UnityJsonSerializer();
-
                     _client.UseSerializer(() => customSerializer);
                 }
 
@@ -92,7 +91,7 @@ namespace Pandora.Network
                 {
                     if (response.ContentType == "application/json")
                     {
-                        var deserializedError = RestSharp.SimpleJson.DeserializeObject<ApiError>(response.Content);
+                        var deserializedError = customSerializer.Deserialize<ApiError>(response.Content);
                         return new ApiResponse<T>(response.StatusCode, deserializedError);
                     }
                     else
