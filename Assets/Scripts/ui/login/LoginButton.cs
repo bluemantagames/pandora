@@ -27,7 +27,7 @@ namespace Pandora.UI.Login
                 UsernameInput.text = PlayerPrefs.GetString(usernameKey);
                 PasswordInput.text = PlayerPrefs.GetString(passwordKey);
 
-                // Login();
+                Login();
             }
         }
 
