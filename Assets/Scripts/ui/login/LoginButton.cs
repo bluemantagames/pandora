@@ -16,6 +16,7 @@ namespace Pandora.UI.Login
         private string oldButtonText = null, usernameKey = "username", passwordKey = "password";
         private PlayerModelSingleton playerModelSingleton;
         public bool UseProdMatchmaking = false;
+        bool isLoading = false;
 
         void Start()
         {
@@ -26,7 +27,7 @@ namespace Pandora.UI.Login
                 UsernameInput.text = PlayerPrefs.GetString(usernameKey);
                 PasswordInput.text = PlayerPrefs.GetString(passwordKey);
 
-                Login();
+                // Login();
             }
         }
 
@@ -60,6 +61,7 @@ namespace Pandora.UI.Login
 
                 // Restoring the button text
                 LoginButtonText.text = oldButtonText;
+                isLoading = false;
 
                 if (ErrorText != null)
                 {
@@ -78,7 +80,7 @@ namespace Pandora.UI.Login
 
         public void Login()
         {
-            if (UsernameInput == null || PasswordInput == null) return;
+            if (UsernameInput == null || PasswordInput == null || isLoading) return;
 
             var username = UsernameInput.text;
             var password = PasswordInput.text;
@@ -89,6 +91,7 @@ namespace Pandora.UI.Login
 
             oldButtonText = LoginButtonText.text;
             LoginButtonText.text = "Loading...";
+            isLoading = true;
         }
     }
 }

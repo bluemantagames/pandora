@@ -16,6 +16,7 @@ namespace Pandora.UI.Signup
         public InputField PasswordInput = null;
         private string oldButtonText = null;
         private PlayerModelSingleton playerModelSingleton;
+        bool isLoading = false;
 
         void Awake()
         {
@@ -43,6 +44,7 @@ namespace Pandora.UI.Signup
 
                 // Restoring the button text
                 SignupButtonText.text = oldButtonText;
+                isLoading = false;
 
                 if (ErrorText != null)
                 {
@@ -62,7 +64,7 @@ namespace Pandora.UI.Signup
 
         public void Signup()
         {
-            if (UsernameInput == null || EmailInput == null || PasswordInput == null) return;
+            if (UsernameInput == null || EmailInput == null || PasswordInput == null || isLoading) return;
 
             var username = UsernameInput.text;
             var email = EmailInput.text;
@@ -74,6 +76,7 @@ namespace Pandora.UI.Signup
 
             oldButtonText = SignupButtonText.text;
             SignupButtonText.text = "Loading...";
+            isLoading = true;
         }
     }
 }
