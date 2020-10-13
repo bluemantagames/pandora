@@ -139,7 +139,6 @@ namespace Pandora
                 var manaCostComponent = GetComponent<ManaCostComponent>();
 
                 var idComponent = GetComponent<UnitIdComponent>();
-                var isEverybodyDead = false;
 
                 var groupComponent = GetComponent<GroupComponent>();
 
@@ -153,41 +152,13 @@ namespace Pandora
                     if (groupComponent.AliveObjects.Count == 0)
                     {
                         CommandViewportBehaviour.Instance.RemoveCommand(groupComponent.OriginalId);
-
-                        isEverybodyDead = true;
                     }
                 }
                 else if (idComponent != null)
                 {
                     CommandViewportBehaviour.Instance.RemoveCommand(idComponent.Id);
-
-                    isEverybodyDead = true;
                 }
                 
-                var sourceTeamComponent = source.GameObject.GetComponent<TeamComponent>();
-
-                int? sourceTeam = null;
-
-                if (sourceTeamComponent != null) {
-                    sourceTeam =
-                        (source is TowerBaseAttack) ?
-                            ((TowerTeamComponent) sourceTeamComponent).EngineTeam :
-                            sourceTeamComponent.Team;
-                }
-
-                // should earn gold if we killed the last unit of the group
-                var shouldEarnGold =
-                    teamComponent.Team != TeamComponent.assignedTeam &&
-                    sourceTeam != null &&
-                    sourceTeam == TeamComponent.assignedTeam &&
-                    manaCostComponent != null &&
-                    isEverybodyDead;
-
-                if (shouldEarnGold)
-                {
-                    walletsComponent.GoldWallet.AddResource(manaCostComponent.ManaCost / 10);
-                }
-
                 SetDeathPosition();
                 Remove();
 

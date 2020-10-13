@@ -143,5 +143,14 @@ static class BuildCommand
         BuildPipeline.BuildPlayer(GetEnabledScenes(), path + "/pandora.apk", BuildTarget.Android, GetBuildOptions());
 
         Console.WriteLine(":: Done with build");
+
+        var pr = new Process();
+
+        pr.StartInfo.UseShellExecute = false;
+        pr.StartInfo.RedirectStandardOutput = true;
+        pr.StartInfo.FileName = "/bin/zsh";
+        pr.StartInfo.Arguments = $"-c '{path + "/release.sh"} {path + "/pandora.apk"}'";
+
+        pr.Start();
     }
 }
