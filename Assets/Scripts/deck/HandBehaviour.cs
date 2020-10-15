@@ -37,6 +37,9 @@ namespace Pandora.Deck
         int handIndex = -1;
 
         public GameObject[] UIHandSlots;
+
+        GameObject baseCard;
+
         public float EaseOutTime = 0.35f;
 
         Deck deck;
@@ -67,6 +70,8 @@ namespace Pandora.Deck
                 DisableMulliganUI();
                 return;
             }
+
+            baseCard = Resources.Load($"Cards/BaseCard") as GameObject;
 
             rectTransform = GetComponent<RectTransform>();
             animator = GetComponent<Animator>();
@@ -153,7 +158,6 @@ namespace Pandora.Deck
         {
             var cardTransform = card.GetComponent<RectTransform>();
 
-            Logger.Debug($"Animating {card} to {idx}");
 
             var targetRectTransform = UIHandSlots[idx].GetComponent<RectTransform>();
 
@@ -161,6 +165,8 @@ namespace Pandora.Deck
 
             var xCurve = AnimationCurve.EaseInOut(0f, cardTransform.anchoredPosition.x, EaseOutTime, targetRectTransform.anchoredPosition.x);
             var yCurve = AnimationCurve.EaseInOut(0f, cardTransform.anchoredPosition.y, EaseOutTime, targetRectTransform.anchoredPosition.y);
+
+            Logger.Debug($"Animating {card} to {idx} ({cardTransform.anchoredPosition.x}, {cardTransform.anchoredPosition.y})");
 
             var clip = new AnimationClip();
             clip.legacy = true;
