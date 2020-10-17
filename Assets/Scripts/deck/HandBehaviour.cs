@@ -241,6 +241,10 @@ namespace Pandora.Deck
             var cardPrefab = Resources.Load($"Cards/{cardDrawn.Name}") as GameObject;
             var card = Instantiate(cardPrefab, new Vector2(0, 0), Quaternion.identity, transform.parent);
 
+            var slotRectTransform = UIHandSlots[idx].GetComponent<RectTransform>();
+
+            card.GetComponent<RectTransform>().sizeDelta = slotRectTransform.sizeDelta;
+
             hand[idx] = new HandCard(cardDrawn.Name, card);
 
             AnimateMovementTo(card, idx);
