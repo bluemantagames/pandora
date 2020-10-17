@@ -93,8 +93,6 @@ namespace Pandora.Resource.Mana
 
                 var manaMask = ChildMaskComponent(manaIndex);
 
-                //Logger.Debug($"Setting percent {unitPercent} to index {manaIndex} going at {1 / Time.deltaTime}");
-
                 manaMask.StopEarnAnimation();
                 manaMask.Percent = unitPercent;
 

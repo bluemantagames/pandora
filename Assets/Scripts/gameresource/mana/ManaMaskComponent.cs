@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Animations;
+using Cysharp.Threading.Tasks;
 
 namespace Pandora.Resource.Mana {
     public class ManaMaskComponent: MonoBehaviour {
@@ -65,10 +66,11 @@ namespace Pandora.Resource.Mana {
         void setChildProperSize() {
             var manaImage = transform.GetChild(0);
             var childRectTransform = manaImage.GetComponent<Image>().rectTransform;
+            
+            childRectTransform.position = image.rectTransform.position;
 
             childRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, image.rectTransform.rect.width);
             childRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, image.rectTransform.rect.height);
-            childRectTransform.position = image.rectTransform.position;
 
             image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0f);
         }

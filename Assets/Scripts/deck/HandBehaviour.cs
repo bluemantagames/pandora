@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using Pandora.Engine;
 using Pandora.Animations;
+using Cysharp.Threading.Tasks;
 
 namespace Pandora.Deck
 {
@@ -139,6 +140,16 @@ namespace Pandora.Deck
                     cards = Deck;
                 }
 
+                _ = SetDeck(cards);
+            }
+        }
+
+        async UniTaskVoid SetDeck(List<Card> cards) {
+            // Wait for 10 frames before setting the deck,
+            // in order to give the layout component time to adjust children positions
+            await UniTask.DelayFrame(10);
+
+            if (deck is LocalDeck localDeck) {
                 localDeck.Deck = cards;
             }
         }
@@ -155,9 +166,15 @@ namespace Pandora.Deck
             }
         }
 
-        void AnimateMovementTo(GameObject card, int idx)
+        void AnimateMovementTo(GameObject card, int fromIdx, int idx)
         {
+            var startTransform =
+                (fromIdx < 0) ?
+                    card.GetComponent<RectTransform>() : 
+                    UIHandSlots[fromIdx].GetComponent<RectTransform>();
+
             var cardTransform = card.GetComponent<RectTransform>();
+
             var targetRectTransform = UIHandSlots[idx].GetComponent<RectTransform>();
 
             var targetPosition = targetRectTransform.position;
@@ -166,10 +183,10 @@ namespace Pandora.Deck
 
             cardTransform.pivot = targetRectTransform.pivot;
 
-            var xCurve = AnimationCurve.EaseInOut(Time.time, cardTransform.localPosition.x, Time.time + EaseOutTime, targetPosition.x);
-            var yCurve = AnimationCurve.EaseInOut(Time.time, cardTransform.localPosition.y, Time.time + EaseOutTime, targetPosition.y);
+            var xCurve = AnimationCurve.EaseInOut(Time.time, startTransform.position.x, Time.time + EaseOutTime, targetPosition.x);
+            var yCurve = AnimationCurve.EaseInOut(Time.time, startTransform.position.y, Time.time + EaseOutTime, targetPosition.y);
 
-            Logger.Debug($"Animating {card} to {idx} ({targetRectTransform.anchoredPosition.x}, {targetRectTransform.anchoredPosition.y})");
+            Logger.Debug($"Animating {card} from ({startTransform.position.x}, {startTransform.position.y}) to {idx} ({startTransform.position.x}, {startTransform.position.y})");
 
             cardAnimation.SetCurves(xCurve, yCurve);
         }
@@ -222,7 +239,7 @@ namespace Pandora.Deck
 
                     if (freePosition.HasValue)
                     {
-                        AnimateMovementTo(hand[i].CardObject, freePosition.Value);
+                        AnimateMovementTo(hand[i].CardObject, i, freePosition.Value);
 
                         hand[freePosition.Value] = hand[i];
                         hand[i] = null;
@@ -247,7 +264,7 @@ namespace Pandora.Deck
 
             hand[idx] = new HandCard(cardDrawn.Name, card);
 
-            AnimateMovementTo(card, idx);
+            AnimateMovementTo(card, -1, idx);
 
             Logger.Debug($"Playing from {rectTransform} to {idx}");
         }
