@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using System;
 using System.Linq;
 using Pandora.Engine;
+using Pandora.Animations;
 
 namespace Pandora.Deck
 {
@@ -157,27 +158,20 @@ namespace Pandora.Deck
         void AnimateMovementTo(GameObject card, int idx)
         {
             var cardTransform = card.GetComponent<RectTransform>();
-
-
             var targetRectTransform = UIHandSlots[idx].GetComponent<RectTransform>();
+
+            var targetPosition = targetRectTransform.position;
+
+            var cardAnimation = card.GetComponent<CustomTransformAnimation>();
 
             cardTransform.pivot = targetRectTransform.pivot;
 
-            var xCurve = AnimationCurve.EaseInOut(0f, cardTransform.anchoredPosition.x, EaseOutTime, targetRectTransform.anchoredPosition.x);
-            var yCurve = AnimationCurve.EaseInOut(0f, cardTransform.anchoredPosition.y, EaseOutTime, targetRectTransform.anchoredPosition.y);
+            var xCurve = AnimationCurve.EaseInOut(Time.time, cardTransform.localPosition.x, Time.time + EaseOutTime, targetPosition.x);
+            var yCurve = AnimationCurve.EaseInOut(Time.time, cardTransform.localPosition.y, Time.time + EaseOutTime, targetPosition.y);
 
-            Logger.Debug($"Animating {card} to {idx} ({cardTransform.anchoredPosition.x}, {cardTransform.anchoredPosition.y})");
+            Logger.Debug($"Animating {card} to {idx} ({targetRectTransform.anchoredPosition.x}, {targetRectTransform.anchoredPosition.y})");
 
-            var clip = new AnimationClip();
-            clip.legacy = true;
-
-            clip.SetCurve("", typeof(RectTransform), "m_AnchoredPosition.x", xCurve);
-            clip.SetCurve("", typeof(RectTransform), "m_AnchoredPosition.y", yCurve);
-
-            var animation = card.GetComponent<Animation>();
-
-            animation.AddClip(clip, clip.name);
-            animation.Play(clip.name);
+            cardAnimation.SetCurves(xCurve, yCurve);
         }
 
         void CardPlayed(DeckEvent ev)
@@ -245,7 +239,7 @@ namespace Pandora.Deck
             Logger.Debug($"Drawing card {idx}");
 
             var cardPrefab = Resources.Load($"Cards/{cardDrawn.Name}") as GameObject;
-            var card = Instantiate(cardPrefab, transform.position, Quaternion.identity, transform.parent);
+            var card = Instantiate(cardPrefab, new Vector2(0, 0), Quaternion.identity, transform.parent);
 
             hand[idx] = new HandCard(cardDrawn.Name, card);
 

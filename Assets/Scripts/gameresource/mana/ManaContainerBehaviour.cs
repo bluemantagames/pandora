@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Animations;
 using Pandora.Events;
+using Pandora.Network;
 
 namespace Pandora.Resource.Mana
 {
@@ -76,7 +77,11 @@ namespace Pandora.Resource.Mana
 
         void Update()
         {
-            if (spentCurve != null)
+            bool isManaActive =
+                (!NetworkControllerSingleton.instance.matchStarted && MapComponent.Instance.gameObject.GetComponent<LocalManaBehaviourScript>().Enabled) ||
+                 NetworkControllerSingleton.instance.matchStarted;
+
+            if (spentCurve != null && isManaActive)
             {
                 var animationMana = Mathf.FloorToInt(spentCurve.Evaluate(Time.time));
                 var manaIndex = ManaBarChildIndex(animationMana);
