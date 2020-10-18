@@ -19,24 +19,7 @@ namespace Pandora
             get => _instance;
         }
 
-        public void DrawCommands()
-        {
-            var rect = GetComponent<RectTransform>();
-
-            for (var i = 0; i < handlers.Count; i++)
-            {
-                var handler = handlers[i];
-
-                if (handler == null) continue;
-
-                var handlerRect = handler.GetComponent<RectTransform>();
-                var width = handlerRect.rect.width;
-                var height = handlerRect.rect.height;
-                var handlerPosition = new Vector2((i * width) + width / 2, -rect.rect.height / 2);
-
-                handlerRect.localPosition = handlerPosition;
-            }
-        }
+        RectTransform rect;
 
         public void RemoveCommand(string id)
         {
@@ -55,8 +38,6 @@ namespace Pandora
                     break;
                 }
             }
-
-            DrawCommands();
         }
 
 
@@ -108,12 +89,28 @@ namespace Pandora
             handler.GetComponent<Image>().sprite = card.sprite;
             handler.GetComponent<CommandImageBehaviour>().UnitId = id;
 
-            DrawCommands();
+            var handlerRectTransform = handler.GetComponent<RectTransform>();
+            
+            var heightFactor = handlerRectTransform.rect.height / rect.rect.height;
+
+            handler.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(
+                RectTransform.Axis.Horizontal,
+                handlerRectTransform.rect.width / heightFactor
+            );
+
+            handler.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(
+                RectTransform.Axis.Vertical,
+                rect.rect.height
+            );
         }
 
         void Awake()
         {
             _instance = this;
+        }
+
+        void Start() {
+            rect = GetComponent<RectTransform>();
         }
 
         void Update()
