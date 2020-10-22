@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using Pandora.Engine;
 using Pandora.Animations;
+using Pandora.UI.HUD;
 using Cysharp.Threading.Tasks;
 
 namespace Pandora.Deck
@@ -374,18 +375,21 @@ namespace Pandora.Deck
         void Select(HandCard card)
         {
             SelectedCards.Add(card);
-            card.CardObject.GetComponent<CardBehaviour>().MulliganSelected = true;
+
+            if (card.CardObject.GetComponent<CardHighlighter>() == null) {
+                card.CardObject.AddComponent<CardHighlighter>();
+            }
         }
 
         void Deselect(int index)
         {
             if (SelectedCards.ElementAt(index) == null) return;
 
-            var combatBehaviour = SelectedCards[index]?.CardObject?.GetComponent<CardBehaviour>();
+            var combatBehaviour = SelectedCards[index]?.CardObject?.GetComponent<CardHighlighter>();
 
             if (combatBehaviour != null)
             {
-                combatBehaviour.MulliganSelected = false;
+                combatBehaviour.Unhighlight();
             }
 
             SelectedCards.RemoveAt(index);
