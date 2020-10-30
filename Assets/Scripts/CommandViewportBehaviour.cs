@@ -88,20 +88,6 @@ namespace Pandora
 
             handler.GetComponent<Image>().sprite = card.sprite;
             handler.GetComponent<CommandImageBehaviour>().UnitId = id;
-
-            var handlerRectTransform = handler.GetComponent<RectTransform>();
-            
-            var heightFactor = handlerRectTransform.rect.height / rect.rect.height;
-
-            handler.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(
-                RectTransform.Axis.Horizontal,
-                handlerRectTransform.rect.width / heightFactor
-            );
-
-            handler.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(
-                RectTransform.Axis.Vertical,
-                rect.rect.height
-            );
         }
 
         void Awake()
