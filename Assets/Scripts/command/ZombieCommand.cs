@@ -4,6 +4,7 @@ using Pandora.Engine;
 using Pandora.Combat;
 using Pandora.Resource.Mana;
 using System.Collections.Generic;
+using Pandora.UI;
 
 namespace Pandora.Command
 {
@@ -102,6 +103,11 @@ namespace Pandora.Command
 
                 MapComponent.Instance.SpawnUnit(zombieSpawn);
             }
+        }
+
+        public List<EffectIndicator> FindTargets()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

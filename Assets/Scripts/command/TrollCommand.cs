@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Pandora.Engine;
 using Pandora.Combat;
+using System.Collections.Generic;
+using Pandora.UI;
 
 namespace Pandora.Command
 {
@@ -12,6 +14,11 @@ namespace Pandora.Command
         public int Damage = 50;
         public bool DebugLines = false;
         public GameObject[] EffectObjects;
+
+        public List<EffectIndicator> FindTargets()
+        {
+            throw new System.NotImplementedException();
+        }
 
         public void InvokeCommand()
         {

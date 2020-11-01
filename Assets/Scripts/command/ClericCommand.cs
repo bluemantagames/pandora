@@ -1,6 +1,8 @@
 using UnityEngine;
 using Pandora.Combat;
 using Pandora.Engine;
+using System.Collections.Generic;
+using Pandora.UI;
 
 namespace Pandora.Command
 {
@@ -62,5 +64,10 @@ namespace Pandora.Command
         }
 
         private bool IsTopSide(GridCell cell) => cell.vector.y >= MapComponent.Instance.bottomMapSizeY + 1;
+
+        public List<EffectIndicator> FindTargets()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

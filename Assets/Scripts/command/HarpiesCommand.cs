@@ -3,6 +3,8 @@ using System.Linq;
 using Pandora.Combat;
 using Pandora.Engine;
 using Pandora.Movement;
+using System.Collections.Generic;
+using Pandora.UI;
 
 namespace Pandora.Command
 {
@@ -98,5 +100,9 @@ namespace Pandora.Command
 
         }
 
+        public List<EffectIndicator> FindTargets()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
