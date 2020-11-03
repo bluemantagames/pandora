@@ -6,6 +6,7 @@ using Pandora.Network;
 using Pandora.Command;
 using System.Collections.Generic;
 using Pandora.UI.HUD;
+using Pandora.UI;
 
 namespace Pandora
 {
@@ -13,6 +14,12 @@ namespace Pandora
     {
         public string UnitId;
         public bool SmartCast = false;
+        IndicatorsHandler indicatorsHandler;
+
+        void Start()
+        {
+            indicatorsHandler = MapComponent.Instance.GetComponent<IndicatorsHandler>();
+        }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
@@ -34,20 +41,28 @@ namespace Pandora
         {
             if (SmartCast)
                 RunCommand();
-            else {
+            else
+            {
                 var cardHighlighter = GetComponent<PositionCardHighlighter>();
 
-                if (cardHighlighter == null) {
+                if (cardHighlighter == null)
+                {
                     Debug.Log("Highlighting");
 
                     gameObject.AddComponent<PositionCardHighlighter>();
-                } else {
+
+                    var indicators = FindCommandListener().GetComponentInParent<CommandBehaviour>().FindTargets();
+
+                    indicatorsHandler.ProcessIndicators(indicators);
+                }
+                else
+                {
                     cardHighlighter.Unhighlight();
                 }
             }
         }
 
-        void RunCommand()
+        CommandListener FindCommandListener()
         {
             var entities = new List<EngineEntity>(MapComponent.Instance.engine.Entities);
 
@@ -68,11 +83,16 @@ namespace Pandora
 
                 if (isOurEntity)
                 {
-                    entity.GameObject.GetComponentInChildren<CommandListener>().Command();
-
-                    break;
+                    return entity.GameObject.GetComponentInChildren<CommandListener>();
                 }
             }
+
+            return null;
+        }
+
+        void RunCommand()
+        {
+            FindCommandListener().Command();
         }
     }
 
