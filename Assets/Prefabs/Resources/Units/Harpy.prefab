@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 9130794682398608112}
   - component: {fileID: 7539184034064533125}
   - component: {fileID: 9111943681145743900}
+  - component: {fileID: 4808324771914466582}
   m_Layer: 10
   m_Name: Harpy
   m_TagString: Untagged
@@ -141,6 +142,8 @@ MonoBehaviour:
   lifeValue: 85
   maxLife: 0
   IsDead: 0
+  TowerGoldRewards: 4
+  GoldReward: 13
 --- !u!95 &7129443875767093079
 Animator:
   serializedVersion: 3
@@ -190,6 +193,9 @@ MonoBehaviour:
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
+  AnimationStateName: 
+  WalkingAnimationEnabled: 0
+  WalkingAnimationEngineUnits: 0
 --- !u!114 &1881195754666818129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,6 +252,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Entity:
+    Speed: 0
+    CollisionSpeed: 0
+    Position: {x: 0, y: 0}
+    Direction: {x: 0, y: 0}
+    IsRigid: 1
+    IsStructure: 0
+    IsMapObstacle: 0
+    Layer: 1
+    Target: {x: 0, y: 0}
+    IsEvading: 0
+    UnitName: 
+    UnitId: 
   DebugEntity: 0
 --- !u!114 &9111943681145743900
 MonoBehaviour:
@@ -262,6 +281,18 @@ MonoBehaviour:
   SelectedColor: {r: 0.9811321, g: 0.9542385, b: 0, a: 1}
   SearchRangeEngineUnits: 1200
   BlinkTime: 1
+--- !u!114 &4808324771914466582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060352442105845753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d1c461b6ef304042b23f5c7517f2f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4421198389732778068
 GameObject:
   m_ObjectHideFlags: 0

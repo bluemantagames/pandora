@@ -4,7 +4,9 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace Pandora.UI {
-    public class EffectIndicator {}
+    public interface EffectIndicator {
+        void visit(IndicatorsVisitor visitor);
+    }
     
     /// <summary>
     /// Place a circular indicator, of a certain radius, on a point in the arena
@@ -23,6 +25,11 @@ namespace Pandora.UI {
             RadiusEngineUnits = radiusEngineUnits;
             PositionEngineUnits = MapComponent.Instance.engine.GridCellToPhysics(position);
         }
+
+        public void visit(IndicatorsVisitor visitor)
+        {
+            visitor.visit(this);
+        }
     }
 
 
@@ -38,6 +45,11 @@ namespace Pandora.UI {
             RadiusEngineUnits = radiusEngineUnits;
             Followed = followed;
         }
+
+        public void visit(IndicatorsVisitor visitor)
+        {
+            visitor.visit(this);
+        }
     }
 
     /// <summary>
@@ -49,6 +61,11 @@ namespace Pandora.UI {
         public EntitiesIndicator(List<EngineEntity> entities)
         {
             Entities = entities;
+        }
+        
+        public void visit(IndicatorsVisitor visitor)
+        {
+            visitor.visit(this);
         }
     }
 
