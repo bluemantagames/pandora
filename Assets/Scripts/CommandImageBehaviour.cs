@@ -14,6 +14,7 @@ namespace Pandora
     {
         public string UnitId;
         public bool SmartCast = false;
+        Guid? currentGuid = null;
         IndicatorsHandler indicatorsHandler;
 
         void Start()
@@ -53,10 +54,13 @@ namespace Pandora
 
                     var indicators = FindCommandListener().GetComponentInParent<CommandBehaviour>().FindTargets();
 
-                    indicatorsHandler.ProcessIndicators(indicators);
+                    currentGuid = indicatorsHandler.ProcessIndicators(indicators);
                 }
                 else
                 {
+                    if (currentGuid.HasValue)
+                        indicatorsHandler.Clear(currentGuid.Value);
+
                     cardHighlighter.Unhighlight();
                 }
             }

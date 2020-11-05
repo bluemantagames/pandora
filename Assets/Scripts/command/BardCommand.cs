@@ -25,7 +25,11 @@ namespace Pandora.Command
 
             foreach (var targetEntity in entities)
             {
-                var targetTeam = targetEntity.GameObject.GetComponent<TeamComponent>().Team;
+                var teamComponent = targetEntity.GameObject.GetComponent<TeamComponent>();
+
+                if (teamComponent == null) continue;
+
+                var targetTeam = teamComponent.Team;
 
                 if (sourceTeam.Team != targetTeam) continue;
 
