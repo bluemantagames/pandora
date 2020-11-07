@@ -14,8 +14,10 @@ namespace Pandora
     {
         public string UnitId;
         public bool SmartCast = false;
+        public int RefreshEveryFrames = 20;
         Guid? currentGuid = null;
         IndicatorsHandler indicatorsHandler;
+        int lastRefresh = 0;
 
         void Start()
         {
@@ -30,7 +32,6 @@ namespace Pandora
         public void OnDrag(PointerEventData eventData)
         {
             transform.position = new Vector2(transform.position.x, eventData.position.y);
-
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -52,17 +53,41 @@ namespace Pandora
 
                     gameObject.AddComponent<PositionCardHighlighter>();
 
-                    var indicators = FindCommandListener().GetComponentInParent<CommandBehaviour>().FindTargets();
-
-                    currentGuid = indicatorsHandler.ProcessIndicators(indicators);
+                    RefreshIndicators();
                 }
                 else
                 {
-                    if (currentGuid.HasValue)
-                        indicatorsHandler.Clear(currentGuid.Value);
+                    ClearIndicators();
 
                     cardHighlighter.Unhighlight();
                 }
+            }
+        }
+
+        void RefreshIndicators()
+        {
+            ClearIndicators();
+
+            var indicators = FindCommandListener().GetComponentInParent<CommandBehaviour>().FindTargets();
+
+            currentGuid = indicatorsHandler.ProcessIndicators(indicators);
+        }
+
+        void ClearIndicators()
+        {
+            if (currentGuid.HasValue)
+                indicatorsHandler.Clear(currentGuid.Value);
+        }
+
+        void Update() {
+            if (!currentGuid.HasValue) return;
+
+            lastRefresh++;
+
+            if (lastRefresh > RefreshEveryFrames) {
+                lastRefresh = 0;
+
+                RefreshIndicators();
             }
         }
 

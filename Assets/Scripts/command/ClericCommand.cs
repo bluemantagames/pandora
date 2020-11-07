@@ -73,11 +73,16 @@ namespace Pandora.Command
 
         public List<EffectIndicator> FindTargets()
         {
-            return new List<EffectIndicator> {
-                new EntitiesIndicator(
-                    new List<EngineEntity> { FindConverted() }
-                )
-            };
+            var target = FindConverted();
+
+            if (target != null)
+                return new List<EffectIndicator> {
+                    new EntitiesIndicator(
+                        new List<EngineEntity> { FindConverted() }
+                    )
+                };
+            else
+                return new List<EffectIndicator> {};
         }
     }
 }
