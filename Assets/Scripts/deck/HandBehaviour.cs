@@ -119,18 +119,20 @@ namespace Pandora.Deck
                         "Zombies"
                     };*/
 
-                    var cardNames = new List<string> {
-                        /*"Troll",
+                    /*var cardNames = new List<string> {
+                        "Troll",
                         "Zombies",
                         "Ranger",
                         "Fireball",
-                        "Bard"*/
+                        "Bard"
                         "Clerics",
-                        /*"Cockatrice",
+                        "Cockatrice",
                         "Mermaids",
                         "HalfOrc",
-                        "Harpies"*/
-                    };
+                        "Harpies"
+                    };*/
+
+                    var cardNames = new List<string> { "Fireball" };
 
                     cards =
                         (from card in cardNames

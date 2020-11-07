@@ -31,24 +31,10 @@ namespace Pandora.UI
         {
             var circle = Instantiate(CircleIndicator, indicator.Followed.transform, false);
 
-            var position = circle.transform.position;
-
-            position.z = -1;
-
-            circle.transform.position = position;
-
-            circle.transform.localScale = Vector2.one;
-
-            var worldSpaceRadius = MapComponent.Instance.engine.PhysicsToWorld(new Vector2Int(indicator.RadiusEngineUnits, indicator.RadiusEngineUnits));
-
-            circle.transform.localScale = new Vector2(
-                worldSpaceRadius.x / circle.transform.lossyScale.x,
-                worldSpaceRadius.y / circle.transform.lossyScale.y
-            );
+            circle.GetComponent<CircleIndicatorBehaviour>().Initialize(indicator.RadiusEngineUnits);
 
             addCircleIndicator(circle);
         }
-
 
         public void visit(CircleRangeIndicator indicator)
         {
@@ -58,14 +44,7 @@ namespace Pandora.UI
 
             var circle = Instantiate(CircleIndicator, worldPosition, Quaternion.identity);
 
-            circle.transform.localScale = Vector2.one;
-
-            var worldSpaceRadius = MapComponent.Instance.engine.PhysicsToWorld(new Vector2Int(indicator.RadiusEngineUnits, indicator.RadiusEngineUnits));
-
-            circle.transform.localScale = new Vector2(
-                worldSpaceRadius.x / circle.transform.lossyScale.x,
-                worldSpaceRadius.y / circle.transform.lossyScale.y
-            );
+            circle.GetComponent<CircleIndicatorBehaviour>().Initialize(indicator.RadiusEngineUnits);
 
             addCircleIndicator(circle);
         }

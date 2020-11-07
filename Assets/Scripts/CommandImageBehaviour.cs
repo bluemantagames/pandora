@@ -75,8 +75,11 @@ namespace Pandora
 
         void ClearIndicators()
         {
-            if (currentGuid.HasValue)
+            if (currentGuid.HasValue) {
                 indicatorsHandler.Clear(currentGuid.Value);
+
+                currentGuid = null;
+            }
         }
 
         void Update() {
