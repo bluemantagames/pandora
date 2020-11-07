@@ -1014,6 +1014,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 235130427}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &251971250 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1263217620473054, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119402720}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &341414742 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2983279049620439837, guid: d87e6d2feacb041a9a9f93ba5ee491af,
@@ -3261,7 +3267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EventKeyCode: 32
-  Console: {fileID: 0}
+  Console: {fileID: 251971250}
 --- !u!1001 &1110013713
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7776,6 +7782,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1263217620473054, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114600693638766706, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f,
+        type: 3}
+      propertyPath: _activateOnStartup
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114600693638766706, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f,
+        type: 3}
+      propertyPath: _interceptDebugLogger
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 143246068027918357, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f,
