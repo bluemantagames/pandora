@@ -28,12 +28,17 @@
             }
         }
 
+
         /// <summary>
         /// Team assigned to this client by the server. 
         /// 
         /// 1 by default (e.g. when client is not connected)
         ///</summary>
         static public int assignedTeam = 1;
+
+        static public int opponentTeam {
+            get => (assignedTeam == bottomTeam) ? topTeam : bottomTeam;
+        }
 
         /// <summary>Team that occupies the top of the map</summary>
         static public int topTeam = 2;

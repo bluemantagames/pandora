@@ -123,10 +123,10 @@ namespace Pandora.Deck
                         /*"Troll",
                         "Zombies",
                         "Ranger",
-                        "Fireball",*/
-                        "Bard"
-                        /*"Clerics",
-                        "Cockatrice",
+                        "Fireball",
+                        "Bard"*/
+                        "Clerics",
+                        /*"Cockatrice",
                         "Mermaids",
                         "HalfOrc",
                         "Harpies"*/

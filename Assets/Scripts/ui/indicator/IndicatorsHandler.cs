@@ -11,6 +11,7 @@ namespace Pandora.UI
         Dictionary<Guid, List<GameObject>> circleIndicators = new Dictionary<Guid, List<GameObject>>(300);
         Dictionary<Guid, List<EngineEntity>> highlightedEntities = new Dictionary<Guid, List<EngineEntity>>(300);
         public GameObject CircleIndicator;
+        public Color HighlightColor = Color.yellow;
 
         Guid? currentGuid = null;
 
@@ -82,7 +83,7 @@ namespace Pandora.UI
                     continue;
                 }
 
-                entityHighlighter.Highlight(new ColorHighlight(Color.yellow));
+                entityHighlighter.Highlight(new ColorHighlight(HighlightColor));
 
                 addHighlightedEntity(entity);
             }
