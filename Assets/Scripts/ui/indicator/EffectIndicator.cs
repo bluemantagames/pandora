@@ -69,4 +69,22 @@ namespace Pandora.UI {
         }
     }
 
+
+    /// <summary>
+    /// Highlights one of the two lanes
+    /// </summary>
+    public class LaneIndicator: EffectIndicator {
+        public Lane Lane;
+
+        public LaneIndicator(Lane lane)
+        {
+            Lane = lane;
+        }
+        
+        public void visit(IndicatorsVisitor visitor)
+        {
+            visitor.visit(this);
+        }
+    }
+
 }

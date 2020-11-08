@@ -9,5 +9,6 @@ namespace Pandora.UI {
         void visit(FollowingCircleRangeIndicator indicator);
         void visit(CircleRangeIndicator indicator);
         void visit(EntitiesIndicator indicator);
+        void visit(LaneIndicator indicator);
     }
 }

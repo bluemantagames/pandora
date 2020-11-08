@@ -9,8 +9,9 @@ namespace Pandora.UI
     public class IndicatorsHandler : MonoBehaviour, IndicatorsVisitor
     {
         Dictionary<Guid, List<GameObject>> circleIndicators = new Dictionary<Guid, List<GameObject>>(300);
+        Dictionary<Guid, List<GameObject>> rectangleIndicators = new Dictionary<Guid, List<GameObject>>(300);
         Dictionary<Guid, List<EngineEntity>> highlightedEntities = new Dictionary<Guid, List<EngineEntity>>(300);
-        public GameObject CircleIndicator;
+        public GameObject CircleIndicator, RectangleIndicator;
         public Color HighlightColor = Color.yellow;
 
         Guid? currentGuid = null;
@@ -68,6 +69,26 @@ namespace Pandora.UI
             }
         }
 
+        public void visit(LaneIndicator indicator)
+        {
+            var mapComponent = MapComponent.Instance;
+            var engine = mapComponent.engine;
+
+            var engineXPosition = (indicator.Lane.GridXPosition() * engine.UnitsPerCell) + engine.UnitsPerCell / 2;
+            var engineYPosition = (mapComponent.RiverY * engine.UnitsPerCell) + engine.UnitsPerCell / 2;
+
+            var position = engine.PhysicsToMapWorld(new Vector2Int(engineXPosition, engineYPosition));
+
+            var rectangle = Instantiate(RectangleIndicator, position, Quaternion.identity);
+
+            rectangle.GetComponent<RectangleIndicatorBehaviour>().Initialize(
+                mapComponent.engine.UnitsPerCell,
+                mapComponent.engine.UnitsPerCell * 15
+            );
+
+            addRectangleIndicator(rectangle);
+        }
+
         public void Clear(Guid guid)
         {
             if (highlightedEntities.ContainsKey(guid))
@@ -78,6 +99,8 @@ namespace Pandora.UI
 
                     entityHighlighter.Dehighlight(entityHighlighter.Current);
                 }
+
+                highlightedEntities.Remove(guid);
             }
 
             if (circleIndicators.ContainsKey(guid))
@@ -86,16 +109,37 @@ namespace Pandora.UI
                 {
                     Destroy(circle);
                 }
+
+                circleIndicators.Remove(guid);
             }
 
-            highlightedEntities.Clear();
-            circleIndicators.Clear();
+            if (rectangleIndicators.ContainsKey(guid))
+            {
+                foreach (var rectangle in rectangleIndicators[guid])
+                {
+                    Destroy(rectangle);
+                }
+
+                rectangleIndicators.Remove(guid);
+            }
         }
 
         public void Clear()
         {
             foreach (var guid in highlightedEntities.Keys) Clear(guid);
             foreach (var guid in circleIndicators.Keys) Clear(guid);
+        }
+
+
+        void addRectangleIndicator(GameObject circle)
+        {
+            if (currentGuid.HasValue)
+            {
+                if (rectangleIndicators.ContainsKey(currentGuid.Value))
+                    rectangleIndicators[currentGuid.Value].Add(circle);
+                else
+                    rectangleIndicators[currentGuid.Value] = new List<GameObject> { circle };
+            }
         }
 
         void addCircleIndicator(GameObject circle)

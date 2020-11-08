@@ -132,7 +132,7 @@ namespace Pandora.Deck
                         "Harpies"
                     };*/
 
-                    var cardNames = new List<string> { "Harpies" };
+                    var cardNames = new List<string> { "Mermaids" };
 
                     cards =
                         (from card in cardNames
