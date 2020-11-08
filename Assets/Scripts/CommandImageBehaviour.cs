@@ -19,6 +19,8 @@ namespace Pandora
         IndicatorsHandler indicatorsHandler;
         int lastRefresh = 0;
 
+        public CommandViewportBehaviour parent;
+
         void Start()
         {
             indicatorsHandler = MapComponent.Instance.GetComponent<IndicatorsHandler>();
@@ -41,6 +43,8 @@ namespace Pandora
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            parent.UnhighlightAll();
+
             if (SmartCast)
                 RunCommand();
             else
@@ -57,11 +61,16 @@ namespace Pandora
                 }
                 else
                 {
-                    ClearIndicators();
-
-                    cardHighlighter.Unhighlight();
+                    Unhighlight();
                 }
             }
+        }
+
+        public void Unhighlight()
+        {
+            ClearIndicators();
+
+            GetComponent<PositionCardHighlighter>()?.Unhighlight();
         }
 
         void RefreshIndicators()

@@ -87,7 +87,17 @@ namespace Pandora
             }
 
             handler.GetComponent<Image>().sprite = card.sprite;
-            handler.GetComponent<CommandImageBehaviour>().UnitId = id;
+
+            var imageBehaviour = handler.GetComponent<CommandImageBehaviour>();
+
+            imageBehaviour.UnitId = id;
+            imageBehaviour.parent = this;
+        }
+
+        public void UnhighlightAll() {
+            foreach (var handler in handlers) {
+                handler.GetComponent<CommandImageBehaviour>().Unhighlight();
+            }
         }
 
         void Awake()
