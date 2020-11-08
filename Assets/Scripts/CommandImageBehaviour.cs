@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace Pandora
 {
-    public class CommandImageBehaviour : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class CommandImageBehaviour : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragHandler
     {
         public string UnitId;
         public bool SmartCast = false;
@@ -37,13 +37,10 @@ namespace Pandora
             image = GetComponent<Image>();
         }
 
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            throw new NotImplementedException();
-        }
-
         public void OnDrag(PointerEventData eventData)
         {
+            if (SmartCast) return;
+
             dragging = true;
 
             if (!originalY.HasValue)
@@ -61,6 +58,8 @@ namespace Pandora
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (SmartCast) return;
+
             endDragTime = Time.time;
             dragging = false;
 
@@ -75,6 +74,12 @@ namespace Pandora
                 position.y = originalY.Value;
 
                 transform.position = position;
+
+                var color = image.color;
+
+                color.a = 1;
+
+                image.color = color;
             }
         }
 
@@ -178,6 +183,8 @@ namespace Pandora
 
         void RunCommand()
         {
+            ClearIndicators();
+
             FindCommandListener().Command();
         }
     }
