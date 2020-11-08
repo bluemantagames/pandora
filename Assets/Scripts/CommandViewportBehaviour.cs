@@ -96,7 +96,7 @@ namespace Pandora
 
         public void UnhighlightAll() {
             foreach (var handler in handlers) {
-                handler.GetComponent<CommandImageBehaviour>().Unhighlight();
+                handler?.GetComponent<CommandImageBehaviour>()?.Unhighlight();
             }
         }
 

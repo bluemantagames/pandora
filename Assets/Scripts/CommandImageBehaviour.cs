@@ -66,7 +66,7 @@ namespace Pandora
             var shouldActivateCommand = (eventData.position.y / commandsThreshold.transform.position.y) >= 1;
 
             if (shouldActivateCommand)
-                RunCommand();
+                runCommand();
             else if (originalY.HasValue)
             {
                 var position = transform.position;
@@ -93,7 +93,7 @@ namespace Pandora
             parent.UnhighlightAll();
 
             if (SmartCast)
-                RunCommand();
+                runCommand();
             else
             {
                 var cardHighlighter = GetComponent<PositionCardHighlighter>();
@@ -104,7 +104,7 @@ namespace Pandora
 
                     gameObject.AddComponent<PositionCardHighlighter>();
 
-                    RefreshIndicators();
+                    refreshIndicators();
                 }
                 else
                 {
@@ -115,21 +115,21 @@ namespace Pandora
 
         public void Unhighlight()
         {
-            ClearIndicators();
+            clearIndicators();
 
             GetComponent<PositionCardHighlighter>()?.Unhighlight();
         }
 
-        void RefreshIndicators()
+        void refreshIndicators()
         {
-            ClearIndicators();
+            clearIndicators();
 
             var indicators = FindCommandListener().GetComponentInParent<CommandBehaviour>().FindTargets();
 
             currentGuid = indicatorsHandler.ProcessIndicators(indicators);
         }
 
-        void ClearIndicators()
+        void clearIndicators()
         {
             if (currentGuid.HasValue)
             {
@@ -149,7 +149,7 @@ namespace Pandora
             {
                 lastRefresh = 0;
 
-                RefreshIndicators();
+                refreshIndicators();
             }
         }
 
@@ -181,9 +181,9 @@ namespace Pandora
             return null;
         }
 
-        void RunCommand()
+        void runCommand()
         {
-            ClearIndicators();
+            clearIndicators();
 
             FindCommandListener().Command();
         }
