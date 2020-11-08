@@ -7,6 +7,7 @@ using Pandora.Command;
 using System.Collections.Generic;
 using Pandora.UI.HUD;
 using Pandora.UI;
+using UnityEngine.UI;
 
 namespace Pandora
 {
@@ -16,14 +17,24 @@ namespace Pandora
         public bool SmartCast = false;
         public int RefreshEveryFrames = 20;
         Guid? currentGuid = null;
+        Image image;
         IndicatorsHandler indicatorsHandler;
         int lastRefresh = 0;
 
         public CommandViewportBehaviour parent;
+        GameObject commandsThreshold;
+        float? originalY = null, endDragTime = null;
+        float endDragDebounceTime = 0.2f;
+
+        bool dragging = false;
 
         void Start()
         {
             indicatorsHandler = MapComponent.Instance.GetComponent<IndicatorsHandler>();
+
+            commandsThreshold = GameObject.FindWithTag("CommandThreshold");
+
+            image = GetComponent<Image>();
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -33,16 +44,47 @@ namespace Pandora
 
         public void OnDrag(PointerEventData eventData)
         {
+            dragging = true;
+
+            if (!originalY.HasValue)
+                originalY = transform.position.y;
+
             transform.position = new Vector2(transform.position.x, eventData.position.y);
+
+            var transparency = (eventData.position.y / commandsThreshold.transform.position.y) * 0.8f;
+            var color = image.color;
+
+            color.a = 1f - transparency;
+
+            image.color = color;
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            throw new NotImplementedException();
+            endDragTime = Time.time;
+            dragging = false;
+
+            var shouldActivateCommand = (eventData.position.y / commandsThreshold.transform.position.y) >= 1;
+
+            if (shouldActivateCommand)
+                RunCommand();
+            else if (originalY.HasValue)
+            {
+                var position = transform.position;
+
+                position.y = originalY.Value;
+
+                transform.position = position;
+            }
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            var shouldDebounce =
+                (endDragTime.HasValue && Time.time - endDragTime.Value < endDragDebounceTime) || dragging;
+
+            if (shouldDebounce) return;
+
             parent.UnhighlightAll();
 
             if (SmartCast)
@@ -84,19 +126,22 @@ namespace Pandora
 
         void ClearIndicators()
         {
-            if (currentGuid.HasValue) {
+            if (currentGuid.HasValue)
+            {
                 indicatorsHandler.Clear(currentGuid.Value);
 
                 currentGuid = null;
             }
         }
 
-        void Update() {
+        void Update()
+        {
             if (!currentGuid.HasValue) return;
 
             lastRefresh++;
 
-            if (lastRefresh > RefreshEveryFrames) {
+            if (lastRefresh > RefreshEveryFrames)
+            {
                 lastRefresh = 0;
 
                 RefreshIndicators();
