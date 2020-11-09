@@ -9,6 +9,7 @@ namespace Pandora.UI
     public class IndicatorsHandler : MonoBehaviour, IndicatorsVisitor
     {
         Dictionary<Guid, List<GameObject>> circleIndicators = new Dictionary<Guid, List<GameObject>>(300);
+        Dictionary<Guid, List<GameObject>> followingIndicators = new Dictionary<Guid, List<GameObject>>(300);
         Dictionary<Guid, List<GameObject>> rectangleIndicators = new Dictionary<Guid, List<GameObject>>(300);
         Dictionary<Guid, List<EngineEntity>> highlightedEntities = new Dictionary<Guid, List<EngineEntity>>(300);
         public GameObject CircleIndicator, RectangleIndicator;
@@ -34,7 +35,7 @@ namespace Pandora.UI
 
             circle.GetComponent<CircleIndicatorBehaviour>().Initialize(indicator.RadiusEngineUnits);
 
-            addCircleIndicator(circle);
+            addToDictionary(circleIndicators, circle);
         }
 
         public void visit(CircleRangeIndicator indicator)
@@ -47,7 +48,7 @@ namespace Pandora.UI
 
             circle.GetComponent<CircleIndicatorBehaviour>().Initialize(indicator.RadiusEngineUnits);
 
-            addCircleIndicator(circle);
+            addToDictionary(circleIndicators, circle);
         }
 
         public void visit(EntitiesIndicator indicator)
@@ -65,7 +66,7 @@ namespace Pandora.UI
 
                 entityHighlighter.Highlight(new ColorHighlight(HighlightColor));
 
-                addHighlightedEntity(entity);
+                addToDictionary(highlightedEntities, entity);
             }
         }
 
@@ -86,7 +87,15 @@ namespace Pandora.UI
                 mapComponent.engine.UnitsPerCell * 15
             );
 
-            addRectangleIndicator(rectangle);
+            addToDictionary(rectangleIndicators, rectangle);
+        }
+
+
+        public void visit(FollowingGameObjectIndicator indicator)
+        {
+            var instance = Instantiate(indicator.Following, Vector3.zero, Quaternion.identity, indicator.Followed.transform);
+
+            addToDictionary(followingIndicators, instance);
         }
 
         public void Clear(Guid guid)
@@ -122,12 +131,24 @@ namespace Pandora.UI
 
                 rectangleIndicators.Remove(guid);
             }
+
+            if (followingIndicators.ContainsKey(guid))
+            {
+                foreach (var indicator in followingIndicators[guid])
+                {
+                    Destroy(indicator);
+                }
+
+                followingIndicators.Remove(guid);
+            }
         }
 
         public void Clear()
         {
             foreach (var guid in highlightedEntities.Keys) Clear(guid);
             foreach (var guid in circleIndicators.Keys) Clear(guid);
+            foreach (var guid in rectangleIndicators.Keys) Clear(guid);
+            foreach (var guid in followingIndicators.Keys) Clear(guid);
         }
 
 
@@ -142,25 +163,12 @@ namespace Pandora.UI
             }
         }
 
-        void addCircleIndicator(GameObject circle)
-        {
-            if (currentGuid.HasValue)
-            {
-                if (circleIndicators.ContainsKey(currentGuid.Value))
-                    circleIndicators[currentGuid.Value].Add(circle);
+        void addToDictionary<A>(Dictionary<Guid, List<A>> dictionary, A instance) {
+            if (currentGuid.HasValue) {
+                if (dictionary.ContainsKey(currentGuid.Value))
+                    dictionary[currentGuid.Value].Add(instance);
                 else
-                    circleIndicators[currentGuid.Value] = new List<GameObject> { circle };
-            }
-        }
-
-        void addHighlightedEntity(EngineEntity entity)
-        {
-            if (currentGuid.HasValue)
-            {
-                if (highlightedEntities.ContainsKey(currentGuid.Value))
-                    highlightedEntities[currentGuid.Value].Add(entity);
-                else
-                    highlightedEntities[currentGuid.Value] = new List<EngineEntity> { entity };
+                    dictionary[currentGuid.Value] = new List<A> { instance };
             }
         }
     }

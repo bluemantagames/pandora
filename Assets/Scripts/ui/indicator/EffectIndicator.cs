@@ -52,6 +52,25 @@ namespace Pandora.UI {
         }
     }
 
+
+    /// <summary>
+    /// Place a gameobject indicator, following a unit or a structure
+    /// <summary>
+    public class FollowingGameObjectIndicator: EffectIndicator {
+        public GameObject Followed, Following;
+
+        public FollowingGameObjectIndicator(GameObject followed, GameObject following)
+        {
+            Followed = followed;
+            Following = Following;
+        }
+
+        public void visit(IndicatorsVisitor visitor)
+        {
+            visitor.visit(this);
+        }
+    }
+
     /// <summary>
     /// Highlight multiple engine entities
     /// </summary>

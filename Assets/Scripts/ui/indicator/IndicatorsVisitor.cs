@@ -7,6 +7,7 @@ using Pandora.Engine;
 namespace Pandora.UI {
     public interface IndicatorsVisitor {
         void visit(FollowingCircleRangeIndicator indicator);
+        void visit(FollowingGameObjectIndicator indicator);
         void visit(CircleRangeIndicator indicator);
         void visit(EntitiesIndicator indicator);
         void visit(LaneIndicator indicator);
