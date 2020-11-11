@@ -5,27 +5,29 @@ using Pandora;
 
 public class TriangleRenderer : MonoBehaviour
 {
+    public Material TriangleMaterial;
+
     // Start is called before the first frame update
-    void Start()
+    public void Initialize(Vector3 worldV1, Vector3 worldV2, Vector3 worldV3)
     {
-        var mapComponent = MapComponent.Instance;
-        var collider = mapComponent.GetComponent<BoxCollider2D>();
-
         var mesh = gameObject.AddComponent<MeshFilter>().mesh;
-        gameObject.AddComponent<MeshRenderer>();
-
-        var right = (Vector2) collider.transform.position + collider.size;
-        right.y = collider.transform.position.y;
+        var meshRenderer = gameObject.AddComponent<MeshRenderer>();
 
         mesh.Clear();
-        mesh.vertices = new Vector3[] { transform.InverseTransformPoint(collider.transform.position), transform.InverseTransformPoint(collider.transform.position + (Vector3) collider.size), transform.InverseTransformPoint(right) };
+        mesh.vertices = new Vector3[] { transform.InverseTransformPoint(worldV1), transform.InverseTransformPoint(worldV2), transform.InverseTransformPoint(worldV3) };
         mesh.triangles = new int[] { 0, 1, 2 };
-        mesh.colors = new Color[] { Color.yellow, Color.yellow, Color.yellow };
+
+        meshRenderer.material = TriangleMaterial;
+
+        var position = transform.position;
+
+        position.z = -1;
+
+        transform.position = position;
     }
 
     // Update is called once per frame
     void Update()
     {
-
     }
 }

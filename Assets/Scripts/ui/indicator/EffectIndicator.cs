@@ -54,15 +54,14 @@ namespace Pandora.UI {
 
 
     /// <summary>
-    /// Place a gameobject indicator, following a unit or a structure
+    /// Keeps track of a game object that's used as an indicator, managing its lifecycle
     /// <summary>
-    public class FollowingGameObjectIndicator: EffectIndicator {
-        public GameObject Followed, Following;
+    public class GameObjectIndicator: EffectIndicator {
+        public GameObject Indicator;
 
-        public FollowingGameObjectIndicator(GameObject followed, GameObject following)
+        public GameObjectIndicator(GameObject indicator)
         {
-            Followed = followed;
-            Following = Following;
+            Indicator = indicator;
         }
 
         public void visit(IndicatorsVisitor visitor)

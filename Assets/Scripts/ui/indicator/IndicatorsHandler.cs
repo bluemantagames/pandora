@@ -9,7 +9,7 @@ namespace Pandora.UI
     public class IndicatorsHandler : MonoBehaviour, IndicatorsVisitor
     {
         Dictionary<Guid, List<GameObject>> circleIndicators = new Dictionary<Guid, List<GameObject>>(300);
-        Dictionary<Guid, List<GameObject>> followingIndicators = new Dictionary<Guid, List<GameObject>>(300);
+        Dictionary<Guid, List<GameObject>> managedIndicators = new Dictionary<Guid, List<GameObject>>(300);
         Dictionary<Guid, List<GameObject>> rectangleIndicators = new Dictionary<Guid, List<GameObject>>(300);
         Dictionary<Guid, List<EngineEntity>> highlightedEntities = new Dictionary<Guid, List<EngineEntity>>(300);
         public GameObject CircleIndicator, RectangleIndicator;
@@ -91,11 +91,9 @@ namespace Pandora.UI
         }
 
 
-        public void visit(FollowingGameObjectIndicator indicator)
+        public void visit(GameObjectIndicator indicator)
         {
-            var instance = Instantiate(indicator.Following, Vector3.zero, Quaternion.identity, indicator.Followed.transform);
-
-            addToDictionary(followingIndicators, instance);
+            addToDictionary(managedIndicators, indicator.Indicator);
         }
 
         public void Clear(Guid guid)
@@ -132,14 +130,14 @@ namespace Pandora.UI
                 rectangleIndicators.Remove(guid);
             }
 
-            if (followingIndicators.ContainsKey(guid))
+            if (managedIndicators.ContainsKey(guid))
             {
-                foreach (var indicator in followingIndicators[guid])
+                foreach (var indicator in managedIndicators[guid])
                 {
                     Destroy(indicator);
                 }
 
-                followingIndicators.Remove(guid);
+                managedIndicators.Remove(guid);
             }
         }
 
@@ -148,7 +146,7 @@ namespace Pandora.UI
             foreach (var guid in highlightedEntities.Keys) Clear(guid);
             foreach (var guid in circleIndicators.Keys) Clear(guid);
             foreach (var guid in rectangleIndicators.Keys) Clear(guid);
-            foreach (var guid in followingIndicators.Keys) Clear(guid);
+            foreach (var guid in managedIndicators.Keys) Clear(guid);
         }
 
 

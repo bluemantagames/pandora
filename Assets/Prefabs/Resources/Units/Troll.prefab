@@ -376,9 +376,12 @@ MonoBehaviour:
   Width: 4000
   Height: 3000
   Damage: 65
+  UnitsLeniency: 20
   DebugLines: 1
   EffectObjects:
   - {fileID: 2016888992844160403, guid: cd54571460e65a54798ea4d9536916ee, type: 3}
+  TriangleIndicator: {fileID: 6283617204288975117, guid: 2ab4f38c7319d4193b4de02a96b1b065,
+    type: 3}
 --- !u!114 &3679560021763947257
 MonoBehaviour:
   m_ObjectHideFlags: 0
