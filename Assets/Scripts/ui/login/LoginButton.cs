@@ -21,11 +21,13 @@ namespace Pandora.UI.Login
         {
             playerModelSingleton = PlayerModelSingleton.instance;
 
-            if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey)) {
+            // Google Play Games auth
+            PlayGames.Authenticate();
+
+            if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey))
+            {
                 UsernameInput.text = PlayerPrefs.GetString(usernameKey);
                 PasswordInput.text = PlayerPrefs.GetString(passwordKey);
-
-                Login();
             }
         }
 
@@ -33,7 +35,8 @@ namespace Pandora.UI.Login
         {
             var apiController = ApiControllerSingleton.instance;
 
-            if (UseProdMatchmaking) {
+            if (UseProdMatchmaking)
+            {
                 ApiControllerSingleton.instance.IsDebugBuild = false;
             }
 
