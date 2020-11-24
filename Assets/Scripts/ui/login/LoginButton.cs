@@ -13,16 +13,19 @@ namespace Pandora.UI.Login
         public Text ErrorText = null;
         public InputField UsernameInput = null;
         public InputField PasswordInput = null;
+        public bool UseProdMatchmaking = false;
         private string oldButtonText = null, usernameKey = "username", passwordKey = "password";
         private PlayerModelSingleton playerModelSingleton;
-        public bool UseProdMatchmaking = false;
+        private PlayGames playGamesInstance = null;
+
 
         void Start()
         {
             playerModelSingleton = PlayerModelSingleton.instance;
+            playGamesInstance = PlayGames.instance;
 
             // Google Play Games auth
-            PlayGames.Authenticate();
+            _ = playGamesInstance.Authenticate();
 
             if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey))
             {
