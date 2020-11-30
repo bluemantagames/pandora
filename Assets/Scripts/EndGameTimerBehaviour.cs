@@ -7,8 +7,9 @@ using Pandora;
 
 public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
 {
-    public uint GameDurationSeconds = 10;
-    public string ComponentName {
+    public uint GameDurationSeconds = 180;
+    public string ComponentName
+    {
         get => "EndGameBehaviour";
     }
     public Text TitleComponent;
@@ -17,6 +18,8 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
     private uint msDuration;
     private uint timePassed;
     private bool winnerTextSet = false;
+    Text text;
+    PandoraEngine engine;
 
     EngineComponent engineComponent;
 
@@ -25,21 +28,20 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
         timePassed = 0;
         msDuration = GameDurationSeconds * 1000;
 
-        engineComponent = GetComponent<EngineComponent>();
+        text = GetComponent<Text>();
 
-        if (engineComponent != null) 
-        {
-            engineComponent.Engine.AddBehaviour(this);
-        }
+        engine = MapComponent.Instance.engine;
+
+        engine.AddBehaviour(this);
     }
 
     public void TickUpdate(uint timeLapsed)
-    {                
-        if (EndGameSingleton.Instance.GameEnded) 
+    {
+        if (EndGameSingleton.Instance.GameEnded)
         {
             if (!winnerTextSet)
             {
-                SetWinnerText(EndGameSingleton.Instance.WinnerTeam);
+                // TODO: Match ended
                 winnerTextSet = true;
             }
 
@@ -48,47 +50,25 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
 
         timePassed += timeLapsed;
 
-        if (TimerComponent)
-        {
-            var timeLeft = msDuration - timePassed;
+        var timeLeft = msDuration - timePassed;
 
-            TimerComponent.text = TimeSpan
-                .FromMilliseconds(timeLeft)
-                .ToString(@"mm\:ss\:ff");
-        }
+        text.text = TimeSpan
+            .FromMilliseconds(timeLeft)
+            .ToString(@"mm\:ss");
 
-        if (timePassed % msDuration <= 0 && engineComponent != null) 
+        if (timePassed % msDuration <= 0 && engine != null)
         {
             // The game has ended
             var winnerTeam = GetWinnerTeam();
 
             EndGameSingleton.Instance.SetWinner(
-                winnerTeam, 
-                engineComponent.Engine.TotalElapsed
+                winnerTeam,
+                engine.TotalElapsed
             );
         }
     }
-    
-    public void SetWinnerText(int winnerTeam)
-    {
-        if (TimerComponent == null) return;
 
-        if (TitleComponent != null)
-        {
-            TitleComponent.text = "Match result:";
-        }
-
-        if (winnerTeam == 0)
-        {
-            TimerComponent.text = $"DRAW";
-        }
-        else 
-        {
-            TimerComponent.text = $"TEAM {winnerTeam} WON";
-        }
-    }
-
-    int GetWinnerTeam() 
+    int GetWinnerTeam()
     {
         int bottomLowestHp = -1;
         int topLowestHp = -1;
@@ -138,8 +118,8 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
         if (bottomLowestHp > topLowestHp)
             return TeamComponent.bottomTeam;
         else if (topLowestHp > bottomLowestHp)
-            return TeamComponent.topTeam; 
-        
+            return TeamComponent.topTeam;
+
         // Otherwise it's a draw...
         return 0;
     }
