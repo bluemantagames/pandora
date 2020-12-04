@@ -8,6 +8,7 @@ namespace Pandora.Resource.Mana {
         public float OriginalWidth;
         Image image;
         AnimationCurve earnCurve = null;
+        bool childSet = false;
 
         float _percent = 0f;
 
@@ -30,8 +31,7 @@ namespace Pandora.Resource.Mana {
         void Start() {
             image = GetComponent<Image>();
             OriginalWidth = image.rectTransform.rect.width;
-
-            setChildProperSize();
+            //setChildProperSize();
         }
 
         public void PlayEarnAnimation() {
@@ -67,15 +67,23 @@ namespace Pandora.Resource.Mana {
             var manaImage = transform.GetChild(0);
             var childRectTransform = manaImage.GetComponent<Image>().rectTransform;
             
-            childRectTransform.position = image.rectTransform.position;
+            childRectTransform.anchorMax = new Vector2(0, 0);
+            childRectTransform.anchorMin = new Vector2(0, 0);
 
-            childRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, image.rectTransform.rect.width);
-            childRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, image.rectTransform.rect.height);
+            var oldSizeDelta = childRectTransform.sizeDelta;
 
             image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0f);
+
+            childRectTransform.sizeDelta = oldSizeDelta;
         }
 
         void Update() {
+            if (!childSet) {
+                setChildProperSize();
+
+                childSet = true;
+            }
+
             if (IsPlaying && Percent < 1f)
                 Percent = earnCurve.Evaluate(Time.time);
         }
