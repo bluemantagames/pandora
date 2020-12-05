@@ -5,10 +5,11 @@ using Cysharp.Threading.Tasks;
 
 namespace Pandora.Resource.Mana {
     public class ManaMaskComponent: MonoBehaviour {
-        public float OriginalWidth;
+        public float OriginalWidth = 0f;
         Image image;
         AnimationCurve earnCurve = null;
         bool childSet = false;
+        RectTransform childRectTransform;
 
         float _percent = 0f;
 
@@ -30,7 +31,7 @@ namespace Pandora.Resource.Mana {
 
         void Start() {
             image = GetComponent<Image>();
-            OriginalWidth = image.rectTransform.rect.width;
+            childRectTransform = transform.GetChild(0).GetComponent<Image>().rectTransform;
             //setChildProperSize();
         }
 
@@ -58,27 +59,34 @@ namespace Pandora.Resource.Mana {
         /// <summary>
         /// This needs a proper explaination:
         ///
-        /// We need the mana bar to be as big as the mask image, but it cannot be anchored to the four corners
+        /// We need the mana bar to be as big as the mask image, but it cannot be anchored permanently to the four corners
         /// (stretched) because we also need to be able to reduce the size of this mask independently of the
-        /// size and position of the child. For this reason, here we rescale the child to fit the mask
-        /// again
+        /// size and position of the child. For this reason, here we deanchor the mana image from the mask and reset the position because of
+        /// Unity layouting quirks
         /// </summary>
         void setChildProperSize() {
-            var manaImage = transform.GetChild(0);
-            var childRectTransform = manaImage.GetComponent<Image>().rectTransform;
-            
-            childRectTransform.anchorMax = new Vector2(0, 0);
+            var horizontalSize = childRectTransform.rect.width;
+            var verticalSize = childRectTransform.rect.height;
+
             childRectTransform.anchorMin = new Vector2(0, 0);
+            childRectTransform.anchorMax = new Vector2(0, 0);
 
-            var oldSizeDelta = childRectTransform.sizeDelta;
-
+            childRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, horizontalSize);
+            childRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, verticalSize);
             image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0f);
 
-            childRectTransform.sizeDelta = oldSizeDelta;
+            childRectTransform.position = transform.parent.position;
         }
 
         void Update() {
-            if (!childSet) {
+            // It appears that the widths are actually zero for a few frames
+            // hence the various if conditions
+
+            if (OriginalWidth == 0f && image.rectTransform.rect.width != 0) {
+                OriginalWidth = image.rectTransform.rect.width;
+            }
+
+            if (OriginalWidth != 0 && childRectTransform.rect.width != 0 && !childSet) {
                 setChildProperSize();
 
                 childSet = true;
