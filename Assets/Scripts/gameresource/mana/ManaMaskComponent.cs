@@ -32,7 +32,12 @@ namespace Pandora.Resource.Mana {
         void Start() {
             image = GetComponent<Image>();
             childRectTransform = transform.GetChild(0).GetComponent<Image>().rectTransform;
-            //setChildProperSize();
+
+            // Set the resolution now, before playing with the various objects sizes
+            Screen.fullScreen = false;
+            Screen.SetResolution(720, 1280, false);
+
+            Application.targetFrameRate = 30;
         }
 
         public void PlayEarnAnimation() {
@@ -81,7 +86,6 @@ namespace Pandora.Resource.Mana {
         void Update() {
             // It appears that the widths are actually zero for a few frames
             // hence the various if conditions
-
             if (OriginalWidth == 0f && image.rectTransform.rect.width != 0) {
                 OriginalWidth = image.rectTransform.rect.width;
             }
