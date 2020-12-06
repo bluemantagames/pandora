@@ -35,6 +35,7 @@ namespace Pandora
         public float localTime = 0;
         public Dictionary<int, HashSet<GridCell>> TowerPositionsDictionary = new Dictionary<int, HashSet<GridCell>>();
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
+        public GameObject CommandsViewport;
         float firstLaneX = 2, secondLaneX = 13;
         CustomSampler aggroSampler, targetValidSampler;
 
@@ -114,7 +115,10 @@ namespace Pandora
 
             timeSinceLastStep = frameStep; // initialize time since last step so we don't skip frames
 
-            Application.targetFrameRate = 30;
+            // The commands viewport horizonal layout seems to not work unless we disable and enable it again here
+            // it probably needs it because we set the resolution earlier
+            CommandsViewport.SetActive(false);
+            CommandsViewport.SetActive(true);
 
             var topArena = GameObject.Find("top_arena");
             var topArenaPosition = topArena.transform.position;
