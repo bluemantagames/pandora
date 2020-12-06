@@ -114,9 +114,6 @@ namespace Pandora
 
             timeSinceLastStep = frameStep; // initialize time since last step so we don't skip frames
 
-            Screen.fullScreen = false;
-            Screen.SetResolution(720, 1280, false);
-
             Application.targetFrameRate = 30;
 
             var topArena = GameObject.Find("top_arena");

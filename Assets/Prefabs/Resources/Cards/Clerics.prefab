@@ -12,39 +12,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Clerics
       objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: Puppet
-      value: 
-      objectReference: {fileID: 4546825404429134782, guid: 85fcd5f9f93018d4db469f871f8d0dd1,
-        type: 3}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: Card
-      value: 
-      objectReference: {fileID: 1060352442105845753, guid: c5edff71eec47064f840955c4743dcb7,
-        type: 3}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: CardName
-      value: Clerics
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: UnitName
-      value: ClericsSpawner
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: RequiredMana
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -4844795113123044640, guid: 5d99a425df70f0044acf7b79f6d0d1d9,
-        type: 3}
     - target: {fileID: 1069214256245577549, guid: f3024322f337f5844bd8d8be1328fece,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -150,6 +117,39 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: Puppet
+      value: 
+      objectReference: {fileID: 4546825404429134782, guid: 85fcd5f9f93018d4db469f871f8d0dd1,
+        type: 3}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 1060352442105845753, guid: c5edff71eec47064f840955c4743dcb7,
+        type: 3}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: CardName
+      value: Clerics
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: UnitName
+      value: ClericsSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: RequiredMana
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -4844795113123044640, guid: 5d99a425df70f0044acf7b79f6d0d1d9,
+        type: 3}
     - target: {fileID: 4796144050406697625, guid: f3024322f337f5844bd8d8be1328fece,
         type: 3}
       propertyPath: m_UsedByEffector
@@ -159,6 +159,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_UsedByComposite
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5461111731191396615, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -67.05002
+      objectReference: {fileID: 0}
+    - target: {fileID: 5461111731191396615, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 70.25002
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3024322f337f5844bd8d8be1328fece, type: 3}
