@@ -1,6 +1,8 @@
 using UnityEngine;
 using Pandora.Combat;
 using Pandora.Engine;
+using System.Collections.Generic;
+using Pandora.UI;
 
 namespace Pandora.Command
 {
@@ -20,6 +22,26 @@ namespace Pandora.Command
 
         public void InvokeCommand()
         {
+            EngineEntity targetEntity = FindConverted();
+
+            var isEveryoneAlive = groupComponent.Objects.TrueForAll(unit => !unit.GetComponent<LifeComponent>().IsDead);
+
+            if (isEveryoneAlive && targetEntity != null) {
+                targetEntity.GameObject.GetComponent<TeamComponent>().Convert(team.Team);
+
+                foreach (var cleric in groupComponent.Objects) {
+                    var lifeComponent = cleric.GetComponent<LifeComponent>();
+
+                    lifeComponent.AssignDamage(lifeComponent.lifeValue, new UnitCommand(gameObject));
+                }
+            } else {
+                Logger.DebugWarning("Somebody is dead or no valid targets, cannot convert");
+            }
+        }
+
+        private bool IsTopSide(GridCell cell) => cell.vector.y >= MapComponent.Instance.bottomMapSizeY + 1;
+
+        private EngineEntity FindConverted() {
             int? minLife = null;
             EngineEntity targetEntity = null;
 
@@ -46,21 +68,21 @@ namespace Pandora.Command
                 }
             }
 
-            var isEveryoneAlive = groupComponent.Objects.TrueForAll(unit => !unit.GetComponent<LifeComponent>().IsDead);
-
-            if (isEveryoneAlive && targetEntity != null) {
-                targetEntity.GameObject.GetComponent<TeamComponent>().Convert(team.Team);
-
-                foreach (var cleric in groupComponent.Objects) {
-                    var lifeComponent = cleric.GetComponent<LifeComponent>();
-
-                    lifeComponent.AssignDamage(lifeComponent.lifeValue, new UnitCommand(gameObject));
-                }
-            } else {
-                Logger.DebugWarning("Somebody is dead or no valid targets, cannot convert");
-            }
+            return targetEntity;
         }
 
-        private bool IsTopSide(GridCell cell) => cell.vector.y >= MapComponent.Instance.bottomMapSizeY + 1;
+        public List<EffectIndicator> FindTargets()
+        {
+            var target = FindConverted();
+
+            if (target != null)
+                return new List<EffectIndicator> {
+                    new EntitiesIndicator(
+                        new List<EngineEntity> { FindConverted() }
+                    )
+                };
+            else
+                return new List<EffectIndicator> {};
+        }
     }
 }

@@ -1,5 +1,7 @@
 using UnityEngine;
 using Pandora.Combat;
+using System.Collections.Generic;
+using Pandora.UI;
 
 namespace Pandora.Command
 {
@@ -37,5 +39,9 @@ namespace Pandora.Command
             }
         }
 
+        public List<EffectIndicator> FindTargets()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

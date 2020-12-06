@@ -120,6 +120,21 @@ namespace Pandora.Network
         }
 
         /// <summary>
+        /// Sign in using Google Play
+        /// </summary>
+        /// <param name="token">The Google token to exchange for authentication</param>
+        /// <returns>A Task with a GoogleSignInResponse (the token)</returns>
+        public Task<ApiResponse<GoogleSignInResponse>> GoogleSignIn(string token)
+        {
+            var request = new RestRequest("/users/googleSignIn", Method.POST);
+            var param = new GoogleSignInRequest { token = token };
+
+            request.AddJsonBody(param);
+
+            return ExecuteApiRequest<GoogleSignInResponse>(request);
+        }
+
+        /// <summary>
         /// Make a signup request
         /// </summary>
         /// <param name="username">The username string</param>

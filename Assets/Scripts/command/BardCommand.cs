@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Pandora.Engine;
 using Pandora.Combat;
+using Pandora.UI;
+using System.Collections.Generic;
 
 namespace Pandora.Command
 {
@@ -10,34 +12,77 @@ namespace Pandora.Command
         public int Radius = 3000;
         public bool DebugLines = false;
         public GameObject[] EffectObjects;
+        List<EngineEntity> targets = new List<EngineEntity>(300);
+        List<EffectIndicator> commandIndicators = new List<EffectIndicator>(300);
+        TeamComponent sourceTeam;
+        EngineEntity sourceEntity;
+
+        List<EngineEntity> FindBuffTargets()
+        {
+            targets.Clear();
+
+            var entities = MapComponent.Instance.engine.Entities;
+
+            foreach (var targetEntity in entities)
+            {
+                var teamComponent = targetEntity.GameObject.GetComponent<TeamComponent>();
+
+                if (teamComponent == null) continue;
+
+                var targetTeam = teamComponent.Team;
+
+                if (sourceTeam.Team != targetTeam) continue;
+
+                if (targetEntity.Engine.IsInCircularRange(sourceEntity, targetEntity, Radius, DebugLines))
+                {
+                    targets.Add(targetEntity);
+                }
+            }
+
+            return targets;
+        }
+
+        void Start() {
+            sourceTeam = GetComponent<TeamComponent>();
+            sourceEntity = gameObject.GetComponent<EngineComponent>().Entity;
+        }
+
+        public List<EffectIndicator> FindTargets()
+        {
+            commandIndicators.Clear();
+
+            commandIndicators.Add(
+                new EntitiesIndicator(FindBuffTargets())
+            );
+
+            commandIndicators.Add(
+                new FollowingCircleRangeIndicator(Radius, gameObject)
+            );
+
+            return commandIndicators;
+        }
 
         public void InvokeCommand()
         {
             Logger.Debug("[Bard] Command invoked");
 
             var sourceEntity = GetComponent<EngineComponent>().Entity;
-            var sourceTeam = GetComponent<TeamComponent>().Team;
             var sourceAnimator = GetComponent<Animator>();
 
             // Execute the attack animation
             sourceAnimator.Play("BardAttack");
 
-            foreach (var targetLifeComponent in MapComponent.Instance.gameObject.GetComponentsInChildren<LifeComponent>())
+            var targets = FindBuffTargets();
+
+            foreach (var targetEntity in targets)
             {
-                var targetGameObject = targetLifeComponent.gameObject;
-                var targetEntity = targetGameObject.GetComponent<EngineComponent>().Entity;
-                var targetTeam = targetGameObject.GetComponent<TeamComponent>().Team;
+                var targetGameObject = targetEntity.GameObject;
 
-                if (sourceTeam != targetTeam) continue;
-
-                if (sourceEntity.Engine.IsInCircularRange(sourceEntity, targetEntity, Radius, DebugLines))
+                foreach (var effectObject in EffectObjects)
                 {
-                    foreach (var effectObject in EffectObjects)
-                    {
-                        var effect = effectObject.GetComponent<Effect>();
+                    var effect = effectObject.GetComponent<Effect>();
 
-                        effect.Apply(gameObject, targetGameObject);
-                    }
+                    effect.Apply(gameObject, targetGameObject);
                 }
             }
         }

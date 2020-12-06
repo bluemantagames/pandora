@@ -10,14 +10,32 @@ namespace Pandora.Resource.Gold.Shop {
     {
         public GameObject Modal;
         public GameObject ModalContent;
+        public GameObject ShopContainer;
+        public Sprite OpenShopSprite;
+        Image image;
+
+        Sprite closedShopSprite;
+        bool isOpen = false;
+
+        void Start() {
+            image = GetComponent<Image>();
+
+            closedShopSprite = image.sprite;
+        }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            var modal = Instantiate(Modal);
+            isOpen = !isOpen;
 
-            modal.GetComponentInChildren<ModalBehaviour>().AddContent(ModalContent);
+            if (isOpen) {
+                ShopContainer.SetActive(true);
 
-            Logger.Debug("Shop button clicked");
+                image.sprite = OpenShopSprite;
+            } else {
+                ShopContainer.SetActive(false);
+
+                image.sprite = closedShopSprite;
+            }
         }
     }
 

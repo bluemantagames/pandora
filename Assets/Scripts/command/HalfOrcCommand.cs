@@ -2,12 +2,19 @@
 using Pandora.Engine;
 using Pandora.Network;
 using Pandora.Resource.Mana;
+using System.Collections.Generic;
+using Pandora.UI;
 
 namespace Pandora.Command
 {
     /// <summary>On double tap, the Half Orc will split into two melee units (the rider and its mount)</summary>
     public class HalfOrcCommand : MonoBehaviour, CommandBehaviour
     {
+        public List<EffectIndicator> FindTargets()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void InvokeCommand()
         {
             Logger.Debug("[HalfOrc] Command invoked");

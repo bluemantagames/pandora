@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 namespace Pandora
 {
-    public class CommandViewportBehaviour : MonoBehaviour
+    public class CommandViewportBehaviour : MonoBehaviour, IPointerDownHandler
     {
         List<GameObject> handlers = new List<GameObject> { };
 
@@ -19,24 +20,8 @@ namespace Pandora
             get => _instance;
         }
 
-        public void DrawCommands()
-        {
-            var rect = GetComponent<RectTransform>();
-
-            for (var i = 0; i < handlers.Count; i++)
-            {
-                var handler = handlers[i];
-
-                if (handler == null) continue;
-
-                var handlerRect = handler.GetComponent<RectTransform>();
-                var width = handlerRect.rect.width;
-                var height = handlerRect.rect.height;
-                var handlerPosition = new Vector2((i * width) + width / 2, -rect.rect.height / 2);
-
-                handlerRect.localPosition = handlerPosition;
-            }
-        }
+        RectTransform rect;
+        GraphicRaycaster graphicRaycaster;
 
         public void RemoveCommand(string id)
         {
@@ -55,8 +40,6 @@ namespace Pandora
                     break;
                 }
             }
-
-            DrawCommands();
         }
 
 
@@ -106,9 +89,17 @@ namespace Pandora
             }
 
             handler.GetComponent<Image>().sprite = card.sprite;
-            handler.GetComponent<CommandImageBehaviour>().UnitId = id;
 
-            DrawCommands();
+            var imageBehaviour = handler.GetComponent<CommandImageBehaviour>();
+
+            imageBehaviour.UnitId = id;
+            imageBehaviour.parent = this;
+        }
+
+        public void UnhighlightAll() {
+            foreach (var handler in handlers) {
+                handler?.GetComponent<CommandImageBehaviour>()?.Unhighlight();
+            }
         }
 
         void Awake()
@@ -116,9 +107,28 @@ namespace Pandora
             _instance = this;
         }
 
-        void Update()
-        {
+        void Start() {
+            rect = GetComponent<RectTransform>();
 
+            graphicRaycaster = GetComponent<GraphicRaycaster>();
+        }
+
+        // Bubble OnPointerDown events to the MapComponent if they are not
+        // in the rectangle handled by the command handlers
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            var isHandledByCommands = false;
+
+            Debug.Log("OnPointerDown viewport");
+
+            var results = new List<RaycastResult> {};
+
+            graphicRaycaster.Raycast(eventData, results);
+
+            isHandledByCommands = (results.Count - 1) > 0;
+
+            if (!isHandledByCommands)
+                MapComponent.Instance.OnPointerDown(eventData);
         }
     }
 

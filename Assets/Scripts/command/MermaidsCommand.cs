@@ -3,6 +3,8 @@ using System.Linq;
 using Pandora.Combat;
 using Pandora.Engine;
 using Pandora.Movement;
+using System.Collections.Generic;
+using Pandora.UI;
 
 namespace Pandora.Command
 {
@@ -15,16 +17,28 @@ namespace Pandora.Command
         public GameObject TornadoObject;
         public Vector2Int LeftBridgePosition, RightBridgePosition;
 
+        EngineComponent engineComponent;
+
+        void Start () {
+            engineComponent = GetComponentInParent<EngineComponent>();
+        }
+
+        public List<EffectIndicator> FindTargets()
+        {
+            return new List<EffectIndicator> {
+                new LaneIndicator(findLane())
+            };
+        }
+
         public void InvokeCommand()
         {
             var mapComponent = MapComponent.Instance;
 
-            var position = GetComponentInParent<EngineComponent>().Entity.GetCurrentCell();
-
             var engine = mapComponent.engine;
             var teamComponent = GetComponentInParent<TeamComponent>();
 
-            var tornadoPosition = (position.vector.x > mapComponent.mapSizeX / 2) ? RightBridgePosition : LeftBridgePosition;
+            var tornadoLane = findLane();
+            var tornadoPosition = (tornadoLane == Lane.Right) ? RightBridgePosition : LeftBridgePosition;
 
             var tornado = Instantiate(TornadoObject, Vector3.zero, Quaternion.identity);
 
@@ -34,13 +48,20 @@ namespace Pandora.Command
 
             var entity = engine.AddEntity(tornado, 0, entityPosition, false, PandoraEngine.SafeGenerateTimestamp(tornado));
 
-            var engineComponent = tornado.AddComponent<EngineComponent>();
+            var tornadoEngineComponent = tornado.AddComponent<EngineComponent>();
 
-            engineComponent.Entity = entity;
+            tornadoEngineComponent.Entity = entity;
 
             var tornadoTeamComponent = tornado.GetComponent<TeamComponent>();
 
             tornadoTeamComponent.Team = teamComponent.Team;
+        }
+
+        Lane findLane() {
+            var mapComponent = MapComponent.Instance;
+            var position = engineComponent.Entity.GetCurrentCell();
+
+            return (position.vector.x > mapComponent.mapSizeX / 2) ? Lane.Right : Lane.Left;
         }
     }
 }

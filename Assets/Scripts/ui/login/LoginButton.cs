@@ -13,21 +13,21 @@ namespace Pandora.UI.Login
         public Text ErrorText = null;
         public InputField UsernameInput = null;
         public InputField PasswordInput = null;
+        public bool UseProdMatchmaking = false;
         private string oldButtonText = null, usernameKey = "username", passwordKey = "password";
         private PlayerModelSingleton playerModelSingleton;
-        public bool UseProdMatchmaking = false;
         bool isLoading = false;
 
         void Start()
         {
             playerModelSingleton = PlayerModelSingleton.instance;
 
+            PlayGamesAuthentication();
+
             if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey))
             {
                 UsernameInput.text = PlayerPrefs.GetString(usernameKey);
                 PasswordInput.text = PlayerPrefs.GetString(passwordKey);
-
-                Login();
             }
         }
 
@@ -68,6 +68,16 @@ namespace Pandora.UI.Login
                     ErrorText.text = loginResponse.Error.message;
                 }
             }
+        }
+
+        /// <summary>
+        /// Platform-aware play games auth caller
+        /// </summary>
+        private void PlayGamesAuthentication()
+        {
+#if UNITY_ANDROID            
+            _ = PlayGames.instance.Authenticate();
+#endif
         }
 
         private bool ValidateLoginForm(string username, string password)

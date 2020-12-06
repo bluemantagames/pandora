@@ -8,7 +8,7 @@ public class LocalManaBehaviourScript : MonoBehaviour
     public bool Enabled = true;
     public int ManaEveryTimelapse = 10;
     public float StepAmount = 0.2f;
-    public float RoundingTimelapse = 2.8f;
+    static public float RoundingTimelapse = 2.8f;
 
     float manaPerStep;
     float timer;
@@ -26,6 +26,7 @@ public class LocalManaBehaviourScript : MonoBehaviour
         if (NetworkControllerSingleton.instance.matchStarted)
         {
             Destroy(this);
+
             return;
         }
 

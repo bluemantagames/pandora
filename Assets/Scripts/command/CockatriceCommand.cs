@@ -3,6 +3,8 @@ using System.Linq;
 using Pandora.Combat;
 using Pandora.Engine;
 using Pandora.Movement;
+using System.Collections.Generic;
+using Pandora.UI;
 
 namespace Pandora.Command
 {
@@ -19,21 +21,35 @@ namespace Pandora.Command
         TeamComponent team;
         EngineComponent engineComponent;
 
-        void Start() {
+        void Start()
+        {
             team = GetComponent<TeamComponent>();
             engineComponent = GetComponent<EngineComponent>();
         }
 
         public void InvokeCommand()
         {
-            var cockatrice = engineComponent.Entity;
-
             var flyingMode = gameObject.AddComponent<CockatriceFlyingMode>();
 
             flyingMode.FlyingTimeMs = FlyingTimeMs;
             gameObject.layer = Constants.FLYING_LAYER;
 
             gameObject.GetComponent<EngineComponent>().RefreshComponents();
+
+            EngineEntity target = findTarget();
+
+            if (target != null)
+            {
+                var lifeComponent = target.GameObject.GetComponent<LifeComponent>();
+                var damage = (lifeComponent.maxLife / 10) * 9;
+
+                lifeComponent.AssignDamage(damage, new UnitCommand(gameObject));
+            }
+        }
+
+        EngineEntity findTarget()
+        {
+            var cockatrice = engineComponent.Entity;
 
             int? lowestDistance = null;
             EngineEntity target = null;
@@ -51,12 +67,18 @@ namespace Pandora.Command
                 }
             }
 
-            if (target != null) {
-                var lifeComponent = target.GameObject.GetComponent<LifeComponent>();
-                var damage = (lifeComponent.maxLife / 10) * 9;
+            return target;
+        }
 
-                lifeComponent.AssignDamage(damage, new UnitCommand(gameObject));
-            }
+        public List<EffectIndicator> FindTargets()
+        {
+            var target = findTarget();
+
+            return (target == null) ?
+                new List<EffectIndicator>() :
+                new List<EffectIndicator> {
+                    new EntitiesIndicator(new List<EngineEntity> { target })
+                };
         }
     }
 }

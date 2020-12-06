@@ -26,8 +26,7 @@ namespace Pandora
         GroupComponent groupComponent;
 
         bool isTower;
-        public int TowerGoldRewards = 4, GoldReward = 13;
-
+        public int TowerGoldRewards = 10, GoldReward = 13;
 
         int currentGoldReward = 1;
 
@@ -185,6 +184,12 @@ namespace Pandora
                             );
                             break;
                     }
+                }
+
+                // Negative feedback loop - a test
+                // Let's empty the gold wallet if an enemy tower is destroyed
+                if (isTower && towerTeamComponent.EngineTeam != TeamComponent.assignedTeam) {
+                    walletsComponent.GoldWallet.SpendResource(walletsComponent.GoldWallet.Resource);
                 }
 
                 // TODO: Play "die" animation

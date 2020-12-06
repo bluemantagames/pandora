@@ -7,11 +7,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7332978942531301314, guid: 527e68cfea5f20c4d9973fd906127621,
+    - target: {fileID: 7332978942531301312, guid: 527e68cfea5f20c4d9973fd906127621,
         type: 3}
-      propertyPath: m_Name
-      value: SpellRadius
-      objectReference: {fileID: 0}
+      propertyPath: CircleIndicator
+      value: 
+      objectReference: {fileID: 6304074700551789912, guid: ae7020c11c4ee4bf49b03f03bea482b7,
+        type: 3}
     - target: {fileID: 7332978942531301313, guid: 527e68cfea5f20c4d9973fd906127621,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -66,6 +67,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7332978942531301314, guid: 527e68cfea5f20c4d9973fd906127621,
+        type: 3}
+      propertyPath: m_Name
+      value: FireballRadius
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 527e68cfea5f20c4d9973fd906127621, type: 3}

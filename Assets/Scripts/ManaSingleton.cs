@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pandora.Resource;
+using Pandora;
 
 public class ManaSingleton
 {
@@ -16,15 +18,24 @@ public class ManaSingleton
         if (newValue <= minMana)
         {
             manaValue = minMana;
-            return;
         }
-
-        if (newValue >= maxMana)
+        else if (newValue >= maxMana)
         {
             manaValue = maxMana;
-            return;
+        }
+        else
+        {
+            manaValue = newValue;
         }
 
-        manaValue = newValue;
+        var manaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().ManaWallet;
+
+        var difference = Mathf.FloorToInt(newValue - manaWallet.Resource);
+
+        if (difference < 0) {
+            manaWallet.SpendResource(-difference);
+        } else {
+            manaWallet.AddResource(difference);
+        }
     }
 }

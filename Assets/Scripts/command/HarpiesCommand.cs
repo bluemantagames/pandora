@@ -3,6 +3,8 @@ using System.Linq;
 using Pandora.Combat;
 using Pandora.Engine;
 using Pandora.Movement;
+using System.Collections.Generic;
+using Pandora.UI;
 
 namespace Pandora.Command
 {
@@ -17,39 +19,21 @@ namespace Pandora.Command
         float? coloredTimePassed = null;
         public float BlinkTime = 1f;
         Enemy target = null;
+        TeamComponent teamComponent;
+
+        void Start() {
+            teamComponent = GetComponent<TeamComponent>();
+        }
 
         public void InvokeCommand()
         {
-            int? hp = null;
-
             var entities =
                 from harpy in GetComponent<GroupComponent>().Objects
                 select harpy;
 
-            var harpyEntities = entities.Select(harpy => harpy.GetComponent<EngineComponent>());
-
             Logger.Debug("harpy command invoked");
 
-            var teamComponent = GetComponent<TeamComponent>();
-
-            foreach (var targetEntity in MapComponent.Instance.engine.Entities)
-            {
-                var lifeComponent = targetEntity.GameObject.GetComponent<LifeComponent>();
-
-                if (lifeComponent == null) continue;
-
-                var isInRange = harpyEntities.Any(harpyCell => harpyCell.Engine.IsInHitboxRange(harpyCell.Entity, targetEntity, SearchRangeEngineUnits));
-                var targetTeamComponent = lifeComponent.gameObject.GetComponent<TeamComponent>();
-
-                if (!isInRange) continue;
-
-                if ((hp == null || hp.Value < lifeComponent.lifeValue) && teamComponent.Team != targetTeamComponent.Team)
-                {
-                    hp = Mathf.FloorToInt(lifeComponent.lifeValue);
-
-                    target = new Enemy(lifeComponent.gameObject);
-                }
-            }
+            target = findTarget();
 
             Logger.Debug($"harpy command invoked {target}");
 
@@ -77,10 +61,6 @@ namespace Pandora.Command
             }
         }
 
-        void Awake()
-        {
-        }
-
         void Update()
         {
             if (coloredTimePassed.HasValue)
@@ -93,10 +73,54 @@ namespace Pandora.Command
 
                     coloredTimePassed = null;
                 }
-
             }
-
         }
 
+        Enemy findTarget() {
+            Enemy target = null;
+
+            int? hp = null;
+
+            var entities =
+                from harpy in GetComponent<GroupComponent>().Objects
+                select harpy;
+
+            var harpyEntities = entities.Select(harpy => harpy.GetComponent<EngineComponent>());
+
+            foreach (var targetEntity in MapComponent.Instance.engine.Entities)
+            {
+                var lifeComponent = targetEntity.GameObject.GetComponent<LifeComponent>();
+
+                if (lifeComponent == null) continue;
+
+                var isInRange = harpyEntities.Any(harpyCell => harpyCell.Engine.IsInHitboxRange(harpyCell.Entity, targetEntity, SearchRangeEngineUnits));
+
+                if (!isInRange) continue;
+
+                var targetTeamComponent = lifeComponent.gameObject.GetComponent<TeamComponent>();
+
+                if ((hp == null || hp.Value < lifeComponent.lifeValue) && teamComponent.Team != targetTeamComponent.Team)
+                {
+                    hp = Mathf.FloorToInt(lifeComponent.lifeValue);
+
+                    target = new Enemy(lifeComponent.gameObject);
+                }
+            }
+
+            return target;
+        }
+
+        public List<EffectIndicator> FindTargets()
+        {
+            var target = findTarget();
+
+            return (target == null) ?
+                new List<EffectIndicator>() :
+                new List<EffectIndicator>() {
+                    new EntitiesIndicator(
+                        new List<EngineEntity> { target.enemyEntity }
+                    )
+                };
+        }
     }
 }

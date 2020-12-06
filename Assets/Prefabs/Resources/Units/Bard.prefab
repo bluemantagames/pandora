@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 8397731732825560848}
   - component: {fileID: 4513345265189026161}
   - component: {fileID: 5673992156168468204}
+  - component: {fileID: -4381383725649756430}
   m_Layer: 9
   m_Name: Bard
   m_TagString: Untagged
@@ -58,6 +59,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -141,6 +143,8 @@ MonoBehaviour:
   lifeValue: 450
   maxLife: 0
   IsDead: 0
+  TowerGoldRewards: 4
+  GoldReward: 13
 --- !u!114 &4081286835766809272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,6 +175,9 @@ MonoBehaviour:
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
+  AnimationStateName: 
+  WalkingAnimationEnabled: 0
+  WalkingAnimationEngineUnits: 0
 --- !u!114 &446255458806803396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,6 +234,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Entity:
+    Speed: 0
+    CollisionSpeed: 0
+    Position: {x: 0, y: 0}
+    Direction: {x: 0, y: 0}
+    IsRigid: 1
+    IsStructure: 0
+    IsMapObstacle: 0
+    Layer: 1
+    Target: {x: 0, y: 0}
+    IsEvading: 0
+    UnitName: 
+    UnitId: 
   DebugEntity: 0
 --- !u!95 &4513345265189026161
 Animator:
@@ -263,6 +283,18 @@ MonoBehaviour:
   DebugLines: 0
   EffectObjects:
   - {fileID: 2016888992844160403, guid: 952398b416080ab49a229d5e39270633, type: 3}
+--- !u!114 &-4381383725649756430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341249731494315628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d1c461b6ef304042b23f5c7517f2f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2409834720673952193
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,11 +521,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1341249731494315536}
     m_Modifications:
-    - target: {fileID: 885019136172078356, guid: b162e8ef05976444397a5b9c48018bb8,
-        type: 3}
-      propertyPath: m_Name
-      value: HealthbarCanvas
-      objectReference: {fileID: 0}
     - target: {fileID: 613300719426973332, guid: b162e8ef05976444397a5b9c48018bb8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -598,6 +625,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 885019136172078356, guid: b162e8ef05976444397a5b9c48018bb8,
+        type: 3}
+      propertyPath: m_Name
+      value: HealthbarCanvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b162e8ef05976444397a5b9c48018bb8, type: 3}

@@ -6,11 +6,12 @@ namespace Pandora
 {
     public class HealthbarBehaviour : MonoBehaviour
     {
-        public Sprite OpponentSprite;
-        Sprite originalSprite;
-        Image imageComponent;
+        public Sprite OpponentSprite, OpponentEmptyHealthbar;
+        Sprite originalSprite, originalEmptyHealthbar;
+        Image imageComponent, emptyHealthbarImageComponent;
         LineRenderer lineRenderer;
         public GameObject HPSeparator;
+        public GameObject EmptyHealthbar;
         public int HPSeparatorRange = 20;
         public LifeComponent LifeComponent;
         RectTransform rectTransform;
@@ -18,7 +19,10 @@ namespace Pandora
         void Awake()
         {
             imageComponent = GetComponent<Image>();
+            emptyHealthbarImageComponent = EmptyHealthbar.GetComponent<Image>();
+
             originalSprite = imageComponent.sprite;
+            originalEmptyHealthbar = emptyHealthbarImageComponent.sprite;
 
             rectTransform = GetComponent<RectTransform>();
 
@@ -32,10 +36,12 @@ namespace Pandora
             if (teamComponent?.Team != TeamComponent.assignedTeam)
             {
                 imageComponent.sprite = OpponentSprite;
+                emptyHealthbarImageComponent.sprite = OpponentEmptyHealthbar;
             }
             else
             {
                 imageComponent.sprite = originalSprite;
+                emptyHealthbarImageComponent.sprite = originalEmptyHealthbar;
             }
         }
 

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.UI;
-using System;
 using System.Collections;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using Pandora.Movement;
@@ -35,12 +35,14 @@ namespace Pandora
         public float localTime = 0;
         public Dictionary<int, HashSet<GridCell>> TowerPositionsDictionary = new Dictionary<int, HashSet<GridCell>>();
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
+        public GameObject CommandsViewport;
         float firstLaneX = 2, secondLaneX = 13;
         CustomSampler aggroSampler, targetValidSampler;
 
         List<GridCell> spawningCells;
 
         HashSet<GridCell> _riverPositions = new HashSet<GridCell>();
+        Dictionary<string, GameObject> loadedUnits = new Dictionary<string, GameObject> {};
 
         HashSet<GridCell> riverPositions
         {
@@ -113,10 +115,10 @@ namespace Pandora
 
             timeSinceLastStep = frameStep; // initialize time since last step so we don't skip frames
 
-            Screen.fullScreen = false;
-            Screen.SetResolution(720, 1280, false);
-
-            Application.targetFrameRate = 30;
+            // The commands viewport horizonal layout seems to not work unless we disable and enable it again here
+            // it probably needs it because we set the resolution earlier
+            CommandsViewport.SetActive(false);
+            CommandsViewport.SetActive(true);
 
             var topArena = GameObject.Find("top_arena");
             var topArenaPosition = topArena.transform.position;
@@ -154,6 +156,8 @@ namespace Pandora
             Logger.Debug($"Map y size: {cellHeight * mapSizeY}");
 
             engine.Init(this);
+
+            LoadCards();
         }
 
         void RefreshTowerHash(TeamComponent team)
@@ -381,7 +385,17 @@ namespace Pandora
             return true;
         }
 
-        public GameObject LoadCard(string unitName) => Resources.Load($"Units/{unitName}") as GameObject;
+        void LoadCards() {
+            var units = new List<UnityEngine.Object>(Resources.LoadAll("Units"));
+
+            foreach (var unit in units) {
+                Logger.Debug($"Loading unit {unit.name}");
+
+                loadedUnits.Add(unit.name, unit as GameObject);
+            }
+        }
+
+        public GameObject LoadCard(string unitName) => loadedUnits[unitName];
 
         /// <summary>Spawns a unit</summary>
         public void SpawnUnit(UnitSpawn spawn)

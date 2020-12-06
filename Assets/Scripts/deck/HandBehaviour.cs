@@ -9,6 +9,9 @@ using UnityEngine.UI;
 using System;
 using System.Linq;
 using Pandora.Engine;
+using Pandora.Animations;
+using Pandora.UI.HUD;
+using Cysharp.Threading.Tasks;
 
 namespace Pandora.Deck
 {
@@ -37,6 +40,9 @@ namespace Pandora.Deck
         int handIndex = -1;
 
         public GameObject[] UIHandSlots;
+
+        GameObject baseCard;
+
         public float EaseOutTime = 0.35f;
 
         Deck deck;
@@ -67,6 +73,8 @@ namespace Pandora.Deck
                 DisableMulliganUI();
                 return;
             }
+
+            baseCard = Resources.Load($"Cards/BaseCard") as GameObject;
 
             rectTransform = GetComponent<RectTransform>();
             animator = GetComponent<Animator>();
@@ -124,6 +132,8 @@ namespace Pandora.Deck
                         "Harpies"
                     };
 
+                    //var cardNames = new List<string> { "Troll" };
+
                     cards =
                         (from card in cardNames
                          select new Card(card)).ToList();
@@ -133,6 +143,16 @@ namespace Pandora.Deck
                     cards = Deck;
                 }
 
+                _ = SetDeck(cards);
+            }
+        }
+
+        async UniTaskVoid SetDeck(List<Card> cards) {
+            // Wait for 10 frames before setting the deck,
+            // in order to give the layout component time to adjust children positions
+            await UniTask.DelayFrame(10);
+
+            if (deck is LocalDeck localDeck) {
                 localDeck.Deck = cards;
             }
         }
@@ -149,29 +169,29 @@ namespace Pandora.Deck
             }
         }
 
-        void AnimateMovementTo(GameObject card, int idx)
+        void AnimateMovementTo(GameObject card, int fromIdx, int idx)
         {
-            var cardTransform = card.GetComponent<RectTransform>();
+            var startTransform =
+                (fromIdx < 0) ?
+                    card.GetComponent<RectTransform>() : 
+                    UIHandSlots[fromIdx].GetComponent<RectTransform>();
 
-            Logger.Debug($"Animating {card} to {idx}");
+            var cardTransform = card.GetComponent<RectTransform>();
 
             var targetRectTransform = UIHandSlots[idx].GetComponent<RectTransform>();
 
+            var targetPosition = targetRectTransform.position;
+
+            var cardAnimation = card.GetComponent<CustomTransformAnimation>();
+
             cardTransform.pivot = targetRectTransform.pivot;
 
-            var xCurve = AnimationCurve.EaseInOut(0f, cardTransform.anchoredPosition.x, EaseOutTime, targetRectTransform.anchoredPosition.x);
-            var yCurve = AnimationCurve.EaseInOut(0f, cardTransform.anchoredPosition.y, EaseOutTime, targetRectTransform.anchoredPosition.y);
+            var xCurve = AnimationCurve.EaseInOut(Time.time, startTransform.position.x, Time.time + EaseOutTime, targetPosition.x);
+            var yCurve = AnimationCurve.EaseInOut(Time.time, startTransform.position.y, Time.time + EaseOutTime, targetPosition.y);
 
-            var clip = new AnimationClip();
-            clip.legacy = true;
+            Logger.Debug($"Animating {card} from ({startTransform.position.x}, {startTransform.position.y}) to {idx} ({startTransform.position.x}, {startTransform.position.y})");
 
-            clip.SetCurve("", typeof(RectTransform), "m_AnchoredPosition.x", xCurve);
-            clip.SetCurve("", typeof(RectTransform), "m_AnchoredPosition.y", yCurve);
-
-            var animation = card.GetComponent<Animation>();
-
-            animation.AddClip(clip, clip.name);
-            animation.Play(clip.name);
+            cardAnimation.SetCurves(xCurve, yCurve);
         }
 
         void CardPlayed(DeckEvent ev)
@@ -222,7 +242,7 @@ namespace Pandora.Deck
 
                     if (freePosition.HasValue)
                     {
-                        AnimateMovementTo(hand[i].CardObject, freePosition.Value);
+                        AnimateMovementTo(hand[i].CardObject, i, freePosition.Value);
 
                         hand[freePosition.Value] = hand[i];
                         hand[i] = null;
@@ -239,11 +259,15 @@ namespace Pandora.Deck
             Logger.Debug($"Drawing card {idx}");
 
             var cardPrefab = Resources.Load($"Cards/{cardDrawn.Name}") as GameObject;
-            var card = Instantiate(cardPrefab, transform.position, Quaternion.identity, transform.parent);
+            var card = Instantiate(cardPrefab, new Vector2(0, 0), Quaternion.identity, transform.parent);
+
+            var slotRectTransform = UIHandSlots[idx].GetComponent<RectTransform>();
+
+            card.GetComponent<RectTransform>().sizeDelta = slotRectTransform.sizeDelta;
 
             hand[idx] = new HandCard(cardDrawn.Name, card);
 
-            AnimateMovementTo(card, idx);
+            AnimateMovementTo(card, -1, idx);
 
             Logger.Debug($"Playing from {rectTransform} to {idx}");
         }
@@ -353,18 +377,21 @@ namespace Pandora.Deck
         void Select(HandCard card)
         {
             SelectedCards.Add(card);
-            card.CardObject.GetComponent<CardBehaviour>().MulliganSelected = true;
+
+            if (card.CardObject.GetComponent<CardHighlighter>() == null) {
+                card.CardObject.AddComponent<CardHighlighter>();
+            }
         }
 
         void Deselect(int index)
         {
             if (SelectedCards.ElementAt(index) == null) return;
 
-            var combatBehaviour = SelectedCards[index]?.CardObject?.GetComponent<CardBehaviour>();
+            var combatBehaviour = SelectedCards[index]?.CardObject?.GetComponent<CardHighlighter>();
 
             if (combatBehaviour != null)
             {
-                combatBehaviour.MulliganSelected = false;
+                combatBehaviour.Unhighlight();
             }
 
             SelectedCards.RemoveAt(index);

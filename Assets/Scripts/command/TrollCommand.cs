@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Pandora.Engine;
 using Pandora.Combat;
+using System.Collections.Generic;
+using Pandora.UI;
 
 namespace Pandora.Command
 {
@@ -10,8 +12,37 @@ namespace Pandora.Command
         public int Width = 4000;
         public int Height = 3000;
         public int Damage = 50;
+        public int UnitsLeniency = 20;
         public bool DebugLines = false;
         public GameObject[] EffectObjects;
+        public GameObject TriangleIndicator;
+
+        EngineEntity sourceEntity;
+
+        void Start() {
+            sourceEntity = GetComponent<EngineComponent>().Entity;
+        }
+
+        public List<EffectIndicator> FindTargets()
+        {
+            var engine = sourceEntity.Engine;
+
+            var (v1, v2, v3) = engine.CalculateRotatedTriangleVertices(
+                sourceEntity.Position, Width, Height, UnitsLeniency, sourceEntity.Direction
+            );
+
+            var triangle = Instantiate(TriangleIndicator, Vector3.zero, Quaternion.identity, sourceEntity.GameObject.transform);
+
+            triangle.GetComponent<TriangleRenderer>().Initialize(
+                engine.PhysicsToMapWorld(v1),
+                engine.PhysicsToMapWorld(v2),
+                engine.PhysicsToMapWorld(v3)
+            );
+
+            return new List<EffectIndicator> {
+                new GameObjectIndicator(triangle)
+            };
+        }
 
         public void InvokeCommand()
         {
@@ -32,7 +63,7 @@ namespace Pandora.Command
 
                 if (sourceTeam == targetTeam) continue;
 
-                if (sourceEntity.Engine.IsInConicRange(sourceEntity, targetEntity, Width, Height, 20, DebugLines))
+                if (sourceEntity.Engine.IsInConicRange(sourceEntity, targetEntity, Width, Height, UnitsLeniency, DebugLines))
                 {
                     // Assign damage
                     targetLifeComponent.AssignDamage(Damage, new UnitCommand(gameObject));

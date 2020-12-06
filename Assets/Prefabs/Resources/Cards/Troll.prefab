@@ -12,44 +12,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Troll
       objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: Puppet
-      value: 
-      objectReference: {fileID: 2103948611786811515, guid: a7ff30ab552991847bdceb2b7f1e6c8d,
-        type: 3}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: Card
-      value: 
-      objectReference: {fileID: 8076880815249732036, guid: cbd2acd6812f90e45aa0f9b348f67ac6,
-        type: 3}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: CardName
-      value: Troll
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: UnitName
-      value: Troll
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: IsAquatic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: RequiredMana
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -5583845262967892771, guid: 5d99a425df70f0044acf7b79f6d0d1d9,
-        type: 3}
     - target: {fileID: 1069214256245577549, guid: f3024322f337f5844bd8d8be1328fece,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -154,6 +116,54 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: Puppet
+      value: 
+      objectReference: {fileID: 2103948611786811515, guid: a7ff30ab552991847bdceb2b7f1e6c8d,
+        type: 3}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 8076880815249732036, guid: cbd2acd6812f90e45aa0f9b348f67ac6,
+        type: 3}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: CardName
+      value: Troll
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: UnitName
+      value: Troll
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: IsAquatic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: RequiredMana
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 64d223dd940ec4ccb979a51cd9b5d092,
+        type: 3}
+    - target: {fileID: 5461111731191396615, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -67.05002
+      objectReference: {fileID: 0}
+    - target: {fileID: 5461111731191396615, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 70.25002
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3024322f337f5844bd8d8be1328fece, type: 3}

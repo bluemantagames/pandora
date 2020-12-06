@@ -739,6 +739,32 @@ namespace Pandora.Engine
             return distance <= radius;
         }
 
+        public (Vector2Int, Vector2Int, Vector2Int) CalculateRotatedTriangleVertices(Vector2Int position, int width, int height, int unitsLeniency, Vector2Int direction) {
+            var v1 = PoolInstances.Vector2IntPool.GetObject();
+            v1.x = position.x - (width / 2);
+            v1.y = position.y + height - unitsLeniency;
+
+            var v2 = PoolInstances.Vector2IntPool.GetObject();
+            v2.x = position.x + (width / 2);
+            v2.y = position.y + height - unitsLeniency;
+
+            var v3 = PoolInstances.Vector2IntPool.GetObject();
+            v3.x = position.x;
+            v3.y = position.y - unitsLeniency;
+
+            var rotatedFigure = RotateFigureByDirection(
+                new List<Vector2Int> { v1, v2, v3 },
+                v3,
+                direction
+            );
+
+            v3 = rotatedFigure[0];
+            v1 = rotatedFigure[1];
+            v2 = rotatedFigure[2];
+
+            return (v1, v2, v3);
+        }
+
         /// <summary>
         /// Check if the target entity is inside a 2D triangle with the
         /// source entity as the main vertex
@@ -758,32 +784,17 @@ namespace Pandora.Engine
             var sourceEntityBound = GetPooledEntityBounds(sourceEntity);
             var targetEntityBound = GetPooledEntityBounds(targetEntity);
 
-            var v1 = PoolInstances.Vector2IntPool.GetObject();
-            v1.x = sourceEntityBound.Center.x - (width / 2);
-            v1.y = sourceEntityBound.Center.y + height - unitsLeniency;
-
-            var v2 = PoolInstances.Vector2IntPool.GetObject();
-            v2.x = sourceEntityBound.Center.x + (width / 2);
-            v2.y = sourceEntityBound.Center.y + height - unitsLeniency;
-
-            var v3 = PoolInstances.Vector2IntPool.GetObject();
-            v3.x = sourceEntityBound.Center.x;
-            v3.y = sourceEntityBound.Center.y - unitsLeniency;
+            var (v1, v2, v3) = CalculateRotatedTriangleVertices(
+                sourceEntityBound.Center,
+                width,
+                height,
+                unitsLeniency,
+                sourceEntity.Direction
+            );
 
             var target = PoolInstances.Vector2IntPool.GetObject();
             target.x = targetEntityBound.Center.x;
             target.y = targetEntityBound.Center.y;
-
-            // Rotate the triangle
-            var rotatedFigure = RotateFigureByDirection(
-                new List<Vector2Int> { v1, v2, v3 },
-                v3,
-                sourceEntity.Direction
-            );
-
-            v3 = rotatedFigure[0];
-            v1 = rotatedFigure[1];
-            v2 = rotatedFigure[2];
 
             var denominator = ((v2.y - v3.y) * (v1.x - v3.x) + (v3.x - v2.x) * (v1.y - v3.y));
             var a = ((v2.y - v3.y) * (target.x - v3.x) + (v3.x - v2.x) * (target.y - v3.y)) / denominator;
@@ -801,6 +812,9 @@ namespace Pandora.Engine
                 Debug.DrawLine(new Vector3(wv2.x, wv2.y, 0f), new Vector3(wv3.x, wv3.y, 0f), Color.red, debugLinesDuration, false);
                 Debug.DrawLine(new Vector3(wv3.x, wv3.y, 0f), new Vector3(wv1.x, wv1.y, 0f), Color.red, debugLinesDuration, false);
             }
+
+            ReturnBounds(sourceEntityBound);
+            ReturnBounds(targetEntityBound);
 
             return 0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1;
         }
@@ -876,14 +890,14 @@ namespace Pandora.Engine
 
 
         /// <summary>Returns the world position, adjusted for the map</summary>
-        Vector2 PhysicsToMapWorldUnflipped(Vector2Int physics)
+        public Vector2 PhysicsToMapWorldUnflipped(Vector2Int physics)
         {
             return PhysicsToWorld(physics) + (Vector2)Map.transform.position;
         }
 
 
         /// <summary>Returns the world position, adjusted for the map and flipped (used for e.g. top team position rendering)</summary>
-        Vector2 PhysicsToMapWorldFlipped(Vector2Int physics)
+        public Vector2 PhysicsToMapWorldFlipped(Vector2Int physics)
         {
             var yPhysicsBounds = UnitsPerCell * Map.mapSizeY;
 
