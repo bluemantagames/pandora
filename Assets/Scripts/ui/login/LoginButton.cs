@@ -16,16 +16,12 @@ namespace Pandora.UI.Login
         public bool UseProdMatchmaking = false;
         private string oldButtonText = null, usernameKey = "username", passwordKey = "password";
         private PlayerModelSingleton playerModelSingleton;
-        private PlayGames playGamesInstance = null;
-
 
         void Start()
         {
             playerModelSingleton = PlayerModelSingleton.instance;
-            playGamesInstance = PlayGames.instance;
 
-            // Google Play Games auth
-            _ = playGamesInstance.Authenticate();
+            PlayGamesAuthentication();
 
             if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey))
             {
@@ -70,6 +66,16 @@ namespace Pandora.UI.Login
                     ErrorText.text = loginResponse.Error.message;
                 }
             }
+        }
+
+        /// <summary>
+        /// Platform-aware play games auth caller
+        /// </summary>
+        private void PlayGamesAuthentication()
+        {
+#if UNITY_ANDROID            
+            _ = PlayGames.instance.Authenticate();
+#endif
         }
 
         private bool ValidateLoginForm(string username, string password)

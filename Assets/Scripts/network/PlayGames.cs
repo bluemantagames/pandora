@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Pandora.Network;
 using System.Net;
 
+#if UNITY_ANDROID
 namespace Pandora.Network
 {
     public class PlayGames
@@ -95,3 +96,4 @@ namespace Pandora.Network
         }
     }
 }
+#endif
