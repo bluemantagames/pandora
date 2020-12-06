@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 namespace Pandora
 {
-    public class CommandViewportBehaviour : MonoBehaviour
+    public class CommandViewportBehaviour : MonoBehaviour, IPointerDownHandler
     {
         List<GameObject> handlers = new List<GameObject> { };
 
@@ -20,6 +21,7 @@ namespace Pandora
         }
 
         RectTransform rect;
+        GraphicRaycaster graphicRaycaster;
 
         public void RemoveCommand(string id)
         {
@@ -107,11 +109,26 @@ namespace Pandora
 
         void Start() {
             rect = GetComponent<RectTransform>();
+
+            graphicRaycaster = GetComponent<GraphicRaycaster>();
         }
 
-        void Update()
+        // Bubble OnPointerDown events to the MapComponent if they are not
+        // in the rectangle handled by the command handlers
+        public void OnPointerDown(PointerEventData eventData)
         {
+            var isHandledByCommands = false;
 
+            Debug.Log("OnPointerDown viewport");
+
+            var results = new List<RaycastResult> {};
+
+            graphicRaycaster.Raycast(eventData, results);
+
+            isHandledByCommands = (results.Count - 1) > 0;
+
+            if (!isHandledByCommands)
+                MapComponent.Instance.OnPointerDown(eventData);
         }
     }
 
