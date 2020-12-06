@@ -25,12 +25,15 @@ namespace Pandora.Network
         }
 
         private static ApiControllerSingleton privateInstance = null;
-        
+
         private RestClient _client = null;
 
-        private RestClient client {
-            get {
-                if (_client == null) {
+        private RestClient client
+        {
+            get
+            {
+                if (_client == null)
+                {
                     Logger.Debug($"Connecting to API gateway: {apiHost}");
 
                     _client = new RestClient(apiHost);
@@ -113,6 +116,21 @@ namespace Pandora.Network
             request.AddJsonBody(param);
 
             return ExecuteApiRequest<LoginResponse>(request);
+        }
+
+        /// <summary>
+        /// Sign in using Google Play
+        /// </summary>
+        /// <param name="token">The Google token to exchange for authentication</param>
+        /// <returns>A Task with a GoogleSignInResponse (the token)</returns>
+        public Task<ApiResponse<GoogleSignInResponse>> GoogleSignIn(string token)
+        {
+            var request = new RestRequest("/users/googleSignIn", Method.POST);
+            var param = new GoogleSignInRequest { token = token };
+
+            request.AddJsonBody(param);
+
+            return ExecuteApiRequest<GoogleSignInResponse>(request);
         }
 
         /// <summary>

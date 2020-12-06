@@ -4,10 +4,13 @@ using UnityEngine.Profiling;
 public static class Logger
 {
     private static CustomSampler _debugSampler = null, _warningSampler = null;
-    
-    private static CustomSampler debugSampler {
-        get {
-            if (_debugSampler == null) {
+
+    private static CustomSampler debugSampler
+    {
+        get
+        {
+            if (_debugSampler == null)
+            {
                 _debugSampler = CustomSampler.Create("Debug.Log");
             }
 
@@ -15,9 +18,12 @@ public static class Logger
         }
     }
 
-    private static CustomSampler warningSampler {
-        get {
-            if (_warningSampler == null) {
+    private static CustomSampler warningSampler
+    {
+        get
+        {
+            if (_warningSampler == null)
+            {
                 _warningSampler = CustomSampler.Create("Debug.LogWarning");
             }
 
@@ -26,7 +32,6 @@ public static class Logger
     }
 
 
-    [Conditional("UNITY_EDITOR")]
     public static void Debug(string logMsg)
     {
         debugSampler.Begin();
