@@ -1,5 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
+
+public enum NavbarButton
+{
+    NewsNavbarButton,
+    ShopNavbarButton,
+    HomeNavbarButton,
+    DeckNavbarButton,
+    SocialNavbarButton
+}
 
 public class NavbarController
 {
@@ -7,35 +17,50 @@ public class NavbarController
 
     private string buttonsContainerName = "NavbarButtonsContainer";
     private string genericButtonName = "NavButton";
-    private string newsNavbarButtonName = "NewsNavbarButton";
-    private string shopNavbarButtonName = "ShopNavbarButton";
-    private string homeNavbarButtonName = "HomeNavbarButton";
-    private string deckNavbarButtonName = "DeckNavbarButton";
-    private string socialNavbarButtonName = "SocialNavbarButton";
+    private Action<NavbarButton> Handler;
 
-    private Dictionary<string, NavbarButtonController> navControllers = new Dictionary<string, NavbarButtonController>();
+    private Dictionary<NavbarButton, NavbarButtonController> navControllers = new Dictionary<NavbarButton, NavbarButtonController>();
 
-    public NavbarController(VisualElement rootElement)
+    public NavbarController(VisualElement rootElement, Action<NavbarButton> Handler)
     {
         navbarElement = rootElement;
+        this.Handler = Handler;
 
         var buttonsContainerElement = rootElement.Q(buttonsContainerName);
 
         foreach (VisualElement entry in buttonsContainerElement.Children())
         {
             var name = entry.name;
-            var button = entry.Q<Button>(genericButtonName);
-            var controller = new NavbarButtonController(button, () => HandleSelect(name));
 
-            navControllers.Add(name, controller);
+            if (!Enum.IsDefined(typeof(NavbarButton), name)) return;
+
+            var enumName = (NavbarButton)Enum.Parse(typeof(NavbarButton), name);
+
+            var button = entry.Q<Button>(genericButtonName);
+
+            var controller = new NavbarButtonController(button, () =>
+            {
+                DeactivateAll(enumName);
+                Handler(enumName);
+            });
+
+            navControllers.Add(enumName, controller);
         }
     }
 
-    private void HandleSelect(string currentName)
+    private void DeactivateAll(NavbarButton currentName)
     {
-        foreach (KeyValuePair<string, NavbarButtonController> entry in navControllers)
+        foreach (KeyValuePair<NavbarButton, NavbarButtonController> entry in navControllers)
         {
             if (entry.Key != currentName) entry.Value.Deactivate();
         }
+    }
+
+    public void Activate(NavbarButton buttonName)
+    {
+        var controller = navControllers[buttonName];
+
+        if (controller != null)
+            controller.Execute();
     }
 }

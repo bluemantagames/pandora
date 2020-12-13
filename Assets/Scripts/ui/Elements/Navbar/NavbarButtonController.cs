@@ -27,7 +27,7 @@ public class NavbarButtonController
     public void Activate()
     {
         IsActive = true;
-        buttonElement.style.backgroundColor = new StyleColor(Color.red);
+        buttonElement.style.backgroundColor = new StyleColor(new Color(255, 255, 255, 0.3f));
     }
 
     public void Deactivate()
@@ -43,12 +43,15 @@ public class NavbarButtonController
 
     private void HandleClick()
     {
-        Logger.Debug("Clicked a button!");
-
         if (!IsActive)
         {
             Activate();
             if (onPressFn != null) onPressFn();
         }
+    }
+
+    public void Execute()
+    {
+        HandleClick();
     }
 }
