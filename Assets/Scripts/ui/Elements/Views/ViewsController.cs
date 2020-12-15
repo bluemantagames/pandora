@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using UnityEngine;
+using System;
 using UnityEngine.UIElements;
+using UnityEngine.UIElements.Experimental;
 
 public enum ViewContainer
 {
@@ -13,7 +14,7 @@ public class ViewsController
 
     VisualElement viewsContainer;
     Dictionary<string, VisualElement> singleViewsContainers = new Dictionary<string, VisualElement>();
-    ViewContainer activeView;
+    ViewContainer activeView = ViewContainer.HomeContainer;
 
     public ViewsController(VisualElement rootElement)
     {
@@ -27,14 +28,27 @@ public class ViewsController
         }
     }
 
-    private void DeactivateView(VisualElement singleViewContainer)
+    private void DeactivateView(VisualElement singleViewContainer, Action Callback)
     {
-        singleViewContainer.style.display = DisplayStyle.None;
+        Func<VisualElement, float> getter = (el) => el.style.opacity.value;
+
+        singleViewContainer.experimental.animation.Start(getter, 0f, 1000, (el, opacity) =>
+        {
+            if (opacity == 0f)
+            {
+                singleViewContainer.style.display = DisplayStyle.None;
+                Callback();
+            }
+        });
     }
 
     private void ActivateView(VisualElement singleViewContainer)
     {
+        Func<VisualElement, float> getter = (el) => el.style.opacity.value;
+
         singleViewContainer.style.display = DisplayStyle.Flex;
+        singleViewContainer.style.opacity = 0f;
+        singleViewContainer.experimental.animation.Start(getter, 1f, 1000, (el, opacity) => { });
     }
 
     public void Show(ViewContainer view)
@@ -46,8 +60,7 @@ public class ViewsController
 
         if (activeContainer == null || toShowContainer == null) return;
 
-        DeactivateView(activeContainer);
-        ActivateView(toShowContainer);
+        DeactivateView(activeContainer, () => ActivateView(toShowContainer));
 
         activeView = view;
     }
