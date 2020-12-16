@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
-
+using UnityEngine;
 public enum NavbarButton
 {
     NewsNavbarButton,
@@ -11,26 +11,36 @@ public enum NavbarButton
     SocialNavbarButton
 }
 
-public class NavbarController
+public class NavbarController : MonoBehaviour
 {
-    private VisualElement navbarElement;
-
+    private VisualElement rootElement;
     private string buttonsContainerName = "NavbarButtonsContainer";
     private string genericButtonName = "NavButton";
     private Action<NavbarButton> Handler;
 
     private Dictionary<NavbarButton, NavbarButtonController> navControllers = new Dictionary<NavbarButton, NavbarButtonController>();
 
-    public NavbarController(VisualElement rootElement, Action<NavbarButton> Handler)
+    public void OnEnable()
     {
-        navbarElement = rootElement;
+        rootElement = GetComponent<UIDocument>().rootVisualElement;
+
+        Setup(rootElement, (button) =>
+        {
+
+        });
+    }
+
+    private void Setup(VisualElement navbarElement, Action<NavbarButton> Handler)
+    {
         this.Handler = Handler;
 
-        var buttonsContainerElement = rootElement.Q(buttonsContainerName);
+        var buttonsContainerElement = navbarElement.Q(buttonsContainerName);
 
         foreach (VisualElement entry in buttonsContainerElement.Children())
         {
             var name = entry.name;
+
+            Logger.Debug($"Nav instantiated {name}");
 
             if (!Enum.IsDefined(typeof(NavbarButton), name)) return;
 
