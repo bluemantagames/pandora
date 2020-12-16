@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Pandora.UI.Elements.Navbar
 {
@@ -16,6 +17,7 @@ namespace Pandora.UI.Elements.Navbar
 
     public class NavbarBehaviour : MonoBehaviour
     {
+        static NavbarBehaviour instance;
         private VisualElement rootElement;
         private string buttonsContainerName = "NavbarButtonsContainer";
         private string genericButtonName = "NavButton";
@@ -29,8 +31,30 @@ namespace Pandora.UI.Elements.Navbar
 
             Setup(rootElement, (button) =>
             {
+                switch (button)
+                {
+                    case NavbarButton.HomeNavbarButton:
+                        SceneManager.LoadScene("HomeScene", LoadSceneMode.Single);
+                        break;
 
+                    case NavbarButton.ShopNavbarButton:
+                        SceneManager.LoadScene("ShopScene", LoadSceneMode.Single);
+                        break;
+                }
             });
+        }
+
+        void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
         private void Setup(VisualElement navbarElement, Action<NavbarButton> Handler)
