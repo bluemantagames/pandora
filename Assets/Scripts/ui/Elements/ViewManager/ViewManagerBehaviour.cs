@@ -9,6 +9,7 @@ public class ViewManagerBehaviour : MonoBehaviour
     VisualElement rootElement;
     VisualElement viewManagerElement;
     string viewElementName = "ViewManager";
+    public int AnimationVelocity = 300;
 
     public void OnEnable()
     {
@@ -26,7 +27,7 @@ public class ViewManagerBehaviour : MonoBehaviour
         viewManagerElement.style.opacity = 1f;
         Func<VisualElement, float> extractor = (element) => element.style.opacity.value;
 
-        viewManagerElement.experimental.animation.Start(extractor, 0f, 2000, (el, value) =>
+        viewManagerElement.experimental.animation.Start(extractor, 0f, AnimationVelocity, (el, value) =>
         {
             el.style.opacity = value;
 
