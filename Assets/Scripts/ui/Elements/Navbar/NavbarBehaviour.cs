@@ -34,17 +34,17 @@ namespace Pandora.UI.Elements.Navbar
                 switch (button)
                 {
                     case NavbarButton.HomeNavbarButton:
-                        SceneManager.LoadScene("HomeScene", LoadSceneMode.Single);
+                        ChangeScene("HomeScene");
                         break;
 
                     case NavbarButton.ShopNavbarButton:
-                        SceneManager.LoadScene("ShopScene", LoadSceneMode.Single);
+                        ChangeScene("ShopScene");
                         break;
                 }
             });
         }
 
-        void Awake()
+        public void Awake()
         {
             if (instance == null)
             {
@@ -66,8 +66,6 @@ namespace Pandora.UI.Elements.Navbar
             foreach (VisualElement entry in buttonsContainerElement.Children())
             {
                 var name = entry.name;
-
-                Logger.Debug($"Nav instantiated {name}");
 
                 if (!Enum.IsDefined(typeof(NavbarButton), name)) return;
 
@@ -93,12 +91,9 @@ namespace Pandora.UI.Elements.Navbar
             }
         }
 
-        public void Activate(NavbarButton buttonName)
+        private void ChangeScene(string sceneName)
         {
-            var controller = navControllers[buttonName];
-
-            if (controller != null)
-                controller.Execute();
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
     }
 
