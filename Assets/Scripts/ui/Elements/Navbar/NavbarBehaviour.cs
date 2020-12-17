@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.UIElements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Pandora.UI.Elements.ViewManager;
+using System.Linq;
 
 namespace Pandora.UI.Elements.Navbar
 {
@@ -17,8 +19,8 @@ namespace Pandora.UI.Elements.Navbar
 
     public class NavbarBehaviour : MonoBehaviour
     {
-        static NavbarBehaviour instance;
         private VisualElement rootElement;
+        private string viewManagerName = "ViewManager";
         private string buttonsContainerName = "NavbarButtonsContainer";
         private string genericButtonName = "NavButton";
         private Action<NavbarButton> Handler;
@@ -42,19 +44,6 @@ namespace Pandora.UI.Elements.Navbar
                         break;
                 }
             });
-        }
-
-        public void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
         }
 
         private void Setup(VisualElement navbarElement, Action<NavbarButton> Handler)
@@ -93,7 +82,17 @@ namespace Pandora.UI.Elements.Navbar
 
         private void ChangeScene(string sceneName)
         {
-            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+            var viewManagerBehaviour = GetViewManager();
+
+            if (viewManagerBehaviour == null) return;
+
+            viewManagerBehaviour.ChangeScene(sceneName);
+        }
+
+        private ViewManagerBehaviour GetViewManager()
+        {
+            var viewManagerBehaviour = transform.parent.GetComponentInChildren<ViewManagerBehaviour>();
+            return viewManagerBehaviour;
         }
     }
 

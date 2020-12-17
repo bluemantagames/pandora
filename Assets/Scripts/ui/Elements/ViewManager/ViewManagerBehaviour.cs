@@ -2,41 +2,69 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
+using UnityEngine.SceneManagement;
 
-public class ViewManagerBehaviour : MonoBehaviour
+namespace Pandora.UI.Elements.ViewManager
 {
-    UIDocument rootDocument;
-    VisualElement rootElement;
-    VisualElement viewManagerElement;
-    string viewElementName = "ViewManager";
-    public int AnimationVelocity = 300;
-
-    public void OnEnable()
+    public class ViewManagerBehaviour : MonoBehaviour
     {
-        rootDocument = GetComponent<UIDocument>();
-        rootElement = rootDocument.rootVisualElement;
-        viewManagerElement = rootElement.Q(viewElementName);
+        UIDocument rootDocument;
+        VisualElement rootElement;
+        VisualElement viewManagerElement;
+        string viewElementName = "ViewManager";
+        private float showSortLevel;
+        private float hideSortLevel = 0;
+        Func<VisualElement, float> animationValueExtractor = (element) => element.style.opacity.value;
+        public int AnimationVelocity = 200;
 
-        StartAnimation();
-    }
-
-    private void StartAnimation()
-    {
-        if (viewManagerElement == null) return;
-
-        viewManagerElement.style.opacity = 1f;
-        Func<VisualElement, float> extractor = (element) => element.style.opacity.value;
-
-        viewManagerElement.experimental.animation.Start(extractor, 0f, AnimationVelocity, (el, value) =>
+        public void OnEnable()
         {
-            el.style.opacity = value;
+            rootDocument = GetComponent<UIDocument>();
+            rootElement = rootDocument.rootVisualElement;
+            viewManagerElement = rootElement.Q(viewElementName);
+            showSortLevel = rootDocument.sortingOrder;
 
-            if (value == 0f) Hide();
-        });
+            HideAnimation();
+        }
+
+        private void HideAnimation()
+        {
+            if (viewManagerElement == null) return;
+
+            rootDocument.sortingOrder = showSortLevel;
+            viewManagerElement.style.opacity = 1f;
+
+            viewManagerElement.experimental.animation.Start(animationValueExtractor, 0f, AnimationVelocity, (el, value) =>
+            {
+                el.style.opacity = value;
+
+                if (value == 0f)
+                    rootDocument.sortingOrder = hideSortLevel;
+            });
+        }
+
+        public void ChangeScene(string sceneName)
+        {
+            if (viewManagerElement == null) return;
+
+            rootDocument.sortingOrder = showSortLevel;
+            viewManagerElement.style.opacity = 0f;
+
+            viewManagerElement.experimental.animation.Start(animationValueExtractor, 1f, AnimationVelocity, (el, value) =>
+            {
+                el.style.opacity = value;
+
+                if (value == 1f)
+                {
+                    var sceneChangeAsync = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+
+                    sceneChangeAsync.completed += (_) =>
+                    {
+                        HideAnimation();
+                    };
+                }
+            });
+        }
     }
 
-    private void Hide()
-    {
-        rootDocument.sortingOrder = 0;
-    }
 }
