@@ -134,7 +134,6 @@ GameObject:
   m_Component:
   - component: {fileID: 133085804}
   - component: {fileID: 133085803}
-  - component: {fileID: 133085805}
   - component: {fileID: 133085802}
   m_Layer: 5
   m_Name: HomeView
@@ -193,24 +192,6 @@ Transform:
   m_Father: {fileID: 731401948}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &133085805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 133085801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afe6c4600f907e64ca01409d01326a60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
 --- !u!1 &334596518
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,8 +410,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1125961657}
   - component: {fileID: 1125961656}
-  - component: {fileID: 1125961659}
   - component: {fileID: 1125961658}
+  - component: {fileID: 1125961659}
   m_Layer: 5
   m_Name: Navbar
   m_TagString: Untagged
