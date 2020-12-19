@@ -24,12 +24,14 @@ namespace Pandora.UI.Elements.Navbar
         private string buttonsContainerName = "NavbarButtonsContainer";
         private string genericButtonName = "NavButton";
         private Action<NavbarButton> Handler;
+        private PanelSettings targetPanel;
 
         private Dictionary<NavbarButton, NavbarButtonController> navControllers = new Dictionary<NavbarButton, NavbarButtonController>();
 
         public void OnEnable()
         {
             rootElement = GetComponent<UIDocument>().rootVisualElement;
+            targetPanel = GetComponent<UIDocument>().panelSettings;
 
             Setup(rootElement, (button) =>
             {
