@@ -1,5 +1,7 @@
 using Pandora.Network;
 using Pandora.Network.Messages;
+using UnityEngine;
+using Pandora.UI.HUD;
 
 class EndGameSingleton {
     static EndGameSingleton _instance = null;
@@ -35,5 +37,9 @@ class EndGameSingleton {
         };
 
         NetworkControllerSingleton.instance.EnqueueMessage(matchFinishedMessage);
+
+        var container = GameObject.Find("MatchEndPanelContainer");
+
+        container.GetComponent<MatchEndPanelAnimation>().StartAnimation();
     }
 }
