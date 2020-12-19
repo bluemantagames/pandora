@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Pandora.UI.Elements.ViewManager;
 using System.Linq;
+using Pandora.UI.Menu;
 
 namespace Pandora.UI.Elements.Navbar
 {
@@ -25,6 +26,7 @@ namespace Pandora.UI.Elements.Navbar
         private string genericButtonName = "NavButton";
         private Action<NavbarButton> Handler;
         private PanelSettings targetPanel;
+        public ViewsContainerBehaviour ViewsContainer;
 
         private Dictionary<NavbarButton, NavbarButtonController> navControllers = new Dictionary<NavbarButton, NavbarButtonController>();
 
@@ -35,16 +37,7 @@ namespace Pandora.UI.Elements.Navbar
 
             Setup(rootElement, (button) =>
             {
-                switch (button)
-                {
-                    case NavbarButton.HomeNavbarButton:
-                        ChangeScene("HomeScene");
-                        break;
-
-                    case NavbarButton.ShopNavbarButton:
-                        ChangeScene("ShopScene");
-                        break;
-                }
+                ChangeView(button);
             });
         }
 
@@ -82,19 +75,11 @@ namespace Pandora.UI.Elements.Navbar
             }
         }
 
-        private void ChangeScene(string sceneName)
+        private void ChangeView(NavbarButton view)
         {
-            var viewManagerBehaviour = GetViewManager();
+            if (ViewsContainer == null) return;
 
-            if (viewManagerBehaviour == null) return;
-
-            viewManagerBehaviour.ChangeScene(sceneName);
-        }
-
-        private ViewManagerBehaviour GetViewManager()
-        {
-            var viewManagerBehaviour = transform.parent.GetComponentInChildren<ViewManagerBehaviour>();
-            return viewManagerBehaviour;
+            ViewsContainer.ShowView(view);
         }
     }
 
