@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Pandora.UI.Elements.Navbar;
+using DG.Tweening;
 
 namespace Pandora.UI.Menu
 {
@@ -59,11 +60,8 @@ namespace Pandora.UI.Menu
             var viewPositionX = view.transform.position.x;
 
             var displayPositionX = currentPositionX - viewPositionX;
-            var newPosition = new Vector2(displayPositionX, currentPositionY);
 
-            Logger.Debug($"Setting new view position {newPosition}");
-
-            gameObject.transform.position = newPosition;
+            gameObject.transform.DOMoveX(displayPositionX, 0.15f).SetEase(Ease.InOutCubic);
         }
     }
 }
