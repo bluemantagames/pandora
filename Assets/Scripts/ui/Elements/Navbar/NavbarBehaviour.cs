@@ -27,6 +27,7 @@ namespace Pandora.UI.Elements.Navbar
         private Action<NavbarButton> Handler;
         private PanelSettings targetPanel;
         public ViewsContainerBehaviour ViewsContainer;
+        public NavbarButton InitialView = NavbarButton.HomeNavbarButton;
 
         private Dictionary<NavbarButton, NavbarButtonController> navControllers = new Dictionary<NavbarButton, NavbarButtonController>();
 
@@ -62,6 +63,11 @@ namespace Pandora.UI.Elements.Navbar
                     DeactivateAll(enumName);
                     Handler(enumName);
                 });
+
+                if (enumName == InitialView)
+                {
+                    controller.Activate();
+                }
 
                 navControllers.Add(enumName, controller);
             }

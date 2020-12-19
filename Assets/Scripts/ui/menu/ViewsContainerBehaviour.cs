@@ -1,17 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Pandora.UI.Elements.Navbar;
 
 namespace Pandora.UI.Menu
 {
     public class ViewsContainerBehaviour : MonoBehaviour
     {
+        private bool initialied = false;
         public GameObject HomeView;
         public GameObject ShopView;
+        public GameObject InitialView;
+
+        public void Awake()
+        {
+            SetInitialView();
+        }
+
+        private void SetInitialView()
+        {
+            if (InitialView == null) return;
+
+            var computedX = 0f;
+            var computedY = gameObject.transform.position.y;
+
+            foreach (RectTransform child in transform)
+            {
+                if (child.gameObject == InitialView) break;
+                else computedX -= child.rect.width;
+            }
+
+            var newPosition = new Vector2(computedX, computedY);
+            Logger.Debug($"Setting initial position {newPosition}");
+            gameObject.transform.position = newPosition;
+        }
 
         public void ShowView(NavbarButton view)
         {
+            Logger.Debug($"Show View {view}");
+
             switch (view)
             {
                 case NavbarButton.HomeNavbarButton:
@@ -33,7 +61,7 @@ namespace Pandora.UI.Menu
             var displayPositionX = currentPositionX - viewPositionX;
             var newPosition = new Vector2(displayPositionX, currentPositionY);
 
-            Logger.Debug($"Setting view container to {newPosition}");
+            Logger.Debug($"Setting new view position {newPosition}");
 
             gameObject.transform.position = newPosition;
         }
