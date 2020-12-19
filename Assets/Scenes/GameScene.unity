@@ -3963,6 +3963,24 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1301091168}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1306182015 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1817561492907184831, guid: 1c8fcde17e00d435ea05dc5d015a7780,
+    type: 3}
+  m_PrefabInstance: {fileID: 1817561492132766423}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1306182016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306182015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4423860db2d244008874f0eb25c8d8e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1357662527
 GameObject:
   m_ObjectHideFlags: 0
@@ -8508,6 +8526,51 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.a
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817561492907184829, guid: 1c8fcde17e00d435ea05dc5d015a7780,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817561492907184829, guid: 1c8fcde17e00d435ea05dc5d015a7780,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817561492907184829, guid: 1c8fcde17e00d435ea05dc5d015a7780,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817561492907184829, guid: 1c8fcde17e00d435ea05dc5d015a7780,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1306182016}
+    - target: {fileID: 1817561492907184829, guid: 1c8fcde17e00d435ea05dc5d015a7780,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnButtonPress
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817561492907184829, guid: 1c8fcde17e00d435ea05dc5d015a7780,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817561492907184829, guid: 1c8fcde17e00d435ea05dc5d015a7780,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: OnButtonPress
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817561492907184829, guid: 1c8fcde17e00d435ea05dc5d015a7780,
+        type: 3}
+      propertyPath: m_SpriteState.m_HighlightedSprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817561492907184829, guid: 1c8fcde17e00d435ea05dc5d015a7780,
+        type: 3}
+      propertyPath: m_SpriteState.m_SelectedSprite
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1817561492907184830, guid: 1c8fcde17e00d435ea05dc5d015a7780,
         type: 3}
