@@ -70,8 +70,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 11
-  m_Sprite: {fileID: 7643779389267483508, guid: d7cbd7ac00c28404eb32731954660f1b,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: b2d9b7d7a40c74dbf9d7f37103cf4f0e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -152,8 +151,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 12
-  m_Sprite: {fileID: 8711906038010557429, guid: d7cbd7ac00c28404eb32731954660f1b,
-    type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -161,7 +159,7 @@ SpriteRenderer:
   m_Size: {x: 1.7376873, y: 2.075}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &3866240383038811722
@@ -251,6 +249,7 @@ MonoBehaviour:
     Target: {x: 0, y: 0}
     IsEvading: 0
     UnitName: 
+    UnitId: 
 --- !u!114 &3866240383038811720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,6 +303,7 @@ MonoBehaviour:
     Target: {x: 0, y: 0}
     IsEvading: 0
     UnitName: 
+    UnitId: 
   DebugEntity: 0
 --- !u!50 &2089915459
 Rigidbody2D:
@@ -364,6 +364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cd17ee6a3bfc413682d0a662b1be9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HitboxName: 
 --- !u!1001 &5202782289575785172
 PrefabInstance:
   m_ObjectHideFlags: 0
