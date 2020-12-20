@@ -25,26 +25,31 @@ namespace Pandora.UI.Menu
         {
             if (InitialView == null) return;
 
-            var computedX = 0f;
-            var computedY = gameObject.transform.position.y;
+            var canvas = GameObject.Find("Canvas");
+            var canvasRect = canvas.GetComponent<RectTransform>();
+            var canvasWidth = canvasRect.rect.width;
+            var canvasHeight = canvasRect.rect.height;
+
+            var computedX = gameObject.transform.localPosition.x;
+            var computedY = gameObject.transform.localPosition.y;
             var reachedActive = false;
 
             foreach (RectTransform child in transform)
             {
+                // Set the width and height for each
+                // view container
+                var newSize = PoolInstances.Vector2Pool.GetObject();
+                newSize.x = canvasWidth;
+                newSize.y = canvasHeight;
+
+                child.sizeDelta = newSize;
+
                 // Calculate the initial X position of the
                 // container
                 if (child.gameObject == InitialView)
                     reachedActive = true;
                 else if (!reachedActive)
-                    computedX -= child.rect.width;
-
-                // Set the width and height for each
-                // view container
-                var newSize = PoolInstances.Vector2Pool.GetObject();
-                newSize.x = Screen.width;
-                newSize.y = Screen.height;
-
-                child.sizeDelta = newSize;
+                    computedX -= newSize.x;
 
                 PoolInstances.Vector2Pool.ReturnObject(newSize);
             }
@@ -55,7 +60,7 @@ namespace Pandora.UI.Menu
 
             Logger.Debug($"Setting initial position {newPosition}");
 
-            gameObject.transform.position = newPosition;
+            gameObject.transform.localPosition = newPosition;
 
             PoolInstances.Vector2Pool.ReturnObject(newPosition);
 
