@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Pandora.UI.Elements.Navbar;
 using DG.Tweening;
+using Pandora.Pool;
 
 namespace Pandora.UI.Menu
 {
@@ -17,25 +18,48 @@ namespace Pandora.UI.Menu
 
         public void Awake()
         {
-            SetInitialView();
+            Setup();
         }
 
-        private void SetInitialView()
+        private void Setup()
         {
             if (InitialView == null) return;
 
             var computedX = 0f;
             var computedY = gameObject.transform.position.y;
+            var reachedActive = false;
 
             foreach (RectTransform child in transform)
             {
-                if (child.gameObject == InitialView) break;
-                else computedX -= child.rect.width;
+                // Calculate the initial X position of the
+                // container
+                if (child.gameObject == InitialView)
+                    reachedActive = true;
+                else if (!reachedActive)
+                    computedX -= child.rect.width;
+
+                // Set the width and height for each
+                // view container
+                var newSize = PoolInstances.Vector2Pool.GetObject();
+                newSize.x = Screen.width;
+                newSize.y = Screen.height;
+
+                child.sizeDelta = newSize;
+
+                PoolInstances.Vector2Pool.ReturnObject(newSize);
             }
 
-            var newPosition = new Vector2(computedX, computedY);
+            var newPosition = PoolInstances.Vector2Pool.GetObject();
+            newPosition.x = computedX;
+            newPosition.y = computedY;
+
             Logger.Debug($"Setting initial position {newPosition}");
+
             gameObject.transform.position = newPosition;
+
+            PoolInstances.Vector2Pool.ReturnObject(newPosition);
+
+            DeactivateAllExcept(InitialView);
         }
 
         public void ShowView(NavbarButton view)
@@ -66,7 +90,41 @@ namespace Pandora.UI.Menu
 
             var displayPositionX = currentPositionX - viewPositionX;
 
-            gameObject.transform.DOMoveX(displayPositionX, 0.15f).SetEase(Ease.InOutCubic);
+            ActivateAll();
+
+            gameObject.transform.DOMoveX(displayPositionX, 0.15f).SetEase(Ease.InOutCubic).OnComplete(() =>
+            {
+                DeactivateAllExcept(view);
+            });
+        }
+
+        private void ActivateAll()
+        {
+            Logger.Debug("Activating all views");
+
+            foreach (Transform view in transform)
+            {
+                foreach (RectTransform viewChild in view)
+                {
+                    viewChild.gameObject.SetActive(true);
+                }
+            }
+        }
+
+        private void DeactivateAllExcept(GameObject exceptView)
+        {
+            Logger.Debug("Deactivating all views except for one");
+
+            foreach (Transform view in transform)
+            {
+                var currentGameObject = view.gameObject;
+                var isActive = currentGameObject == exceptView;
+
+                foreach (RectTransform viewChild in view)
+                {
+                    viewChild.gameObject.SetActive(isActive);
+                }
+            }
         }
     }
 }
