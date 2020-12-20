@@ -106,8 +106,6 @@ namespace Pandora.Engine.Grid
                         grid[x].Length - 1 < y;
 
                     if (isIndexInvalid) {
-                        Logger.DebugWarning($"Received invalid index {x}, {y} while inserting {item.GameObject.name}");
-
                         continue;
                     }
 

@@ -110,24 +110,10 @@ namespace Pandora.Engine
 
         public void AddRiverEntities()
         {
-            var leftRiverObject = GameObject.Find("arena_water_left");
+            var riverY = Map.RiverY;
+            var riverX = Map.RiverX;
 
-            var leftPosition = new Vector2Int(UnitsPerCell, 13 * UnitsPerCell + UnitsPerCell / 2);
-
-            var leftEntity =
-                AddEntity(leftRiverObject, 0, leftPosition, true, SafeGenerateTimestamp(leftRiverObject));
-
-            var rightRiverObject = GameObject.Find("arena_water_right");
-
-            var rightPosition = new Vector2Int(
-                (Map.mapSizeX - 1) * UnitsPerCell,
-                (13 * UnitsPerCell) + UnitsPerCell / 2
-            );
-
-            var rightEntity =
-                AddEntity(rightRiverObject, 0, rightPosition, true, SafeGenerateTimestamp(rightRiverObject));
-
-            var centerPosition = new Vector2Int(8 * UnitsPerCell, 13 * UnitsPerCell + (UnitsPerCell / 2));
+            var centerPosition = new Vector2Int(riverX * UnitsPerCell + UnitsPerCell / 2, riverY * UnitsPerCell + UnitsPerCell / 2);
 
             var centerRiverObject = GameObject.Find("arena_water_center");
 
@@ -141,23 +127,6 @@ namespace Pandora.Engine
             var centerComponent = centerRiverObject.AddComponent<EngineComponent>();
 
             centerComponent.Entity = centerEntity;
-
-            rightEntity.IsStructure = true;
-            rightEntity.IsMapObstacle = true;
-            rightEntity.Layer = Constants.WATER_LAYER;
-
-
-            var rightComponent = rightRiverObject.AddComponent<EngineComponent>();
-
-            rightComponent.Entity = rightEntity;
-
-            leftEntity.IsStructure = true;
-            leftEntity.IsMapObstacle = true;
-            leftEntity.Layer = Constants.WATER_LAYER;
-
-            var leftComponent = leftRiverObject.AddComponent<EngineComponent>();
-
-            leftComponent.Entity = leftEntity;
         }
 
         public int GetSpeed(int engineUnitsPerSecond) =>
@@ -892,7 +861,7 @@ namespace Pandora.Engine
         /// <summary>Returns the world position, adjusted for the map</summary>
         public Vector2 PhysicsToMapWorldUnflipped(Vector2Int physics)
         {
-            return PhysicsToWorld(physics) + (Vector2)Map.transform.position;
+            return PhysicsToWorld(physics) + (Vector2)Map.WorldBoundsPosition;
         }
 
 
@@ -932,8 +901,8 @@ namespace Pandora.Engine
         /// <returns></returns>
         public Vector2 PhysicsToWorldArena(Vector2Int physics)
         {
-            var xFix = Map.transform.position.x;
-            var yFix = Map.transform.position.y;
+            var xFix = Map.WorldBoundsPosition.x;
+            var yFix = Map.WorldBoundsPosition.y;
 
             var xWorldBounds = Map.cellWidth * Map.mapSizeX;
             var yWorldBounds = Map.cellHeight * Map.mapSizeY;

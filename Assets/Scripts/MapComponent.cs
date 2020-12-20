@@ -23,10 +23,11 @@ namespace Pandora
     public class MapComponent : MonoBehaviour, IPointerDownHandler
     {
         int bottomMapSizeX = 16;
-        public int bottomMapSizeY = 13;
+        public int bottomMapSizeY = 12;
         public int mapSizeX;
         public int mapSizeY;
-        public int RiverY = 13;
+        public int RiverY = 12;
+        public int RiverX = 7;
         bool isLockedOnMiddle = false;
         public Vector2 worldMapSize;
         public bool debugHitboxes = false;
@@ -38,6 +39,8 @@ namespace Pandora
         public GameObject CommandsViewport;
         float firstLaneX = 2, secondLaneX = 13;
         CustomSampler aggroSampler, targetValidSampler;
+        BoxCollider2D boxCollider;
+        public Vector2 WorldBoundsPosition;
 
         List<GridCell> spawningCells;
 
@@ -120,15 +123,12 @@ namespace Pandora
             CommandsViewport.SetActive(false);
             CommandsViewport.SetActive(true);
 
-            var topArena = GameObject.Find("top_arena");
-            var topArenaPosition = topArena.transform.position;
-            var topArenaSize = topArena.GetComponent<SpriteRenderer>().bounds.size;
+            boxCollider = GetComponent<BoxCollider2D>();
 
-            Logger.Debug($"Top arena position y {topArenaPosition.y}");
-            Logger.Debug($"Top arena position {(topArenaPosition.y + topArenaSize.y)}");
+            WorldBoundsPosition = boxCollider.bounds.min;
 
-            cellWidth = topArenaSize.x / mapSizeX;
-            cellHeight = ((topArenaPosition.y + topArenaSize.y) - transform.position.y) / mapSizeY;
+            cellWidth = (boxCollider.bounds.max.x - boxCollider.bounds.min.x) / mapSizeX;
+            cellHeight = (boxCollider.bounds.max.y - boxCollider.bounds.min.y) / mapSizeY;
 
             for (var x = 0; x < mapSizeX; x++)
             {
@@ -206,8 +206,8 @@ namespace Pandora
 
             Vector2 gridPosition =
                 new Vector2(
-                    position.x - transform.position.x,
-                    position.y - transform.position.y
+                    position.x - WorldBoundsPosition.x,
+                    position.y - WorldBoundsPosition.y
                 );
 
             var cellPosition = new Vector2Int(
@@ -221,8 +221,8 @@ namespace Pandora
         public Vector2 GridCellToWorldPosition(GridCell cell)
         {
             Vector2 worldPosition = new Vector2(
-                transform.position.x + (cell.vector.x * cellWidth) + cellWidth / 2,
-                transform.position.y + (cell.vector.y * cellHeight) + cellHeight / 2
+                boxCollider.bounds.min.x + (cell.vector.x * cellWidth) + cellWidth / 2,
+                boxCollider.bounds.min.y + (cell.vector.y * cellHeight) + cellHeight / 2
             );
 
             return worldPosition;
@@ -778,8 +778,8 @@ namespace Pandora
 
             Vector2 mousePosition =
                 new Vector2(
-                    worldMouse.x - transform.position.x,
-                    worldMouse.y - transform.position.y
+                    worldMouse.x - WorldBoundsPosition.x,
+                    worldMouse.y - WorldBoundsPosition.y
                 );
 
             var cellPosition = new Vector2Int(
@@ -796,7 +796,7 @@ namespace Pandora
 
             Logger.Debug($"Pointed cell {cell}");
 
-            var worldCellPoint = transform.position;
+            var worldCellPoint = (Vector3) WorldBoundsPosition;
 
             worldCellPoint.x += cellWidth * cell.x + (cellWidth / 2);
             worldCellPoint.y += cellHeight * cell.y + (cellHeight / 2);

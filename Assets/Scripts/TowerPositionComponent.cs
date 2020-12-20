@@ -64,53 +64,7 @@ namespace Pandora
             return positions;
         }
 
-        public GridCell GetMapTarget()
-        {
-            if (EngineTowerPosition == TowerPosition.TopLeft || EngineTowerPosition == TowerPosition.TopRight)
-            {
-                return new GridCell(Position.x + 1, Position.y - 1);
-            }
-            else if (EngineTowerPosition == TowerPosition.BottomLeft || EngineTowerPosition == TowerPosition.BottomRight)
-            {
-                return new GridCell(Position.x + 1, Position.y + 3);
-            }
-            else if (EngineTowerPosition == TowerPosition.BottomMiddle)
-            {
-                return new GridCell(8, 3);
-            }
-            else if (EngineTowerPosition == TowerPosition.TopMiddle)
-            {
-                return new GridCell(8, 23);
-            }
-            else
-            {
-                return TowerCell;
-            }
-        }
-
-        public GridCell GetTowerCenter()
-        {
-            if (EngineTowerPosition == TowerPosition.TopLeft || EngineTowerPosition == TowerPosition.TopRight)
-            {
-                return new GridCell(Position.x + 1, Position.y + 1);
-            }
-            else if (EngineTowerPosition == TowerPosition.BottomLeft || EngineTowerPosition == TowerPosition.BottomRight)
-            {
-                return new GridCell(Position.x + 1, Position.y + 1);
-            }
-            else if (EngineTowerPosition == TowerPosition.BottomMiddle)
-            {
-                return new GridCell(Position.x + 2, Position.y + 1);
-            }
-            else if (EngineTowerPosition == TowerPosition.TopMiddle)
-            {
-                return new GridCell(Position.x + 2, Position.y + 1);
-            }
-            else
-            {
-                return TowerCell;
-            }
-        }
+        public GridCell GetTowerCenter() => TowerCell;
 
         void Start()
         {
