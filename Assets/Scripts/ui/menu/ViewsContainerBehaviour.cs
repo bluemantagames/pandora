@@ -12,6 +12,7 @@ namespace Pandora.UI.Menu
         private bool initialied = false;
         public GameObject HomeView;
         public GameObject ShopView;
+        public GameObject DeckView;
         public GameObject InitialView;
 
         public void Awake()
@@ -49,6 +50,10 @@ namespace Pandora.UI.Menu
 
                 case NavbarButton.ShopNavbarButton:
                     EnableView(ShopView);
+                    break;
+
+                case NavbarButton.DeckNavbarButton:
+                    EnableView(DeckView);
                     break;
             }
         }
