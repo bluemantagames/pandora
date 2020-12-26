@@ -48,7 +48,7 @@ namespace Pandora
                 playerModelSingleton.DeckSlots = meResponse.Body.deckSlots;
 
                 IsLoading = false;
-                SceneManager.LoadScene("MainMenuScene");
+                SceneManager.LoadScene("HomeScene");
             }
             else
             {
