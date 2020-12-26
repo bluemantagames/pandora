@@ -19,6 +19,8 @@ namespace Pandora.Deck.UI
         DeckSpotBehaviour lastDeckSpot;
         Image imageComponent;
         Color imageColor;
+        int menuCardSiblingIndex;
+        GameObject placeholderCard;
 
         public void Load()
         {
@@ -26,6 +28,7 @@ namespace Pandora.Deck.UI
             originalPosition = transform.localPosition;
             originalPivot = GetComponent<RectTransform>().pivot;
             deckSpotParentBehaviour = GameObject.Find("Canvas").GetComponentInChildren<DeckSpotParentBehaviour>();
+            menuCardSiblingIndex = gameObject.transform.GetSiblingIndex();
         }
 
         public void Reset()
@@ -33,13 +36,17 @@ namespace Pandora.Deck.UI
             Logger.Debug($"Resetting {gameObject}");
 
             gameObject.transform.SetParent(originalParent.transform);
-
-            transform.localPosition = originalPosition;
+            transform.SetSiblingIndex(menuCardSiblingIndex);
 
             if (lastDeckSpot != null)
             {
                 lastDeckSpot.Card = null;
                 lastDeckSpot.CardObject = null;
+            }
+
+            if (placeholderCard != null)
+            {
+                Destroy(placeholderCard);
             }
 
             GetComponent<RectTransform>().pivot = originalPivot;
@@ -51,15 +58,19 @@ namespace Pandora.Deck.UI
 
             if (deckSpotBehaviour.CardObject != null)
             {
-                deckSpotBehaviour.CardObject.GetComponent<MenuCardBehaviour>()?.Reset();
+                if (deckSpotBehaviour.CardObject != gameObject)
+                    deckSpotBehaviour.CardObject.GetComponent<MenuCardBehaviour>()?.Reset();
             }
 
             deckSpotBehaviour.Card = new Card(CardName);
             deckSpotBehaviour.CardObject = gameObject;
 
-            gameObject.transform.SetParent(deckSpot.transform.parent);
+            gameObject.transform.SetParent(deckSpot.transform);
+            transform.localPosition = new Vector2(0, 0);
 
-            transform.localPosition = deckSpot.transform.localPosition;
+            var deckSpotRect = deckSpotBehaviour.GetComponent<RectTransform>();
+            var rectTransform = gameObject.GetComponent<RectTransform>();
+            rectTransform.sizeDelta = deckSpotRect.sizeDelta;
 
             GetComponent<RectTransform>().pivot = deckSpot.GetComponent<RectTransform>().pivot;
         }
@@ -67,6 +78,18 @@ namespace Pandora.Deck.UI
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (UiDisabled == true) return;
+
+            if (placeholderCard == null)
+            {
+                // Create the placeholder card
+                var newCard = Instantiate(gameObject);
+                var newCardMenuCardBehaviour = newCard.GetComponent<MenuCardBehaviour>();
+                newCardMenuCardBehaviour.UiDisabled = true;
+                newCard.transform.SetParent(gameObject.transform.parent, false);
+                placeholderCard = newCard;
+                newCard.transform.SetSiblingIndex(menuCardSiblingIndex);
+            }
+
             gameObject.transform.SetParent(Canvas.transform);
         }
 
