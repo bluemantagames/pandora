@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Pandora.Network;
+using Pandora.Pool;
 
 namespace Pandora.Deck.UI
 {
@@ -66,13 +67,20 @@ namespace Pandora.Deck.UI
             deckSpotBehaviour.CardObject = gameObject;
 
             gameObject.transform.SetParent(deckSpot.transform);
-            transform.localPosition = new Vector2(0, 0);
+
+            Vector2 newPosition = PoolInstances.Vector2Pool.GetObject();
+            newPosition.x = 0;
+            newPosition.y = 0;
+
+            transform.localPosition = newPosition;
 
             var deckSpotRect = deckSpotBehaviour.GetComponent<RectTransform>();
             var rectTransform = gameObject.GetComponent<RectTransform>();
             rectTransform.sizeDelta = deckSpotRect.sizeDelta;
 
             GetComponent<RectTransform>().pivot = deckSpot.GetComponent<RectTransform>().pivot;
+
+            PoolInstances.Vector2Pool.ReturnObject(newPosition);
         }
 
         public void OnBeginDrag(PointerEventData eventData)
