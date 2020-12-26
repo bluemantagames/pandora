@@ -13,7 +13,7 @@ namespace Pandora.UI.Login
         public Text ErrorText = null;
         public InputField UsernameInput = null;
         public InputField PasswordInput = null;
-        public bool UseProdMatchmaking = false;
+        public bool UseProdServer = false;
         private string oldButtonText = null, usernameKey = "username", passwordKey = "password";
         private PlayerModelSingleton playerModelSingleton;
         bool isLoading = false;
@@ -35,9 +35,9 @@ namespace Pandora.UI.Login
         {
             var apiController = ApiControllerSingleton.instance;
 
-            if (UseProdMatchmaking)
+            if (UseProdServer)
             {
-                ApiControllerSingleton.instance.IsDebugBuild = false;
+                apiController.IsDebugBuild = false;
             }
 
             var loginResponse = await apiController.Login(username, password);
