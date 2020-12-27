@@ -7,6 +7,7 @@ using DG.Tweening;
 using Pandora.Pool;
 using UnityEngine.EventSystems;
 using Pandora.UI.Menu.Event;
+using Pandora.UI.Menu;
 
 namespace Pandora.UI.Menu
 {
@@ -72,21 +73,21 @@ namespace Pandora.UI.Menu
             DeactivateAllExcept(InitialView);
         }
 
-        public void ShowView(NavbarButton view)
+        public void ShowView(MenuView view)
         {
             Logger.Debug($"Show View {view}");
 
             switch (view)
             {
-                case NavbarButton.HomeNavbarButton:
+                case MenuView.HomeView:
                     EnableView(HomeView);
                     break;
 
-                case NavbarButton.ShopNavbarButton:
+                case MenuView.ShopView:
                     EnableView(ShopView);
                     break;
 
-                case NavbarButton.DeckNavbarButton:
+                case MenuView.DeckView:
                     EnableView(DeckView);
                     break;
             }

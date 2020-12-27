@@ -8,7 +8,6 @@ using System.Net;
 using Pandora.UI.Menu;
 using Pandora.UI.Menu.Event;
 using Pandora.Events;
-using Pandora.UI.Elements.Navbar;
 
 public class DeckSlotParentBehaviour : MonoBehaviour
 {
@@ -79,7 +78,7 @@ public class DeckSlotParentBehaviour : MonoBehaviour
         var viewActive = ev as ViewActive;
         var activeDeckSlot = playerModelSingleton?.User?.activeDeckSlot;
 
-        if (viewActive.ActiveView != NavbarButton.DeckNavbarButton) return;
+        if (viewActive.ActiveView != MenuView.DeckView) return;
         if (activeDeckSlot == null) return;
         if (deckSpotParentBehaviour == null) return;
 
