@@ -5,6 +5,10 @@ using Pandora.Network;
 using Pandora.Deck.UI;
 using Cysharp.Threading.Tasks;
 using System.Net;
+using Pandora.UI.Menu;
+using Pandora.UI.Menu.Event;
+using Pandora.Events;
+using Pandora.UI.Elements.Navbar;
 
 public class DeckSlotParentBehaviour : MonoBehaviour
 {
@@ -12,20 +16,29 @@ public class DeckSlotParentBehaviour : MonoBehaviour
     public Button DeckSlotButton;
     PlayerModelSingleton playerModelSingleton;
     ApiControllerSingleton apiControllerSingleton;
+    MenuEventsSingleton menuEventsSingleton;
+    DeckSpotParentBehaviour deckSpotParentBehaviour;
 
     void Awake()
     {
         playerModelSingleton = PlayerModelSingleton.instance;
         apiControllerSingleton = ApiControllerSingleton.instance;
+        menuEventsSingleton = MenuEventsSingleton.instance;
+        deckSpotParentBehaviour = DeckSpotsParent.GetComponent<DeckSpotParentBehaviour>();
 
+        Setup();
+
+        menuEventsSingleton.EventBus.Subscribe<ViewActive>(new EventSubscriber<MenuEvent>(ViewActiveHandler, "ViewActiveHandler"));
+    }
+
+    void Setup()
+    {
         if (playerModelSingleton.DeckSlots == null) return;
         if (DeckSlotButton == null) return;
         if (DeckSpotsParent == null) return;
-
-        var deckSpotParentBehaviour = DeckSpotsParent.GetComponent<DeckSpotParentBehaviour>();
-        var activeDeckSlot = playerModelSingleton.User.activeDeckSlot;
-
         if (deckSpotParentBehaviour == null) return;
+
+        var activeDeckSlot = playerModelSingleton.User.activeDeckSlot;
 
         for (var index = 0; index < playerModelSingleton.DeckSlots.Count; index++)
         {
@@ -50,16 +63,37 @@ public class DeckSlotParentBehaviour : MonoBehaviour
                 if (deckSlot.id == activeDeckSlot)
                 {
                     deckSlotBehaviour.Activate();
-                    deckSpotParentBehaviour.LoadSavedDeck(index);
                 }
             }
         }
+
+        // Load deck
+        deckSpotParentBehaviour.LoadSavedDeck(activeDeckSlot);
 
         // Remove first button
         Destroy(DeckSlotButton.gameObject);
     }
 
-    public async UniTaskVoid ExecuteChangeDeckSlot(long deckSlotId, int deckSlotIndex)
+    void ViewActiveHandler(MenuEvent ev)
+    {
+        var viewActive = ev as ViewActive;
+        var activeDeckSlot = playerModelSingleton?.User?.activeDeckSlot;
+
+        if (viewActive.ActiveView != NavbarButton.DeckNavbarButton) return;
+        if (activeDeckSlot == null) return;
+        if (deckSpotParentBehaviour == null) return;
+
+        // This method must be used because
+        // when we are switching a view, it
+        // will be enabled, and all the grid layout
+        // inside could have `0` since they are not
+        // instantly calculated.
+        LayoutRebuilder.ForceRebuildLayoutImmediate(deckSpotParentBehaviour.gameObject.GetComponent<RectTransform>());
+
+        deckSpotParentBehaviour.LoadSavedDeck((long)activeDeckSlot);
+    }
+
+    public async UniTaskVoid ExecuteChangeDeckSlot(long deckSlotId)
     {
         if (DeckSpotsParent == null) return;
 
@@ -76,7 +110,7 @@ public class DeckSlotParentBehaviour : MonoBehaviour
         if (response.StatusCode == HttpStatusCode.OK)
         {
             deckSpotParentBehaviour.Reset();
-            deckSpotParentBehaviour.LoadSavedDeck(deckSlotIndex);
+            deckSpotParentBehaviour.LoadSavedDeck(deckSlotId);
 
             // Update the model
             playerModelSingleton.User.activeDeckSlot = deckSlotId;

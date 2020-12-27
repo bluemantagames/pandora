@@ -20,7 +20,7 @@ public class DeckSlotBehaviour : MonoBehaviour
 
         if (deckSpotParentBehaviour)
         {
-            _ = deckSpotParentBehaviour.ExecuteChangeDeckSlot(DeckSlotId, DeckSlotIndex);
+            _ = deckSpotParentBehaviour.ExecuteChangeDeckSlot(DeckSlotId);
         }
     }
 

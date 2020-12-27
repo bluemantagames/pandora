@@ -44,14 +44,13 @@ namespace Pandora.Deck.UI
             var deck = Deck.Select(d => d != null ? d.Name : null).ToList();
             var token = playerModelSingleton.Token;
 
-            Debug.Log($"Saving deck slot {activeDeckSlot} with deck");
-            Debug.Log(deck);
+            Logger.Debug($"Saving deck slot {activeDeckSlot}");
 
             var response = await apiControllerSingleton.DeckSlotUpdate((long)activeDeckSlot, deck, token);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                Debug.Log($"Updated deck slot {activeDeckSlot}");
+                Logger.Debug($"Updated deck slot {activeDeckSlot}");
 
                 // Updating the model
                 playerModelSingleton.DeckSlots = playerModelSingleton.DeckSlots.Select(deckSlot =>
@@ -63,25 +62,25 @@ namespace Pandora.Deck.UI
                 }).ToList();
             }
             else
-                Debug.Log(response.Error.message);
+                Logger.Debug(response.Error.message);
         }
 
-        public void LoadSavedDeck(int deckSlotIndex)
+        public void LoadSavedDeck(long deckSlotId)
         {
-            var deckSlot = playerModelSingleton.DeckSlots[deckSlotIndex];
+            Logger.Debug($"Loading deck {deckSlotId}");
+
+            var deckSlot = playerModelSingleton?.DeckSlots.Find(slot => slot.id == deckSlotId);
 
             if (deckSlot == null) return;
 
             var menuCardsParent = transform.parent.GetComponentInChildren<MenuCardsParentBehaviour>();
             var spots = new Queue<DeckSpotBehaviour>(GetComponentsInChildren<DeckSpotBehaviour>());
 
-            Debug.Log(deckSlot.deck);
-
             if (deckSlot.deck == null) return;
 
             foreach (var cardName in deckSlot.deck)
             {
-                Debug.Log($"Loading {cardName}");
+                Logger.Debug($"Loading {cardName}");
 
                 var spot = spots.Dequeue();
 
@@ -90,7 +89,7 @@ namespace Pandora.Deck.UI
                     var card = menuCardsParent.FindCard(cardName);
 
                     if (card != null)
-                        card.SetSpot(spot.gameObject);
+                        card.SetSpotWithPlaceholder(spot.gameObject);
                 }
             }
         }

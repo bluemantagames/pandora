@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using Pandora.UI.Elements.Navbar;
 using DG.Tweening;
 using Pandora.Pool;
+using UnityEngine.EventSystems;
+using Pandora.UI.Menu.Event;
 
 namespace Pandora.UI.Menu
 {
@@ -15,9 +17,12 @@ namespace Pandora.UI.Menu
         public GameObject ShopView;
         public GameObject DeckView;
         public GameObject InitialView;
+        MenuEventsSingleton menuEventsSingleton;
 
         public void Awake()
         {
+            menuEventsSingleton = MenuEventsSingleton.instance;
+
             Setup();
         }
 
@@ -85,6 +90,8 @@ namespace Pandora.UI.Menu
                     EnableView(DeckView);
                     break;
             }
+
+            menuEventsSingleton.EventBus.Dispatch(new ViewActive(view));
         }
 
         private void EnableView(GameObject view, bool animate = false)
