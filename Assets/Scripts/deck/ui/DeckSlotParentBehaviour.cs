@@ -8,11 +8,14 @@ using System.Net;
 using Pandora.UI.Menu;
 using Pandora.UI.Menu.Event;
 using Pandora.Events;
+using System.Collections.Generic;
 
 public class DeckSlotParentBehaviour : MonoBehaviour
 {
+    public MenuView CurrentView;
     public GameObject DeckSpotsParent;
     public Button DeckSlotButton;
+    public bool DeckSlotsOnly;
     PlayerModelSingleton playerModelSingleton;
     ApiControllerSingleton apiControllerSingleton;
     MenuEventsSingleton menuEventsSingleton;
@@ -23,7 +26,7 @@ public class DeckSlotParentBehaviour : MonoBehaviour
         playerModelSingleton = PlayerModelSingleton.instance;
         apiControllerSingleton = ApiControllerSingleton.instance;
         menuEventsSingleton = MenuEventsSingleton.instance;
-        deckSpotParentBehaviour = DeckSpotsParent.GetComponent<DeckSpotParentBehaviour>();
+        deckSpotParentBehaviour = DeckSpotsParent?.GetComponent<DeckSpotParentBehaviour>();
 
         Setup();
 
@@ -34,8 +37,6 @@ public class DeckSlotParentBehaviour : MonoBehaviour
     {
         if (playerModelSingleton.DeckSlots == null) return;
         if (DeckSlotButton == null) return;
-        if (DeckSpotsParent == null) return;
-        if (deckSpotParentBehaviour == null) return;
 
         var activeDeckSlot = playerModelSingleton.User.activeDeckSlot;
 
@@ -67,7 +68,10 @@ public class DeckSlotParentBehaviour : MonoBehaviour
         }
 
         // Load deck
-        deckSpotParentBehaviour.LoadSavedDeck(activeDeckSlot);
+        if (deckSpotParentBehaviour != null && !DeckSlotsOnly)
+        {
+            deckSpotParentBehaviour.LoadSavedDeck(activeDeckSlot);
+        }
 
         // Remove first button
         Destroy(DeckSlotButton.gameObject);
@@ -78,7 +82,7 @@ public class DeckSlotParentBehaviour : MonoBehaviour
         var viewActive = ev as ViewActive;
         var activeDeckSlot = playerModelSingleton?.User?.activeDeckSlot;
 
-        if (viewActive.ActiveView != MenuView.DeckView) return;
+        if (viewActive.ActiveView != CurrentView) return;
         if (activeDeckSlot == null) return;
         if (deckSpotParentBehaviour == null) return;
 
@@ -89,17 +93,18 @@ public class DeckSlotParentBehaviour : MonoBehaviour
         // instantly calculated.
         LayoutRebuilder.ForceRebuildLayoutImmediate(deckSpotParentBehaviour.gameObject.GetComponent<RectTransform>());
 
-        deckSpotParentBehaviour.LoadSavedDeck((long)activeDeckSlot);
+        UpdateActiveSlot();
+
+        if (!DeckSlotsOnly && activeDeckSlot != null)
+        {
+            deckSpotParentBehaviour.Reset();
+            deckSpotParentBehaviour.LoadSavedDeck((long)activeDeckSlot);
+        }
     }
 
     public async UniTaskVoid ExecuteChangeDeckSlot(long deckSlotId)
     {
-        if (DeckSpotsParent == null) return;
-
-        var deckSpotParentBehaviour = DeckSpotsParent.GetComponent<DeckSpotParentBehaviour>();
-
-        if (deckSpotParentBehaviour == null) return;
-
+        var deckSpotParentBehaviour = DeckSpotsParent?.GetComponent<DeckSpotParentBehaviour>();
         var token = playerModelSingleton.Token;
 
         if (token == null) return;
@@ -108,13 +113,16 @@ public class DeckSlotParentBehaviour : MonoBehaviour
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            deckSpotParentBehaviour.Reset();
-            deckSpotParentBehaviour.LoadSavedDeck(deckSlotId);
-
             // Update the model
             playerModelSingleton.User.activeDeckSlot = deckSlotId;
 
             UpdateActiveSlot();
+
+            if (deckSpotParentBehaviour != null && !DeckSlotsOnly)
+            {
+                deckSpotParentBehaviour.Reset();
+                deckSpotParentBehaviour.LoadSavedDeck(deckSlotId);
+            }
         }
     }
 
