@@ -46,7 +46,7 @@ namespace Pandora.UI.Menu
                 // view container
                 var newSize = PoolInstances.Vector2Pool.GetObject();
                 newSize.x = canvasWidth;
-                newSize.y = canvasHeight;
+                newSize.y = child.rect.height;
 
                 child.sizeDelta = newSize;
 
