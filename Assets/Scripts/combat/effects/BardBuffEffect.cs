@@ -9,6 +9,7 @@ using Pandora.Movement;
 namespace Pandora.Combat.Effects {
     public class BardBuffEffect: MonoBehaviour, EngineBehaviour, Effect {
         bool _isDisabled = false;
+        Sprite test;
 
         public bool IsDisabled {
             get => _isDisabled;
