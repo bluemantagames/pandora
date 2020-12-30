@@ -10,7 +10,6 @@ namespace Pandora.UI.HUD
         CinemachineVirtualCamera vcam;
         public bool animationStarted = false;
         public float EndSize = 6, AnimationTimeSeconds = 5;
-        float? timeStart = null, timeEnd = null, startSize = null;
         AnimationCurve zoomCurve = null;
 
         // Update is called once per frame
