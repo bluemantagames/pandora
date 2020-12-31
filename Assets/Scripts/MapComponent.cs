@@ -810,6 +810,8 @@ namespace Pandora
             var canvas = Instantiate(textObject, position, Quaternion.identity, transform);
 
             canvas.GetComponentInChildren<Text>().text = text;
+            canvas.GetComponentInChildren<Text>().color = Color.white;
+            canvas.GetComponentInChildren<Canvas>().sortingOrder = 1000;
         }
 
         private EngineEntity GetEngineEntity(GameObject gameObject)
