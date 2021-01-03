@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net;
 using Pandora.Network;
 using UnityEngine.UI;
+using Pandora.Pool;
+using System;
 
 namespace Pandora.Deck.UI
 {
@@ -126,12 +128,16 @@ namespace Pandora.Deck.UI
         {
             if (ManaCurveText == null) return;
 
+            // We could probably use the decimal pool here
+            // but it's a really minor improvement
             var cardsMana = deck.Select(c => c.RequiredMana);
             var curve = CalculateManaCurve(cardsMana);
+            var decimalCurve = Convert.ToDecimal(curve);
+            var roudedCurve = decimalCurve.ToString("#.#");
 
-            Logger.Debug($"Setting mana curve to: {curve}");
+            Logger.Debug($"Setting mana curve to: {roudedCurve}");
 
-            ManaCurveText.text = $"{curve}";
+            ManaCurveText.text = $"{roudedCurve}";
         }
 
         private double CalculateManaCurve(IEnumerable<int> manas)
