@@ -5,11 +5,13 @@ using Cysharp.Threading.Tasks;
 using System.Linq;
 using System.Net;
 using Pandora.Network;
+using UnityEngine.UI;
 
 namespace Pandora.Deck.UI
 {
     public class DeckSpotParentBehaviour : MonoBehaviour
     {
+        public Text ManaCurveText;
         private PlayerModelSingleton playerModelSingleton;
         private ApiControllerSingleton apiControllerSingleton;
 
@@ -35,8 +37,20 @@ namespace Pandora.Deck.UI
             }
         }
 
+        public List<CardBehaviour> DeckInfo
+        {
+            get
+            {
+                var cards = gameObject.GetComponentsInChildren<CardBehaviour>();
+
+                return new List<CardBehaviour>(cards);
+            }
+        }
+
         public async UniTaskVoid SaveDeck()
         {
+            UpdateManaCurve(DeckInfo);
+
             var activeDeckSlot = playerModelSingleton?.User?.activeDeckSlot;
 
             if (activeDeckSlot == null) return;
@@ -92,6 +106,8 @@ namespace Pandora.Deck.UI
                         card.SetSpotWithPlaceholder(spot.gameObject);
                 }
             }
+
+            UpdateManaCurve(DeckInfo);
         }
 
         public void Reset()
@@ -102,6 +118,25 @@ namespace Pandora.Deck.UI
             {
                 menuCardBehaviour.Reset();
             }
+
+            UpdateManaCurve(DeckInfo);
+        }
+
+        private void UpdateManaCurve(List<CardBehaviour> deck)
+        {
+            if (ManaCurveText == null) return;
+
+            var cardsMana = deck.Select(c => c.RequiredMana);
+            var curve = CalculateManaCurve(cardsMana);
+
+            Logger.Debug($"Setting mana curve to: {curve}");
+
+            ManaCurveText.text = $"{curve}";
+        }
+
+        private double CalculateManaCurve(IEnumerable<int> manas)
+        {
+            return manas.Average();
         }
     }
 }

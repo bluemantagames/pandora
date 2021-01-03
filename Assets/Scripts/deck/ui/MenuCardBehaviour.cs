@@ -85,12 +85,6 @@ namespace Pandora.Deck.UI
             PoolInstances.Vector2Pool.ReturnObject(newPosition);
         }
 
-        public void SetSpotWithPlaceholder(GameObject deckSpot)
-        {
-            CreatePlaceholder();
-            SetSpot(deckSpot);
-        }
-
         private void CreatePlaceholder()
         {
             var newCard = Instantiate(gameObject);
@@ -99,6 +93,12 @@ namespace Pandora.Deck.UI
             newCard.transform.SetParent(gameObject.transform.parent, false);
             placeholderCard = newCard;
             newCard.transform.SetSiblingIndex(menuCardSiblingIndex);
+        }
+
+        public void SetSpotWithPlaceholder(GameObject deckSpot)
+        {
+            CreatePlaceholder();
+            SetSpot(deckSpot);
         }
 
         public void OnBeginDrag(PointerEventData eventData)
