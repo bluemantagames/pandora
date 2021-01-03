@@ -89,6 +89,12 @@ namespace Pandora.Deck.UI
         {
             var newCard = Instantiate(gameObject);
             var newCardMenuCardBehaviour = newCard.GetComponent<MenuCardBehaviour>();
+            var newCardCardBehaviour = newCard.GetComponent<CardBehaviour>();
+
+            // A placeholder doesn't need the
+            // card behaviour component
+            Destroy(newCardCardBehaviour);
+
             newCardMenuCardBehaviour.UiDisabled = true;
             newCard.transform.SetParent(gameObject.transform.parent, false);
             placeholderCard = newCard;

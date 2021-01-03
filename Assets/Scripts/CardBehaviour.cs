@@ -92,7 +92,12 @@ namespace Pandora
             }
         }
 
-        public void OnDrag(PointerEventData eventData) => Dragging = true;
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (disabled) return;
+
+            Dragging = true;
+        }
 
         GridCell GetPointed()
         {
