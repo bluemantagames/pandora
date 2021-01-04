@@ -7,6 +7,7 @@ using UnityEngine.U2D;
 using UnityEditor.U2D;
 using System.Linq;
 using System.IO;
+using Pandora.Editor.Data;
 
 namespace Pandora.Editor
 {
@@ -23,20 +24,17 @@ namespace Pandora.Editor
             var texturesPath = EditorUtility.OpenFolderPanel("Pick the texture folder", "Assets/Art/Sprites/Characters/", "");
             var projectTexturesPath = texturesPath.Replace(projectFolder, "");
 
+            progressBar("Loading clips from manifest", 1f);
+
             var filenames =
                 (from texturePath in Directory.GetFiles(texturesPath, "*.png")
-                select Path.GetFileName(texturePath)).ToList();
+                 select Path.GetFileName(texturePath)).ToList();
 
             Debug.Log($"Loading from {texturesPath}, removed {projectFolder}");
 
-            var percent = 0f;
-            var index = 0f;
-
             foreach (var filename in filenames)
             {
-                percent = (++index / filenames.Count);
-
-                progressBar($"Processing {filename}..", percent);
+                progressBar($"Processing {filename}..", filenames.Count);
 
                 var assetPath = Path.Combine(projectTexturesPath, filename);
                 var objects = AssetDatabase.LoadAllAssetsAtPath(assetPath);
@@ -54,8 +52,7 @@ namespace Pandora.Editor
                 }
             }
 
-            percent = 0f;
-            index = 0f;
+            resetProgressBar();
 
             AssetDatabase.CreateAsset(sa, path);
             AssetDatabase.SaveAssets();
@@ -66,96 +63,138 @@ namespace Pandora.Editor
                 (from packable in sa.GetPackables()
                  select packable as Sprite).ToList();
 
-            var frames = new Dictionary<int, Dictionary<int, Sprite>> { };
-            var clips = new Dictionary<int, AnimationClip> { };
+            progressBar("Parsing animation manifest", 0f);
 
-            Debug.Log($"Clips {frames}");
+            var animationManifest = JsonUtility.FromJson<AnimationManifest>(
+                File.ReadAllText(
+                    Path.Combine(texturesPath, "animation-manifest.json")
+                )
+            );
 
-            foreach (var sprite in sprites)
-            {
-                var components = sprite.texture.name.Split(new char[] { '-' });
-                var angle = Int32.Parse(components[0]);
-                var frameNumber = Int32.Parse(components[1]);
+            progressBar("Parsing animation manifest", 1f);
 
-                if (!frames.ContainsKey(angle))
-                    frames[angle] = new Dictionary<int, Sprite> { };
+            var animations = new Dictionary<int, ClipManifest> { };
+            var blendTrees = new Dictionary<string, BlendTree> { };
 
-                Debug.Log($"Adding frame {frameNumber} for angle {angle}");
+            int? framesNum = null;
 
-                frames[angle].Add(frameNumber, sprite);
-            }
-
-            foreach (var angle in frames.Keys)
-            {
-                percent += (++index / frames.Count);
-
-                progressBar($"Processing angle {angle}..", percent);
-
-                var animClip = new AnimationClip();
-                var spriteBinding = new EditorCurveBinding();
-
-                spriteBinding.type = typeof(SpriteRenderer);
-                spriteBinding.path = "";
-                spriteBinding.propertyName = "m_Sprite";
-
-                var spriteKeyFrames = new ObjectReferenceKeyframe[sprites.Count];
-
-                for (var i = 0; i < sprites.Count; i++)
-                {
-                    spriteKeyFrames[i] = new ObjectReferenceKeyframe();
-                    spriteKeyFrames[i].time = i;
-                    spriteKeyFrames[i].value = sprites[i];
-                }
-
-                AnimationUtility.SetObjectReferenceCurve(animClip, spriteBinding, spriteKeyFrames);
-
-                var clipName = path.Replace(".spriteatlas", $"-{angle}.anim");
-
-                Debug.Log($"Saving clip {clipName}");
-
-                AssetDatabase.CreateAsset(animClip, clipName);
-
-                clips[angle] = animClip;
-            }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            progressBar("Loading clips from manifest", 0f);
 
             var controllerPath = path.Replace(".spriteatlas", ".controller");
 
             var controller = UnityEditor.Animations.AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
 
-            var rootStateMachine = controller.layers[0].stateMachine;
-
-            var blendTree = new BlendTree();
-
-            controller.CreateBlendTreeInController("Walking", out blendTree);
-
-            var blendIndex = controller.parameters.ToList().FindIndex((parameter) => parameter.name == "Blend");
-
-            if (blendIndex > 0)
-            {
-                controller.RemoveParameter(blendIndex);
-            }
-
             controller.AddParameter("BlendX", AnimatorControllerParameterType.Float);
             controller.AddParameter("BlendY", AnimatorControllerParameterType.Float);
 
-            blendTree.blendType = BlendTreeType.SimpleDirectional2D;
+            var rootStateMachine = controller.layers[0].stateMachine;
 
-            blendTree.blendParameter = "BlendX";
-            blendTree.blendParameterY = "BlendY";
-
-            var directions = 12;
-
-            for (var i = 0; i < directions; i++)
+            foreach (var clip in animationManifest.animations)
             {
-                var direction = Quaternion.AngleAxis(-i * (360f / directions), Vector3.forward) * Vector2.up;
+                progressBar($"Loading clip {clip.name}", animationManifest.animations.Count);
 
-                if (clips.ContainsKey(i))
+                if (!framesNum.HasValue || framesNum.Value < clip.endFrame)
                 {
-                    blendTree.AddChild(clips[i], direction);
+                    framesNum = clip.endFrame;
                 }
+
+                for (var i = clip.startFrame; i <= clip.endFrame; i++)
+                {
+                    animations[i] = clip;
+                }
+
+                var blendTree = new BlendTree();
+
+                controller.CreateBlendTreeInController(clip.name, out blendTree);
+
+                var blendIndex = controller.parameters.ToList().FindIndex((parameter) => parameter.name == "Blend");
+
+                if (blendIndex > 0)
+                {
+                    controller.RemoveParameter(blendIndex);
+                }
+
+                blendTree.blendType = BlendTreeType.SimpleDirectional2D;
+
+                blendTree.blendParameter = "BlendX";
+                blendTree.blendParameterY = "BlendY";
+
+                blendTrees[clip.name] = blendTree;
+            }
+
+            resetProgressBar();
+
+            var clips = new Dictionary<int, AnimationClip> { };
+            var clipFrames = new Dictionary<string, Dictionary<int, Sprite[]>> { };
+
+
+            foreach (var sprite in sprites)
+            {
+                progressBar($"Indexing {sprite.texture.name}..", sprites.Count);
+
+                var components = sprite.texture.name.Split(new char[] { '-' });
+
+                var angle = Int32.Parse(components[0]);
+                var frameNumber = Int32.Parse(components[1]);
+
+                if (!animations.ContainsKey(frameNumber)) continue;
+
+                var clipManifest = animations[frameNumber];
+                var clipName = clipManifest.name;
+
+                if (!clipFrames.ContainsKey(clipManifest.name))
+                {
+                    clipFrames[clipName] = new Dictionary<int, Sprite[]> { };
+                }
+
+                if (!clipFrames[clipName].ContainsKey(angle))
+                {
+                    clipFrames[clipName][angle] = new Sprite[(clipManifest.endFrame - clipManifest.startFrame) + 1];
+                }
+
+                clipFrames[clipName][angle][frameNumber - clipManifest.startFrame] = sprite;
+
+                Debug.Log($"Adding frame {frameNumber} for angle {angle}");
+            }
+
+            resetProgressBar();
+
+            foreach (var clip in clipFrames.Keys)
+            {
+                foreach (var angle in clipFrames[clip].Keys)
+                {
+                    progressBar($"Building animation clip for {clip} at angle {angle}..", clipFrames[clip].Count);
+
+                    var animClip = new AnimationClip();
+                    var spriteBinding = new EditorCurveBinding();
+
+                    spriteBinding.type = typeof(SpriteRenderer);
+                    spriteBinding.path = "";
+                    spriteBinding.propertyName = "m_Sprite";
+
+                    var spriteKeyFrames = new ObjectReferenceKeyframe[sprites.Count];
+
+                    for (var i = 0; i < clipFrames[clip][angle].Length; i++)
+                    {
+                        spriteKeyFrames[i] = new ObjectReferenceKeyframe();
+                        spriteKeyFrames[i].time = i;
+                        spriteKeyFrames[i].value = clipFrames[clip][angle][i];
+                    }
+
+                    AnimationUtility.SetObjectReferenceCurve(animClip, spriteBinding, spriteKeyFrames);
+
+                    var clipName = path.Replace(".spriteatlas", $"{clip}-{angle}.anim");
+
+                    Debug.Log($"Saving clip {clipName}");
+
+                    AssetDatabase.CreateAsset(animClip, clipName);
+
+                    var direction = Quaternion.AngleAxis(-angle * (360f / clipFrames[clip].Count), Vector3.forward) * Vector2.up;
+
+                    blendTrees[clip].AddChild(animClip, direction);
+                }
+
+                resetProgressBar();
             }
 
             AssetDatabase.SaveAssets();
@@ -167,6 +206,18 @@ namespace Pandora.Editor
         private static void progressBar(string message, float percent)
         {
             EditorUtility.DisplayProgressBar("Animation importer", message, percent);
+        }
+
+        private static float index = 0f;
+
+        private static void resetProgressBar()
+        {
+            index = 0f;
+        }
+
+        private static void progressBar(string message, int total)
+        {
+            progressBar(message, ++index / total);
         }
     }
 
