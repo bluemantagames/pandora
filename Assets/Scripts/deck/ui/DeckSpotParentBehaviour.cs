@@ -14,6 +14,7 @@ namespace Pandora.Deck.UI
     public class DeckSpotParentBehaviour : MonoBehaviour
     {
         public Text ManaCurveText;
+        public MenuCardsParentBehaviour MenuCardsParent;
         private PlayerModelSingleton playerModelSingleton;
         private ApiControllerSingleton apiControllerSingleton;
 
@@ -89,7 +90,6 @@ namespace Pandora.Deck.UI
 
             if (deckSlot == null) return;
 
-            var menuCardsParent = transform.parent.GetComponentInChildren<MenuCardsParentBehaviour>();
             var spots = new Queue<DeckSpotBehaviour>(GetComponentsInChildren<DeckSpotBehaviour>());
 
             if (deckSlot.deck == null) return;
@@ -102,7 +102,7 @@ namespace Pandora.Deck.UI
 
                 if (cardName != null)
                 {
-                    var card = menuCardsParent.FindCard(cardName);
+                    var card = MenuCardsParent.FindCard(cardName);
 
                     if (card != null)
                         card.SetSpotWithPlaceholder(spot.gameObject);
@@ -142,7 +142,9 @@ namespace Pandora.Deck.UI
 
         private double CalculateManaCurve(IEnumerable<int> manas)
         {
-            return manas.Average();
+            var curve = manas.Count() <= 0 ? 0 : manas.Average();
+
+            return curve;
         }
     }
 }
