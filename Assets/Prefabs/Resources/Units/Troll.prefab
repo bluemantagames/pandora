@@ -249,7 +249,7 @@ Animator:
   m_GameObject: {fileID: 8076880815249732036}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: df5f27bf706953b41a35ece7f9f90395, type: 2}
+  m_Controller: {fileID: 9100000, guid: e33b57f3d2bf24078a409eb48ef42e67, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -288,9 +288,11 @@ MonoBehaviour:
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  AnimationStateName: 
-  WalkingAnimationEnabled: 0
-  WalkingAnimationEngineUnits: 0
+  BlueController: {fileID: 9100000, guid: e33b57f3d2bf24078a409eb48ef42e67, type: 2}
+  RedController: {fileID: 9100000, guid: e33b57f3d2bf24078a409eb48ef42e67, type: 2}
+  WalkingAnimationStateName: Walking
+  WalkingAnimationEnabled: 1
+  WalkingAnimationEngineUnits: 800
 --- !u!114 &7258290981616491628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,7 +308,7 @@ MonoBehaviour:
   damage: 300
   attackCooldownMs: 500
   backswingMs: 1
-  animationStateName: GiantAttack
+  animationStateName: Attacking
   AggroRangeCells: 3
   AttackRangeEngineUnits: 200
 --- !u!61 &6440670934494413

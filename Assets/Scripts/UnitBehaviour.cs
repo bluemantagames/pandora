@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Profiling;
 using Pandora.Movement;
 using Pandora.Combat;
@@ -14,8 +15,10 @@ namespace Pandora
         CombatBehaviour combatBehaviour;
         LifeComponent lifeComponent;
         EngineComponent engineComponent;
+        TeamComponent teamComponent;
         public bool DebugMove = false;
         public Bounds hitbox;
+        public RuntimeAnimatorController BlueController, RedController;
         public string ComponentName
         {
             get
@@ -27,7 +30,8 @@ namespace Pandora
         CustomSampler moveSampler;
         Animator animator;
 
-        public string AnimationStateName;
+
+        public string WalkingAnimationStateName = "Walking";
         public bool WalkingAnimationEnabled = false;
         public uint WalkingAnimationEngineUnits;
 
@@ -43,6 +47,14 @@ namespace Pandora
             moveSampler = CustomSampler.Create($"Move() {gameObject.name}");
             animator = GetComponent<Animator>();
             engineComponent = GetComponent<EngineComponent>();
+            teamComponent = GetComponent<TeamComponent>();
+
+            if (BlueController || RedController)
+            {
+                animator.runtimeAnimatorController =
+                    (teamComponent.Team == TeamComponent.assignedTeam) ? BlueController : RedController;
+            }
+
 
             Logger.Debug($"CombatBehaviour is {combatBehaviour}");
         }
@@ -50,7 +62,6 @@ namespace Pandora
         // This is called from PandoraEngine every tick
         public void TickUpdate(uint timeLapsed)
         {
-
             if (lifeComponent.IsDead) return; // Do nothing if dead
 
             moveSampler.Begin();
@@ -78,21 +89,23 @@ namespace Pandora
             }
             else if (WalkingAnimationEnabled)
             {
-                if (!animator.GetBool("Walking"))
-                {
-                    animator.SetBool("Walking", true);
-                    animator.speed = 0;
-                }
+                animator.speed = 0;
 
-                var timePercent = engineComponent.Entity.Speed / ((float) WalkingAnimationEngineUnits);
+                var timePercent = engineComponent.Entity.Speed / ((float)WalkingAnimationEngineUnits);
 
                 walkingAnimationTime += timePercent;
 
-                if (walkingAnimationTime > 1f) {
+                if (walkingAnimationTime > 1f)
+                {
                     walkingAnimationTime = 0f;
                 }
 
-                animator.Play(AnimationStateName, 0, walkingAnimationTime);
+                animator.SetFloat("BlendX", movementBehaviour.WalkingDirection.x);
+                animator.SetFloat("BlendY", movementBehaviour.WalkingDirection.y);
+
+                var time = Mathf.RoundToInt(walkingAnimationTime * 10) * 60;
+
+                animator.Play(WalkingAnimationStateName, 0, time);
             }
         }
     }

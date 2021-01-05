@@ -15,7 +15,7 @@ namespace Pandora.Combat
         bool isBackswinging = false;
         public int attackCooldownMs = 500, backswingMs = 400;
         public bool isAttacking { get; private set; } = false;
-        public string animationStateName;
+        public string animationStateName = "Attacking";
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 0;
         public List<Effect> Effects = new List<Effect> {};
 

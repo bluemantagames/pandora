@@ -55,21 +55,24 @@ namespace Pandora.Command
             // Execute the attack animation
             sourceAnimator.Play("GiantAttack");
 
-            foreach (var targetLifeComponent in MapComponent.Instance.gameObject.GetComponentsInChildren<LifeComponent>())
+            foreach (var entity in sourceEntity.Engine.Entities)
             {
-                var targetGameObject = targetLifeComponent.gameObject;
-                var targetEntity = targetGameObject.GetComponent<EngineComponent>().Entity;
+                var targetGameObject = entity.GameObject;
+                var targetLifeComponent = targetGameObject.GetComponent<LifeComponent>();
+
+                if (targetLifeComponent == null) continue;
+
                 var targetTeam = targetGameObject.GetComponent<TeamComponent>().Team;
 
                 if (sourceTeam == targetTeam) continue;
 
-                if (sourceEntity.Engine.IsInConicRange(sourceEntity, targetEntity, Width, Height, UnitsLeniency, DebugLines))
+                if (sourceEntity.Engine.IsInConicRange(sourceEntity, entity, Width, Height, UnitsLeniency, DebugLines))
                 {
                     // Assign damage
                     targetLifeComponent.AssignDamage(Damage, new UnitCommand(gameObject));
 
                     // Assign effects to non-structure units
-                    if (!targetEntity.IsStructure && targetEntity.GameObject.layer != Constants.SWIMMING_LAYER) {
+                    if (!entity.IsStructure && entity.GameObject.layer != Constants.SWIMMING_LAYER) {
                         foreach (var effectObject in EffectObjects)
                         {
                             var effect = effectObject.GetComponent<Effect>();

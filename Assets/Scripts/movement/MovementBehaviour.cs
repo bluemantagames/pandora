@@ -19,5 +19,7 @@ namespace Pandora.Movement
 
         MovementState Move();
         void ResetPath();
+
+        Vector2 WalkingDirection { get; }
     }
 }

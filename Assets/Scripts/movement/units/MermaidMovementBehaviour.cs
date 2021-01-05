@@ -22,6 +22,8 @@ namespace Pandora.Movement
         TeamComponent team;
         CombatBehaviour combatBehaviour;
 
+        public Vector2 WalkingDirection { get; set; }
+
         public int MovementSpeed = 400;
 
         public int Speed
@@ -77,11 +79,12 @@ namespace Pandora.Movement
 
                 entity.SetTarget(targetPosition);
 
+                WalkingDirection = ((Vector2)targetPosition.vector - currentPosition.vector).normalized;
+
                 return new MovementState(target, MovementStateEnum.TargetAcquired);
             }
-
-
         }
+
         public void ResetPath()
         {
 

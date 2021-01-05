@@ -18,7 +18,7 @@ namespace Pandora.Editor
         {
             SpriteAtlas sa = new SpriteAtlas();
 
-            var path = EditorUtility.SaveFilePanelInProject("Choose where to save the SpriteAtlas", "atlas", "spriteatlas", "");
+            var path = EditorUtility.SaveFilePanelInProject("Choose where to save the SpriteAtlas", "atlas", "spriteatlas", "", "Assets/Art/Sprites/Characters/");
 
             var projectFolder = Path.GetFullPath(Path.Combine(Application.dataPath, "../"));
             var texturesPath = EditorUtility.OpenFolderPanel("Pick the texture folder", "Assets/Art/Sprites/Characters/", "");

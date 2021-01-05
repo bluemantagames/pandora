@@ -19,7 +19,7 @@ namespace Pandora.Movement
         Rigidbody2D body;
         GridCell currentTarget;
         Vector2 worldCurrentTarget;
-        Vector2 direction;
+        public Vector2 WalkingDirection { get; set; }
         List<GridCell> currentPath;
         TeamComponent team;
         Enemy targetEnemy;
@@ -203,7 +203,7 @@ namespace Pandora.Movement
 
             engineEntity.SetTarget(currentTarget);
 
-            direction = ((Vector2)currentTarget.vector - currentPosition.vector).normalized;
+            WalkingDirection = ((Vector2)currentTarget.vector - currentPosition.vector).normalized;
         }
 
         List<GridCell> VectorsToGridCells(IEnumerable<Vector2Int> vectors) =>
