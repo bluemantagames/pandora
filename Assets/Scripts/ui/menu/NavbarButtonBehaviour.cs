@@ -44,7 +44,7 @@ public class NavbarButtonBehaviour : MonoBehaviour
     private void DeactivateOthers()
     {
         var parent = gameObject.transform.parent;
-        var others = parent.GetComponentsInChildren<NavbarButtonBehaviour>();
+        var others = parent.transform.parent.GetComponentsInChildren<NavbarButtonBehaviour>();
 
         foreach (var otherButton in others)
         {
