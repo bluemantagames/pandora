@@ -65,10 +65,16 @@ namespace Pandora.Editor
 
             progressBar("Parsing animation manifest", 0f);
 
+            var animationManifestPath = Path.Combine(texturesPath, "animation-manifest.json");
+
+            if (!File.Exists(animationManifestPath)) {
+                EditorUtility.DisplayDialog("Error importing animation", "Missing animation-manifest.json", "Ok");
+
+                return;
+            }
+
             var animationManifest = JsonUtility.FromJson<AnimationManifest>(
-                File.ReadAllText(
-                    Path.Combine(texturesPath, "animation-manifest.json")
-                )
+                File.ReadAllText(animationManifestPath)
             );
 
             progressBar("Parsing animation manifest", 1f);

@@ -10,18 +10,23 @@ namespace Pandora.Combat
     {
         public MapComponent map;
         public GameObject projectile;
-        public string ComponentName {
+        public string ComponentName
+        {
             get => "TowerCombatBehaviour";
         }
 
-        public Vector2 aggroBoxOrigin {
-            get {
+        public Vector2 aggroBoxOrigin
+        {
+            get
+            {
                 return MapComponent.Instance.GetTowerAggroBoxOrigin(towerPosition.EngineTowerPosition).Value;
             }
         }
 
-        public Vector2 aggroBoxEnd {
-            get {
+        public Vector2 aggroBoxEnd
+        {
+            get
+            {
                 return MapComponent.Instance.GetTowerAggroBoxEnd(towerPosition.EngineTowerPosition).Value;
             }
         }
@@ -38,6 +43,9 @@ namespace Pandora.Combat
         }
         public int damage = 3;
         public uint cooldownMs = 300;
+        public GameObject Balista;
+        Animator balistaAnimator;
+        public string AttackingStateName = "Attacking";
 
         TowerTeamComponent teamComponent;
         Vector2 worldTowerPosition
@@ -53,14 +61,18 @@ namespace Pandora.Combat
 
         public GameObject CurrentTarget;
         LifeComponent targetLifeComponent;
-        int aggroBoxHeight {
-            get {
+        int aggroBoxHeight
+        {
+            get
+            {
                 return (int)(aggroBoxEnd.y - aggroBoxOrigin.y);
             }
         }
 
-        int aggroBoxWidth {
-            get {
+        int aggroBoxWidth
+        {
+            get
+            {
                 return (int)(aggroBoxEnd.x - aggroBoxOrigin.x);
             }
         }
@@ -76,6 +88,18 @@ namespace Pandora.Combat
             teamComponent = GetComponent<TowerTeamComponent>();
             towerPosition = GetComponent<TowerPositionComponent>();
             engineComponent = GetComponent<EngineComponent>();
+
+            balistaAnimator = Balista?.GetComponent<Animator>();
+
+            if (balistaAnimator != null)
+            {
+                balistaAnimator.speed = 0;
+
+                var direction = (towerPosition.WorldTowerPosition.IsTop()) ? Vector2.down : Vector2.up;
+
+                balistaAnimator.SetFloat("BlendX", direction.x);
+                balistaAnimator.SetFloat("BlendY", direction.y);
+            }
         }
 
         public void TickUpdate(uint lapsed)
@@ -87,7 +111,8 @@ namespace Pandora.Combat
             var isTargetInAggroBox = false;
             var isTargetDead = false;
 
-            if (targetLifeComponent != null) {
+            if (targetLifeComponent != null)
+            {
                 var targetCell = targetLifeComponent.GetComponent<EngineComponent>().Entity.GetCurrentCell();
 
                 isTargetInAggroBox =
@@ -144,6 +169,18 @@ namespace Pandora.Combat
             { // if not dead, attack once cooldown is over
                 lastAttackTimeLapse += lapsed;
 
+                if (balistaAnimator != null)
+                {
+                    var animationPercent = (float) lastAttackTimeLapse / cooldownMs;
+
+                    balistaAnimator.Play(AttackingStateName, 0, animationPercent);
+
+                    var direction = ((Vector2) CurrentTarget.transform.position - (Vector2) transform.position).normalized;
+
+                    balistaAnimator.SetFloat("BlendX", direction.x);
+                    balistaAnimator.SetFloat("BlendY", direction.y);
+                }
+
                 Logger.Debug($"Time lapse is {lastAttackTimeLapse} {Time.time}");
 
                 if (lastAttackTimeLapse >= cooldownMs)
@@ -176,7 +213,7 @@ namespace Pandora.Combat
 
             var epoch = System.DateTime.MinValue;
 
-            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, towerEntity.Position, false, epoch.AddSeconds((int) towerPosition.EngineTowerPosition * 10));
+            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, towerEntity.Position, false, epoch.AddSeconds((int)towerPosition.EngineTowerPosition * 10));
 
             projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
 
@@ -200,6 +237,8 @@ namespace Pandora.Combat
             CurrentTarget = null;
             targetLifeComponent = null;
             isAttacking = false;
+
+            balistaAnimator?.Play(AttackingStateName, 0, 0f);
         }
 
         /** Called if a launched projectile collided */
