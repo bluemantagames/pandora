@@ -172,12 +172,14 @@ namespace Pandora.Editor
                     spriteBinding.path = "";
                     spriteBinding.propertyName = "m_Sprite";
 
-                    var spriteKeyFrames = new ObjectReferenceKeyframe[sprites.Count];
+                    var clipLength = clipFrames[clip][angle].Length;
 
-                    for (var i = 0; i < clipFrames[clip][angle].Length; i++)
+                    var spriteKeyFrames = new ObjectReferenceKeyframe[clipLength];
+
+                    for (var i = 0; i < clipLength; i++)
                     {
                         spriteKeyFrames[i] = new ObjectReferenceKeyframe();
-                        spriteKeyFrames[i].time = i;
+                        spriteKeyFrames[i].time = i / animClip.frameRate;
                         spriteKeyFrames[i].value = clipFrames[clip][angle][i];
                     }
 
@@ -189,7 +191,7 @@ namespace Pandora.Editor
 
                     AssetDatabase.CreateAsset(animClip, clipName);
 
-                    var direction = Quaternion.AngleAxis(-angle * (360f / clipFrames[clip].Count), Vector3.forward) * Vector2.up;
+                    var direction = Quaternion.AngleAxis(angle * (360f / clipFrames[clip].Count), Vector3.forward) * Vector2.up;
 
                     blendTrees[clip].AddChild(animClip, direction);
                 }

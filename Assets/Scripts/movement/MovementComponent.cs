@@ -120,7 +120,11 @@ namespace Pandora.Movement
 
             var mapComponent = MapComponent.Instance;
 
-            transform.position = engineEntity.GetWorldPosition();
+            var updatedPosition = engineEntity.GetWorldPosition();
+
+            WalkingDirection = (updatedPosition - (Vector2) transform.position).normalized;
+
+            transform.position = updatedPosition;
 
             // if you're attacking an enemy: keep attacking
             if (targetEnemy != null && combatBehaviour.IsInAttackRange(targetEnemy) && !isTargetDead)
@@ -202,8 +206,6 @@ namespace Pandora.Movement
             }
 
             engineEntity.SetTarget(currentTarget);
-
-            WalkingDirection = ((Vector2)currentTarget.vector - currentPosition.vector).normalized;
         }
 
         List<GridCell> VectorsToGridCells(IEnumerable<Vector2Int> vectors) =>

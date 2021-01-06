@@ -103,9 +103,7 @@ namespace Pandora
                 animator.SetFloat("BlendX", movementBehaviour.WalkingDirection.x);
                 animator.SetFloat("BlendY", movementBehaviour.WalkingDirection.y);
 
-                var time = Mathf.RoundToInt(walkingAnimationTime * 10) * 60;
-
-                animator.Play(WalkingAnimationStateName, 0, time);
+                animator.Play(WalkingAnimationStateName, 0, walkingAnimationTime);
             }
         }
     }

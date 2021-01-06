@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2103948611786811513}
   - component: {fileID: 2103948611786811514}
   m_Layer: 0
-  m_Name: GiantShadow
+  m_Name: TrollShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,6 +45,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -69,7 +70,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: dfba0a9ece99baa4b9e03f194e4085fc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8e1bba1399ecd4b9fa4056985c46165a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.54901963}
   m_FlipX: 0
   m_FlipY: 0
