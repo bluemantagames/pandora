@@ -34,11 +34,6 @@ namespace Pandora.Deck.UI
 
         public void Reset()
         {
-            Logger.Debug($"Resetting {gameObject}");
-
-            gameObject.transform.SetParent(originalParent.transform);
-            transform.SetSiblingIndex(menuCardSiblingIndex);
-
             if (lastDeckSpot != null)
             {
                 lastDeckSpot.Card = null;
@@ -47,9 +42,17 @@ namespace Pandora.Deck.UI
 
             if (placeholderCard != null)
             {
+                // Here we are setting the placeholder as the
+                // last sibling because the removal will not
+                // happen instantly and this will cause 
+                // problems with the card positioning.
+                placeholderCard.transform.SetAsLastSibling();
+
                 Destroy(placeholderCard);
             }
 
+            transform.SetParent(originalParent.transform);
+            transform.SetSiblingIndex(menuCardSiblingIndex);
             GetComponent<RectTransform>().pivot = originalPivot;
         }
 
@@ -76,8 +79,6 @@ namespace Pandora.Deck.UI
 
             var deckSpotRect = deckSpotBehaviour.GetComponent<RectTransform>();
             var rectTransform = GetComponent<RectTransform>();
-
-            Logger.Debug($"Setting card size: {deckSpotRect.sizeDelta.x} - {deckSpotRect.sizeDelta.y}");
 
             rectTransform.sizeDelta = deckSpotRect.sizeDelta;
             rectTransform.pivot = deckSpotRect.pivot;
