@@ -4,15 +4,19 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Pandora.Network;
 using Pandora.Pool;
+using Cysharp.Threading.Tasks;
+using System;
+using System.Threading;
 
 namespace Pandora.Deck.UI
 {
-    public class MenuCardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
+    public class MenuCardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {
         GameObject originalParent;
         Vector2 originalPosition, originalPivot;
 
         public GameObject Canvas;
+        public ScrollRect ParentScrollRect;
         public string CardName;
         public bool UiDisabled = false;
 
@@ -22,6 +26,8 @@ namespace Pandora.Deck.UI
         Color imageColor;
         int menuCardSiblingIndex;
         GameObject placeholderCard;
+        CancellationTokenSource draggingCancellationToken;
+        bool isDragging = false;
 
         public void Load()
         {
@@ -30,6 +36,7 @@ namespace Pandora.Deck.UI
             originalPivot = GetComponent<RectTransform>().pivot;
             deckSpotParentBehaviour = GameObject.Find("Canvas").GetComponentInChildren<DeckSpotParentBehaviour>();
             menuCardSiblingIndex = gameObject.transform.GetSiblingIndex();
+            ParentScrollRect = GetComponentInParent<ScrollRect>();
         }
 
         public void Reset()
@@ -100,6 +107,7 @@ namespace Pandora.Deck.UI
             newCard.transform.SetParent(gameObject.transform.parent, false);
             placeholderCard = newCard;
             newCard.transform.SetSiblingIndex(menuCardSiblingIndex);
+            newCardMenuCardBehaviour.ParentScrollRect = ParentScrollRect;
         }
 
         public void SetSpotWithPlaceholder(GameObject deckSpot)
@@ -108,45 +116,93 @@ namespace Pandora.Deck.UI
             SetSpot(deckSpot);
         }
 
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            _ = StartDragTimer();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            CancelDragTimer();
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            CancelDragTimer();
+        }
+
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (UiDisabled == true) return;
-            if (placeholderCard == null) CreatePlaceholder();
+            if (!isDragging)
+            {
+                CancelDragTimer();
 
-            gameObject.transform.SetParent(Canvas.transform);
+                if (ParentScrollRect == null) return;
+
+                ExecuteEvents.Execute(ParentScrollRect.gameObject, eventData, ExecuteEvents.beginDragHandler);
+            }
+            else
+            {
+                if (UiDisabled == true) return;
+                if (placeholderCard == null) CreatePlaceholder();
+
+                gameObject.transform.SetParent(Canvas.transform);
+            }
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (UiDisabled == true) return;
+            if (!isDragging)
+            {
+                CancelDragTimer();
 
-            transform.position = Input.mousePosition;
+                if (ParentScrollRect == null) return;
+
+                ExecuteEvents.Execute(ParentScrollRect.gameObject, eventData, ExecuteEvents.dragHandler);
+            }
+            else
+            {
+                transform.position = Input.mousePosition;
+            }
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (UiDisabled == true) return;
-
-            var pointerData = new PointerEventData(null);
-
-            pointerData.position = Input.mousePosition;
-
-            var foundElements = new List<RaycastResult> { };
-
-            Canvas.GetComponent<GraphicRaycaster>().Raycast(pointerData, foundElements);
-
-            var deckSpot = foundElements.Find(result => result.gameObject.GetComponent<DeckSpotBehaviour>() != null).gameObject;
-
-            if (deckSpot != null)
+            if (!isDragging)
             {
-                SetSpot(deckSpot);
+                CancelDragTimer();
+
+                if (ParentScrollRect == null) return;
+
+                ExecuteEvents.Execute(ParentScrollRect.gameObject, eventData, ExecuteEvents.endDragHandler);
             }
             else
             {
-                Reset();
-            }
+                isDragging = false;
 
-            _ = deckSpotParentBehaviour.SaveDeck();
+                if (UiDisabled == true) return;
+
+                var pointerData = new PointerEventData(null);
+
+                pointerData.position = Input.mousePosition;
+
+                var foundElements = new List<RaycastResult> { };
+
+                Canvas.GetComponent<GraphicRaycaster>().Raycast(pointerData, foundElements);
+
+                var deckSpot = foundElements.Find(result => result.gameObject.GetComponent<DeckSpotBehaviour>() != null).gameObject;
+
+                if (deckSpot != null)
+                {
+                    SetSpot(deckSpot);
+                }
+                else
+                {
+                    Reset();
+                }
+
+                _ = deckSpotParentBehaviour.SaveDeck();
+            }
         }
 
         void Awake()
@@ -160,6 +216,20 @@ namespace Pandora.Deck.UI
             // Make it opaque if disabled
             var opaqueColor = new Color(imageColor.r, imageColor.g, imageColor.b, 0.2f);
             imageComponent.color = (UiDisabled == true) ? opaqueColor : imageColor;
+        }
+
+        private async UniTaskVoid StartDragTimer()
+        {
+            draggingCancellationToken = new CancellationTokenSource();
+            await UniTask.Delay(100, cancellationToken: draggingCancellationToken.Token);
+            isDragging = true;
+        }
+
+        private void CancelDragTimer()
+        {
+            if (draggingCancellationToken == null) return;
+
+            draggingCancellationToken.Cancel();
         }
     }
 
