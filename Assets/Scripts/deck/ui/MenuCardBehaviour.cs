@@ -28,6 +28,8 @@ namespace Pandora.Deck.UI
         GameObject placeholderCard;
         CancellationTokenSource draggingCancellationToken;
         bool isDragging = false;
+        int draggingDelay = 80;
+        bool disableScrollInteraction = false;
 
         public void Load()
         {
@@ -61,6 +63,8 @@ namespace Pandora.Deck.UI
             transform.SetParent(originalParent.transform);
             transform.SetSiblingIndex(menuCardSiblingIndex);
             GetComponent<RectTransform>().pivot = originalPivot;
+
+            disableScrollInteraction = false;
         }
 
         public void SetSpot(GameObject deckSpot)
@@ -89,6 +93,8 @@ namespace Pandora.Deck.UI
 
             rectTransform.sizeDelta = deckSpotRect.sizeDelta;
             rectTransform.pivot = deckSpotRect.pivot;
+
+            disableScrollInteraction = true;
 
             PoolInstances.Vector2Pool.ReturnObject(newPosition);
         }
@@ -133,7 +139,7 @@ namespace Pandora.Deck.UI
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (!isDragging)
+            if (ShouldDragBubble())
             {
                 CancelDragTimer();
 
@@ -143,7 +149,6 @@ namespace Pandora.Deck.UI
             }
             else
             {
-                if (UiDisabled == true) return;
                 if (placeholderCard == null) CreatePlaceholder();
 
                 gameObject.transform.SetParent(Canvas.transform);
@@ -152,7 +157,7 @@ namespace Pandora.Deck.UI
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!isDragging)
+            if (ShouldDragBubble())
             {
                 CancelDragTimer();
 
@@ -168,7 +173,7 @@ namespace Pandora.Deck.UI
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!isDragging)
+            if (ShouldDragBubble())
             {
                 CancelDragTimer();
 
@@ -221,7 +226,7 @@ namespace Pandora.Deck.UI
         private async UniTaskVoid StartDragTimer()
         {
             draggingCancellationToken = new CancellationTokenSource();
-            await UniTask.Delay(100, cancellationToken: draggingCancellationToken.Token);
+            await UniTask.Delay(draggingDelay, cancellationToken: draggingCancellationToken.Token);
             isDragging = true;
         }
 
@@ -230,6 +235,11 @@ namespace Pandora.Deck.UI
             if (draggingCancellationToken == null) return;
 
             draggingCancellationToken.Cancel();
+        }
+
+        private bool ShouldDragBubble()
+        {
+            return !disableScrollInteraction && (!isDragging || UiDisabled == true);
         }
     }
 
