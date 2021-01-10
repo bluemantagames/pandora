@@ -30,6 +30,7 @@ namespace Pandora.Deck.UI
         bool isDragging = false;
         int draggingDelay = 80;
         bool disableScrollInteraction = false;
+        bool isSelected = false;
 
         public void Load()
         {
@@ -64,7 +65,7 @@ namespace Pandora.Deck.UI
             transform.SetSiblingIndex(menuCardSiblingIndex);
             GetComponent<RectTransform>().pivot = originalPivot;
 
-            disableScrollInteraction = false;
+            isSelected = false;
         }
 
         public void SetSpot(GameObject deckSpot)
@@ -94,7 +95,7 @@ namespace Pandora.Deck.UI
             rectTransform.sizeDelta = deckSpotRect.sizeDelta;
             rectTransform.pivot = deckSpotRect.pivot;
 
-            disableScrollInteraction = true;
+            isSelected = true;
 
             PoolInstances.Vector2Pool.ReturnObject(newPosition);
         }
@@ -139,6 +140,9 @@ namespace Pandora.Deck.UI
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (!disableScrollInteraction)
+                disableScrollInteraction = ParentScrollRect?.vertical == false;
+
             if (ShouldDragBubble())
             {
                 CancelDragTimer();
@@ -239,7 +243,7 @@ namespace Pandora.Deck.UI
 
         private bool ShouldDragBubble()
         {
-            return !disableScrollInteraction && (!isDragging || UiDisabled == true);
+            return !disableScrollInteraction && !isSelected && (!isDragging || UiDisabled == true);
         }
     }
 
