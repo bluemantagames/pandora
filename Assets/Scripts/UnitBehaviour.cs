@@ -17,6 +17,9 @@ namespace Pandora
         EngineComponent engineComponent;
         TeamComponent teamComponent;
         public bool DebugMove = false;
+
+        // represents whether we are handling movement / animation or another component is doing it
+        bool areWeHandling = true;
         public Bounds hitbox;
         public RuntimeAnimatorController BlueController, RedController;
         public string ComponentName
@@ -62,7 +65,7 @@ namespace Pandora
         // This is called from PandoraEngine every tick
         public void TickUpdate(uint timeLapsed)
         {
-            if (lifeComponent.IsDead) return; // Do nothing if dead
+            if (lifeComponent.IsDead || !areWeHandling) return; // Do nothing if dead
 
             moveSampler.Begin();
             var state = movementBehaviour.Move();
@@ -77,8 +80,6 @@ namespace Pandora
 
             if (state.state == MovementStateEnum.EnemyApproached)
             {
-                animator.SetBool("Walking", false);
-
                 combatBehaviour.AttackEnemy(state.enemy, timeLapsed);
             }
             else if (state.state != MovementStateEnum.EnemyApproached && combatBehaviour.isAttacking)
@@ -105,6 +106,16 @@ namespace Pandora
 
                 animator.Play(WalkingAnimationStateName, 0, walkingAnimationTime);
             }
+        }
+
+        /// <summary>Other behaviours can use this method to stop our handling of animation and movement</summary>
+        public void PauseBehaviour() {
+            areWeHandling = false;
+        }
+
+        /// <summary>Other behaviours can use this method to resume our handling after pausing it with PauseBehaviour</summary>
+        public void UnpauseBehaviour() {
+            areWeHandling = true;
         }
     }
 }

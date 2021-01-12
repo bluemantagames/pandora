@@ -14,6 +14,9 @@ namespace Pandora.Engine
         public Vector2Int Direction;
         public IEnumerator<Vector2Int> Path;
 
+        /// <summary>When this is true, PandoraEngine will not move the unit forward</summary>
+        public bool IsMovementPaused = false;
+
         GameObject _gameObject;
 
         [NonSerialized] public Bounds Bounds;

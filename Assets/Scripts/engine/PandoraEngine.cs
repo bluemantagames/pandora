@@ -350,7 +350,7 @@ namespace Pandora.Engine
             {
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed));
 
-                if (entity.Path == null) continue;
+                if (entity.Path == null || entity.IsMovementPaused) continue;
 
                 for (var i = 0; i < unitsMoved; i++)
                 {

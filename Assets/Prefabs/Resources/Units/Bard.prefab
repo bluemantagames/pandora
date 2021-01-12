@@ -83,7 +83,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 19
+  m_SortingOrder: 11
   m_Sprite: {fileID: 21300000, guid: f3b51064af7a1414c9b1cd3e963f991f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -175,7 +175,9 @@ MonoBehaviour:
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  AnimationStateName: 
+  BlueController: {fileID: 0}
+  RedController: {fileID: 0}
+  WalkingAnimationStateName: Walking
   WalkingAnimationEnabled: 0
   WalkingAnimationEngineUnits: 0
 --- !u!114 &446255458806803396
@@ -239,6 +241,7 @@ MonoBehaviour:
     CollisionSpeed: 0
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
+    IsMovementPaused: 0
     IsRigid: 1
     IsStructure: 0
     IsMapObstacle: 0

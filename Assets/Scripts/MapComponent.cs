@@ -123,6 +123,9 @@ namespace Pandora
             CommandsViewport.SetActive(false);
             CommandsViewport.SetActive(true);
 
+            Camera.main.transparencySortMode = TransparencySortMode.CustomAxis;
+            Camera.main.transparencySortAxis = new Vector3(0, 1, 1);
+
             boxCollider = GetComponent<BoxCollider2D>();
 
             WorldBoundsPosition = boxCollider.bounds.min;
@@ -462,7 +465,9 @@ namespace Pandora
         /// <summary>Initializes unit components, usually called on spawn</summary>
         public void InitializeComponents(GameObject unit, GridCell cell, UnitSpawn unitSpawn)
         {
-            unit.GetComponent<TeamComponent>().Team = unitSpawn.Team;
+            var teamComponent = unit.GetComponent<TeamComponent>();
+
+            teamComponent.Team = unitSpawn.Team;
 
             var movement = unit.GetComponent<MovementComponent>();
             var movementBehaviour = unit.GetComponent<MovementBehaviour>();
@@ -514,6 +519,18 @@ namespace Pandora
             Debug.Log($"Gold earn mana cost {unitSpawn.ManaUsed}");
 
             manaCostComponent.ManaCost = unitSpawn.ManaUsed;
+
+            var unitBehaviour = unit.GetComponent<UnitBehaviour>();
+
+            var blueController = unitBehaviour?.BlueController;
+            var redController = unitBehaviour?.RedController;
+
+            var animator = unit.GetComponent<Animator>();
+
+            if (animator != null && (redController != null || blueController != null)) {
+                animator.runtimeAnimatorController =
+                    (teamComponent.Team == TeamComponent.assignedTeam) ? blueController : redController;
+            }
         }
 
         public void ShowManaUsedAlert(GameObject unit, int manaUsed, Vector2 position)
