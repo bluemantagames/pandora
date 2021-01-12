@@ -19,7 +19,8 @@ namespace Pandora.Command
 
         EngineEntity sourceEntity;
 
-        void Start() {
+        void Start()
+        {
             sourceEntity = GetComponent<EngineComponent>().Entity;
         }
 
@@ -72,7 +73,8 @@ namespace Pandora.Command
                     targetLifeComponent.AssignDamage(Damage, new UnitCommand(gameObject));
 
                     // Assign effects to non-structure units
-                    if (!entity.IsStructure && entity.GameObject.layer != Constants.SWIMMING_LAYER) {
+                    if (!entity.IsStructure && entity.GameObject.layer != Constants.SWIMMING_LAYER)
+                    {
                         foreach (var effectObject in EffectObjects)
                         {
                             var effect = effectObject.GetComponent<Effect>();
