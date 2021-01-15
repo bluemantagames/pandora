@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Pandora;
 using Pandora.Network;
 using Cysharp.Threading.Tasks;
 using System.Net;
@@ -23,6 +24,8 @@ namespace Pandora.UI.Login
             playerModelSingleton = PlayerModelSingleton.instance;
 
             PlayGamesAuthentication();
+
+            AnalyticsSingleton.Instance.TrackEvent("First event!");
 
             if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey))
             {
