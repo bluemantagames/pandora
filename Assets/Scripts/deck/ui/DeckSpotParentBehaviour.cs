@@ -142,7 +142,7 @@ namespace Pandora.Deck.UI
 
         private double CalculateManaCurve(IEnumerable<int> manas)
         {
-            var curve = manas.Count() <= 0 ? 0 : manas.Average();
+            var curve = manas.Count() <= 0 ? 0 : manas.Average() / 10;
 
             return curve;
         }
