@@ -23,7 +23,7 @@ namespace Pandora
 
         private AnalyticsSingleton()
         {
-            isEnabled = Debug.isDebugBuild;
+            isEnabled = !Debug.isDebugBuild;
 
             if (isEnabled)
             {
