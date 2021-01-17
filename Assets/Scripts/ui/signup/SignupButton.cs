@@ -15,6 +15,7 @@ namespace Pandora.UI.Signup
         public InputField EmailInput = null;
         public InputField PasswordInput = null;
         public bool UseProdServer = false;
+        private LoadingBehaviour loadingBehaviour;
         private string oldButtonText = null;
         private PlayerModelSingleton playerModelSingleton;
         bool isLoading = false;
@@ -22,6 +23,7 @@ namespace Pandora.UI.Signup
         void Awake()
         {
             playerModelSingleton = PlayerModelSingleton.instance;
+            loadingBehaviour = GameObject.Find("LoadingCanvas")?.GetComponent<LoadingBehaviour>();
         }
 
         public async UniTaskVoid ExecuteSignup(string username, string email, string password)
@@ -43,7 +45,9 @@ namespace Pandora.UI.Signup
                 Logger.Debug($"Signup successful with the token: {token}");
 
                 playerModelSingleton.Token = token;
-                _ = LoaderSingleton.instance.LoadMainMenu();
+
+                if (loadingBehaviour != null)
+                    _ = loadingBehaviour.LoadMainMenu();
             }
             else
             {

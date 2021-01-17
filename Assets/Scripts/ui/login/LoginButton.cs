@@ -4,7 +4,6 @@ using Pandora;
 using Pandora.Network;
 using Cysharp.Threading.Tasks;
 using System.Net;
-using UnityEngine.SceneManagement;
 
 namespace Pandora.UI.Login
 {
@@ -14,18 +13,21 @@ namespace Pandora.UI.Login
         public Text ErrorText = null;
         public InputField UsernameInput = null;
         public InputField PasswordInput = null;
+        private LoadingBehaviour loadingBehaviour;
         public bool UseProdServer = false;
         private string oldButtonText = null, usernameKey = "username", passwordKey = "password";
         private PlayerModelSingleton playerModelSingleton;
         bool isLoading = false;
 
-        void Start()
+        void Awake()
         {
             playerModelSingleton = PlayerModelSingleton.instance;
+            loadingBehaviour = GameObject.Find("LoadingCanvas")?.GetComponent<LoadingBehaviour>();
+        }
 
+        void Start()
+        {
             PlayGamesAuthentication();
-
-            AnalyticsSingleton.Instance.TrackEvent("First event!");
 
             if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey))
             {
@@ -56,7 +58,9 @@ namespace Pandora.UI.Login
                 Logger.Debug($"Logged in successfully with the token: {token}");
 
                 playerModelSingleton.Token = token;
-                _ = LoaderSingleton.instance.LoadMainMenu();
+
+                if (loadingBehaviour != null)
+                    _ = loadingBehaviour.LoadMainMenu();
             }
             else
             {
