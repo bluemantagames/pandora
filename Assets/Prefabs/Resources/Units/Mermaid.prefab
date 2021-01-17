@@ -300,8 +300,8 @@ MonoBehaviour:
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  BlueController: {fileID: 0}
-  RedController: {fileID: 0}
+  BlueController: {fileID: 9100000, guid: c0d12ba0414f4465fb8109a0969b0c13, type: 2}
+  RedController: {fileID: 9100000, guid: 48e92a9b6ab184fc89f485564185e020, type: 2}
   WalkingAnimationStateName: Walking
   WalkingAnimationEnabled: 0
   WalkingAnimationEngineUnits: 0

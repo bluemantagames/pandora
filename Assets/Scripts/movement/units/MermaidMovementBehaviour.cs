@@ -41,6 +41,8 @@ namespace Pandora.Movement
 
             team = GetComponent<TeamComponent>();
             combatBehaviour = GetComponent<CombatBehaviour>();
+
+            WalkingDirection = Vector2.up;
         }
 
         public MovementState Move()
@@ -79,7 +81,11 @@ namespace Pandora.Movement
 
                 entity.SetTarget(targetPosition);
 
-                WalkingDirection = ((Vector2)targetPosition.vector - currentPosition.vector).normalized;
+                var walkingDirection = ((Vector2)targetPosition.vector - currentPosition.vector).normalized;
+
+                if (walkingDirection != Vector2.zero) {
+                    WalkingDirection = walkingDirection;
+                }
 
                 return new MovementState(target, MovementStateEnum.TargetAcquired);
             }

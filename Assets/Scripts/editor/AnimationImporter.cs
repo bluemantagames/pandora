@@ -180,16 +180,23 @@ namespace Pandora.Editor
 
                     var clipLength = clipFrames[clip][angle].Length;
 
-                    var spriteKeyFrames = new ObjectReferenceKeyframe[clipLength];
+                    var spriteKeyFrames = new List<ObjectReferenceKeyframe>(clipLength);
 
                     for (var i = 0; i < clipLength; i++)
                     {
-                        spriteKeyFrames[i] = new ObjectReferenceKeyframe();
-                        spriteKeyFrames[i].time = i / animClip.frameRate;
-                        spriteKeyFrames[i].value = clipFrames[clip][angle][i];
+                        var sprite = clipFrames[clip][angle][i];
+
+                        if (sprite != null) {
+                            var keyframe = new ObjectReferenceKeyframe();
+
+                            keyframe.time = i / animClip.frameRate;
+                            keyframe.value = clipFrames[clip][angle][i];
+
+                            spriteKeyFrames.Add(keyframe);
+                        }
                     }
 
-                    AnimationUtility.SetObjectReferenceCurve(animClip, spriteBinding, spriteKeyFrames);
+                    AnimationUtility.SetObjectReferenceCurve(animClip, spriteBinding, spriteKeyFrames.ToArray());
 
                     var clipName = path.Replace(".spriteatlas", $"{clip}-{angle}.anim");
 
