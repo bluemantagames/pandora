@@ -81,7 +81,7 @@ namespace Pandora.Movement
 
                 entity.SetTarget(targetPosition);
 
-                var walkingDirection = ((Vector2)targetPosition.vector - currentPosition.vector).normalized;
+                var walkingDirection = ((Vector2)targetPosition.vector - (Vector2) entity.GetCurrentCell().vector).normalized;
 
                 if (walkingDirection != Vector2.zero) {
                     WalkingDirection = walkingDirection;

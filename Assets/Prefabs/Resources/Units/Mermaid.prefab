@@ -301,9 +301,9 @@ MonoBehaviour:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   BlueController: {fileID: 9100000, guid: c0d12ba0414f4465fb8109a0969b0c13, type: 2}
-  RedController: {fileID: 9100000, guid: 48e92a9b6ab184fc89f485564185e020, type: 2}
+  RedController: {fileID: 9100000, guid: 0788500a178e944ddab656cd7df7cec4, type: 2}
   WalkingAnimationStateName: Walking
-  WalkingAnimationEnabled: 0
+  WalkingAnimationEnabled: 1
   WalkingAnimationEngineUnits: 0
 --- !u!114 &8660774719796279383
 MonoBehaviour:
@@ -322,7 +322,7 @@ MonoBehaviour:
   backswingMs: 400
   projectile: {fileID: 5687362912629012028, guid: d519b85eadcfc0d43ab3c181acade232,
     type: 3}
-  animationStateName: AttackingMermaid
+  animationStateName: Attacking
   AggroRangeCells: 50
   AttackRangeEngineUnits: 1200
   EffectObjects: []
@@ -377,7 +377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d9adc7506b19e4faae607bdb399099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TornadoObject: {fileID: 1463601171584166044, guid: 0fd29991a06145d41b1bd2f053c244e7,
+  TornadoObject: {fileID: 85389872564333759, guid: 5af93f02e6afc458d8cbd5fadda1dd18,
     type: 3}
   LeftBridgePosition: {x: 2, y: 13}
   RightBridgePosition: {x: 13, y: 13}

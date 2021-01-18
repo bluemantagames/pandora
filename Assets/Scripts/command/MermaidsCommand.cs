@@ -40,7 +40,7 @@ namespace Pandora.Command
             var tornadoLane = findLane();
             var tornadoPosition = (tornadoLane == Lane.Right) ? RightBridgePosition : LeftBridgePosition;
 
-            var tornado = Instantiate(TornadoObject, Vector3.zero, Quaternion.identity);
+            var tornado = Instantiate(TornadoObject, Vector3.zero, TornadoObject.transform.rotation);
 
             var entityPosition = engine.GridCellToPhysics(new GridCell(tornadoPosition));
 

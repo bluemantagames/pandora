@@ -15,7 +15,9 @@ namespace Pandora.Command
         uint totalTimeElapsed = 0;
         List<EngineEntity> targets = new List<EngineEntity> { };
         bool isDisabled = false;
-
+        float animationStartTime = 0.85f, endAnimationTime = 2.86f;
+        ParticleSystem[] particles = null;
+        bool particlesSetup = false;
 
         public void TickUpdate(uint timeLapsed)
         {
@@ -36,8 +38,8 @@ namespace Pandora.Command
             foreach (var target in engine.FindInRadius(entity.Position, EngineUnitsRadius, false))
             {
                 if (
-                    target == entity || 
-                    !target.IsRigid || 
+                    target == entity ||
+                    !target.IsRigid ||
                     target.GameObject.GetComponent<TeamComponent>().Team == GetComponent<TeamComponent>().Team
                 ) continue;
 
@@ -99,5 +101,32 @@ namespace Pandora.Command
                 GetComponent<SpriteRenderer>().enabled = false;
             }
         }
+
+        ParticleSystem[] findParticles()
+        {
+            if (particles == null)
+            {
+                particles = GetComponentsInChildren<ParticleSystem>();
+            }
+
+            return particles;
+        }
+
+        void Update() {
+            if (particlesSetup) {
+                return;
+            }
+
+            float animationPercent = (float)totalTimeElapsed / DurationMs;
+
+            foreach (var particle in findParticles()) {
+                particle.Pause();
+
+                particle.time = animationStartTime + (animationPercent * (endAnimationTime - animationStartTime));
+
+                Debug.Log($"Particle time {particle.time}, animationPercent {animationPercent}");
+            }
+        }
     }
+
 }

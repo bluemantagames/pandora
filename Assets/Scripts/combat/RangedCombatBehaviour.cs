@@ -48,6 +48,11 @@ namespace Pandora.Combat
                 isAttacking = true;
             }
 
+            var direction = ((Vector2) target.enemy.transform.position - (Vector2) transform.position).normalized;
+
+            animator.SetFloat("BlendX", direction.x);
+            animator.SetFloat("BlendY", direction.y);
+
             animator.Play(animationStateName, 0, timeSinceLastProjectile / (float)(cappedAttackCooldownMs + cappedBackswingMs));
 
             timeSinceLastProjectile += timeLapse;
