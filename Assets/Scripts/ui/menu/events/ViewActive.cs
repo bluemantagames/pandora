@@ -1,6 +1,3 @@
-using Pandora.UI.Elements.Navbar;
-using Pandora.UI.Menu;
-
 namespace Pandora.UI.Menu.Event
 {
     public class ViewActive : MenuEvent

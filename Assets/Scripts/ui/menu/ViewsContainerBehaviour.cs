@@ -1,13 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using Pandora.UI.Elements.Navbar;
+﻿using UnityEngine;
 using DG.Tweening;
 using Pandora.Pool;
-using UnityEngine.EventSystems;
 using Pandora.UI.Menu.Event;
-using Pandora.UI.Menu;
 
 namespace Pandora.UI.Menu
 {
