@@ -119,10 +119,12 @@ namespace Pandora.Command
 
             float animationPercent = (float)totalTimeElapsed / DurationMs;
 
+            var time = animationStartTime + (animationPercent * (endAnimationTime - animationStartTime));
+
             foreach (var particle in findParticles()) {
                 particle.Pause();
 
-                particle.time = animationStartTime + (animationPercent * (endAnimationTime - animationStartTime));
+                particle.Simulate(time);
 
                 Debug.Log($"Particle time {particle.time}, animationPercent {animationPercent}");
             }
