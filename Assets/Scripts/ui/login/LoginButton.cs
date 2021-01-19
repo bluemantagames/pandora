@@ -27,7 +27,7 @@ namespace Pandora.UI.Login
 
         void Start()
         {
-            PlayGamesAuthentication();
+            _ = PlayGamesAuthentication();
 
             if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey))
             {
@@ -80,10 +80,13 @@ namespace Pandora.UI.Login
         /// <summary>
         /// Platform-aware play games auth caller
         /// </summary>
-        private void PlayGamesAuthentication()
+        private async UniTaskVoid PlayGamesAuthentication()
         {
 #if UNITY_ANDROID            
-            _ = PlayGames.instance.Authenticate();
+            var authenticated = await PlayGames.instance.Authenticate();
+
+            if (authenticated)
+                _ = loadingBehaviour.LoadMainMenu();
 #endif
         }
 

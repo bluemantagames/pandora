@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using Pandora.Network;
 using System.Net;
+using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
 using DG.Tweening;
@@ -12,7 +13,7 @@ namespace Pandora
     {
         public float fadeDuration = 0.2f;
         private PlayerModelSingleton playerModelSingleton;
-        private ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
+        private ApiControllerSingleton apiControllerSingleton;
         private Canvas canvasComponent;
         private CanvasGroup canvasGroupComponent;
 
@@ -69,8 +70,8 @@ namespace Pandora
             Show();
 
             var userInfoResult = await LoadUserInfo();
-            await SceneManager.LoadSceneAsync("HomeScene").ToUniTask();
-            await LocalizationSettings.InitializationOperation.ToUniTask();
+            await SceneManager.LoadSceneAsync("HomeScene");
+            await LocalizationSettings.InitializationOperation.Task;
 
             if (userInfoResult) Hide();
         }
@@ -79,6 +80,7 @@ namespace Pandora
         {
             DontDestroyOnLoad(gameObject);
 
+            apiControllerSingleton = ApiControllerSingleton.instance;
             playerModelSingleton = PlayerModelSingleton.instance;
             apiControllerSingleton = ApiControllerSingleton.instance;
             canvasComponent = GetComponent<Canvas>();
