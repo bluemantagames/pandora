@@ -50,6 +50,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -74,8 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 11
-  m_Sprite: {fileID: -4367994768778996756, guid: 8780ab8a94b2daf48955cb2d01979bb4,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 261a4d821449442c99837ac11241cd7b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -124,7 +124,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.08, y: 0.48}
+    oldSize: {x: 0.39, y: 3}
     newSize: {x: 0.12, y: 0.71}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cd17ee6a3bfc413682d0a662b1be9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HitboxName: 
 --- !u!114 &4061167875481412185
 MonoBehaviour:
   m_ObjectHideFlags: 0
