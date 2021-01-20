@@ -18,8 +18,6 @@ namespace Pandora.Network
         /// <summary>Forces a game without authentication</summary>
         public bool DevMatchmaking = false;
 
-        public DeckSpotParentBehaviour DeckSpotParent = null;
-
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
 
         public void Connect()
@@ -31,10 +29,11 @@ namespace Pandora.Network
                 NetworkControllerSingleton.instance.IsDebugBuild = false;
             }
 
-            var deck = DevMatchmaking && DeckSpotParent != null ?
-                DeckSpotParent.Deck :
-                playerModelSingleton.GetActiveDeck().Select(cardName => new Card(cardName)).ToList();
+            var activeDeck = playerModelSingleton.GetActiveDeck();
 
+            if (activeDeck == null) return;
+
+            var deck = activeDeck.Select(cardName => new Card(cardName)).ToList();
             var deckStr = deck.Select(card => card.Name).ToList();
 
             if (DevMatchmaking)
@@ -46,7 +45,7 @@ namespace Pandora.Network
                 NetworkControllerSingleton.instance.StartMatchmaking(deckStr);
             }
 
-            GameObject.Find("MatchmakingButton").GetComponent<Button>().interactable = false;
+            DisableButton();
 
             NetworkControllerSingleton.instance.matchStartEvent.AddListener(LoadGameScene);
 
@@ -57,6 +56,7 @@ namespace Pandora.Network
         {
             NetworkControllerSingleton.instance.StartMatch();
         }
+
         void LoadGameScene()
         {
             GameSceneToLoad = true;
@@ -77,6 +77,10 @@ namespace Pandora.Network
             SceneManager.LoadScene("LiveMenuScene");
         }
 
+        void DisableButton()
+        {
+            GetComponent<Button>().interactable = false;
+        }
     }
 
 }

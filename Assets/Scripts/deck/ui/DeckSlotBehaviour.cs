@@ -11,8 +11,8 @@ public class DeckSlotBehaviour : MonoBehaviour
     public long DeckSlotId;
     public int DeckSlotIndex;
     public bool Active = false;
-    public Color ActiveColor = new Color(196, 94, 110);
-    Color oldColor;
+    public Sprite ActiveImage;
+    Sprite oldImage;
 
     public void ChangeDeckSlot()
     {
@@ -20,7 +20,7 @@ public class DeckSlotBehaviour : MonoBehaviour
 
         if (deckSpotParentBehaviour)
         {
-            _ = deckSpotParentBehaviour.ExecuteChangeDeckSlot(DeckSlotId, DeckSlotIndex);
+            _ = deckSpotParentBehaviour.ExecuteChangeDeckSlot(DeckSlotId);
         }
     }
 
@@ -30,8 +30,8 @@ public class DeckSlotBehaviour : MonoBehaviour
 
         if (image != null)
         {
-            oldColor = image.color;
-            image.color = ActiveColor;
+            oldImage = image.sprite;
+            image.sprite = ActiveImage;
         }
 
         Active = true;
@@ -43,7 +43,7 @@ public class DeckSlotBehaviour : MonoBehaviour
 
         if (image != null)
         {
-            image.color = oldColor;
+            image.sprite = oldImage;
         }
 
         Active = false;

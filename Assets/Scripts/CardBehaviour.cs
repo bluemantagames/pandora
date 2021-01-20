@@ -45,7 +45,8 @@ namespace Pandora
                 _isUI = value;
 
                 // Disable mana image on UI
-                // and swap this component for MenuCardBehaviour
+                // Disable this component
+                // Add MenuCardBehaviour
                 if (value)
                 {
                     var menuCardBehaviour = gameObject.AddComponent<MenuCardBehaviour>();
@@ -62,8 +63,6 @@ namespace Pandora
                     {
                         Destroy(child.gameObject);
                     }
-
-                    Destroy(this);
                 }
             }
         }
@@ -93,7 +92,12 @@ namespace Pandora
             }
         }
 
-        public void OnDrag(PointerEventData eventData) => Dragging = true;
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (disabled) return;
+
+            Dragging = true;
+        }
 
         GridCell GetPointed()
         {
@@ -153,7 +157,7 @@ namespace Pandora
             {
                 if (movement != null) movement.map = map;
                 if (projectileSpell != null) projectileSpell.map = map;
-                
+
                 var pointed = GetPointed();
 
                 var mapComponent = MapComponent.Instance;
@@ -197,9 +201,12 @@ namespace Pandora
             {
                 Destroy(gameObject);
             }
-            else
+            else if (!_isUI)
             {
-                GetComponentInChildren<Text>().text = (RequiredMana / 10).ToString();
+                var manaText = GetComponentInChildren<Text>();
+
+                if (manaText != null)
+                    manaText.text = (RequiredMana / 10).ToString();
             }
         }
 
@@ -230,6 +237,8 @@ namespace Pandora
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            if (disabled) return;
+
             Debug.Log($"[MULLIGAN] Clicked {CardName}");
             LocalDeck.Instance.CardSelect(new Card(CardName));
         }
@@ -244,6 +253,8 @@ namespace Pandora
 
         void Update()
         {
+            if (disabled) return;
+
             imageComponent.color = (MulliganSelected == true) ? Color.yellow : defaultColor;
 
             if (Dragging)
