@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Pandora;
 using Pandora.Network;
 using Cysharp.Threading.Tasks;
 using System.Net;
-using UnityEngine.SceneManagement;
 
 namespace Pandora.UI.Login
 {
@@ -13,16 +13,21 @@ namespace Pandora.UI.Login
         public Text ErrorText = null;
         public InputField UsernameInput = null;
         public InputField PasswordInput = null;
-        public bool UseProdMatchmaking = false;
+        private LoadingBehaviour loadingBehaviour;
+        public bool UseProdServer = false;
         private string oldButtonText = null, usernameKey = "username", passwordKey = "password";
         private PlayerModelSingleton playerModelSingleton;
         bool isLoading = false;
 
-        void Start()
+        void Awake()
         {
             playerModelSingleton = PlayerModelSingleton.instance;
+            loadingBehaviour = GameObject.Find("LoadingCanvas")?.GetComponent<LoadingBehaviour>();
+        }
 
-            PlayGamesAuthentication();
+        void Start()
+        {
+            _ = PlayGamesAuthentication();
 
             if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey))
             {
@@ -35,9 +40,9 @@ namespace Pandora.UI.Login
         {
             var apiController = ApiControllerSingleton.instance;
 
-            if (UseProdMatchmaking)
+            if (UseProdServer)
             {
-                ApiControllerSingleton.instance.IsDebugBuild = false;
+                apiController.IsDebugBuild = false;
             }
 
             var loginResponse = await apiController.Login(username, password);
@@ -53,7 +58,9 @@ namespace Pandora.UI.Login
                 Logger.Debug($"Logged in successfully with the token: {token}");
 
                 playerModelSingleton.Token = token;
-                _ = LoaderSingleton.instance.LoadMainMenu();
+
+                if (loadingBehaviour != null)
+                    _ = loadingBehaviour.LoadMainMenu();
             }
             else
             {
@@ -73,10 +80,13 @@ namespace Pandora.UI.Login
         /// <summary>
         /// Platform-aware play games auth caller
         /// </summary>
-        private void PlayGamesAuthentication()
+        private async UniTaskVoid PlayGamesAuthentication()
         {
 #if UNITY_ANDROID            
-            _ = PlayGames.instance.Authenticate();
+            var authenticated = await PlayGames.instance.Authenticate();
+
+            if (authenticated)
+                _ = loadingBehaviour.LoadMainMenu();
 #endif
         }
 

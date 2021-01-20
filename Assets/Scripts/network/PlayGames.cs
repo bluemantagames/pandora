@@ -58,9 +58,9 @@ namespace Pandora.Network
             return task.Task;
         }
 
-        public async UniTaskVoid Authenticate()
+        public async UniTask<bool> Authenticate()
         {
-            if (PlayGamesPlatform.Instance == null) return;
+            if (PlayGamesPlatform.Instance == null) return false;
 
             var apiController = ApiControllerSingleton.instance;
             var playerModelSingleton = PlayerModelSingleton.instance;
@@ -82,16 +82,19 @@ namespace Pandora.Network
                     Logger.Debug($"Logged in successfully with the token: {token}");
 
                     playerModelSingleton.Token = token;
-                    _ = LoaderSingleton.instance.LoadMainMenu();
+
+                    return true;
                 }
                 else
                 {
                     Logger.Debug($"Status code {googleSignInResponse.StatusCode} while logging in: {googleSignInResponse.Error.message}");
+                    return false;
                 }
             }
             else
             {
                 Logger.Debug($"Google Play Games sigin error: {result}");
+                return false;
             }
         }
     }

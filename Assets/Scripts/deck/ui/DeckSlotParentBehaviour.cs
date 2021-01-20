@@ -5,27 +5,40 @@ using Pandora.Network;
 using Pandora.Deck.UI;
 using Cysharp.Threading.Tasks;
 using System.Net;
+using Pandora.UI.Menu;
+using Pandora.UI.Menu.Event;
+using Pandora.Events;
+using System.Collections.Generic;
 
 public class DeckSlotParentBehaviour : MonoBehaviour
 {
+    public MenuView CurrentView;
     public GameObject DeckSpotsParent;
     public Button DeckSlotButton;
+    public bool DeckSlotsOnly;
     PlayerModelSingleton playerModelSingleton;
     ApiControllerSingleton apiControllerSingleton;
+    MenuEventsSingleton menuEventsSingleton;
+    DeckSpotParentBehaviour deckSpotParentBehaviour;
 
     void Awake()
     {
         playerModelSingleton = PlayerModelSingleton.instance;
         apiControllerSingleton = ApiControllerSingleton.instance;
+        menuEventsSingleton = MenuEventsSingleton.instance;
+        deckSpotParentBehaviour = DeckSpotsParent?.GetComponent<DeckSpotParentBehaviour>();
 
+        Setup();
+
+        menuEventsSingleton.EventBus.Subscribe<ViewActive>(new EventSubscriber<MenuEvent>(ViewActiveHandler, "ViewActiveHandler"));
+    }
+
+    void Setup()
+    {
         if (playerModelSingleton.DeckSlots == null) return;
         if (DeckSlotButton == null) return;
-        if (DeckSpotsParent == null) return;
 
-        var deckSpotParentBehaviour = DeckSpotsParent.GetComponent<DeckSpotParentBehaviour>();
         var activeDeckSlot = playerModelSingleton.User.activeDeckSlot;
-
-        if (deckSpotParentBehaviour == null) return;
 
         for (var index = 0; index < playerModelSingleton.DeckSlots.Count; index++)
         {
@@ -50,23 +63,48 @@ public class DeckSlotParentBehaviour : MonoBehaviour
                 if (deckSlot.id == activeDeckSlot)
                 {
                     deckSlotBehaviour.Activate();
-                    deckSpotParentBehaviour.LoadSavedDeck(index);
                 }
             }
+        }
+
+        // Load deck
+        if (deckSpotParentBehaviour != null && !DeckSlotsOnly)
+        {
+            deckSpotParentBehaviour.LoadSavedDeck(activeDeckSlot);
         }
 
         // Remove first button
         Destroy(DeckSlotButton.gameObject);
     }
 
-    public async UniTaskVoid ExecuteChangeDeckSlot(long deckSlotId, int deckSlotIndex)
+    void ViewActiveHandler(MenuEvent ev)
     {
-        if (DeckSpotsParent == null) return;
+        var viewActive = ev as ViewActive;
+        var activeDeckSlot = playerModelSingleton?.User?.activeDeckSlot;
 
-        var deckSpotParentBehaviour = DeckSpotsParent.GetComponent<DeckSpotParentBehaviour>();
-
+        if (viewActive.ActiveView != CurrentView) return;
+        if (activeDeckSlot == null) return;
         if (deckSpotParentBehaviour == null) return;
 
+        // This method must be used because
+        // when we are switching a view, it
+        // will be enabled, and all the grid layout
+        // inside could have `0` since they are not
+        // instantly calculated.
+        LayoutRebuilder.ForceRebuildLayoutImmediate(deckSpotParentBehaviour.gameObject.GetComponent<RectTransform>());
+
+        UpdateActiveSlot();
+
+        if (!DeckSlotsOnly && activeDeckSlot != null)
+        {
+            deckSpotParentBehaviour.Reset();
+            deckSpotParentBehaviour.LoadSavedDeck((long)activeDeckSlot);
+        }
+    }
+
+    public async UniTaskVoid ExecuteChangeDeckSlot(long deckSlotId)
+    {
+        var deckSpotParentBehaviour = DeckSpotsParent?.GetComponent<DeckSpotParentBehaviour>();
         var token = playerModelSingleton.Token;
 
         if (token == null) return;
@@ -75,13 +113,16 @@ public class DeckSlotParentBehaviour : MonoBehaviour
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            deckSpotParentBehaviour.Reset();
-            deckSpotParentBehaviour.LoadSavedDeck(deckSlotIndex);
-
             // Update the model
             playerModelSingleton.User.activeDeckSlot = deckSlotId;
 
             UpdateActiveSlot();
+
+            if (deckSpotParentBehaviour != null && !DeckSlotsOnly)
+            {
+                deckSpotParentBehaviour.Reset();
+                deckSpotParentBehaviour.LoadSavedDeck(deckSlotId);
+            }
         }
     }
 
