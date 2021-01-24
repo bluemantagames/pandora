@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Pandora.UI.Modal;
 using Pandora;
+using Pandora.Deck;
 
 namespace Pandora.UI.Menu.Deck
 {
     public class SingleCardDetails : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler
     {
         private MenuModalBehaviour modalContainer;
-        private CardModalBehaviour cardModalBehaviour;
         private CardBehaviour cardBehaviour;
         private bool isDragging = false;
 
@@ -19,7 +19,6 @@ namespace Pandora.UI.Menu.Deck
             var mainCanvas = GameObject.Find("Main").gameObject;
 
             modalContainer = mainCanvas.GetComponentInChildren<MenuModalBehaviour>();
-            cardModalBehaviour = mainCanvas.GetComponentInChildren<CardModalBehaviour>();
 
             cardBehaviour = GetComponent<CardBehaviour>();
         }
@@ -38,12 +37,30 @@ namespace Pandora.UI.Menu.Deck
         {
             if (isDragging) return;
 
+            var modalComponent = InstantiateModal();
+            modalContainer.AppendComponent(modalComponent);
+            modalContainer.Show();
+        }
+
+        private GameObject InstantiateModal()
+        {
+            var cardType = cardBehaviour.CardType;
+            GameObject detailedCardResource = null;
+
+            switch (cardType)
+            {
+                default:
+                    detailedCardResource = Resources.Load("DetailedCards/ControllerDetailedCard") as GameObject;
+                    break;
+            }
+
+            var instantiatedModal = Instantiate(detailedCardResource);
+
+            var cardModalBehaviour = instantiatedModal.GetComponent<CardModalBehaviour>();
             cardModalBehaviour.CurrentCardBehaviour = cardBehaviour;
             cardModalBehaviour.LoadInfo();
 
-            var cardModalObject = cardModalBehaviour.gameObject;
-            modalContainer.AppendComponent(cardModalObject);
-            modalContainer.Show();
+            return instantiatedModal;
         }
     }
 }

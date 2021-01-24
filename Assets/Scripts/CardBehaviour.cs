@@ -28,6 +28,7 @@ namespace Pandora
         public bool MulliganSelected = false;
         public bool IsDevCard = false;
         public bool UiDisabled = false;
+        public CardType CardType;
 
         Image imageComponent;
         GraphicRaycaster raycasterComponent;
