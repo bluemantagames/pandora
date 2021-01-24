@@ -5,6 +5,7 @@
     using Pandora.Command;
     using UnityEngine;
     using Pandora.Network;
+    using Pandora.Combat;
 
     public class TeamComponent : MonoBehaviour
     {
@@ -91,6 +92,11 @@
             Team = newTeam;
 
             GetComponentInChildren<HealthbarBehaviour>()?.RefreshColor();
+
+            var combatBehaviour = GetComponent<CombatBehaviour>();
+
+            if (combatBehaviour.isAttacking)
+                combatBehaviour.StopAttacking();
         }
     }
 }

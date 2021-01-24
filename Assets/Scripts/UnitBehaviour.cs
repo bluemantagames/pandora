@@ -6,6 +6,7 @@ using UnityEngine.Profiling;
 using Pandora.Movement;
 using Pandora.Combat;
 using Pandora.Engine;
+using System;
 
 namespace Pandora
 {
@@ -39,6 +40,9 @@ namespace Pandora
         public uint WalkingAnimationEngineUnits;
 
         float walkingAnimationTime = 0;
+        string overridingAnimationName = null;
+        uint overridingAnimationMsLength = 0, overridingTotalTimePassed = 0;
+        Action onOverrideEnd = null;
 
         // Start is called before the first frame update
         void Awake()
@@ -67,6 +71,15 @@ namespace Pandora
         {
             if (lifeComponent.IsDead || !areWeHandling) return; // Do nothing if dead
 
+            if (overridingAnimationName != null)
+            {
+                overridingTotalTimePassed += timeLapsed;
+
+                playAnimation((float) overridingTotalTimePassed / (float) overridingAnimationMsLength, overridingAnimationName);
+
+                return;
+            }
+
             moveSampler.Begin();
             var state = movementBehaviour.Move();
             moveSampler.End();
@@ -90,8 +103,6 @@ namespace Pandora
             }
             else if (WalkingAnimationEnabled)
             {
-                animator.speed = 0;
-
                 var timePercent = engineComponent.Entity.Speed / ((float)WalkingAnimationEngineUnits);
 
                 walkingAnimationTime += timePercent;
@@ -101,21 +112,44 @@ namespace Pandora
                     walkingAnimationTime = 0f;
                 }
 
-                animator.SetFloat("BlendX", movementBehaviour.WalkingDirection.x);
-                animator.SetFloat("BlendY", movementBehaviour.WalkingDirection.y);
-
-                animator.Play(WalkingAnimationStateName, 0, walkingAnimationTime);
+                playAnimation(timePercent, overridingAnimationName);
             }
         }
 
         /// <summary>Other behaviours can use this method to stop our handling of animation and movement</summary>
-        public void PauseBehaviour() {
+        public void PauseBehaviour()
+        {
             areWeHandling = false;
         }
 
         /// <summary>Other behaviours can use this method to resume our handling after pausing it with PauseBehaviour</summary>
-        public void UnpauseBehaviour() {
+        public void UnpauseBehaviour()
+        {
             areWeHandling = true;
+        }
+
+        public void PlayAnimation(string animationStateName, uint animationMsLength, Action animationEndCallback)
+        {
+            overridingAnimationName = animationStateName;
+            overridingAnimationMsLength = animationMsLength;
+            onOverrideEnd = animationEndCallback;
+        }
+
+        void playAnimation(float timePercent, string animationName)
+        {
+            animator.speed = 0;
+
+            animator.SetFloat("BlendX", movementBehaviour.WalkingDirection.x);
+            animator.SetFloat("BlendY", movementBehaviour.WalkingDirection.y);
+
+            animator.Play(WalkingAnimationStateName, 0, timePercent);
+
+            if (timePercent >= 1f)
+            {
+                overridingAnimationName = null;
+
+                if (onOverrideEnd != null) onOverrideEnd();
+            }
         }
     }
 }

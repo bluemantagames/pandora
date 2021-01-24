@@ -13,8 +13,12 @@ namespace Pandora.Command
         TeamComponent team;
         EngineComponent engineComponent;
         GroupComponent groupComponent;
+        public GameObject CommandVFX;
+        public float VFXStartTime = 0f;
+        public uint CommandAnimationMs = 500;
 
-        void Start() {
+        void Start()
+        {
             team = GetComponent<TeamComponent>();
             engineComponent = GetComponent<EngineComponent>();
             groupComponent = GetComponent<GroupComponent>();
@@ -26,30 +30,49 @@ namespace Pandora.Command
 
             var isEveryoneAlive = groupComponent.Objects.TrueForAll(unit => !unit.GetComponent<LifeComponent>().IsDead);
 
-            if (isEveryoneAlive && targetEntity != null) {
-                targetEntity.GameObject.GetComponent<TeamComponent>().Convert(team.Team);
+            
+            foreach (var cleric in groupComponent.Objects)
+            {
+                cleric.GetComponent<UnitBehaviour>().PlayAnimation("Command", CommandAnimationMs, sacrifice);
+            }
 
-                foreach (var cleric in groupComponent.Objects) {
-                    var lifeComponent = cleric.GetComponent<LifeComponent>();
+            if (isEveryoneAlive && targetEntity != null)
+            {
+                if (CommandVFX != null)
+                {
+                    var target = targetEntity.GameObject;
+                    var targetSpriteRenderer = target.GetComponent<SpriteRenderer>();
+                    var bounds = targetSpriteRenderer.bounds;
 
-                    lifeComponent.AssignDamage(lifeComponent.lifeValue, new UnitCommand(gameObject));
+                    var vfxPosition = new Vector3(bounds.min.x + (bounds.extents.x / 2), bounds.min.y, 0f);
+
+                    var vfx = Instantiate(CommandVFX, vfxPosition, CommandVFX.transform.rotation, target.transform);
+
+                    var particles = vfx.GetComponent<ParticleSystem>();
+
+                    particles.Play();
                 }
-            } else {
+
+                targetEntity.GameObject.GetComponent<TeamComponent>().Convert(team.Team);
+            }
+            else
+            {
                 Logger.DebugWarning("Somebody is dead or no valid targets, cannot convert");
             }
         }
 
         private bool IsTopSide(GridCell cell) => cell.vector.y >= MapComponent.Instance.bottomMapSizeY + 1;
 
-        private EngineEntity FindConverted() {
+        private EngineEntity FindConverted()
+        {
             int? minLife = null;
             EngineEntity targetEntity = null;
 
-            var isTopValid = groupComponent.Objects.Exists((cleric) => 
+            var isTopValid = groupComponent.Objects.Exists((cleric) =>
                 IsTopSide(cleric.GetComponent<EngineComponent>().Entity.GetCurrentCell())
             );
 
-            var isBottomValid = groupComponent.Objects.Exists((cleric) => 
+            var isBottomValid = groupComponent.Objects.Exists((cleric) =>
                 !IsTopSide(cleric.GetComponent<EngineComponent>().Entity.GetCurrentCell())
             );
 
@@ -59,10 +82,11 @@ namespace Pandora.Command
 
                 var lifeValue = entity.GameObject.GetComponent<LifeComponent>().lifeValue;
 
-                var isSideValid = 
+                var isSideValid =
                     IsTopSide(entity.GetCurrentCell()) ? isTopValid : isBottomValid;
 
-                if ((minLife == null || minLife > lifeValue) && isSideValid) {
+                if ((minLife == null || minLife > lifeValue) && isSideValid)
+                {
                     minLife = lifeValue;
                     targetEntity = entity;
                 }
@@ -82,7 +106,17 @@ namespace Pandora.Command
                     )
                 };
             else
-                return new List<EffectIndicator> {};
+                return new List<EffectIndicator> { };
+        }
+
+        void sacrifice()
+        {
+            foreach (var cleric in groupComponent.Objects)
+            {
+                var lifeComponent = cleric.GetComponent<LifeComponent>();
+
+                lifeComponent.AssignDamage(lifeComponent.lifeValue, new UnitCommand(gameObject));
+            }
         }
     }
 }
