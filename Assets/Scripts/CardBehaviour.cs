@@ -51,7 +51,7 @@ namespace Pandora
                 {
                     var menuCardBehaviour = gameObject.AddComponent<MenuCardBehaviour>();
 
-                    menuCardBehaviour.Canvas = GameObject.Find("Canvas");
+                    menuCardBehaviour.Canvas = GameObject.Find("Main");
                     menuCardBehaviour.CardName = CardName;
                     menuCardBehaviour.UiDisabled = UiDisabled;
 
