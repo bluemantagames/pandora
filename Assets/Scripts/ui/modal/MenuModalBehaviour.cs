@@ -11,6 +11,7 @@ namespace Pandora.UI.Modal
         public GameObject Viewport;
         private Canvas canvasComponent;
         private CanvasGroup canvasGroupComponent;
+        private GameObject appendedExternalComponent = null;
 
         void Awake()
         {
@@ -34,6 +35,8 @@ namespace Pandora.UI.Modal
             canvasGroupComponent.DOFade(0, fadeDuration).OnComplete(() =>
             {
                 canvasComponent.enabled = false;
+
+                DestroyAppendedComponent();
             });
         }
 
@@ -50,6 +53,13 @@ namespace Pandora.UI.Modal
         {
             externalComponent.transform.parent = Viewport.transform;
             externalComponent.transform.localPosition = new Vector2(0, 0);
+
+            appendedExternalComponent = externalComponent;
+        }
+
+        public void DestroyAppendedComponent()
+        {
+            if (appendedExternalComponent != null) Destroy(appendedExternalComponent);
         }
     }
 }
