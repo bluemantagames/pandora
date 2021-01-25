@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.3999939, y: 533.2}
+  m_AnchoredPosition: {x: 0.000030517578, y: 520}
   m_SizeDelta: {x: -134.60669, y: -1134.2275}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3550718525229445451
@@ -72,8 +72,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.36019897, y: 123.7}
-  m_SizeDelta: {x: 0.72039795, y: -247.27344}
+  m_AnchoredPosition: {x: 0, y: 192.49}
+  m_SizeDelta: {x: -62.30963, y: -384.97955}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6536134783368605553
 MonoBehaviour:
@@ -298,8 +298,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -25, y: 0.35459}
-  m_SizeDelta: {x: 50, y: 0}
+  m_AnchoredPosition: {x: -35, y: -0.000024259}
+  m_SizeDelta: {x: 70, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5936783917297618262
 CanvasRenderer:
@@ -387,8 +387,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -4.48}
+  m_SizeDelta: {x: 0, y: -8.95636}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4321620315596997486
 CanvasRenderer:
@@ -420,7 +420,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 0d4ff071e72754353a29138faa82d9a5, type: 3}
-    m_FontSize: 28
+    m_FontSize: 38
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -444,6 +444,7 @@ GameObject:
   - component: {fileID: 8258796036483250762}
   - component: {fileID: 2281713005066217785}
   - component: {fileID: 127012892929206613}
+  - component: {fileID: 4954342395595976916}
   m_Layer: 5
   m_Name: Tab
   m_TagString: Untagged
@@ -469,7 +470,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 101.34833, y: 50}
+  m_SizeDelta: {x: 207.47232, y: 63.864197}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8258796036483250762
 CanvasRenderer:
@@ -552,6 +553,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4954342395595976916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7045331650348971659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AspectMode: 1
+  m_AspectRatio: 3.2486484
 --- !u!1 &7859052844582231792
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,8 +602,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.19000244, y: -36.789993}
-  m_SizeDelta: {x: 0.720459, y: -73.75647}
+  m_AnchoredPosition: {x: 0.2000122, y: -31.89999}
+  m_SizeDelta: {x: 0.51660156, y: -71.33716}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8348317354743149334
 MonoBehaviour:
@@ -811,8 +826,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.5999756, y: -1.5999756}
-  m_SizeDelta: {x: -44.80432, y: -34.72003}
+  m_AnchoredPosition: {x: 0, y: -0.000030517578}
+  m_SizeDelta: {x: -95.77966, y: -93.247375}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6043710794016967979
 CanvasRenderer:
@@ -892,8 +907,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.2099915, y: -304.5}
-  m_SizeDelta: {x: -143.83215, y: -902.0894}
+  m_AnchoredPosition: {x: -0.000030517578, y: -299}
+  m_SizeDelta: {x: -143.83215, y: -764.38586}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9143892323350607663
 MonoBehaviour:
