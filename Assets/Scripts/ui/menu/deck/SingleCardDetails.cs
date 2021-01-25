@@ -49,8 +49,24 @@ namespace Pandora.UI.Menu.Deck
 
             switch (cardType)
             {
-                default:
+                case CardType.Controller:
                     detailedCardResource = Resources.Load("DetailedCards/ControllerDetailedCard") as GameObject;
+                    break;
+
+                case CardType.Damage:
+                    detailedCardResource = Resources.Load("DetailedCards/DamageDetailedCard") as GameObject;
+                    break;
+
+                case CardType.Spell:
+                    detailedCardResource = Resources.Load("DetailedCards/SpellDetailedCard") as GameObject;
+                    break;
+
+                case CardType.Support:
+                    detailedCardResource = Resources.Load("DetailedCards/SupportDetailedCard") as GameObject;
+                    break;
+
+                case CardType.Tank:
+                    detailedCardResource = Resources.Load("DetailedCards/TankDetailedCard") as GameObject;
                     break;
             }
 

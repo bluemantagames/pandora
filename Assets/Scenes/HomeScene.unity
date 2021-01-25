@@ -1274,6 +1274,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 670770216}
     m_Modifications:
+    - target: {fileID: 3065302226510336104, guid: 4e18098dd73a0f940ab1cc192dd8248d,
+        type: 3}
+      propertyPath: CardType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3065302226510336106, guid: 4e18098dd73a0f940ab1cc192dd8248d,
         type: 3}
       propertyPath: m_Name
@@ -6090,6 +6095,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fireball
       objectReference: {fileID: 0}
+    - target: {fileID: 3545436999122184299, guid: 1c4b8ebe9da50864fa253419f643bb5d,
+        type: 3}
+      propertyPath: CardType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8371264503401727522, guid: 1c4b8ebe9da50864fa253419f643bb5d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -6770,6 +6780,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 620125996788808114, guid: cf312495b29ea6f4cbd5543b70bdfd3b,
+        type: 3}
+      propertyPath: CardType
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5585723384835627003, guid: cf312495b29ea6f4cbd5543b70bdfd3b,
         type: 3}
@@ -7653,6 +7668,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 670770216}
     m_Modifications:
+    - target: {fileID: 812671481729146876, guid: 383dbce5e9e950c408f0e052724f4f43,
+        type: 3}
+      propertyPath: CardType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 812671481729146878, guid: 383dbce5e9e950c408f0e052724f4f43,
         type: 3}
       propertyPath: m_Name
