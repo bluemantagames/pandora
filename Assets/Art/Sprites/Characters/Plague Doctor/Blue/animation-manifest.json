@@ -1,0 +1,20 @@
+{
+    "provenience": "PlagueDoctor.abc",
+    "animations": [
+        {
+            "name": "Walking",
+            "startFrame": 0,
+            "endFrame": 30
+        },
+        {
+            "name": "Attacking",
+            "startFrame": 31,
+            "endFrame": 74
+        },
+        {
+            "name": "Command",
+            "startFrame": 75,
+            "endFrame": 135
+        }
+    ]
+}

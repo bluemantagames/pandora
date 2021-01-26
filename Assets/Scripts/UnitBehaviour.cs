@@ -107,12 +107,12 @@ namespace Pandora
 
                 walkingAnimationTime += timePercent;
 
-                if (walkingAnimationTime > 1f)
+                if (walkingAnimationTime >= 1f)
                 {
                     walkingAnimationTime = 0f;
                 }
 
-                playAnimation(timePercent, overridingAnimationName);
+                playAnimation(walkingAnimationTime, WalkingAnimationStateName);
             }
         }
 
@@ -142,7 +142,7 @@ namespace Pandora
             animator.SetFloat("BlendX", movementBehaviour.WalkingDirection.x);
             animator.SetFloat("BlendY", movementBehaviour.WalkingDirection.y);
 
-            animator.Play(WalkingAnimationStateName, 0, timePercent);
+            animator.Play(animationName, 0, timePercent);
 
             if (timePercent >= 1f)
             {
