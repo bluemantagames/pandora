@@ -20,7 +20,7 @@ namespace Pandora
         public bool DebugMove = false;
 
         // represents whether we are handling movement / animation or another component is doing it
-        bool areWeHandling = true;
+        bool areWePaused = false;
         public Bounds hitbox;
         public RuntimeAnimatorController BlueController, RedController;
         public string ComponentName
@@ -43,6 +43,7 @@ namespace Pandora
         string overridingAnimationName = null;
         uint overridingAnimationMsLength = 0, overridingTotalTimePassed = 0;
         Action onOverrideEnd = null;
+        int? overridenSpeed = null;
 
         // Start is called before the first frame update
         void Awake()
@@ -69,7 +70,7 @@ namespace Pandora
         // This is called from PandoraEngine every tick
         public void TickUpdate(uint timeLapsed)
         {
-            if (lifeComponent.IsDead || !areWeHandling) return; // Do nothing if dead
+            if (lifeComponent.IsDead || areWePaused) return; // Do nothing if dead
 
             if (overridingAnimationName != null)
             {
@@ -103,6 +104,8 @@ namespace Pandora
             }
             else if (WalkingAnimationEnabled)
             {
+                playAnimation(walkingAnimationTime, WalkingAnimationStateName);
+
                 var timePercent = engineComponent.Entity.Speed / ((float)WalkingAnimationEngineUnits);
 
                 walkingAnimationTime += timePercent;
@@ -112,20 +115,23 @@ namespace Pandora
                     walkingAnimationTime = 0f;
                 }
 
-                playAnimation(walkingAnimationTime, WalkingAnimationStateName);
+                // Never skip the last frame
+                if (walkingAnimationTime + timePercent >= 1f) {
+                    walkingAnimationTime = 1f;
+                }
             }
         }
 
         /// <summary>Other behaviours can use this method to stop our handling of animation and movement</summary>
         public void PauseBehaviour()
         {
-            areWeHandling = false;
+            areWePaused = true;
         }
 
         /// <summary>Other behaviours can use this method to resume our handling after pausing it with PauseBehaviour</summary>
         public void UnpauseBehaviour()
         {
-            areWeHandling = true;
+            areWePaused = false;
         }
 
         public void PlayAnimation(string animationStateName, uint animationMsLength, Action animationEndCallback)
@@ -133,6 +139,9 @@ namespace Pandora
             overridingAnimationName = animationStateName;
             overridingAnimationMsLength = animationMsLength;
             onOverrideEnd = animationEndCallback;
+            overridenSpeed = engineComponent.Entity.Speed;
+
+            engineComponent.Entity.SetSpeedUnitsPerSecond(0);
         }
 
         void playAnimation(float timePercent, string animationName)
@@ -144,9 +153,12 @@ namespace Pandora
 
             animator.Play(animationName, 0, timePercent);
 
-            if (timePercent >= 1f)
+            if (timePercent >= 1f && overridingAnimationName != null)
             {
                 overridingAnimationName = null;
+
+                if (overridenSpeed.HasValue)
+                    engineComponent.Entity.Speed = overridenSpeed.Value;
 
                 if (onOverrideEnd != null) onOverrideEnd();
             }

@@ -196,7 +196,7 @@ MonoBehaviour:
   damage: 150
   attackCooldownMs: 300
   backswingMs: 300
-  animationStateName: BardAttack
+  animationStateName: Attacking
   AggroRangeCells: 3
   AttackRangeEngineUnits: 200
 --- !u!61 &7105882005904317285
@@ -262,7 +262,7 @@ Animator:
   m_GameObject: {fileID: 1341249731494315628}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8cf1d8f96376b034a85df5443ecd9c10, type: 2}
+  m_Controller: {fileID: 9100000, guid: 01da475283f484daa8736d3c0f5150ac, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -287,6 +287,8 @@ MonoBehaviour:
   DebugLines: 0
   EffectObjects:
   - {fileID: 2016888992844160403, guid: 952398b416080ab49a229d5e39270633, type: 3}
+  VFXObject: {fileID: 2376239335491957566, guid: 2f705405466f14a16a36173a5016f530,
+    type: 3}
 --- !u!114 &-4381383725649756430
 MonoBehaviour:
   m_ObjectHideFlags: 0

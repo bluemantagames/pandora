@@ -73,7 +73,7 @@ namespace Pandora.Movement
             {
                 if (combatBehaviour.isAttacking) combatBehaviour.StopAttacking();
 
-                entity.SetSpeed(MovementSpeed);
+                entity.SetSpeedUnitsPerSecond(MovementSpeed);
 
                 var targetPosition = currentPosition;
 

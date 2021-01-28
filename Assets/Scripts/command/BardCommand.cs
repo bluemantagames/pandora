@@ -12,6 +12,7 @@ namespace Pandora.Command
         public int Radius = 3000;
         public bool DebugLines = false;
         public GameObject[] EffectObjects;
+        public GameObject VFXObject;
         List<EngineEntity> targets = new List<EngineEntity>(300);
         List<EffectIndicator> commandIndicators = new List<EffectIndicator>(300);
         TeamComponent sourceTeam;
@@ -69,8 +70,11 @@ namespace Pandora.Command
             var sourceEntity = GetComponent<EngineComponent>().Entity;
             var sourceAnimator = GetComponent<Animator>();
 
-            // Execute the attack animation
-            sourceAnimator.Play("BardAttack");
+            GetComponent<UnitBehaviour>().PlayAnimation("Command", 1000, null);
+
+            var vfx = Instantiate(VFXObject, transform.position, VFXObject.transform.rotation, transform);
+
+            vfx.GetComponent<ParticleSystem>().Play();
 
             var targets = FindBuffTargets();
 

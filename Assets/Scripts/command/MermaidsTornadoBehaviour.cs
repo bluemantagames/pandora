@@ -83,7 +83,7 @@ namespace Pandora.Command
                 if (target != null)
                 {
                     entity.SetTarget(target);
-                    entity.SetSpeed(EngineUnitsSpeed);
+                    entity.SetSpeedUnitsPerSecond(EngineUnitsSpeed);
                 }
             }
 

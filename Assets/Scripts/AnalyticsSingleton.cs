@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using GameAnalyticsSDK;
 
 namespace Pandora
 {
@@ -28,7 +27,6 @@ namespace Pandora
             if (isEnabled)
             {
                 Logger.Debug("Started analytics integration");
-                GameAnalytics.Initialize();
             }
             else
             {
@@ -43,8 +41,6 @@ namespace Pandora
         public void TrackEvent(string eventName)
         {
             if (!isEnabled) return;
-
-            GameAnalytics.NewDesignEvent(eventName);
         }
 
         /// <summary>
@@ -55,8 +51,6 @@ namespace Pandora
         public void TrackEvent(string eventName, float eventValue)
         {
             if (!isEnabled) return;
-
-            GameAnalytics.NewDesignEvent(eventName, eventValue);
         }
     }
 }
