@@ -8,6 +8,7 @@ using Pandora.Spell;
 using Pandora.Network;
 using Pandora.Deck;
 using Pandora.Deck.UI;
+using UnityEngine.Localization;
 
 namespace Pandora
 {
@@ -30,8 +31,7 @@ namespace Pandora
         public bool UiDisabled = false;
         public CardType CardType;
         public Texture2D CardMainImage;
-        public string CardSkillDescription = "";
-
+        public LocalizedString CardSkillDescription;
         Image imageComponent;
         GraphicRaycaster raycasterComponent;
         Color defaultColor;

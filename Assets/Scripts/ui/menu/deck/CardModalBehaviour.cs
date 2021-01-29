@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 
 namespace Pandora.UI.Menu.Deck
 {
@@ -14,6 +15,19 @@ namespace Pandora.UI.Menu.Deck
 
         }
 
+        private async UniTaskVoid LoadSkillDescription()
+        {
+            if (CurrentCardBehaviour == null) return;
+
+            var cardSkillDescription = GetComponentInChildren<CardSkillDescriptionBehaviour>()?.gameObject;
+            var cardSkillDescriptionText = cardSkillDescription?.GetComponent<Text>();
+
+            var description = await CurrentCardBehaviour.CardSkillDescription.GetLocalizedString();
+
+            if (cardSkillDescriptionText)
+                cardSkillDescriptionText.text = description;
+        }
+
         public void LoadInfo()
         {
             if (CurrentCardBehaviour == null) return;
@@ -24,11 +38,15 @@ namespace Pandora.UI.Menu.Deck
             var cardSplash = GetComponentInChildren<CardImageBehaviour>()?.gameObject;
             var cardSplashImage = cardSplash?.GetComponent<RawImage>();
 
+
+
             if (cardNameText)
                 cardNameText.text = CurrentCardBehaviour.UnitName;
 
             if (cardSplashImage)
                 cardSplashImage.texture = CurrentCardBehaviour.CardMainImage;
+
+            _ = LoadSkillDescription();
         }
     }
 
