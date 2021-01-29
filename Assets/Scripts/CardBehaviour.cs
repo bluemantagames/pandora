@@ -29,6 +29,8 @@ namespace Pandora
         public bool IsDevCard = false;
         public bool UiDisabled = false;
         public CardType CardType;
+        public Texture2D CardMainImage;
+        public string CardSkillDescription = "";
 
         Image imageComponent;
         GraphicRaycaster raycasterComponent;

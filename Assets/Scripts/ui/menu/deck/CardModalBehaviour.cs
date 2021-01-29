@@ -21,8 +21,14 @@ namespace Pandora.UI.Menu.Deck
             var cardName = GetComponentInChildren<CardNameBehaviour>()?.gameObject;
             var cardNameText = cardName?.GetComponent<Text>();
 
+            var cardSplash = GetComponentInChildren<CardImageBehaviour>()?.gameObject;
+            var cardSplashImage = cardSplash?.GetComponent<RawImage>();
+
             if (cardNameText)
                 cardNameText.text = CurrentCardBehaviour.UnitName;
+
+            if (cardSplashImage)
+                cardSplashImage.texture = CurrentCardBehaviour.CardMainImage;
         }
     }
 

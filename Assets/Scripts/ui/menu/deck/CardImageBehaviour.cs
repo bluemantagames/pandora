@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Pandora.UI.Menu.Deck
 {
-    public class CardNameBehaviour : MonoBehaviour
+    public class CardImageBehaviour : MonoBehaviour
     {
         // Start is called before the first frame update
         void Start()
