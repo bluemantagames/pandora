@@ -57,14 +57,18 @@ namespace Pandora
             engineComponent = GetComponent<EngineComponent>();
             teamComponent = GetComponent<TeamComponent>();
 
+            Logger.Debug($"CombatBehaviour is {combatBehaviour}");
+
+            SetupAnimationControllers();
+        }
+
+        public void SetupAnimationControllers() {
             if (BlueController || RedController)
             {
                 animator.runtimeAnimatorController =
                     (teamComponent.Team == TeamComponent.assignedTeam) ? BlueController : RedController;
             }
 
-
-            Logger.Debug($"CombatBehaviour is {combatBehaviour}");
         }
 
         // This is called from PandoraEngine every tick

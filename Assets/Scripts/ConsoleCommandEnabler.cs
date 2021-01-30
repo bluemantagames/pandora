@@ -14,7 +14,7 @@ public class ConsoleCommandEnabler : MonoBehaviour
     float debouceTime = 0.2f;
 
     void Start() {
-        QuantumMacros.DefineMacro("spawn-enemy", "spawn-enemy-unit-params \"HalfOrc\" 14,7");
+        QuantumMacros.DefineMacro("spawn-enemy", "spawn-enemy-unit-params \"Troll\" 14,7");
     }
 
     void OnGUI()

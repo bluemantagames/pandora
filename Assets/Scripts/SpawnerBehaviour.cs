@@ -13,7 +13,7 @@ namespace Pandora
             get => Positions;
         }
 
-        public List<GameObject> Spawn(MapComponent map, UnitSpawn spawn)
+        public virtual List<GameObject> Spawn(MapComponent map, UnitSpawn spawn)
         {
             var units = new List<GameObject> { };
             var yIncrement = (spawn.Team == TeamComponent.topTeam) ? -1 : 1;
