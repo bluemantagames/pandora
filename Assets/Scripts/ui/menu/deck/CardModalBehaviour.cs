@@ -41,7 +41,7 @@ namespace Pandora.UI.Menu.Deck
 
 
             if (cardNameText)
-                cardNameText.text = CurrentCardBehaviour.UnitName;
+                cardNameText.text = CurrentCardBehaviour.CardName;
 
             if (cardSplashImage)
                 cardSplashImage.texture = CurrentCardBehaviour.CardMainImage;
