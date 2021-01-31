@@ -53,6 +53,7 @@ namespace Pandora.UI.Modal
         {
             externalComponent.transform.parent = Viewport.transform;
             externalComponent.transform.localPosition = new Vector2(0, 0);
+            externalComponent.transform.localScale = new Vector3(1, 1, 1);
 
             appendedExternalComponent = externalComponent;
         }
