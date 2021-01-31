@@ -29,6 +29,10 @@ namespace Pandora.Command
 
         public void InvokeCommand()
         {
+            var unitBehaviour = GetComponent<UnitBehaviour>();
+
+            unitBehaviour.PlayAnimation("Command", 1000, null);
+
             var flyingMode = gameObject.AddComponent<CockatriceFlyingMode>();
 
             flyingMode.FlyingTimeMs = FlyingTimeMs;
