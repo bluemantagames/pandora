@@ -120,7 +120,7 @@ namespace Pandora.Deck
                     };*/
 
                     var cardNames = new List<string> {
-                        "HalfOrc"
+                        "Zombies"
                     };
 
                     //var cardNames = new List<string> { "Troll" };
