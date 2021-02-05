@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using GameAnalyticsSDK;
+using System.Collections.Generic;
+using UnityEngine.Analytics;
 
 namespace Pandora
 {
@@ -28,7 +29,6 @@ namespace Pandora
             if (isEnabled)
             {
                 Logger.Debug("Started analytics integration");
-                GameAnalytics.Initialize();
             }
             else
             {
@@ -44,7 +44,7 @@ namespace Pandora
         {
             if (!isEnabled) return;
 
-            GameAnalytics.NewDesignEvent(eventName);
+            AnalyticsEvent.Custom(eventName);
         }
 
         /// <summary>
@@ -56,7 +56,9 @@ namespace Pandora
         {
             if (!isEnabled) return;
 
-            GameAnalytics.NewDesignEvent(eventName, eventValue);
+            var value = eventValue.ToString();
+
+            AnalyticsEvent.Custom(eventName, new Dictionary<string, object> { { "value", value } });
         }
     }
 }

@@ -8,6 +8,7 @@ using Pandora.Spell;
 using Pandora.Network;
 using Pandora.Deck;
 using Pandora.Deck.UI;
+using UnityEngine.Localization;
 
 namespace Pandora
 {
@@ -28,7 +29,9 @@ namespace Pandora
         public bool MulliganSelected = false;
         public bool IsDevCard = false;
         public bool UiDisabled = false;
-
+        public CardType CardType;
+        public Texture2D CardMainImage;
+        public LocalizedString CardSkillDescription;
         Image imageComponent;
         GraphicRaycaster raycasterComponent;
         Color defaultColor;
@@ -51,7 +54,7 @@ namespace Pandora
                 {
                     var menuCardBehaviour = gameObject.AddComponent<MenuCardBehaviour>();
 
-                    menuCardBehaviour.Canvas = GameObject.Find("Canvas");
+                    menuCardBehaviour.Canvas = GameObject.Find("Main");
                     menuCardBehaviour.CardName = CardName;
                     menuCardBehaviour.UiDisabled = UiDisabled;
 

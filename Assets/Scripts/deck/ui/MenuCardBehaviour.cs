@@ -37,7 +37,7 @@ namespace Pandora.Deck.UI
             originalParent = transform.parent.gameObject;
             originalPosition = transform.localPosition;
             originalPivot = GetComponent<RectTransform>().pivot;
-            deckSpotParentBehaviour = GameObject.Find("Canvas").GetComponentInChildren<DeckSpotParentBehaviour>();
+            deckSpotParentBehaviour = GameObject.Find("Main").GetComponentInChildren<DeckSpotParentBehaviour>();
             menuCardSiblingIndex = gameObject.transform.GetSiblingIndex();
             ParentScrollRect = GetComponentInParent<ScrollRect>();
         }
