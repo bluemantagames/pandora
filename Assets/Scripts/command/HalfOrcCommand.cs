@@ -10,6 +10,8 @@ namespace Pandora.Command
     /// <summary>On double tap, the Half Orc will split into two melee units (the rider and its mount)</summary>
     public class HalfOrcCommand : MonoBehaviour, CommandBehaviour
     {
+        public GameObject VFX;
+
         public List<EffectIndicator> FindTargets()
         {
             throw new System.NotImplementedException();
@@ -20,6 +22,11 @@ namespace Pandora.Command
             Logger.Debug("[HalfOrc] Command invoked");
 
             var sourceEntity = GetComponent<EngineComponent>().Entity;
+
+            var vfx = Instantiate(VFX, sourceEntity.GameObject.transform.position, VFX.transform.rotation);
+
+            vfx.GetComponent<ParticleSystem>().Play();
+
             var sourceId = GetComponent<UnitIdComponent>();
             var sourceLife = GetComponent<LifeComponent>();
             var sourceTeam = GetComponent<TeamComponent>().Team;
