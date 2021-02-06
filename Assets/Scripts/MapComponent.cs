@@ -37,7 +37,7 @@ namespace Pandora
         public Dictionary<int, HashSet<GridCell>> TowerPositionsDictionary = new Dictionary<int, HashSet<GridCell>>();
         public Dictionary<string, GameObject> Units = new Dictionary<string, GameObject> { };
         public GameObject CommandsViewport;
-        float firstLaneX = 2, secondLaneX = 13;
+        public List<int> firstLaneXs, secondLaneXs;
         CustomSampler aggroSampler, targetValidSampler;
         BoxCollider2D boxCollider;
         public Vector2 WorldBoundsPosition;
@@ -55,7 +55,7 @@ namespace Pandora
                 {
                     for (var x = 0; x < bottomMapSize.x; x++)
                     {
-                        if (x != firstLaneX && x != secondLaneX)
+                        if (!firstLaneXs.Contains(x) && !secondLaneXs.Contains(x))
                         {
                             _riverPositions.Add(new GridCell(x, RiverY));
                         }
