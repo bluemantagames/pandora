@@ -3306,7 +3306,7 @@ MonoBehaviour:
   BottomLeftAggroEnd: {x: 15, y: 7}
   BottomMiddleAggroOrigin: {x: 0, y: 0}
   BottomMiddleAggroEnd: {x: 15, y: 7}
-  BottomRightAggroOrigin: {x: 0, y: 12}
+  BottomRightAggroOrigin: {x: 10, y: 0}
   BottomRightAggroEnd: {x: 15, y: 10}
   IsLive: 0
 --- !u!61 &996488290
@@ -3846,8 +3846,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1130516806}
   m_HandleRect: {fileID: 1130516805}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 0.9999999
+  m_Value: 0
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7753,7 +7753,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1530874139}
   m_HandleRect: {fileID: 1530874138}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
