@@ -13,12 +13,6 @@ namespace Pandora.Command
     {
         public long delayMs = 1000;
 
-        List<GameObject> puppets = new List<GameObject>(30);
-
-        public GameObject ZombiePuppet;
-
-
-
         public void InvokeCommand()
         {
             var sourceEntity = GetComponent<EngineComponent>().Entity;
@@ -45,21 +39,12 @@ namespace Pandora.Command
 
                 if (TeamComponent.assignedTeam == TeamComponent.topTeam)
                     deathPosition = MapComponent.Instance.Flip(deathPosition);
-
-                var puppetPosition = MapComponent.Instance.GridCellToWorldPosition(deathPosition);
-
-                puppets.Add(Instantiate(ZombiePuppet, puppetPosition, Quaternion.identity));
             }
         }
 
         public void Respawn()
         {
             Logger.Debug("[Zombie] Command invoked");
-
-            foreach (var puppet in puppets)
-            {
-                Destroy(puppet);
-            }
 
             var sourceEntity = GetComponent<EngineComponent>().Entity;
             var team = GetComponent<TeamComponent>().Team;
@@ -75,6 +60,8 @@ namespace Pandora.Command
                 var commandListener = zombie.GetComponentInChildren<CommandListener>();
                 var zombieId = zombie.GetComponent<UnitIdComponent>();
                 var lifeComponent = zombie.GetComponent<LifeComponent>();
+
+                zombie.GetComponent<ZombieDeathCallback>().OnRespawn();
 
                 // Disable other commands
                 if (commandListener != null)

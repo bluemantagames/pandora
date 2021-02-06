@@ -148,7 +148,7 @@ namespace Pandora
                 {
                     groupComponent.AliveObjects.RemoveAll((unit) => unit.name == gameObject.name);
 
-                    if (groupComponent.AliveObjects.Count == 0)
+                    if (groupComponent.IsEveryoneDead())
                     {
                         CommandViewportBehaviour.Instance.RemoveCommand(groupComponent.OriginalId);
                     }
@@ -160,6 +160,10 @@ namespace Pandora
                 
                 SetDeathPosition();
                 Remove();
+
+                var deathCallback = GetComponent<DeathCallback>();
+
+                if (deathCallback != null) deathCallback.OnDeath();
 
                 // Check if the component is a middle tower
                 var towerPositionComponent = GetComponent<TowerPositionComponent>();
@@ -184,12 +188,6 @@ namespace Pandora
                             );
                             break;
                     }
-                }
-
-                // Negative feedback loop - a test
-                // Let's empty the gold wallet if an enemy tower is destroyed
-                if (isTower && towerTeamComponent.EngineTeam != TeamComponent.assignedTeam) {
-                    walletsComponent.GoldWallet.SpendResource(walletsComponent.GoldWallet.Resource);
                 }
 
                 // TODO: Play "die" animation

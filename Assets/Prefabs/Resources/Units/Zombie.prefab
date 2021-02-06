@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 7539184034064533125}
   - component: {fileID: 8339720865069616051}
   - component: {fileID: -1305072037283640020}
+  - component: {fileID: -4706409946302498224}
   m_Layer: 9
   m_Name: Zombie
   m_TagString: Untagged
@@ -285,6 +286,7 @@ MonoBehaviour:
   delayMs: 500
   ZombiePuppet: {fileID: 4546825404429134782, guid: c42df16191f33334ebca206984bf76bd,
     type: 3}
+  DeadZombie: {fileID: 0}
 --- !u!114 &-1305072037283640020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +299,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d1c461b6ef304042b23f5c7517f2f62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-4706409946302498224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060352442105845753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30c0d88ba6647483797e356e53a8cc4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DeadZombie: {fileID: 7543051424741589500, guid: 33c17018515b944b78a7ae98fb899d4b,
+    type: 3}
+  DeadZombieInstance: {fileID: 0}
 --- !u!1 &4421198389732778068
 GameObject:
   m_ObjectHideFlags: 0
