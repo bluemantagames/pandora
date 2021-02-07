@@ -13,6 +13,7 @@ namespace Pandora.Command
 
         SpriteRenderer rangerRenderer;
         MeleeCombatBehaviour combatBehaviour;
+        List<EffectIndicator> empty = new List<EffectIndicator>(0);
 
         public void InvokeCommand()
         {
@@ -39,9 +40,6 @@ namespace Pandora.Command
             }
         }
 
-        public List<EffectIndicator> FindTargets()
-        {
-            throw new System.NotImplementedException();
-        }
+        public List<EffectIndicator> FindTargets() => empty;
     }
 }

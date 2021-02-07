@@ -3284,6 +3284,8 @@ MonoBehaviour:
   debugHitboxes: 0
   localTime: 0
   CommandsViewport: {fileID: 1357662527}
+  firstLaneXs: 010000000200000003000000
+  secondLaneXs: 0b0000000c0000000d000000
   WorldBoundsPosition: {x: 0, y: 0}
   cellHeight: 0
   cellWidth: 0
@@ -3303,7 +3305,7 @@ MonoBehaviour:
   TopRightAggroOrigin: {x: 10, y: 12}
   TopRightAggroEnd: {x: 15, y: 22}
   BottomLeftAggroOrigin: {x: 0, y: 0}
-  BottomLeftAggroEnd: {x: 15, y: 7}
+  BottomLeftAggroEnd: {x: 7, y: 10}
   BottomMiddleAggroOrigin: {x: 0, y: 0}
   BottomMiddleAggroEnd: {x: 15, y: 7}
   BottomRightAggroOrigin: {x: 10, y: 0}
@@ -7646,7 +7648,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.31918308, y: -0.1010828}
+  m_Offset: {x: -0.31918308, y: 0.13170189}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -7657,7 +7659,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.43832368, y: 4.50632}
+  m_Size: {x: 0.43832368, y: 3.4004269}
   m_EdgeRadius: 0
 --- !u!114 &1845265293
 MonoBehaviour:

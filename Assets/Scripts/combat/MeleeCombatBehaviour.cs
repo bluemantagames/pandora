@@ -18,6 +18,7 @@ namespace Pandora.Combat
         public string animationStateName = "Attacking";
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 0;
         public List<Effect> Effects = new List<Effect> {};
+        public GameObject MultipliedVFX;
 
         /// <summary>Multiplier applied for the next attack</summary>
         public int? NextAttackMultiplier = null;
@@ -88,9 +89,19 @@ namespace Pandora.Combat
 
             var lifeComponent = target.GetComponent<LifeComponent>();
 
-            var assignedDamage = NextAttackMultiplier.HasValue ? damage * NextAttackMultiplier.Value : damage;
+            var inflictedDamage = damage;
 
-            lifeComponent.AssignDamage(assignedDamage, new BaseAttack(gameObject));
+            if (NextAttackMultiplier.HasValue) {
+                inflictedDamage = NextAttackMultiplier.Value * damage;
+
+                if (MultipliedVFX != null) {
+                    var vfx = Instantiate(MultipliedVFX, target.transform.position, MultipliedVFX.transform.rotation);
+
+                    vfx.GetComponent<ParticleSystem>()?.Play();
+                }
+            }
+
+            lifeComponent.AssignDamage(inflictedDamage, new BaseAttack(gameObject));
 
             NextAttackMultiplier = null;
 
