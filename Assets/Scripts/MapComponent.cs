@@ -445,7 +445,7 @@ namespace Pandora
             // This is tricky, we need the stuff below because the spawner and the units are actually
             // created in different positions. The spawner element (NOT THE UNITS) is created 
             // non-mirrored, while the single unit is created directly mirrored in the field.
-            // This leads to inconcistencies in the ManaUsedAlert component position in the Team 2
+            // This leads to inconsistencies in the ManaUsedAlert component position in the Team 2
             // (since the Team 2 field is mirrored).
             if (spawner == null && TeamComponent.assignedTeam == TeamComponent.topTeam)
             {
@@ -456,7 +456,7 @@ namespace Pandora
                 ShowManaUsedAlert(unitObject, spawn.ManaUsed, manaAnimationPosition);
             }
 
-            if (spawn.Team == TeamComponent.assignedTeam && unitObject.GetComponent<ProjectileSpellBehaviour>() == null)
+            if (spawn.Team == TeamComponent.assignedTeam && unitObject.GetComponent<SpellBehaviour>() == null)
             {
                 CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
             }
@@ -471,7 +471,7 @@ namespace Pandora
 
             var movement = unit.GetComponent<MovementComponent>();
             var movementBehaviour = unit.GetComponent<MovementBehaviour>();
-            var projectileSpell = unit.GetComponent<ProjectileSpellBehaviour>();
+            var spell = unit.GetComponent<SpellBehaviour>();
 
             var idComponent = unit.AddComponent<UnitIdComponent>();
 
@@ -480,32 +480,28 @@ namespace Pandora
 
             if (movementBehaviour != null) movementBehaviour.map = this;
 
-            if (projectileSpell != null)
+            if (spell != null)
             {
-                projectileSpell.StartCell =
+                spell.StartCell =
                     new GridCell(
                         ((unitSpawn.Team == TeamComponent.assignedTeam) ?
                             GetTowerPositionComponent(TowerPosition.BottomMiddle) : GetTowerPositionComponent(TowerPosition.TopMiddle)).Position
                     );
-
-                projectileSpell.map = this;
             }
 
             var engineEntity = engine.AddEntity(
                 unit, 
-                movementBehaviour?.Speed ?? projectileSpell.Speed,
-                projectileSpell?.StartCell ?? cell,
-                projectileSpell == null,
+                movementBehaviour?.Speed ?? spell.Speed,
+                spell?.StartCell ?? cell,
+                spell == null,
                 unitSpawn.Timestamp
             );
 
             if (movement != null) engineEntity.CollisionCallback = movement;
 
-            if (projectileSpell != null)
+            if (spell != null)
             {
-                engineEntity.SetTarget(cell);
-
-                projectileSpell.Target = cell;
+                spell.Target = cell;
             }
 
             unit.GetComponent<EngineComponent>().Entity = engineEntity;
