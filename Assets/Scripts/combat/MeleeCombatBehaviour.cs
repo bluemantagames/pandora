@@ -97,6 +97,10 @@ namespace Pandora.Combat
                 if (MultipliedVFX != null) {
                     var vfx = Instantiate(MultipliedVFX, target.transform.position, MultipliedVFX.transform.rotation);
 
+                    var callback = vfx.GetComponent<CombatVFXCallback>();
+
+                    if (callback != null) callback.Target = target;
+
                     vfx.GetComponent<ParticleSystem>()?.Play();
                 }
             }
