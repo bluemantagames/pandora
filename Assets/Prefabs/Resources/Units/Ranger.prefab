@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 11
-  m_Sprite: {fileID: 21300000, guid: d6171605a6d5c7842aee37cab924e6fa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1050d115d59b3467383fb8df92e5dae0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -195,8 +195,8 @@ MonoBehaviour:
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  BlueController: {fileID: 0}
-  RedController: {fileID: 0}
+  BlueController: {fileID: 9100000, guid: 2ad4177b760c4414d9084eb7d7c927e8, type: 2}
+  RedController: {fileID: 9100000, guid: 645c0d7cc61b64555a58e306a9c5f9f0, type: 2}
   WalkingAnimationStateName: Walking
   WalkingAnimationEnabled: 1
   WalkingAnimationEngineUnits: 400
@@ -215,7 +215,7 @@ MonoBehaviour:
   damage: 180
   attackCooldownMs: 400
   backswingMs: 700
-  animationStateName: BarbarianAttack
+  animationStateName: Attacking
   AggroRangeCells: 3
   AttackRangeEngineUnits: 200
   MultipliedVFX: {fileID: 1796372672288128853, guid: 4c57448e85bed4c2e958a9987e797fba,
@@ -237,7 +237,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 2}
+    oldSize: {x: 3, y: 3}
     newSize: {x: 1.93, y: 2.09}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
