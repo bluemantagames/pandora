@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.Analytics;
 
 namespace Pandora
 {
@@ -41,6 +43,8 @@ namespace Pandora
         public void TrackEvent(string eventName)
         {
             if (!isEnabled) return;
+
+            AnalyticsEvent.Custom(eventName);
         }
 
         /// <summary>
@@ -51,6 +55,10 @@ namespace Pandora
         public void TrackEvent(string eventName, float eventValue)
         {
             if (!isEnabled) return;
+
+            var value = eventValue.ToString();
+
+            AnalyticsEvent.Custom(eventName, new Dictionary<string, object> { { "value", value } });
         }
     }
 }

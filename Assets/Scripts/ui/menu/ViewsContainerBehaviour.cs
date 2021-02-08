@@ -25,7 +25,7 @@ namespace Pandora.UI.Menu
         {
             if (InitialView == null) return;
 
-            var canvas = GameObject.Find("Canvas");
+            var canvas = GameObject.Find("Main");
             var canvasRect = canvas.GetComponent<RectTransform>();
             var canvasWidth = canvasRect.rect.width;
             var canvasHeight = canvasRect.rect.height;
