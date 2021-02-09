@@ -12,11 +12,9 @@ namespace Pandora.UI {
             transform.localScale = Vector2.one;
 
             var worldSpaceRadius = MapComponent.Instance.engine.PhysicsToWorld(new Vector2Int(radiusEngineUnits, radiusEngineUnits));
+            var scale = worldSpaceRadius.x / transform.lossyScale.x;
 
-            transform.localScale = new Vector2(
-                worldSpaceRadius.x / transform.lossyScale.x,
-                worldSpaceRadius.y / transform.lossyScale.y
-            );
+            transform.localScale = new Vector2(scale, scale);
         }
     }
 }

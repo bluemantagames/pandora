@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 1256556886159109192}
   - component: {fileID: 741662852215567471}
   - component: {fileID: 7231520874585964180}
-  - component: {fileID: 6005104599782084799}
-  - component: {fileID: 6659282926461846134}
   - component: {fileID: 8524348773393458539}
   - component: {fileID: 2775991788436886472}
+  - component: {fileID: -8930249468233529160}
   m_Layer: 0
   m_Name: Fireball
   m_TagString: Untagged
@@ -51,6 +50,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -75,8 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 11
-  m_Sprite: {fileID: 8865729233865765387, guid: 8780ab8a94b2daf48955cb2d01979bb4,
-    type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -84,7 +83,7 @@ SpriteRenderer:
   m_Size: {x: 0.45, y: 0.44}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &7231520874585964180
@@ -99,34 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43f41e00d952f54fb36119cddc0ca11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6005104599782084799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1851135866392614702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eb75e5292b83ec46a62f291f7f81104, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  map: {fileID: 0}
-  Speed: 4000
---- !u!114 &6659282926461846134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1851135866392614702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91f4a81e13c05df408aa1e6be385905a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 300
-  radius: 3
 --- !u!114 &8524348773393458539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,3 +151,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.45, y: 0.44}
   m_EdgeRadius: 0
+--- !u!114 &-8930249468233529160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851135866392614702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4c2186e8bc6e4d2ea7b58cb6599089d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DelayMs: 1500
+  VFXDelayMS: 200
+  damage: 500
+  radius: 3
+  Speed: 0
+  VFX: {fileID: 868720356676599359, guid: 3ec417832afbe44379e83fe22deb2a1e, type: 3}

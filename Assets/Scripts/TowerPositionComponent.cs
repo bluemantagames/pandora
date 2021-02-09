@@ -54,8 +54,8 @@ namespace Pandora
 
             var xLength = (EngineTowerPosition.IsMiddle()) ? 4 : 3;
 
-            for (var x = 0; x < xLength; x++) {
-                for (var y = 0; y < 3; y++) {
+            for (var x = -2; x < xLength; x++) {
+                for (var y = -2; y < 3; y++) {
 
                     positions.Add(new GridCell(Position.x + x, Position.y + y));
                 }

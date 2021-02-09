@@ -12,9 +12,9 @@ namespace Pandora.Spell
     {
         public GridCell Target { get; set; }
         public GridCell StartCell { get; set; }
-        public int DelayMs = 1500, damage = 20, radius = 3, Speed = 0;
+        public int DelayMs = 1500, VFXDelayMS = 300, damage = 20, radius = 3, Speed = 0;
         uint totalElapsed = 0;
-        bool done = false;
+        bool done = false, vfxPlayed = false;
         public GameObject VFX;
 
         EngineComponent entityComponent;
@@ -32,11 +32,13 @@ namespace Pandora.Spell
         {
             totalElapsed += msElapsed;
 
-            if (totalElapsed >= DelayMs && !done) {
-                if (VFX != null) {
-                    var vfx = Instantiate(VFX, entityComponent.Entity.GetWorldPosition(), VFX.transform.rotation);
-                }
+            if (VFX != null && !vfxPlayed && totalElapsed >= DelayMs - VFXDelayMS) {
+                var vfx = Instantiate(VFX, entityComponent.Entity.GetWorldPosition(), VFX.transform.rotation);
 
+                vfxPlayed = true;
+            }
+
+            if (totalElapsed >= DelayMs && !done) {
                 done = true;
 
                 var teamComponent = GetComponent<TeamComponent>();
@@ -81,6 +83,8 @@ namespace Pandora.Spell
                 }
 
                 PoolInstances.GridCellPool.ReturnObject(lastTargetCell);
+
+                Destroy(this);
             }
         }
 

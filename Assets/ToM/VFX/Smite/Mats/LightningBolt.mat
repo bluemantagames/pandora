@@ -53,6 +53,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_202D3A08: 20.2
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -75,12 +76,13 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_98456749: {r: 64, g: 64, b: 64, a: 1}
+    - Color_98456749: {r: 1, g: 1, b: 1, a: 1}
     - Vector2_2189EF2D: {r: 0, g: 2, b: 0, a: 0}
     - _BaseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+  m_BuildTextureStacks: []
 --- !u!114 &2523847608513987166
 MonoBehaviour:
   m_ObjectHideFlags: 11

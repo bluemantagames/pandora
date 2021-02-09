@@ -480,19 +480,10 @@ namespace Pandora
 
             if (movementBehaviour != null) movementBehaviour.map = this;
 
-            if (spell != null)
-            {
-                spell.StartCell =
-                    new GridCell(
-                        ((unitSpawn.Team == TeamComponent.assignedTeam) ?
-                            GetTowerPositionComponent(TowerPosition.BottomMiddle) : GetTowerPositionComponent(TowerPosition.TopMiddle)).Position
-                    );
-            }
-
             var engineEntity = engine.AddEntity(
                 unit, 
                 movementBehaviour?.Speed ?? spell.Speed,
-                spell?.StartCell ?? cell,
+                cell,
                 spell == null,
                 unitSpawn.Timestamp
             );
@@ -759,7 +750,11 @@ namespace Pandora
 
             if ((!isGlobal && cell.vector.y > 13) || (isAquatic && !riverPositions.Contains(cell))) return false;
 
-            lastPuppet = Instantiate(puppet, GridCellToWorldPosition(cell), Quaternion.identity, transform);
+            var cellPosition = (Vector3) GridCellToWorldPosition(cell);
+
+            cellPosition.z = -1;
+
+            lastPuppet = Instantiate(puppet, cellPosition, Quaternion.identity, transform);
 
             lastPuppet.transform.SetAsFirstSibling();
 

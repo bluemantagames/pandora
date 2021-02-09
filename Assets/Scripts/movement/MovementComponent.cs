@@ -182,7 +182,7 @@ namespace Pandora.Movement
             }
             else
             {
-                currentPath = new List<GridCell> { }; // Leave pathfinding to the engine when evading
+                currentPath = new List<GridCell> { }; // Leave pathfinding to the PandoraEngine while evading
             }
 
             if (currentPath.Count < 1 && !engineEntity.IsEvading)
