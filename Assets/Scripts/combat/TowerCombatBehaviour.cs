@@ -203,8 +203,19 @@ namespace Pandora.Combat
 
             var towerEntity = GetComponent<TowerPositionComponent>().TowerEntity;
 
-            var projectileObject = Instantiate(projectile, MapComponent.Instance.engine.PhysicsToWorld(towerEntity.Position), Quaternion.identity);
+            var projectileObject = Instantiate(projectile, MapComponent.Instance.engine.PhysicsToMapWorld(towerEntity.Position), Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
+
+            var rotationDegrees = 
+                (projectileBehaviour is SimpleProjectileBehaviour simpleBehaviour) ? simpleBehaviour.StartRotationDegrees : 0;
+
+            var direction = (target.enemy.transform.position - gameObject.transform.position).normalized;
+            var angle = Vector2.SignedAngle(Vector2.up, direction) + rotationDegrees;
+
+            Logger.Debug($"Angling projectiles at {angle}");
+
+            // rotate the projectile towards the target
+            projectileObject.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
             projectileBehaviour.target = target;
             projectileBehaviour.parent = gameObject;
@@ -226,7 +237,6 @@ namespace Pandora.Combat
             engineComponent.Entity = projectileEngineEntity;
 
             projectileObject.GetComponent<ProjectileBehaviour>().Init();
-
         }
 
         /** Stops attacking an enemy */
