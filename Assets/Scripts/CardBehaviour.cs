@@ -70,8 +70,21 @@ namespace Pandora
             }
         }
 
+        public bool IsDeckBuilderPlaceholder
+        {
+            get => _isPlaceholder;
+
+            set
+            {
+                _isUI = value;
+                _isPlaceholder = value;
+                disabled = value;
+            }
+        }
+
         bool canBeSpawned = false;
         bool _isUI = false;
+        bool _isPlaceholder = false;
 
         private void CleanUpDrag(bool returnToPosition)
         {
