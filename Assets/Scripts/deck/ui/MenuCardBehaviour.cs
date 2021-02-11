@@ -13,10 +13,7 @@ namespace Pandora.Deck.UI
     public class MenuCardBehaviour : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
     {
         GameObject originalParent;
-        Vector2 originalPosition, originalPivot;
-
         public GameObject Canvas;
-        public ScrollRect ParentScrollRect;
         public string CardName;
         public bool UiDisabled = false;
 
@@ -32,11 +29,8 @@ namespace Pandora.Deck.UI
         public void Load()
         {
             originalParent = transform.parent.gameObject;
-            originalPosition = transform.localPosition;
-            originalPivot = GetComponent<RectTransform>().pivot;
-            deckSpotParentBehaviour = GameObject.Find("Main").GetComponentInChildren<DeckSpotParentBehaviour>();
+            deckSpotParentBehaviour = Canvas.GetComponentInChildren<DeckSpotParentBehaviour>();
             menuCardSiblingIndex = gameObject.transform.GetSiblingIndex();
-            ParentScrollRect = GetComponentInParent<ScrollRect>();
         }
 
         public void Reset()
@@ -60,7 +54,6 @@ namespace Pandora.Deck.UI
 
             transform.SetParent(originalParent.transform);
             transform.SetSiblingIndex(menuCardSiblingIndex);
-            GetComponent<RectTransform>().pivot = originalPivot;
 
             isSelected = false;
         }
@@ -107,9 +100,9 @@ namespace Pandora.Deck.UI
             newCardMenuCardBehaviour.UiDisabled = true;
             newCardCardBehaviour.IsDeckBuilderPlaceholder = true;
             newCard.transform.SetParent(gameObject.transform.parent, false);
-            placeholderCard = newCard;
             newCard.transform.SetSiblingIndex(menuCardSiblingIndex);
-            newCardMenuCardBehaviour.ParentScrollRect = ParentScrollRect;
+
+            placeholderCard = newCard;
         }
 
         public void SetSpotWithPlaceholder(GameObject deckSpot)
@@ -121,6 +114,7 @@ namespace Pandora.Deck.UI
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (UiDisabled == true) return;
+
             if (placeholderCard == null) CreatePlaceholder();
 
             gameObject.transform.SetParent(Canvas.transform);

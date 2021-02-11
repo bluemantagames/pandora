@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 namespace Pandora.UI.Modal
@@ -11,21 +12,37 @@ namespace Pandora.UI.Modal
         public GameObject Viewport;
         private Canvas canvasComponent;
         private CanvasGroup canvasGroupComponent;
+        private GraphicRaycaster graphicRaycaster;
         private GameObject appendedExternalComponent = null;
 
         void Awake()
         {
             canvasComponent = GetComponent<Canvas>();
             canvasGroupComponent = GetComponent<CanvasGroup>();
+            graphicRaycaster = GetComponent<GraphicRaycaster>();
 
             HideNoAnimation();
+        }
+
+        private void Disable()
+        {
+            if (canvasComponent != null) canvasComponent.enabled = false;
+            if (canvasGroupComponent != null) canvasGroupComponent.enabled = false;
+            if (graphicRaycaster != null) graphicRaycaster.enabled = false;
+        }
+
+        private void Enable()
+        {
+            if (canvasComponent != null) canvasComponent.enabled = true;
+            if (canvasGroupComponent != null) canvasGroupComponent.enabled = true;
+            if (graphicRaycaster != null) graphicRaycaster.enabled = true;
         }
 
         public void HideNoAnimation()
         {
             if (canvasComponent == null) return;
 
-            canvasComponent.enabled = false;
+            Disable();
         }
 
         public void Hide()
@@ -34,8 +51,7 @@ namespace Pandora.UI.Modal
 
             canvasGroupComponent.DOFade(0, fadeDuration).OnComplete(() =>
             {
-                canvasComponent.enabled = false;
-
+                Disable();
                 DestroyAppendedComponent();
             });
         }
@@ -44,8 +60,8 @@ namespace Pandora.UI.Modal
         {
             if (canvasComponent == null || canvasGroupComponent == null) return;
 
+            Enable();
             canvasGroupComponent.alpha = 0;
-            canvasComponent.enabled = true;
             var canvasFade = canvasGroupComponent.DOFade(1, fadeDuration);
         }
 
