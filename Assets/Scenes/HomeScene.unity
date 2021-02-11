@@ -937,6 +937,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3065302226510336104, guid: 4e18098dd73a0f940ab1cc192dd8248d,
         type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3065302226510336104, guid: 4e18098dd73a0f940ab1cc192dd8248d,
+        type: 3}
+      propertyPath: Puppet
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3065302226510336104, guid: 4e18098dd73a0f940ab1cc192dd8248d,
+        type: 3}
       propertyPath: CardType
       value: 3
       objectReference: {fileID: 0}
@@ -1073,12 +1083,12 @@ PrefabInstance:
     - target: {fileID: 8040469866977721889, guid: 4e18098dd73a0f940ab1cc192dd8248d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60.000137
+      value: -59.999893
       objectReference: {fileID: 0}
     - target: {fileID: 8040469866977721889, guid: 4e18098dd73a0f940ab1cc192dd8248d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.999985
+      value: 60.000046
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e18098dd73a0f940ab1cc192dd8248d, type: 3}
@@ -1184,6 +1194,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 670770216}
     m_Modifications:
+    - target: {fileID: 1666105596513172269, guid: b1229fcc8d83ef04f811a8c54ddc2266,
+        type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666105596513172269, guid: b1229fcc8d83ef04f811a8c54ddc2266,
+        type: 3}
+      propertyPath: Puppet
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1666105596513172269, guid: b1229fcc8d83ef04f811a8c54ddc2266,
         type: 3}
       propertyPath: CardMainImage
@@ -1342,12 +1362,12 @@ PrefabInstance:
     - target: {fileID: 5908839991137113444, guid: b1229fcc8d83ef04f811a8c54ddc2266,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60.000137
+      value: -59.999893
       objectReference: {fileID: 0}
     - target: {fileID: 5908839991137113444, guid: b1229fcc8d83ef04f811a8c54ddc2266,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.999985
+      value: 60.000046
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8752762561212130129, guid: b1229fcc8d83ef04f811a8c54ddc2266, type: 3}
@@ -1482,6 +1502,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2226387889367678955, guid: 653c4b4654a561046908fcc5f4267534,
         type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2226387889367678955, guid: 653c4b4654a561046908fcc5f4267534,
+        type: 3}
+      propertyPath: Puppet
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2226387889367678955, guid: 653c4b4654a561046908fcc5f4267534,
+        type: 3}
       propertyPath: CardMainImage
       value: 
       objectReference: {fileID: 2800000, guid: a36aebd32a70c4cca9407ffc99aee5af, type: 3}
@@ -1498,12 +1528,12 @@ PrefabInstance:
     - target: {fileID: 6627873002624209314, guid: 653c4b4654a561046908fcc5f4267534,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60.000137
+      value: -59.999893
       objectReference: {fileID: 0}
     - target: {fileID: 6627873002624209314, guid: 653c4b4654a561046908fcc5f4267534,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.999992
+      value: 60.000053
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 653c4b4654a561046908fcc5f4267534, type: 3}
@@ -2491,8 +2521,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1416819264}
   m_HandleRect: {fileID: 1416819263}
   m_Direction: 2
-  m_Value: 0.99997073
-  m_Size: 0.92035383
+  m_Value: 0.99997175
+  m_Size: 0.9203541
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4432,12 +4462,12 @@ PrefabInstance:
     - target: {fileID: 4107037332850343706, guid: fb164d07ffb23a84596e95088b1cc8ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60.00026
+      value: -60.000015
       objectReference: {fileID: 0}
     - target: {fileID: 4107037332850343706, guid: fb164d07ffb23a84596e95088b1cc8ae,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.999992
+      value: 60.000053
       objectReference: {fileID: 0}
     - target: {fileID: 9070381787345277264, guid: fb164d07ffb23a84596e95088b1cc8ae,
         type: 3}
@@ -4553,6 +4583,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mermaids
+      objectReference: {fileID: 0}
+    - target: {fileID: 9070381787345277267, guid: fb164d07ffb23a84596e95088b1cc8ae,
+        type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9070381787345277267, guid: fb164d07ffb23a84596e95088b1cc8ae,
+        type: 3}
+      propertyPath: Puppet
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9070381787345277267, guid: fb164d07ffb23a84596e95088b1cc8ae,
         type: 3}
@@ -5367,6 +5407,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 272538718722313564, guid: b6db786b28a3a874bbe566c388bc5e24,
         type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 272538718722313564, guid: b6db786b28a3a874bbe566c388bc5e24,
+        type: 3}
+      propertyPath: Puppet
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 272538718722313564, guid: b6db786b28a3a874bbe566c388bc5e24,
+        type: 3}
       propertyPath: CardMainImage
       value: 
       objectReference: {fileID: 2800000, guid: 1cd77cd0d52a1416382c395bd8d8f87e, type: 3}
@@ -5513,12 +5563,12 @@ PrefabInstance:
     - target: {fileID: 5104575199388853013, guid: b6db786b28a3a874bbe566c388bc5e24,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60.000137
+      value: -59.999893
       objectReference: {fileID: 0}
     - target: {fileID: 5104575199388853013, guid: b6db786b28a3a874bbe566c388bc5e24,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.999992
+      value: 60.000053
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6db786b28a3a874bbe566c388bc5e24, type: 3}
@@ -5812,6 +5862,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3545436999122184299, guid: 1c4b8ebe9da50864fa253419f643bb5d,
         type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3545436999122184299, guid: 1c4b8ebe9da50864fa253419f643bb5d,
+        type: 3}
+      propertyPath: Puppet
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3545436999122184299, guid: 1c4b8ebe9da50864fa253419f643bb5d,
+        type: 3}
       propertyPath: CardType
       value: 2
       objectReference: {fileID: 0}
@@ -5833,12 +5893,12 @@ PrefabInstance:
     - target: {fileID: 8371264503401727522, guid: 1c4b8ebe9da50864fa253419f643bb5d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60.00026
+      value: -60.000015
       objectReference: {fileID: 0}
     - target: {fileID: 8371264503401727522, guid: 1c4b8ebe9da50864fa253419f643bb5d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.999985
+      value: 60.000046
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c4b8ebe9da50864fa253419f643bb5d, type: 3}
@@ -6029,12 +6089,12 @@ PrefabInstance:
     - target: {fileID: 394090635218036899, guid: 41a1b4448dda5a941aa526d289c729ec,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60.000137
+      value: -59.999893
       objectReference: {fileID: 0}
     - target: {fileID: 394090635218036899, guid: 41a1b4448dda5a941aa526d289c729ec,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.999992
+      value: 60.000053
       objectReference: {fileID: 0}
     - target: {fileID: 4640765645558253288, guid: 41a1b4448dda5a941aa526d289c729ec,
         type: 3}
@@ -6150,6 +6210,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4640765645558253290, guid: 41a1b4448dda5a941aa526d289c729ec,
+        type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4640765645558253290, guid: 41a1b4448dda5a941aa526d289c729ec,
+        type: 3}
+      propertyPath: Puppet
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4640765645558253290, guid: 41a1b4448dda5a941aa526d289c729ec,
         type: 3}
@@ -6720,6 +6790,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 620125996788808114, guid: cf312495b29ea6f4cbd5543b70bdfd3b,
         type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 620125996788808114, guid: cf312495b29ea6f4cbd5543b70bdfd3b,
+        type: 3}
+      propertyPath: Puppet
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 620125996788808114, guid: cf312495b29ea6f4cbd5543b70bdfd3b,
+        type: 3}
       propertyPath: CardType
       value: 4
       objectReference: {fileID: 0}
@@ -6741,12 +6821,12 @@ PrefabInstance:
     - target: {fileID: 5585723384835627003, guid: cf312495b29ea6f4cbd5543b70bdfd3b,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60.000137
+      value: -59.999893
       objectReference: {fileID: 0}
     - target: {fileID: 5585723384835627003, guid: cf312495b29ea6f4cbd5543b70bdfd3b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.999992
+      value: 60.000053
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf312495b29ea6f4cbd5543b70bdfd3b, type: 3}
@@ -7537,6 +7617,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 812671481729146876, guid: 383dbce5e9e950c408f0e052724f4f43,
         type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 812671481729146876, guid: 383dbce5e9e950c408f0e052724f4f43,
+        type: 3}
+      propertyPath: Puppet
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 812671481729146876, guid: 383dbce5e9e950c408f0e052724f4f43,
+        type: 3}
       propertyPath: CardType
       value: 1
       objectReference: {fileID: 0}
@@ -7673,12 +7763,12 @@ PrefabInstance:
     - target: {fileID: 5645377530755215797, guid: 383dbce5e9e950c408f0e052724f4f43,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60.000137
+      value: -59.999893
       objectReference: {fileID: 0}
     - target: {fileID: 5645377530755215797, guid: 383dbce5e9e950c408f0e052724f4f43,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.999985
+      value: 60.000046
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 383dbce5e9e950c408f0e052724f4f43, type: 3}
@@ -8677,6 +8767,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3207655489694493494, guid: d468fd8a9a2fd3444963992901226369,
         type: 3}
+      propertyPath: Card
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207655489694493494, guid: d468fd8a9a2fd3444963992901226369,
+        type: 3}
+      propertyPath: Puppet
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3207655489694493494, guid: d468fd8a9a2fd3444963992901226369,
+        type: 3}
       propertyPath: CardMainImage
       value: 
       objectReference: {fileID: 2800000, guid: e13de87abe0c24d42b4e0101959b7b50, type: 3}
@@ -8693,12 +8793,12 @@ PrefabInstance:
     - target: {fileID: 7610161087320606079, guid: d468fd8a9a2fd3444963992901226369,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60.000137
+      value: -59.999893
       objectReference: {fileID: 0}
     - target: {fileID: 7610161087320606079, guid: d468fd8a9a2fd3444963992901226369,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.999992
+      value: 60.000053
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d468fd8a9a2fd3444963992901226369, type: 3}

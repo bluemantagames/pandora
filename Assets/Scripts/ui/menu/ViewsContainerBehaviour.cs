@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 using Pandora.Pool;
 using Pandora.UI.Menu.Event;
@@ -17,7 +18,10 @@ namespace Pandora.UI.Menu
         public void Awake()
         {
             menuEventsSingleton = MenuEventsSingleton.instance;
+        }
 
+        public void Start()
+        {
             Setup();
         }
 
@@ -25,46 +29,7 @@ namespace Pandora.UI.Menu
         {
             if (InitialView == null) return;
 
-            var canvas = GameObject.Find("Main");
-            var canvasRect = canvas.GetComponent<RectTransform>();
-            var canvasWidth = canvasRect.rect.width;
-            var canvasHeight = canvasRect.rect.height;
-
-            var computedX = gameObject.transform.localPosition.x;
-            var computedY = gameObject.transform.localPosition.y;
-            var reachedActive = false;
-
-            foreach (RectTransform child in transform)
-            {
-                // Set the width and height for each
-                // view container
-                var newSize = PoolInstances.Vector2Pool.GetObject();
-                newSize.x = canvasWidth;
-                newSize.y = child.rect.height;
-
-                child.sizeDelta = newSize;
-
-                // Calculate the initial X position of the
-                // container
-                if (child.gameObject == InitialView)
-                    reachedActive = true;
-                else if (!reachedActive)
-                    computedX -= newSize.x;
-
-                PoolInstances.Vector2Pool.ReturnObject(newSize);
-            }
-
-            var newPosition = PoolInstances.Vector2Pool.GetObject();
-            newPosition.x = computedX;
-            newPosition.y = computedY;
-
-            Logger.Debug($"Setting initial position {newPosition}");
-
-            gameObject.transform.localPosition = newPosition;
-
-            PoolInstances.Vector2Pool.ReturnObject(newPosition);
-
-            DeactivateAllExcept(InitialView);
+            EnableView(InitialView, false);
         }
 
         public void ShowView(MenuView view)
@@ -89,7 +54,7 @@ namespace Pandora.UI.Menu
             menuEventsSingleton.EventBus.Dispatch(new ViewActive(view));
         }
 
-        private void EnableView(GameObject view, bool animate = false)
+        private void EnableView(GameObject view, bool animate = true)
         {
             var currentPositionX = gameObject.transform.position.x;
             var currentPositionY = gameObject.transform.position.y;
@@ -97,12 +62,20 @@ namespace Pandora.UI.Menu
 
             var displayPositionX = currentPositionX - viewPositionX;
 
-            ActivateAll();
-
-            gameObject.transform.DOMoveX(displayPositionX, 0.15f).SetEase(Ease.InOutCubic).OnComplete(() =>
+            if (animate)
             {
+                ActivateAll();
+
+                gameObject.transform.DOMoveX(displayPositionX, 0.15f).SetEase(Ease.InOutCubic).OnComplete(() =>
+                {
+                    DeactivateAllExcept(view);
+                });
+            }
+            else
+            {
+                gameObject.transform.position = new Vector2(displayPositionX, currentPositionY);
                 DeactivateAllExcept(view);
-            });
+            }
         }
 
         private void ActivateAll()
