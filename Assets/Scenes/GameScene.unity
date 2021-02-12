@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 6e8c70cb5db6a459bbb5326014b4e18c,
+    type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 77f32f24fa0e84e6db96fd4ad69fa584,
     type: 2}
 --- !u!196 &4
@@ -665,7 +666,7 @@ GameObject:
   - component: {fileID: 217589022}
   - component: {fileID: 217589021}
   m_Layer: 5
-  m_Name: ClosedBetaText
+  m_Name: ClosedAlphaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9167,7 +9168,7 @@ PrefabInstance:
     - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: damage
-      value: 0
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}

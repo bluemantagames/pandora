@@ -107,7 +107,7 @@ namespace Pandora.Deck
 
                 if (Deck == null)
                 {
-                    /*var cardNames = new List<string> {
+                    var cardNames = new List<string> {
                         "Bard",
                         "Ranger",
                         "Clerics",
@@ -117,11 +117,11 @@ namespace Pandora.Deck
                         "Mermaids",
                         "Troll",
                         "Zombies"
-                    };*/
-
-                    var cardNames = new List<string> {
-                        "Fireball"
                     };
+
+                    /*var cardNames = new List<string> {
+                        "Fireball"
+                    };*/
 
                     //var cardNames = new List<string> { "Troll" };
 
