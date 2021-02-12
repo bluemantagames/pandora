@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class EulaModalBehaviour : MonoBehaviour
 {
     Canvas eulaCanvas;
-    string eulaKey = "isEulaAccepted1";
+    string eulaKey = "isEulaAccepted";
     int eulaAcceptedValue = 1;
     int eulaNonAcceptedValue = 0;
 
