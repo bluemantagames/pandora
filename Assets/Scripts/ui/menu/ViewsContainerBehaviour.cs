@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using Pandora.Pool;
 using Pandora.UI.Menu.Event;
+using System;
 
 namespace Pandora.UI.Menu
 {
@@ -13,7 +14,12 @@ namespace Pandora.UI.Menu
         public GameObject ShopView;
         public GameObject DeckView;
         public GameObject InitialView;
+        public GameObject BackgroundObject;
         MenuEventsSingleton menuEventsSingleton;
+
+        float viewsAnimationTime = 0.15f;
+        float backgroundAnimationTime = 0.15f;
+        float backgroundParallaxVelocity = 0.1f;
 
         public void Awake()
         {
@@ -65,8 +71,9 @@ namespace Pandora.UI.Menu
             if (animate)
             {
                 ActivateAll();
+                MoveBackground(currentPositionX, displayPositionX);
 
-                gameObject.transform.DOMoveX(displayPositionX, 0.15f).SetEase(Ease.InOutCubic).OnComplete(() =>
+                gameObject.transform.DOMoveX(displayPositionX, viewsAnimationTime).SetEase(Ease.InOutCubic).OnComplete(() =>
                 {
                     DeactivateAllExcept(view);
                 });
@@ -105,6 +112,16 @@ namespace Pandora.UI.Menu
                     viewChild.gameObject.SetActive(isActive);
                 }
             }
+        }
+
+        private void MoveBackground(float currentPositionX, float destinationX)
+        {
+            var currentBackgroundPositionX = BackgroundObject.transform.position.x;
+            var direction = currentPositionX > destinationX ? -1 : 1;
+            var amount = Math.Abs(currentPositionX - destinationX) * backgroundParallaxVelocity;
+            var newPosition = direction < 0 ? currentBackgroundPositionX - amount : currentBackgroundPositionX + amount;
+
+            BackgroundObject.transform.DOMoveX(newPosition, backgroundAnimationTime).SetEase(Ease.InOutCubic);
         }
     }
 }
