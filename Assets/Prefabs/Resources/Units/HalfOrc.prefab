@@ -194,13 +194,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 0
-  attackCooldownMs: 1800
-  backswingMs: 500
+  attackCooldownMs: 1600
+  backswingMs: 700
   projectile: {fileID: 5687362912629012028, guid: ee18aa8a2cbb1ff409e08df0bdadddcc,
     type: 3}
   animationStateName: Attacking
   AggroRangeCells: 3
-  AttackRangeEngineUnits: 2000
+  AttackRangeEngineUnits: 1600
   EffectObjects: []
 --- !u!61 &7105882005904317285
 BoxCollider2D:
