@@ -31,7 +31,8 @@ namespace Pandora
         public bool UiDisabled = false;
         public CardType CardType;
         public Texture2D CardMainImage;
-        public LocalizedString CardSkillDescription;
+        public LocalizedString LocalizedCardName;
+        public LocalizedString LocalizedCardSkillDescription;
         Image imageComponent;
         GraphicRaycaster raycasterComponent;
         Color defaultColor;
@@ -70,8 +71,21 @@ namespace Pandora
             }
         }
 
+        public bool IsDeckBuilderPlaceholder
+        {
+            get => _isPlaceholder;
+
+            set
+            {
+                _isUI = value;
+                _isPlaceholder = value;
+                disabled = value;
+            }
+        }
+
         bool canBeSpawned = false;
         bool _isUI = false;
+        bool _isPlaceholder = false;
 
         private void CleanUpDrag(bool returnToPosition)
         {

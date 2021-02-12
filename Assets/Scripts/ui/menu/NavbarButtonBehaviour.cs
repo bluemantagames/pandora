@@ -9,15 +9,30 @@ public class NavbarButtonBehaviour : MonoBehaviour
     public MenuView TargetView;
     public ViewsContainerBehaviour ViewsContainer;
     public bool Active;
+    public bool Disabled = false;
+    GameObject panelComponent;
+    Image panelImageComponent;
+    Color panelImageColor;
 
     void Awake()
     {
         if (Active) Activate();
+
+        panelComponent = transform.GetChild(0).gameObject;
+        panelImageComponent = panelComponent.GetComponent<Image>();
+        panelImageColor = panelImageComponent.color;
+    }
+
+    void Start()
+    {
+        // Make it opaque if disabled
+        var opaqueColor = new Color(panelImageColor.r, panelImageColor.g, panelImageColor.b, 0.1f);
+        panelImageComponent.color = (Disabled) ? opaqueColor : panelImageColor;
     }
 
     public void HandlePress()
     {
-        if (ViewsContainer == null) return;
+        if (ViewsContainer == null || Disabled) return;
 
         ViewsContainer.ShowView(TargetView);
 
