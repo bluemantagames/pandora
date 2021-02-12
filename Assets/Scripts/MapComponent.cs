@@ -16,6 +16,7 @@ using Pandora.Network.Messages;
 using Pandora.Engine;
 using System.Threading;
 using Pandora.Command;
+using Pandora.Audio;
 using UnityEngine.EventSystems;
 
 namespace Pandora
@@ -133,6 +134,7 @@ namespace Pandora
             cellWidth = (boxCollider.bounds.max.x - boxCollider.bounds.min.x) / mapSizeX;
             cellHeight = (boxCollider.bounds.max.y - boxCollider.bounds.min.y) / mapSizeY;
 
+#if UNITY_EDITOR
             for (var x = 0; x < mapSizeX; x++)
             {
                 var gridPosition = GridCellToWorldPosition(new GridCell(new Vector2Int(x, mapSizeY + 1)));
@@ -146,6 +148,7 @@ namespace Pandora
 
                 SpawnText(gridPosition, y.ToString());
             }
+#endif
 
             engine = ScriptableObject.CreateInstance<PandoraEngine>();
 
