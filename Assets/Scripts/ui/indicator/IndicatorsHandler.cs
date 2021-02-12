@@ -83,7 +83,7 @@ namespace Pandora.UI
             var rectangle = Instantiate(RectangleIndicator, position, Quaternion.identity);
 
             rectangle.GetComponent<RectangleIndicatorBehaviour>().Initialize(
-                mapComponent.engine.UnitsPerCell,
+                mapComponent.engine.UnitsPerCell * 2,
                 mapComponent.engine.UnitsPerCell * 15
             );
 
