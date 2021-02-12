@@ -5,7 +5,9 @@ namespace Pandora.UI {
         public void Initialize(int radiusEngineUnits) {
             var position = transform.position;
 
-            position.z = -1;
+            position.z = -2;
+
+            GetComponent<MeshRenderer>().sortingOrder = 200; // VFX layer
 
             transform.position = position;
 
