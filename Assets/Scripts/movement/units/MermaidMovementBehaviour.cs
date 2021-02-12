@@ -25,6 +25,7 @@ namespace Pandora.Movement
         public Vector2 WalkingDirection { get; set; }
 
         public int MovementSpeed = 400;
+        public int MinX, MaxX;
 
         public int Speed
         {
@@ -77,7 +78,8 @@ namespace Pandora.Movement
 
                 var targetPosition = currentPosition;
 
-                targetPosition.vector.x = target.enemyCell.vector.x;
+                targetPosition.vector.x = 
+                    Mathf.Min(MaxX, Mathf.Max(MinX, target.enemyCell.vector.x));
 
                 entity.SetTarget(targetPosition);
 

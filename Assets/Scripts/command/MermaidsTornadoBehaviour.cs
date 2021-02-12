@@ -98,7 +98,7 @@ namespace Pandora.Command
 
                 engine.RemoveEntity(entity);
 
-                GetComponent<SpriteRenderer>().enabled = false;
+                Destroy(this);
             }
         }
 

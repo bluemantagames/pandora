@@ -214,9 +214,10 @@ MonoBehaviour:
   damage: 33
   attackCooldownMs: 1000
   backswingMs: 1000
-  animationStateName: ClericAttack
+  animationStateName: Attacking
   AggroRangeCells: 3
   AttackRangeEngineUnits: 200
+  MultipliedVFX: {fileID: 0}
 --- !u!61 &9130794682398608112
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -286,6 +287,7 @@ MonoBehaviour:
   CommandVFX: {fileID: 5389838460377274629, guid: dcf611f6020dd4d69b422ff3875a978d,
     type: 3}
   VFXStartTime: 0.51
+  CommandAnimationMs: 500
 --- !u!114 &-1636367056199846540
 MonoBehaviour:
   m_ObjectHideFlags: 0
