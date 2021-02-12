@@ -34,13 +34,14 @@ namespace Pandora
             });
         }
 
-        private void Show()
+        private UniTask? Show()
         {
-            if (canvasComponent == null || canvasGroupComponent == null) return;
+            if (canvasComponent == null || canvasGroupComponent == null) return null;
 
             canvasGroupComponent.alpha = 0;
             canvasComponent.enabled = true;
-            var canvasFade = canvasGroupComponent.DOFade(1, fadeDuration);
+
+            return canvasGroupComponent.DOFade(1, fadeDuration).AsyncWaitForCompletion().AsUniTask();
         }
 
         private async UniTask<bool> LoadUserInfo()
@@ -67,13 +68,30 @@ namespace Pandora
         /// </summary>
         public async UniTaskVoid LoadMainMenu()
         {
-            Show();
+            var showTask = Show();
+
+            if (showTask != null)
+                await (UniTask)showTask;
+
+            Logger.Debug("[LoadingBehaviour] Loading user info...");
 
             var userInfoResult = await LoadUserInfo();
-            await SceneManager.LoadSceneAsync("HomeScene");
-            await LocalizationSettings.InitializationOperation.Task;
 
-            if (userInfoResult) Hide();
+            Logger.Debug("[LoadingBehaviour] Loading the home scene...");
+
+            await SceneManager.LoadSceneAsync("HomeScene");
+
+            if (!LocalizationSettings.InitializationOperation.IsDone)
+            {
+                Logger.Debug("[LoadingBehaviour] Loading the internationalization...");
+                await LocalizationSettings.InitializationOperation.Task;
+            }
+
+            if (userInfoResult)
+            {
+                Logger.Debug("[LoadingBehaviour] Loading complete, exiting!");
+                Hide();
+            }
         }
 
         void Awake()

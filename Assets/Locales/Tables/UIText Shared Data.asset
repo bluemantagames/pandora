@@ -15,22 +15,6 @@ MonoBehaviour:
   m_TableCollectionName: UIText
   m_TableCollectionNameGuidString: 84069264adda04a569a6b13abc1da97e
   m_Entries:
-  - m_Id: 8295276544
-    m_Key: menu.home.deck.title
-    m_Metadata:
-      m_Items: []
-  - m_Id: 5260251750400
-    m_Key: menu.home.play
-    m_Metadata:
-      m_Items: []
-  - m_Id: 40165534851072
-    m_Key: menu.deckbuilder.mana
-    m_Metadata:
-      m_Items: []
-  - m_Id: 40302743117824
-    m_Key: menu.deckbuilder.cards.title
-    m_Metadata:
-      m_Items: []
   - m_Id: 40478132133888
     m_Key: menu.deckbuilder.cards.filter
     m_Metadata:
@@ -39,12 +23,112 @@ MonoBehaviour:
     m_Key: menu.deckbuilder.cards.search
     m_Metadata:
       m_Items: []
-  - m_Id: 1416350059716608
-    m_Key: misc.loading
+  - m_Id: 40302743117824
+    m_Key: menu.deckbuilder.cards.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40165534851072
+    m_Key: menu.deckbuilder.mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10834853963489280
+    m_Key: menu.deckbuilder.singlecard.beheaded.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10834207172452352
+    m_Key: menu.deckbuilder.singlecard.beheaded.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10835063045349376
+    m_Key: menu.deckbuilder.singlecard.cleric.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10834315138031616
+    m_Key: menu.deckbuilder.singlecard.cleric.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10835153927528448
+    m_Key: menu.deckbuilder.singlecard.cockatrice.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10834400638918656
+    m_Key: menu.deckbuilder.singlecard.cockatrice.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10835219232841728
+    m_Key: menu.deckbuilder.singlecard.halforc.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10834592029204480
+    m_Key: menu.deckbuilder.singlecard.halforc.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10835510095241216
+    m_Key: menu.deckbuilder.singlecard.mermaids.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10834712682553344
+    m_Key: menu.deckbuilder.singlecard.mermaids.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10835571059449856
+    m_Key: menu.deckbuilder.singlecard.plaguedoctor.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10833634473795584
+    m_Key: menu.deckbuilder.singlecard.plaguedoctor.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10835661136322560
+    m_Key: menu.deckbuilder.singlecard.ranger.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10834758736011264
+    m_Key: menu.deckbuilder.singlecard.ranger.name
     m_Metadata:
       m_Items: []
   - m_Id: 5862158872076288
     m_Key: menu.deckbuilder.singlecard.skilldescription.generic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10835434450968576
+    m_Key: menu.deckbuilder.singlecard.smite.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10834653463175168
+    m_Key: menu.deckbuilder.singlecard.smite.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10835726252892160
+    m_Key: menu.deckbuilder.singlecard.troll.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10834812007866368
+    m_Key: menu.deckbuilder.singlecard.troll.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10835793399504896
+    m_Key: menu.deckbuilder.singlecard.zombies.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10834850893258752
+    m_Key: menu.deckbuilder.singlecard.zombies.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8295276544
+    m_Key: menu.home.deck.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5260251750400
+    m_Key: menu.home.play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8320928306946048
+    m_Key: menu.shop.comingsoon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8321065590710272
+    m_Key: menu.shop.skins.title
     m_Metadata:
       m_Items: []
   - m_Id: 8320771343507456
@@ -55,12 +139,24 @@ MonoBehaviour:
     m_Key: menu.shop.tomplus.title2
     m_Metadata:
       m_Items: []
-  - m_Id: 8320928306946048
-    m_Key: menu.shop.comingsoon
+  - m_Id: 1416350059716608
+    m_Key: misc.loading
     m_Metadata:
       m_Items: []
-  - m_Id: 8321065590710272
-    m_Key: menu.shop.skins.title
+  - m_Id: 10845841324498944
+    m_Key: menu.deckbuilder.singlecard.ability
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10877860884504576
+    m_Key: menu.eula.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10877910847053824
+    m_Key: menu.eula.accept
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10877967184945152
+    m_Key: menu.eula.text
     m_Metadata:
       m_Items: []
   m_Metadata:
