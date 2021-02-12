@@ -13,7 +13,6 @@ public class EulaModalBehaviour : MonoBehaviour
     private bool IsAlreadyAccepted()
     {
         var eulaValue = PlayerPrefs.GetInt(eulaKey, eulaNonAcceptedValue);
-        Logger.Debug($"Is Eula accepted: {eulaValue}");
         return eulaValue == eulaAcceptedValue;
     }
 
