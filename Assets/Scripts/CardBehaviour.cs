@@ -31,7 +31,8 @@ namespace Pandora
         public bool UiDisabled = false;
         public CardType CardType;
         public Texture2D CardMainImage;
-        public LocalizedString CardSkillDescription;
+        public LocalizedString LocalizedCardName;
+        public LocalizedString LocalizedCardSkillDescription;
         Image imageComponent;
         GraphicRaycaster raycasterComponent;
         Color defaultColor;
