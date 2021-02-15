@@ -10,6 +10,7 @@ using UnityEngine.Events;
 using Pandora.Network.Messages;
 using System.Collections.Concurrent;
 using Pandora.Network.Data.Matchmaking;
+using Cysharp.Threading.Tasks;
 
 namespace Pandora.Network
 {
@@ -21,11 +22,12 @@ namespace Pandora.Network
         Socket matchSocket = null;
         Thread networkThread = null;
         Thread receiveThread = null;
+        public AsyncOperation GameSceneLoading;
         ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
         ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
         JWT jwt;
-        int matchStartTimeout = 3; // seconds
+        int matchStartTimeout = 300; // seconds
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
@@ -69,11 +71,12 @@ namespace Pandora.Network
             if (deck != null) ExecMatchmaking(deck, true);
         }
 
-        public async void ExecMatchmaking(List<string> deck, bool isDev)
+        public async UniTaskVoid ExecMatchmaking(List<string> deck, bool isDev)
         {
             IsActive = true;
 
-            apiControllerSingleton.IsDebugBuild = IsDebugBuild;
+            // Wait for the game scene to be loaded before actually trying to join a match
+            await UniTask.WaitUntil(() => GameSceneLoading.progress >= 0.9f);
 
             var response = isDev
                 ? await apiControllerSingleton.StartDevMatchmaking(deck, playerModelSingleton.Token)
@@ -95,6 +98,7 @@ namespace Pandora.Network
 
         public void StartMatch()
         {
+
             Debug.Log($"Connecting to the game server with token {userMatchToken}");
 
             var startTime = DateTime.Now;

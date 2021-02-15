@@ -14,14 +14,20 @@ namespace Pandora.Network
         public bool IsDebugBuild = Debug.isDebugBuild;
         UnityJsonSerializer customSerializer = new UnityJsonSerializer();
 
+        string prodEndpoint = "http://pandora.bluemanta.games:8080/api";
+
         private string apiHost
         {
             get
             {
-                if (IsDebugBuild)
-                    return "http://127.0.0.1:8080/api";
-                else
-                    return "http://pandora.bluemanta.games:8080/api";
+#if UNITY_EDITOR
+                    if (IsDebugBuild)
+                        return "http://127.0.0.1:8080/api";
+                    else
+                        return prodEndpoint;
+#else
+                    return prodEndpoint;
+#endif
             }
         }
 
@@ -38,6 +44,8 @@ namespace Pandora.Network
                     Logger.Debug($"Connecting to API gateway: {apiHost}");
 
                     _client = new RestClient(apiHost);
+
+                    _client.Timeout = int.MaxValue;
 
                     // Using the unity serializer
                     _client.UseSerializer(() => customSerializer);
