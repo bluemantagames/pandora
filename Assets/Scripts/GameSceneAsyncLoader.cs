@@ -8,6 +8,7 @@ public class GameSceneAsyncLoader : MonoBehaviour
 {
     bool isLoaded = false;
 
+#if !UNITY_EDITOR
     void Update()
     {
         if (!isLoaded)
@@ -21,4 +22,6 @@ public class GameSceneAsyncLoader : MonoBehaviour
             networkController.GameSceneLoading.allowSceneActivation = false;
         }
     }
+#endif
+
 }
