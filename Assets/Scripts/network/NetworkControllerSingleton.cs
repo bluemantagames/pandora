@@ -27,7 +27,7 @@ namespace Pandora.Network
         ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
         JWT jwt;
-        int matchStartTimeout = 300; // seconds
+        int matchStartTimeout = 5; // seconds
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
@@ -76,7 +76,11 @@ namespace Pandora.Network
             IsActive = true;
 
             // Wait for the game scene to be loaded before actually trying to join a match
-            await UniTask.WaitUntil(() => GameSceneLoading.progress >= 0.9f);
+            if (GameSceneLoading != null) {
+                await UniTask.WaitUntil(() => GameSceneLoading.progress >= 0.9f);
+
+                Debug.Log($"Starting matchmaking with progress {GameSceneLoading.progress}");
+            }
 
             var response = isDev
                 ? await apiControllerSingleton.StartDevMatchmaking(deck, playerModelSingleton.Token)
