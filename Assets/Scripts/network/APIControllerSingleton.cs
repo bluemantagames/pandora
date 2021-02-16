@@ -46,6 +46,7 @@ namespace Pandora.Network
                     _client = new RestClient(apiHost);
 
                     _client.Timeout = int.MaxValue;
+                    _client.ReadWriteTimeout = int.MaxValue;
 
                     // Using the unity serializer
                     _client.UseSerializer(() => customSerializer);
