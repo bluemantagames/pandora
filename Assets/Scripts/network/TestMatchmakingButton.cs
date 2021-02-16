@@ -68,9 +68,12 @@ namespace Pandora.Network
             {
                 var networkController = NetworkControllerSingleton.instance;
 
-                if (networkController.GameSceneLoading != null) {
+                if (networkController.GameSceneLoading != null)
+                {
                     networkController.GameSceneLoading.allowSceneActivation = true;
-                } else {
+                }
+                else
+                {
                     SceneManager.LoadScene("GameScene");
                 }
 

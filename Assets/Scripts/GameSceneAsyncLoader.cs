@@ -3,25 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Pandora.Network;
+using Pandora;
+using Cysharp.Threading.Tasks;
 
 public class GameSceneAsyncLoader : MonoBehaviour
 {
-    bool isLoaded = false;
+    bool isExecuted = false;
+    NetworkControllerSingleton networkControllerSingleton;
 
-#if !UNITY_EDITOR
+    void Awake()
+    {
+        networkControllerSingleton = NetworkControllerSingleton.instance;
+    }
+
+    private async UniTask StartLoading()
+    {
+        var loadUnitsTask = AddressablesSingleton.instance.LoadUnits();
+
+        Logger.Debug("Preloading units...");
+
+        await loadUnitsTask;
+
+        Logger.Debug("Preloading game scene...");
+
+        networkControllerSingleton.GameSceneLoading = SceneManager.LoadSceneAsync("GameScene");
+        networkControllerSingleton.GameSceneLoading.allowSceneActivation = false;
+    }
+
+    //#if !UNITY_EDITOR
     void Update()
     {
-        if (!isLoaded)
+        if (!isExecuted)
         {
-            isLoaded = true;
-
-            var networkController = NetworkControllerSingleton.instance;
-
-            networkController.GameSceneLoading = SceneManager.LoadSceneAsync("GameScene");
-
-            networkController.GameSceneLoading.allowSceneActivation = false;
+            isExecuted = true;
+            _ = StartLoading();
         }
     }
-#endif
-
+    //#endif
 }
