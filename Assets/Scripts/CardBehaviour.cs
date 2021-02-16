@@ -110,7 +110,11 @@ namespace Pandora
 
         private GameObject GetCardInstance()
         {
-            return AddressablesSingleton.instance.units[UnitName];
+            GameObject unit = null;
+
+            AddressablesSingleton.instance.units.TryGetValue(UnitName, out unit);
+
+            return unit;
         }
 
         public void OnDrag(PointerEventData eventData)
