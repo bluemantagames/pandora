@@ -46,7 +46,6 @@ namespace Pandora
         List<GridCell> spawningCells;
 
         HashSet<GridCell> _riverPositions = new HashSet<GridCell>();
-        Dictionary<string, GameObject> loadedUnits = new Dictionary<string, GameObject> {};
 
         HashSet<GridCell> riverPositions
         {
@@ -162,8 +161,6 @@ namespace Pandora
             Logger.Debug($"Map y size: {cellHeight * mapSizeY}");
 
             engine.Init(this);
-
-            LoadCards();
         }
 
         void RefreshTowerHash(TeamComponent team)
@@ -273,7 +270,8 @@ namespace Pandora
                         unit.GetComponent<CommandBehaviour>().InvokeCommand();
                     }
 
-                    if (command is GoldRewardMessage goldRewardMessage) {
+                    if (command is GoldRewardMessage goldRewardMessage)
+                    {
                         var goldReward = RewardsRepository.Instance.GetReward(goldRewardMessage.rewardId);
 
                         goldReward.RewardApply(this, goldRewardMessage.team, goldRewardMessage.playerId);
@@ -324,14 +322,16 @@ namespace Pandora
             ResetAggroPoints();
         }
 
-        public void ApplyGoldReward(string rewardId, int goldCost) {
+        public void ApplyGoldReward(string rewardId, int goldCost)
+        {
             var maybePlayerId = NetworkControllerSingleton.instance.PlayerId;
             var playerId = maybePlayerId.HasValue ? maybePlayerId.Value : 0;
 
-            var message = new GoldRewardMessage {
+            var message = new GoldRewardMessage
+            {
                 rewardId = rewardId,
                 team = TeamComponent.assignedTeam,
-                elapsedMs = (int) engine.TotalElapsed,
+                elapsedMs = (int)engine.TotalElapsed,
                 goldSpent = goldCost,
                 playerId = playerId
             };
@@ -391,17 +391,7 @@ namespace Pandora
             return true;
         }
 
-        void LoadCards() {
-            var units = new List<UnityEngine.Object>(Resources.LoadAll("Units"));
-
-            foreach (var unit in units) {
-                Logger.Debug($"Loading unit {unit.name}");
-
-                loadedUnits.Add(unit.name, unit as GameObject);
-            }
-        }
-
-        public GameObject LoadCard(string unitName) => loadedUnits[unitName];
+        public GameObject LoadCard(string unitName) => AddressablesSingleton.instance.units[unitName];
 
         /// <summary>Spawns a unit</summary>
         public void SpawnUnit(UnitSpawn spawn)
@@ -484,7 +474,7 @@ namespace Pandora
             if (movementBehaviour != null) movementBehaviour.map = this;
 
             var engineEntity = engine.AddEntity(
-                unit, 
+                unit,
                 movementBehaviour?.Speed ?? spell.Speed,
                 cell,
                 spell == null,
@@ -517,7 +507,8 @@ namespace Pandora
 
             var animator = unit.GetComponent<Animator>();
 
-            if (animator != null && (redController != null || blueController != null)) {
+            if (animator != null && (redController != null || blueController != null))
+            {
                 animator.runtimeAnimatorController =
                     (teamComponent.Team == TeamComponent.assignedTeam) ? blueController : redController;
             }
@@ -753,7 +744,7 @@ namespace Pandora
 
             if ((!isGlobal && cell.vector.y > 13) || (isAquatic && !riverPositions.Contains(cell))) return false;
 
-            var cellPosition = (Vector3) GridCellToWorldPosition(cell);
+            var cellPosition = (Vector3)GridCellToWorldPosition(cell);
 
             cellPosition.z = -1;
 
@@ -807,7 +798,7 @@ namespace Pandora
 
             Logger.Debug($"Pointed cell {cell}");
 
-            var worldCellPoint = (Vector3) WorldBoundsPosition;
+            var worldCellPoint = (Vector3)WorldBoundsPosition;
 
             worldCellPoint.x += cellWidth * cell.x + (cellWidth / 2);
             worldCellPoint.y += cellHeight * cell.y + (cellHeight / 2);
