@@ -11,6 +11,7 @@ namespace Pandora
         public Dictionary<string, GameObject> units = new Dictionary<string, GameObject> { };
 
         private static AddressablesSingleton privateInstance = null;
+        string unitsAssetsLabel = "Unit";
 
         private AddressablesSingleton() { }
 
@@ -25,10 +26,15 @@ namespace Pandora
             }
         }
 
+        public UniTask DownloadDependencies()
+        {
+            return Addressables.DownloadDependenciesAsync(unitsAssetsLabel).ToUniTask();
+        }
+
         public UniTask LoadUnits()
         {
             return Addressables
-                .LoadAssetsAsync<GameObject>("Unit", loadedUnit =>
+                .LoadAssetsAsync<GameObject>(unitsAssetsLabel, loadedUnit =>
                 {
                     var unitName = loadedUnit.name;
 

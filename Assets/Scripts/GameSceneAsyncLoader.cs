@@ -18,11 +18,13 @@ public class GameSceneAsyncLoader : MonoBehaviour
 
     private async UniTask StartLoading()
     {
-        var loadUnitsTask = AddressablesSingleton.instance.LoadUnits();
+        Logger.Debug("Downloading dependencies...");
+
+        await AddressablesSingleton.instance.DownloadDependencies();
 
         Logger.Debug("Preloading units...");
 
-        await loadUnitsTask;
+        await AddressablesSingleton.instance.LoadUnits();
 
         Logger.Debug("Preloading game scene...");
 
