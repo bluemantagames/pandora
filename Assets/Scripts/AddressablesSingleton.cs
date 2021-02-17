@@ -27,6 +27,11 @@ namespace Pandora
             }
         }
 
+        public UniTask ClearDependenciesCache()
+        {
+            return Addressables.ClearDependencyCacheAsync(unitsAssetsLabel, false).ToUniTask();
+        }
+
         public UniTask DownloadDependencies(Action<float> progressHandler = null)
         {
             var progressManager = Progress.Create<float>(progressHandler);

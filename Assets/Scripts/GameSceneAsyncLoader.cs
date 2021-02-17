@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -23,6 +22,9 @@ public class GameSceneAsyncLoader : MonoBehaviour
     private async UniTask StartLoading()
     {
         ShowLoader();
+
+        // Used in dev to clear the cached dependencies
+        // await AddressablesSingleton.instance.ClearDependenciesCache();
 
         Logger.Debug("Downloading dependencies...");
 
@@ -56,7 +58,12 @@ public class GameSceneAsyncLoader : MonoBehaviour
 
     void UpdateDownloadStatus(float progress)
     {
-        LoadingText.GetComponent<Text>().text = $"Downloading... {progress * 100}%";
+        var numericValue = progress * 100;
+        var roundedValue = Math.Round(numericValue, 2);
+        var progressText = $"Downloading... {roundedValue}%";
+
+        Logger.Debug(progressText);
+        LoadingText.GetComponent<Text>().text = progressText;
     }
 
     void UpdateLoadingAssets()
