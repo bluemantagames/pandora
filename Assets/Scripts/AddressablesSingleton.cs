@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Pandora.Network.Data.Users;
 using UnityEngine;
@@ -9,9 +10,9 @@ namespace Pandora
     public class AddressablesSingleton
     {
         public Dictionary<string, GameObject> units = new Dictionary<string, GameObject> { };
-
         private static AddressablesSingleton privateInstance = null;
         string unitsAssetsLabel = "Unit";
+        float loadingProgress = 0f;
 
         private AddressablesSingleton() { }
 
@@ -26,13 +27,16 @@ namespace Pandora
             }
         }
 
-        public UniTask DownloadDependencies()
+        public UniTask DownloadDependencies(Action<float> progressHandler = null)
         {
-            return Addressables.DownloadDependenciesAsync(unitsAssetsLabel).ToUniTask();
+            var progressManager = Progress.Create<float>(progressHandler);
+            return Addressables.DownloadDependenciesAsync(unitsAssetsLabel).ToUniTask(progress: progressManager);
         }
 
-        public UniTask LoadUnits()
+        public UniTask LoadUnits(Action<float> progressHandler = null)
         {
+            var progressManager = Progress.Create<float>(progressHandler);
+
             return Addressables
                 .LoadAssetsAsync<GameObject>(unitsAssetsLabel, loadedUnit =>
                 {
@@ -42,7 +46,7 @@ namespace Pandora
 
                     units.Add(unitName, loadedUnit);
                 })
-                .ToUniTask();
+                .ToUniTask(progress: progressManager);
         }
     }
 }
