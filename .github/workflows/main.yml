@@ -3,6 +3,8 @@ on:
   create:
     tags:
       - '*'
+  workflow_dispatch:
+
 jobs:
   BuildAndroid:
     name: Build Android release
