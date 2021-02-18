@@ -28,7 +28,7 @@ public class GameSceneAsyncLoader : MonoBehaviour
 
         var addressablesSize = await AddressablesSingleton.instance.GetAddressablesSize();
 
-        if (addressablesSize == 0)
+        if (addressablesSize != 0)
         {
             Logger.Debug("Downloading dependencies...");
 
