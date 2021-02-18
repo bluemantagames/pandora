@@ -1,17 +1,28 @@
 name: Acquire activation file
-on: [push]
+on:
+  create:
+    tags:
+      - '*'
 jobs:
-  activation:
-    name: Request manual activation file ??
+  BuildAndroid:
+    name: Build Android release
     runs-on: ubuntu-latest
     steps:
-      - name: Request manual activation file
-        id: getManualLicenseFile
-        uses: webbertakken/unity-request-manual-activation-file@v2.0-alpha-1
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
         with:
-          unityVersion: 2020.1.17f1
-      - name: Expose as artifact
-        uses: actions/upload-artifact@v1
+          path: Library
+          key: Library-Android
+      - uses: game-ci/unity-builder@v2.0-alpha-6
         with:
-          name: ${{ steps.getManualLicenseFile.outputs.filePath }}
-          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+          targetPlatform: Android
+          androidAppBundle: true
+          androidKeystoreName: user.keystore
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
+          androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-Android
+          path: build/Android
