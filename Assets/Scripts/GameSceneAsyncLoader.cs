@@ -26,9 +26,14 @@ public class GameSceneAsyncLoader : MonoBehaviour
         // Used in dev to clear the cached dependencies
         // await AddressablesSingleton.instance.ClearDependenciesCache();
 
-        Logger.Debug("Downloading dependencies...");
+        var addressablesSize = await AddressablesSingleton.instance.GetAddressablesSize();
 
-        await AddressablesSingleton.instance.DownloadDependencies(UpdateDownloadStatus);
+        if (addressablesSize == 0)
+        {
+            Logger.Debug("Downloading dependencies...");
+
+            await AddressablesSingleton.instance.DownloadDependencies(UpdateDownloadStatus);
+        }
 
         Logger.Debug("Preloading units...");
 
@@ -59,10 +64,9 @@ public class GameSceneAsyncLoader : MonoBehaviour
     void UpdateDownloadStatus(float progress)
     {
         var numericValue = progress * 100;
-        var roundedValue = Math.Round(numericValue, 2);
-        var progressText = $"Downloading... {roundedValue}%";
+        var roundedValue = Math.Round(numericValue, 1);
+        var progressText = $"Downloading... \n{roundedValue}%";
 
-        Logger.Debug(progressText);
         LoadingText.GetComponent<Text>().text = progressText;
     }
 
