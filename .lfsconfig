@@ -1,2 +1,2 @@
-[lfs]
-url = "http://gitlfs.example.com:8080/api/my-org/my-project"
+[remote "origin"]
+lfsurl = "http://gitlfs.example.com:8080/api/my-org/my-project"
