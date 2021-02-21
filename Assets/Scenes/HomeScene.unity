@@ -2421,6 +2421,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayButton: {fileID: 1298957360}
   LoadingText: {fileID: 1782216516}
+  LocalizedDownloadingText:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 14184657749794816
+      m_Key: 
+  LocalizedLoadingText:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 14184949342003200
+      m_Key: 
 --- !u!1 &391242542
 GameObject:
   m_ObjectHideFlags: 0

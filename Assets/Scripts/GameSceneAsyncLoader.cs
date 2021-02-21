@@ -5,11 +5,18 @@ using UnityEngine.SceneManagement;
 using Pandora.Network;
 using Pandora;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Localization;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class GameSceneAsyncLoader : MonoBehaviour
 {
     public GameObject PlayButton;
     public GameObject LoadingText;
+    public LocalizedString LocalizedDownloadingText;
+    public LocalizedString LocalizedLoadingText;
+
+    string downloadingText = null;
+    string loadingText = null;
 
     bool isExecuted = false;
     NetworkControllerSingleton networkControllerSingleton;
@@ -17,6 +24,18 @@ public class GameSceneAsyncLoader : MonoBehaviour
     void Awake()
     {
         networkControllerSingleton = NetworkControllerSingleton.instance;
+
+        LocalizedDownloadingText.GetLocalizedString().Completed += (handle) =>
+        {
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+                downloadingText = handle.Result;
+        };
+
+        LocalizedLoadingText.GetLocalizedString().Completed += (handle) =>
+        {
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+                loadingText = handle.Result;
+        };
     }
 
     private async UniTask StartLoading()
@@ -63,16 +82,20 @@ public class GameSceneAsyncLoader : MonoBehaviour
 
     void UpdateDownloadStatus(float progress)
     {
+        if (downloadingText == null) return;
+
         var numericValue = progress * 100;
         var roundedValue = Math.Round(numericValue, 1);
-        var progressText = $"Downloading... \n{roundedValue}%";
+        var progressText = $"{downloadingText} \n{roundedValue}%";
 
         LoadingText.GetComponent<Text>().text = progressText;
     }
 
     void UpdateLoadingAssets()
     {
-        LoadingText.GetComponent<Text>().text = $"Loading assets...";
+        if (loadingText == null) return;
+
+        LoadingText.GetComponent<Text>().text = loadingText;
     }
 
     void Update()
