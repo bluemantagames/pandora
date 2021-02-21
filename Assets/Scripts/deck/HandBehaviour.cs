@@ -101,6 +101,9 @@ namespace Pandora.Deck
                 engineComponent.Engine.AddBehaviour(this);
             }
 
+            MulliganTakeObject?.SetActive(true);
+            MulliganRejectObject?.SetActive(true);
+
             if (deck is LocalDeck localDeck)
             {
                 List<Card> cards;

@@ -26,6 +26,8 @@ namespace Pandora.Command
 
             foreach (var targetEntity in entities)
             {
+                if (targetEntity.GameObject.GetComponent<LifeComponent>() == null) continue;
+
                 var teamComponent = targetEntity.GameObject.GetComponent<TeamComponent>();
 
                 if (teamComponent == null) continue;

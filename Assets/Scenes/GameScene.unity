@@ -7665,6 +7665,7 @@ GameObject:
   - component: {fileID: 2063161277}
   - component: {fileID: 2063161279}
   - component: {fileID: 2063161278}
+  - component: {fileID: 2063161280}
   m_Layer: 5
   m_Name: CardsContainer
   m_TagString: Untagged
@@ -7742,6 +7743,33 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
+--- !u!114 &2063161280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063161276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a656ad397553b4ab349ae511f288ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Entity:
+    Speed: 0
+    CollisionSpeed: 0
+    Position: {x: 0, y: 0}
+    Direction: {x: 0, y: 0}
+    IsMovementPaused: 0
+    IsRigid: 1
+    IsStructure: 0
+    IsMapObstacle: 0
+    Layer: 1
+    Target: {x: 0, y: 0}
+    IsEvading: 0
+    UnitName: 
+    UnitId: 
+  DebugEntity: 0
 --- !u!1 &2089915458 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3866240383038811722, guid: 3ae196b7cda494c4b8d0457362c166ec,
