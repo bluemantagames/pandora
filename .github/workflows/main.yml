@@ -30,6 +30,7 @@ jobs:
           androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
           androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
           androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
+          allowDirtyBuild: true # this is needed because the git lfs checkout leaves the branch dirty somehow
       - uses: actions/upload-artifact@v2
         with:
           name: build-Android
