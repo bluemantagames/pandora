@@ -18,6 +18,8 @@ namespace Pandora.Resource.Gold.Rewards {
             var entities = new List<EngineEntity>(map.engine.Entities);
 
             foreach (var entity in entities) {
+                if (entity.GameObject.GetComponent<LifeComponent>() == null) continue;
+
                 var isTower = entity.GameObject.GetComponent<TowerTeamComponent>() != null;
 
                 if (isTower) continue;
