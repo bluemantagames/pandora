@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 84069264adda04a569a6b13abc1da97e, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - id: 0
   m_TableData:
   - m_Id: 8295276544
     m_Localized: Deck
@@ -33,7 +34,8 @@ MonoBehaviour:
   - m_Id: 40302743117824
     m_Localized: Army
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 40478132133888
     m_Localized: Filter
     m_Metadata:
@@ -107,43 +109,55 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 10834853963489280
-    m_Localized: Beheaded description...
+    m_Localized: Three flying fast attackers. On Command, they will gather and attack
+      the weakest enemy closest to one of them.
     m_Metadata:
       m_Items: []
   - m_Id: 10835063045349376
-    m_Localized: Cleric description...
+    m_Localized: Three weak melee units. On Command, if all of them are still alive,
+      the nearest unit in the same half of the Arena is converted to the allied team,
+      clerics sacrificing themselves in the process.
     m_Metadata:
       m_Items: []
   - m_Id: 10835153927528448
-    m_Localized: Cockatrice description...
+    m_Localized: "A poisonous beast. On Command, she will fly for a limited time
+      and will deal damage on a large percentage of the target\u2019s hp"
     m_Metadata:
       m_Items: []
   - m_Id: 10835219232841728
-    m_Localized: Half Orc description...
+    m_Localized: "A half orc riding a giant bat. On Command, he will come down from
+      the bat, forming two separate units: The half orc, slow and tank like,  and
+      the bat, fast and deals a large amount of damage but it\u2019s weak."
     m_Metadata:
       m_Items: []
   - m_Id: 10835434450968576
-    m_Localized: Smite description...
+    m_Localized: A 1.5 second delayed bolt that will deal damage to troops and structures
+      in a small radius.
     m_Metadata:
       m_Items: []
   - m_Id: 10835510095241216
-    m_Localized: Mermaids description...
+    m_Localized: "Two mermaids which can be spawned only on the River. On Command,
+      they\u2019ll spawn a tornado that pulls units in its center."
     m_Metadata:
       m_Items: []
   - m_Id: 10835571059449856
-    m_Localized: Plague Doctor description...
+    m_Localized: A slow moving melee unit. On Command, he will heal himself and his
+      allied units and increase attack and movement speed of the nearby allies.
     m_Metadata:
       m_Items: []
   - m_Id: 10835661136322560
-    m_Localized: Ranger decription...
+    m_Localized: "He\u2019s a tough melee fighter. On Command, the Ranger\u2019s
+      sword power will increase and his next attack will be multiplied."
     m_Metadata:
       m_Items: []
   - m_Id: 10835726252892160
-    m_Localized: Troll description...
+    m_Localized: Slow unit with high life points and high damage. On Command, he
+      will push back and damage all units in front of him.
     m_Metadata:
       m_Items: []
   - m_Id: 10835793399504896
-    m_Localized: Zombies description...
+    m_Localized: Spawns an army of zombies. On Command, all dead zombies respawn
+      in the position they died.
     m_Metadata:
       m_Items: []
   - m_Id: 10845841324498944
@@ -254,3 +268,7 @@ MonoBehaviour:
       m_Items: []
   references:
     version: 1
+    00000000:
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00e0afb6a7240000
