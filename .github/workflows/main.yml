@@ -11,6 +11,11 @@ jobs:
     outputs:
       release_type: ${{ steps.release_type.outputs.release_type }}
     steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout LFS objects
+        run: git lfs checkout
       - id: release_type
         run: './misc/release_type.sh'
 
