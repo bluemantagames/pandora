@@ -17,7 +17,7 @@ jobs:
       - name: Checkout LFS objects
         run: git lfs checkout
       - id: release_type
-        run: './misc/release_type.sh'
+        run: '${{ github.workspace }}/misc/release_type.sh'
 
   BuildAndroid:
     name: Build Android release
