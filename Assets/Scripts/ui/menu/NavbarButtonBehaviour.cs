@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Pandora.UI.Menu;
+using Pandora;
 
 public class NavbarButtonBehaviour : MonoBehaviour
 {
@@ -33,6 +34,11 @@ public class NavbarButtonBehaviour : MonoBehaviour
     public void HandlePress()
     {
         if (ViewsContainer == null || Disabled) return;
+
+        AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MENU_VIEW_CHANGE, new Dictionary<string, object>() {
+            {"from", ViewsContainer.CurrentView.name},
+            {"to", TargetView}
+        });
 
         ViewsContainer.ShowView(TargetView);
 
