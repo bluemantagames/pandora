@@ -746,7 +746,7 @@ namespace Pandora
 
             var cellPosition = (Vector3)GridCellToWorldPosition(cell);
 
-            cellPosition.z = -1;
+            cellPosition.z = -2;
 
             lastPuppet = Instantiate(puppet, cellPosition, Quaternion.identity, transform);
 
