@@ -31,7 +31,7 @@ namespace Pandora
 
         private AnalyticsSingleton()
         {
-            isEnabled = true;
+            isEnabled = !Debug.isDebugBuild;
 
             if (isEnabled)
             {
@@ -81,7 +81,7 @@ namespace Pandora
         {
             if (!isEnabled) return;
 
-            Debug.Log($"Tracking {eventName}");
+            Debug.Log($"Tracking {eventName}")
 
             AnalyticsEvent.Custom(eventName, values);
         }
