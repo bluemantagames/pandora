@@ -22,7 +22,6 @@ jobs:
 
   BuildAndroid:
     name: Build Android release
-    if: false
     runs-on: self-hosted
     needs: ReleaseType
     steps:
@@ -92,7 +91,7 @@ jobs:
 
   UploadBundles:
     runs-on: self-hosted
-    needs: [ReleaseType]
+    needs: [BuildAndroid]
     steps:
     - uses: actions/checkout@master
       with:
