@@ -24,6 +24,8 @@ namespace Pandora.Network
         {
             Logger.Debug("Connecting");
 
+            AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATCHMAKING_START);
+
             if (ProdMatchmaking)
             {
                 NetworkControllerSingleton.instance.IsDebugBuild = false;
@@ -66,6 +68,8 @@ namespace Pandora.Network
         {
             if (GameSceneToLoad)
             {
+                AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATHCMAKING_MATCH_FOUND);
+
                 var networkController = NetworkControllerSingleton.instance;
 
                 if (networkController.GameSceneLoading != null)
@@ -76,6 +80,8 @@ namespace Pandora.Network
                 {
                     SceneManager.LoadScene("GameScene");
                 }
+
+                AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATCHMAKING_MATCH_START);
 
                 GameSceneToLoad = false;
             }
