@@ -89,10 +89,6 @@ jobs:
         uses: maierj/fastlane-action@v2.0.0
         with:
           lane: 'android internal'
-      - name: Tidy up artifact to avoid storage limit
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: build-Android
 
   UploadBundles:
     runs-on: self-hosted
@@ -112,3 +108,12 @@ jobs:
         AWS_REGION: 'fra1'
         SOURCE_DIR: 'ServerData'
         DEST_DIR: 'Addressables'
+    - name: Tidy up artifact to avoid storage limit
+      uses: geekyeggo/delete-artifact@v1
+      with:
+        name: build-Android
+    - name: Tidy up artifact to avoid storage limit
+      uses: geekyeggo/delete-artifact@v1
+      with:
+        name: bundles-Android
+
