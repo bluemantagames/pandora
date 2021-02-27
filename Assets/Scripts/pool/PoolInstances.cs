@@ -113,5 +113,11 @@ namespace Pandora.Pool
             resetFunction: d => d = 0,
             profilingEnabled: false
         );
+
+        public static ConcurrentObjectPool<HashSet<(EngineEntity, EngineEntity)>> EntityHashsetPool = new ConcurrentObjectPool<HashSet<(EngineEntity, EngineEntity)>>(
+            createFunction: () => new HashSet<(EngineEntity, EngineEntity)>(),
+            resetFunction: d => d.Clear(),
+            profilingEnabled: false
+        );
     }
 }

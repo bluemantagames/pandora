@@ -64,6 +64,9 @@ namespace Pandora.Engine.Grid
 
                 if (collide)
                 {
+                    hitboxCheck.End();
+                    collideCheck.End();
+
                     return true;
                 }
 

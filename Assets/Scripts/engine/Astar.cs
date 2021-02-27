@@ -17,6 +17,7 @@ namespace Pandora.Engine
         ConcurrentObjectPool<QueueItem<T>> nodeQueueItemPool;
         ConcurrentObjectPool<T> nodePool;
         ConcurrentObjectPool<List<T>> nodeContainerPool;
+        Dictionary<T, bool> obstacleCache = new Dictionary<T, bool>(1000000);
 
         StablePriorityQueue<QueueItem<T>> priorityQueue = new StablePriorityQueue<QueueItem<T>>(1000000);
 
@@ -109,7 +110,7 @@ namespace Pandora.Engine
         * When greedy is true, g(x) is removed from the score, making this algorithm effectively
         * a greedy best-first search, which seems to perform better when evading other units.
         */
-        public LinkedList<T> FindLinkedListPath(T currentPosition, T end, Func<T, bool> isObstacle, Func<T, List<T>> getSurroundingNodes, Func<T, T, float> distance, bool greedy = false)
+        public LinkedList<T> FindLinkedListPath(T currentPosition, T end, Func<T, bool> isObstacle, Func<T, List<T>> getNeighbours, Func<T, T, float> distance, bool greedy = false)
         {
             priorityQueue.Clear();
             cameFrom.Clear();
@@ -118,7 +119,7 @@ namespace Pandora.Engine
             fScore.Clear();
             dequeueCandidates.Clear();
 
-            int pass = 0, advancesNum = 0;
+            int pass = 0, neighboursNum = 0;
 
             var map = MapComponent.Instance;
 
@@ -161,7 +162,7 @@ namespace Pandora.Engine
                 }
 
                 surroundingSampler.Begin();
-                var advances = getSurroundingNodes(item);
+                var neighbours = getNeighbours(item);
                 surroundingSampler.End();
 
                 if (DebugPathfinding)
@@ -169,14 +170,19 @@ namespace Pandora.Engine
                     Logger.Debug($"Checking {item}");
                 }
 
-                foreach (var advance in advances)
+                foreach (var neighbour in neighbours)
                 {
-                    advancesNum++;
+                    neighboursNum++;
 
                     obstacleSampler.Begin();
-                    if (isObstacle(advance) || advance.Equals(item))
+
+                    if (!obstacleCache.ContainsKey(neighbour)) {
+                        obstacleCache[neighbour] = isObstacle(neighbour);
+                    }
+
+                    if (obstacleCache[neighbour] || neighbour.Equals(item))
                     {
-                        nodePool.ReturnObject(advance);
+                        nodePool.ReturnObject(neighbour);
 
                         obstacleSampler.End();
 
@@ -186,40 +192,40 @@ namespace Pandora.Engine
 
                     QueueItem<T> queueItem = null;
 
-                    if (queueItems.ContainsKey(advance))
+                    if (queueItems.ContainsKey(neighbour))
                     {
-                        queueItem = queueItems[advance];
+                        queueItem = queueItems[neighbour];
                     }
                     else
                     {
                         queueItem = nodeQueueItemPool.GetObject();
 
-                        queueItem.Item = advance;
+                        queueItem.Item = neighbour;
 
-                        queueItems[advance] = queueItem;
+                        queueItems[neighbour] = queueItem;
                     }
 
                     var advanceGScore = gScore[item] + 1;
 
-                    if (!gScore.ContainsKey(advance) || gScore[advance] > advanceGScore)
+                    if (!gScore.ContainsKey(neighbour) || gScore[neighbour] > advanceGScore)
                     {
                         cameFrom[queueItem] = evaluatingPosition;
-                        gScore[advance] = advanceGScore;
-                        fScore[advance] = (greedy ? 0 : advanceGScore) + distance(advance, end);
+                        gScore[neighbour] = advanceGScore;
+                        fScore[neighbour] = (greedy ? 0 : advanceGScore) + distance(neighbour, end);
 
                         // We don't update when in greedy mode, since the fScore doesn't change
                         if (priorityQueue.Contains(queueItem) && !greedy)
                         {
-                            priorityQueue.UpdatePriority(queueItem, fScore[advance]);
+                            priorityQueue.UpdatePriority(queueItem, fScore[neighbour]);
                         }
                         else
                         {
-                            priorityQueue.Enqueue(queueItem, fScore[advance]);
+                            priorityQueue.Enqueue(queueItem, fScore[neighbour]);
                         }
                     }
                 }
 
-                nodeContainerPool?.ReturnObject(advances);
+                nodeContainerPool?.ReturnObject(neighbours);
 
                 passSampler.End();
 
@@ -238,7 +244,7 @@ namespace Pandora.Engine
 
                 if (pass > 2000)
                 {
-                    Logger.DebugWarning($"Short circuiting after {pass} passes started from {currentPosition} to {end} ({Time.frameCount}, checked {advancesNum} nodes)");
+                    Logger.DebugWarning($"Short circuiting after {pass} passes started from {currentPosition} to {end} ({Time.frameCount}, checked {neighboursNum} nodes)");
 
                     if (DebugPathfinding)
                     {
