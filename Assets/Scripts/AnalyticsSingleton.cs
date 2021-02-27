@@ -49,11 +49,7 @@ namespace Pandora
         /// <param name="eventName">The event name</param>
         public void TrackEvent(string eventName)
         {
-            if (!isEnabled) return;
-
-            Debug.Log($"Tracking {eventName}");
-
-            AnalyticsEvent.Custom(eventName);
+            TrackEvent(eventName, null);
         }
 
         /// <summary>
@@ -63,13 +59,7 @@ namespace Pandora
         /// <param name="eventValue">The event value</param>
         public void TrackEvent(string eventName, float eventValue)
         {
-            if (!isEnabled) return;
-
-            Debug.Log($"Tracking {eventName}");
-
-            var value = eventValue.ToString();
-
-            AnalyticsEvent.Custom(eventName, new Dictionary<string, object> { { "value", value } });
+            TrackEvent(eventName, new Dictionary<string, object> { { "value", eventValue.ToString() } });
         }
 
         /// <summary>
@@ -81,9 +71,9 @@ namespace Pandora
         {
             if (!isEnabled) return;
 
-            Debug.Log($"Tracking {eventName}");
+            var result = AnalyticsEvent.Custom(eventName, values);
 
-            AnalyticsEvent.Custom(eventName, values);
+            Debug.Log($"Tracking {eventName}, result is {result}");
         }
     }
 }

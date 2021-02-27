@@ -37,7 +37,7 @@ public class NavbarButtonBehaviour : MonoBehaviour
 
         AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MENU_VIEW_CHANGE, new Dictionary<string, object>() {
             {"from", ViewsContainer.CurrentView.name},
-            {"to", TargetView}
+            {"to", TargetView.ToString()}
         });
 
         ViewsContainer.ShowView(TargetView);
