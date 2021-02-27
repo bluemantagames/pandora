@@ -46,6 +46,7 @@ jobs:
           androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
           androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
           allowDirtyBuild: true # this is needed because the git lfs checkout leaves the branch dirty somehow
+          buildMethod: UnityBuilderAction.Builder.BuildProject
       - uses: actions/upload-artifact@v2
         with:
           name: build-Android
