@@ -108,7 +108,7 @@ jobs:
         AWS_REGION: 'fra1'
         SOURCE_DIR: 'ServerData'
         DEST_DIR: 'Addressables'
-        AWS_S3_ENDPOINT: 'https://towersofminduir.fra1.digitaloceanspaces.com/'
+        AWS_S3_ENDPOINT: 'https://fra1.digitaloceanspaces.com/'
     - name: Tidy up artifact to avoid storage limit
       uses: geekyeggo/delete-artifact@v1
       with:
