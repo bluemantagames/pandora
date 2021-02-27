@@ -6,9 +6,25 @@ on:
   workflow_dispatch:
 
 jobs:
+  ReleaseType:
+    runs-on: self-hosted
+    outputs:
+      release_type: ${{ steps.release_type.outputs.release_type }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+          fetch-depth: 0
+      - name: Checkout LFS objects
+        run: git lfs checkout
+      - id: release_type
+        run: '${{ github.workspace }}/misc/release-type.sh'
+
   BuildAndroid:
     name: Build Android release
+    if: false
     runs-on: self-hosted
+    needs: ReleaseType
     steps:
       - uses: actions/checkout@v2
         with:
@@ -34,4 +50,42 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: build-Android
-          path: build/Android
+          path: build/Android/Android.aab
+
+  ReleaseInternal:
+    name: Release to the Google Play Store
+    runs-on: self-hosted
+    needs: [ReleaseType, BuildAndroid]
+    if: ${{ needs.ReleaseType.outputs.release_type == 'staging' }}
+    env:
+      GOOGLE_PLAY_KEY_FILE: ${{ secrets.FASTLANE_SERVICE_ACCOUNT }}
+      GOOGLE_PLAY_KEY_FILE_PATH: ${{ format('{0}/fastlane/google-fastlane.json', github.workspace) }}
+      ANDROID_BUILD_FILE_PATH: ${{ format('{0}/build/Android/Android.aab', github.workspace) }}
+      ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout LFS objects
+        run: git lfs checkout
+      - name: Download Android Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-Android
+          path: Android.aab
+      - name: Prepare for Upload
+        run: echo "$GOOGLE_PLAY_KEY_FILE" > $GOOGLE_PLAY_KEY_FILE_PATH
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+      - name: Install Fastlane
+        run: bundle install
+      - name: Upload to Google Play Internal
+        uses: maierj/fastlane-action@v2.0.0
+        with:
+          lane: 'android internal'
+      - name: Tidy up artifact to avoid storage limit
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: build-Android

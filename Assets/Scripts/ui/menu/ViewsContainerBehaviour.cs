@@ -15,6 +15,7 @@ namespace Pandora.UI.Menu
         public GameObject DeckView;
         public GameObject InitialView;
         public GameObject BackgroundObject;
+        public GameObject CurrentView;
         MenuEventsSingleton menuEventsSingleton;
 
         float viewsAnimationTime = 0.15f;
@@ -83,6 +84,8 @@ namespace Pandora.UI.Menu
                 gameObject.transform.position = new Vector2(displayPositionX, currentPositionY);
                 DeactivateAllExcept(view);
             }
+
+            CurrentView = view;
         }
 
         private void ActivateAll()

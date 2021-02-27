@@ -4,6 +4,7 @@ using Pandora;
 using Pandora.Network;
 using Cysharp.Threading.Tasks;
 using System.Net;
+using System.Collections.Generic;
 
 namespace Pandora.UI.Login
 {
@@ -27,6 +28,8 @@ namespace Pandora.UI.Login
 
         void Start()
         {
+            AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.LOGIN_SCENE);
+
             _ = PlayGamesAuthentication();
 
             if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey))
@@ -50,6 +53,11 @@ namespace Pandora.UI.Login
             // Setting the token and redirect if logged in
             if (loginResponse.StatusCode == HttpStatusCode.OK && loginResponse.Body != null)
             {
+                AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.LOGIN, new Dictionary<string, object>() {
+                    {"mode", "credentials"},
+                    {"failed", false}
+                });
+
                 var token = loginResponse.Body.token;
 
                 PlayerPrefs.SetString(usernameKey, username);
@@ -64,6 +72,11 @@ namespace Pandora.UI.Login
             }
             else
             {
+                AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.LOGIN, new Dictionary<string, object>() {
+                    {"mode", "credentials"},
+                    {"failed", true}
+                });
+
                 Logger.Debug($"Status code {loginResponse.StatusCode} while logging in: {loginResponse.Error.message}");
 
                 // Restoring the button text
@@ -85,8 +98,19 @@ namespace Pandora.UI.Login
 #if UNITY_ANDROID            
             var authenticated = await PlayGames.instance.Authenticate();
 
-            if (authenticated)
+            if (authenticated) {
                 _ = loadingBehaviour.LoadMainMenu();
+                
+                AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.LOGIN, new Dictionary<string, object>() {
+                    {"mode", "google-play"},
+                    {"failed", false}
+                });
+            } else {
+                AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.LOGIN, new Dictionary<string, object>() {
+                    {"mode", "google-play"},
+                    {"failed", true}
+                });
+            }
 #endif
         }
 
