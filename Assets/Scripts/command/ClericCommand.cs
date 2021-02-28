@@ -30,7 +30,7 @@ namespace Pandora.Command
 
             var isEveryoneAlive = groupComponent.Objects.TrueForAll(unit => !unit.GetComponent<LifeComponent>().IsDead);
 
-            
+
             foreach (var cleric in groupComponent.Objects)
             {
                 cleric.GetComponent<UnitBehaviour>().PlayAnimation("Command", CommandAnimationMs, sacrifice);
@@ -42,11 +42,24 @@ namespace Pandora.Command
                 {
                     var target = targetEntity.GameObject;
                     var targetSpriteRenderer = target.GetComponent<SpriteRenderer>();
+                    var groundAnchor = target.GetComponentInChildren<UnitGroundAnchor>();
                     var bounds = targetSpriteRenderer.bounds;
 
-                    var vfxPosition = new Vector3(bounds.min.x + (bounds.extents.x / 2), bounds.min.y, 0f);
+                    GameObject vfx;
 
-                    var vfx = Instantiate(CommandVFX, vfxPosition, CommandVFX.transform.rotation, target.transform);
+                    if (groundAnchor != null)
+                    {
+                        var vfxPosition = new Vector3(0f, 0f, 0f);
+                        vfx = Instantiate(CommandVFX, vfxPosition, CommandVFX.transform.rotation, groundAnchor.transform);
+
+                        var vfxRect = vfx.GetComponent<RectTransform>();
+                        if (vfxRect != null) vfxRect.anchoredPosition = vfxPosition;
+                    }
+                    else
+                    {
+                        var vfxPosition = new Vector3(bounds.min.x + bounds.extents.x, bounds.min.y + bounds.extents.y, 0f);
+                        vfx = Instantiate(CommandVFX, vfxPosition, CommandVFX.transform.rotation, target.transform);
+                    }
 
                     var particles = vfx.GetComponent<ParticleSystem>();
 
