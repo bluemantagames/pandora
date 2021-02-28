@@ -84,10 +84,6 @@ jobs:
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6
-          bundler-cache: true
       - name: Install Fastlane
         run: bundle install
       - name: Upload to Google Play Internal
