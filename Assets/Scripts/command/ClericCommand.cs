@@ -13,6 +13,7 @@ namespace Pandora.Command
         TeamComponent team;
         EngineComponent engineComponent;
         GroupComponent groupComponent;
+        ParticleSystem commandParticles;
         public GameObject CommandVFX;
         public float VFXStartTime = 0f;
         public uint CommandAnimationMs = 500;
@@ -61,9 +62,9 @@ namespace Pandora.Command
                         vfx = Instantiate(CommandVFX, vfxPosition, CommandVFX.transform.rotation, target.transform);
                     }
 
-                    var particles = vfx.GetComponent<ParticleSystem>();
+                    commandParticles = vfx.GetComponent<ParticleSystem>();
 
-                    particles.Play();
+                    commandParticles.Play();
                 }
 
                 targetEntity.GameObject.GetComponent<TeamComponent>().Convert(team.Team);
@@ -130,6 +131,13 @@ namespace Pandora.Command
 
                 lifeComponent.AssignDamage(lifeComponent.lifeValue, new UnitCommand(gameObject));
             }
+        }
+
+        void Update()
+        {
+            // Remove the SFX when completed
+            if (commandParticles != null && !commandParticles.IsAlive())
+                Destroy(commandParticles.gameObject);
         }
     }
 }
