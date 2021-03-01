@@ -62,9 +62,9 @@ jobs:
     needs: [ReleaseType, BuildAndroid, UploadBundles]
     if: ${{ needs.ReleaseType.outputs.release_type == 'staging' }}
     env:
-      GOOGLE_PLAY_KEY_FILE: ${{ secrets.FASTLANE_SERVICE_ACCOUNT }}
+      GOOGLE_PLAY_KEY_FILE: ${{ secrets.GOOGLE_PLAY_KEY_FILE }}
       GOOGLE_PLAY_KEY_FILE_PATH: ${{ format('{0}/fastlane/google-fastlane.json', github.workspace) }}
-      ANDROID_BUILD_FILE_PATH: ${{ format('{0}/build/Android/Android.aab', github.workspace) }}
+      ANDROID_BUILD_FILE_PATH: ${{ format('{0}/Android.aab/Android.aab', github.workspace) }}
       ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME }}
       ImageOS: ubuntu20
     steps:
@@ -103,10 +103,10 @@ jobs:
     runs-on: self-hosted
     needs: [BuildAndroid]
     steps:
-    - uses: actions/checkout@master
+    - name: Download bundle
+      uses: actions/download-artifact@v2
       with:
-        lfs: true
-        fetch-depth: 0
+        name: bundles-Android
     - uses: jakejarvis/s3-sync-action@master
       with:
         args: --acl public-read --follow-symlinks
