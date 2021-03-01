@@ -53,7 +53,7 @@ namespace Pandora.Engine.Grid
             var startY = Math.Min(box.LowerLeft.y / (mapHeight / columns), columns - 1);
             var endY = Math.Min(box.UpperLeft.y / (mapHeight / columns), columns - 1);
 
-            var processed = new HashSet<(EngineEntity, EngineEntity)> {};
+            var processed = PoolInstances.EntityHashsetPool.GetObject();
 
             for (var x = 0; x < rows; x++)
             {
@@ -61,9 +61,15 @@ namespace Pandora.Engine.Grid
                 {
                     var collision = grid[x][y].Collide(isCollision, processed, entity, box);
 
-                    if (collision) return true;
+                    if (collision) {
+                        PoolInstances.EntityHashsetPool.ReturnObject(processed);
+
+                        return true;
+                    }
                 }
             }
+
+            PoolInstances.EntityHashsetPool.ReturnObject(processed);
 
             return false;
         }

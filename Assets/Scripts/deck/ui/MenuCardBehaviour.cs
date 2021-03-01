@@ -96,7 +96,6 @@ namespace Pandora.Deck.UI
             var newCardMenuCardBehaviour = newCard.GetComponent<MenuCardBehaviour>();
             var newCardCardBehaviour = newCard.GetComponent<CardBehaviour>();
 
-            newCardCardBehaviour.Card = null;
             newCardMenuCardBehaviour.UiDisabled = true;
             newCardCardBehaviour.IsDeckBuilderPlaceholder = true;
             newCard.transform.SetParent(gameObject.transform.parent, false);

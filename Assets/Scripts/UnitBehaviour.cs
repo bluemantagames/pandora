@@ -62,7 +62,8 @@ namespace Pandora
             SetupAnimationControllers();
         }
 
-        public void SetupAnimationControllers() {
+        public void SetupAnimationControllers()
+        {
             if (BlueController || RedController)
             {
                 animator.runtimeAnimatorController =
@@ -80,7 +81,7 @@ namespace Pandora
             {
                 overridingTotalTimePassed += timeLapsed;
 
-                playAnimation((float) overridingTotalTimePassed / (float) overridingAnimationMsLength, overridingAnimationName);
+                playAnimation((float)overridingTotalTimePassed / (float)overridingAnimationMsLength, overridingAnimationName);
 
                 return;
             }
@@ -120,7 +121,8 @@ namespace Pandora
                 }
 
                 // Never skip the last frame
-                if (walkingAnimationTime + timePercent >= 1f) {
+                if (walkingAnimationTime + timePercent >= 1f)
+                {
                     walkingAnimationTime = 1f;
                 }
             }

@@ -32,6 +32,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9e2161e41bce14ec78d462b5053a80ef, type: 2}
   - {fileID: 11400000, guid: e8aa43dbcd72744f5bf5acd0bd98f878, type: 2}
   - {fileID: 11400000, guid: 271d2c3beba5549799f2a79e9729fa4d, type: 2}
+  - {fileID: 11400000, guid: 7cd458a1f9a444c869c37a8f64cb47b8, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -52,7 +53,35 @@ MonoBehaviour:
       - m_Id: 6d04fefba98bc4b7d924a86321016d01
         m_Value: ServerData/[BuildTarget]
       - m_Id: d6a0edd7a8afb4d48b81e31ade2e7e6e
-        m_Value: http://localhost/[BuildTarget]
+        m_Value: https://towersofminduir.fra1.digitaloceanspaces.com/Addressables/[BuildTarget]
+    - m_InheritedParent: 
+      m_Id: d386f3255399f4320bf310f707e4adf4
+      m_ProfileName: Staging
+      m_Values:
+      - m_Id: 2fcdb6e7c73744fe7ab2e3d4e700543a
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: 2598292011dd64b499f3d253f9538304
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/Staging/[BuildTarget]'
+      - m_Id: c38218a7acc794bb6a239240557b9cf5
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/Staging/[BuildTarget]'
+      - m_Id: 6d04fefba98bc4b7d924a86321016d01
+        m_Value: ServerData/Staging/[BuildTarget]
+      - m_Id: d6a0edd7a8afb4d48b81e31ade2e7e6e
+        m_Value: https://towersofminduir.fra1.digitaloceanspaces.com/Addressables/Staging/[BuildTarget]
+    - m_InheritedParent: 
+      m_Id: 24dd18c79975449018af64e36dde4e8b
+      m_ProfileName: Production
+      m_Values:
+      - m_Id: 2fcdb6e7c73744fe7ab2e3d4e700543a
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: 2598292011dd64b499f3d253f9538304
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/Staging/[BuildTarget]'
+      - m_Id: c38218a7acc794bb6a239240557b9cf5
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/Production/[BuildTarget]'
+      - m_Id: 6d04fefba98bc4b7d924a86321016d01
+        m_Value: ServerData/Production/[BuildTarget]
+      - m_Id: d6a0edd7a8afb4d48b81e31ade2e7e6e
+        m_Value: https://towersofminduir.fra1.digitaloceanspaces.com/Addressables/Production/[BuildTarget]
     m_ProfileEntryNames:
     - m_Id: 2fcdb6e7c73744fe7ab2e3d4e700543a
       m_Name: BuildTarget
@@ -77,6 +106,7 @@ MonoBehaviour:
     - Locale-en
     - Locale-it
     - Preload
+    - Unit
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 4bae175350b7f4e3bb3244b6e80acd93, type: 2}
@@ -90,10 +120,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c3d5ee78f2c344e13b75055cec4e548c, type: 2}
   - {fileID: 11400000, guid: 5e549c9fe56624b78951f3ce378cc383, type: 2}
   - {fileID: 11400000, guid: 3f2803c20fafc4f45aaea964888b5fdf, type: 2}
-  m_ActiveProfileId: a9ed2d8c6d9294c1391b860949b4fed6
+  m_ActiveProfileId: d386f3255399f4320bf310f707e4adf4
   m_HostingServicesManager:
     m_HostingServiceInfos: []
     m_Settings: {fileID: 11400000}
-    m_NextInstanceId: 1
+    m_NextInstanceId: 2
     m_RegisteredServiceTypeRefs:
     - UnityEditor.AddressableAssets.HostingServices.HttpHostingService, Unity.Addressables.Editor

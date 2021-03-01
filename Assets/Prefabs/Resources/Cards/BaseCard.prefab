@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 1069214256245577544}
   - component: {fileID: 1069214256245577551}
   - component: {fileID: 1069214256245577550}
-  - component: {fileID: 7099064934448548329}
   - component: {fileID: -4787545923695219553}
   - component: {fileID: 932249368317489463}
   - component: {fileID: 998394072442466090}
   - component: {fileID: 7726613829720295283}
+  - component: {fileID: -4091111717921224352}
   m_Layer: 5
   m_Name: BaseCard
   m_TagString: Untagged
@@ -94,8 +94,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f2b9061a68c48a49a5f5121f6f2115e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Puppet: {fileID: 0}
-  Card: {fileID: 0}
   Team: 1
   UnitName: 
   CardName: 
@@ -108,28 +106,19 @@ MonoBehaviour:
   UiDisabled: 0
   CardType: 0
   CardMainImage: {fileID: 0}
-  CardSkillDescription:
+  LocalizedCardName:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+  LocalizedCardSkillDescription:
     m_TableReference:
       m_TableCollectionName: 
     m_TableEntryReference:
       m_KeyId: 0
       m_Key: 
   Dragging: 0
---- !u!111 &7099064934448548329
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1069214256245577548}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 0}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!223 &-4787545923695219553
 Canvas:
   m_ObjectHideFlags: 0
@@ -192,6 +181,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9699f8d167c984f54aaf4a44d19366eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!111 &-4091111717921224352
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1069214256245577548}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &2646395196047893133
 GameObject:
   m_ObjectHideFlags: 0

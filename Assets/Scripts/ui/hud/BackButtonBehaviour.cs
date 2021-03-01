@@ -7,7 +7,7 @@ namespace Pandora.UI.HUD
     {
         public void OnButtonPress()
         {
-            SceneManager.LoadScene("MainMenuScene");
+            SceneManager.LoadScene("HomeScene");
         }
 
     }

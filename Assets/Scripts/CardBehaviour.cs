@@ -17,8 +17,6 @@ namespace Pandora
         Vector3? originalPosition = null;
         MapComponent map;
 
-        public GameObject Puppet;
-        public GameObject Card;
         public int Team = 1;
         public string UnitName;
         public string CardName;
@@ -39,6 +37,7 @@ namespace Pandora
         bool disabled = false;
         public bool Dragging = false;
         Vector2? lastMousePosition = null;
+        GameObject targetCard = null;
 
         public bool IsDeckBuilderUI
         {
@@ -109,6 +108,15 @@ namespace Pandora
             }
         }
 
+        private GameObject GetCardInstance()
+        {
+            GameObject unit = null;
+
+            AddressablesSingleton.instance.units.TryGetValue(UnitName, out unit);
+
+            return unit;
+        }
+
         public void OnDrag(PointerEventData eventData)
         {
             if (disabled) return;
@@ -132,6 +140,9 @@ namespace Pandora
         {
             if (disabled) return;
 
+            var shadowAssetBehaviour = targetCard?.GetComponent<ShadowAssetBehaviour>();
+            var shadow = shadowAssetBehaviour?.Shadow;
+
             if (!originalPosition.HasValue)
             {
                 originalPosition = transform.position;
@@ -152,7 +163,7 @@ namespace Pandora
 
                 map = hit.collider.gameObject.GetComponent<MapComponent>();
 
-                canBeSpawned = map.OnUICardCollision(Puppet, IsAquatic, Global, map.LoadCard(UnitName), GetPointed());
+                canBeSpawned = map.OnUICardCollision(shadow, IsAquatic, Global, map.LoadCard(UnitName), GetPointed());
 
                 GetComponent<Image>().enabled = false;
             }
@@ -166,9 +177,8 @@ namespace Pandora
         {
             if (disabled) return;
 
-            var movement = Card.GetComponent<MovementBehaviour>();
-            var projectileSpell = Card.GetComponent<ProjectileSpellBehaviour>();
-
+            MovementBehaviour movement = null; /*Card.GetComponent<MovementBehaviour>();*/
+            ProjectileSpellBehaviour projectileSpell = null; /*Card.GetComponent<ProjectileSpellBehaviour>();*/
 
             if (map != null && canBeSpawned)
             {
@@ -266,6 +276,7 @@ namespace Pandora
 
             imageComponent = gameObject.GetComponent<Image>();
             defaultColor = imageComponent.color;
+            targetCard = GetCardInstance();
         }
 
         void Update()

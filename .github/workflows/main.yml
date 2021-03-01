@@ -22,7 +22,6 @@ jobs:
 
   BuildAndroid:
     name: Build Android release
-    if: false
     runs-on: self-hosted
     needs: ReleaseType
     steps:
@@ -47,21 +46,27 @@ jobs:
           androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
           androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
           allowDirtyBuild: true # this is needed because the git lfs checkout leaves the branch dirty somehow
+          buildMethod: UnityBuilderAction.Builder.BuildProject
       - uses: actions/upload-artifact@v2
         with:
           name: build-Android
           path: build/Android/Android.aab
+      - uses: actions/upload-artifact@v2
+        with:
+          name: bundles-Android
+          path: ServerData
 
   ReleaseInternal:
     name: Release to the Google Play Store
     runs-on: self-hosted
-    needs: [ReleaseType, BuildAndroid]
+    needs: [ReleaseType, BuildAndroid, UploadBundles]
     if: ${{ needs.ReleaseType.outputs.release_type == 'staging' }}
     env:
-      GOOGLE_PLAY_KEY_FILE: ${{ secrets.FASTLANE_SERVICE_ACCOUNT }}
+      GOOGLE_PLAY_KEY_FILE: ${{ secrets.GOOGLE_PLAY_KEY_FILE }}
       GOOGLE_PLAY_KEY_FILE_PATH: ${{ format('{0}/fastlane/google-fastlane.json', github.workspace) }}
-      ANDROID_BUILD_FILE_PATH: ${{ format('{0}/build/Android/Android.aab', github.workspace) }}
+      ANDROID_BUILD_FILE_PATH: ${{ format('{0}/Android.aab/Android.aab', github.workspace) }}
       ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME }}
+      ImageOS: ubuntu20
     steps:
       - uses: actions/checkout@v2
         with:
@@ -89,3 +94,28 @@ jobs:
         uses: geekyeggo/delete-artifact@v1
         with:
           name: build-Android
+      - name: Tidy up artifact to avoid storage limit
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: bundles-Android
+
+  UploadBundles:
+    runs-on: self-hosted
+    needs: [BuildAndroid]
+    steps:
+    - uses: actions/checkout@master
+      with:
+        lfs: true
+        fetch-depth: 0
+    - uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --follow-symlinks
+      env:
+        AWS_S3_BUCKET: 'towersofminduir'
+        AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'fra1'
+        SOURCE_DIR: 'ServerData'
+        DEST_DIR: 'Addressables'
+        AWS_S3_ENDPOINT: 'https://fra1.digitaloceanspaces.com/'
+
