@@ -107,6 +107,10 @@ jobs:
       with:
         lfs: true
         fetch-depth: 0
+    - name: Download bundle
+      uses: actions/download-artifact@v2
+      with:
+        name: bundles-Android
     - uses: jakejarvis/s3-sync-action@master
       with:
         args: --acl public-read --follow-symlinks
