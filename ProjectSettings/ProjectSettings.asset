@@ -126,7 +126,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: v0.1.0-alpha-RC1
+  bundleVersion: 1.0.2
   preloadedAssets:
   - {fileID: 11400000, guid: 6d973ac2be93f4f56b36865405f79bb9, type: 2}
   metroInputSource: 0
@@ -173,8 +173,9 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.bluemanta.towersofminduir
     Standalone: com.Company.ProductName
-  buildNumber: {}
-  AndroidBundleVersionCode: 6
+  buildNumber:
+    Standalone: 1.0.2
+  AndroidBundleVersionCode: 7
   AndroidMinSdkVersion: 19
   AndroidTargetSdkVersion: 29
   AndroidPreferredInstallLocation: 1
