@@ -142,6 +142,9 @@ MonoBehaviour:
   lifeValue: 150
   maxLife: 0
   IsDead: 0
+  DeathVFX: {fileID: 2685581498212572552, guid: 83f603f9e61cdbd4c8da4a6ec28e3dc1,
+    type: 3}
+  DeathVFXSpeedMultiplier: 2
   TowerGoldRewards: 4
   GoldReward: 13
 --- !u!95 &7129443875767093079
@@ -216,6 +219,7 @@ MonoBehaviour:
   animationStateName: Attacking
   AggroRangeCells: 3
   AttackRangeEngineUnits: 200
+  MultipliedVFX: {fileID: 0}
 --- !u!61 &9130794682398608112
 BoxCollider2D:
   m_ObjectHideFlags: 0

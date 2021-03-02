@@ -122,8 +122,8 @@ namespace Pandora.Deck
                         "Zombies"
                     };
 
-                    /*var cardNames = new List<string> {
-                        "Fireball"
+                    /*cardNames = new List<string> {
+                        "Harpies"
                     };*/
 
                     //var cardNames = new List<string> { "Troll" };

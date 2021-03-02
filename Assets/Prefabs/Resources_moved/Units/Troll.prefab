@@ -239,6 +239,9 @@ MonoBehaviour:
   lifeValue: 1250
   maxLife: 0
   IsDead: 0
+  DeathVFX: {fileID: 2685581498212572552, guid: 83f603f9e61cdbd4c8da4a6ec28e3dc1,
+    type: 3}
+  DeathVFXSpeedMultiplier: 2
   TowerGoldRewards: 4
   GoldReward: 13
 --- !u!95 &2040455867788288362

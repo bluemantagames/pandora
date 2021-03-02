@@ -25,6 +25,9 @@ namespace Pandora
         TowerTeamComponent towerTeamComponent;
         GroupComponent groupComponent;
 
+        public GameObject DeathVFX;
+        public float DeathVFXSpeedMultiplier = 2f;
+
         bool isTower;
         public int TowerGoldRewards = 10, GoldReward = 13;
 
@@ -106,7 +109,6 @@ namespace Pandora
         {
             lifeValue += amount;
 
-
             if (lifeValue > maxLife)
             {
                 lifeValue = maxLife;
@@ -140,6 +142,16 @@ namespace Pandora
                 var idComponent = GetComponent<UnitIdComponent>();
 
                 var groupComponent = GetComponent<GroupComponent>();
+
+                if (DeathVFX != null) {
+                    var vfx = Instantiate(DeathVFX, transform.position, DeathVFX.transform.rotation);
+
+                    multiplySpeed(vfx.GetComponent<ParticleSystem>());
+
+                    foreach (var system in vfx.GetComponentsInChildren<ParticleSystem>()) {
+                        multiplySpeed(system);
+                    }
+                }
 
                 IsDead = true;
                 GetComponent<CombatBehaviour>().OnDead();
@@ -199,6 +211,16 @@ namespace Pandora
             float lifePercent = (float)lifeValue / (float)maxLife;
 
             mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
+        }
+
+        void multiplySpeed(ParticleSystem system) {
+            system.Stop();
+
+            var main = system.main;
+
+            main.simulationSpeed *= DeathVFXSpeedMultiplier;
+
+            system.Play();
         }
 
     }
