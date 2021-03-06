@@ -13,6 +13,7 @@ namespace Pandora.Command
         TeamComponent team;
         EngineComponent engineComponent;
         GroupComponent groupComponent;
+        ParticleSystem commandParticles;
         public GameObject CommandVFX;
         public float VFXStartTime = 0f;
         public uint CommandAnimationMs = 500;
@@ -30,7 +31,7 @@ namespace Pandora.Command
 
             var isEveryoneAlive = groupComponent.Objects.TrueForAll(unit => !unit.GetComponent<LifeComponent>().IsDead);
 
-            
+
             foreach (var cleric in groupComponent.Objects)
             {
                 cleric.GetComponent<UnitBehaviour>().PlayAnimation("Command", CommandAnimationMs, sacrifice);
@@ -42,15 +43,28 @@ namespace Pandora.Command
                 {
                     var target = targetEntity.GameObject;
                     var targetSpriteRenderer = target.GetComponent<SpriteRenderer>();
+                    var groundAnchor = target.GetComponentInChildren<UnitGroundAnchor>();
                     var bounds = targetSpriteRenderer.bounds;
 
-                    var vfxPosition = new Vector3(bounds.min.x + (bounds.extents.x / 2), bounds.min.y, 0f);
+                    GameObject vfx;
 
-                    var vfx = Instantiate(CommandVFX, vfxPosition, CommandVFX.transform.rotation, target.transform);
+                    if (groundAnchor != null)
+                    {
+                        var vfxPosition = new Vector3(0f, 0f, 0f);
+                        vfx = Instantiate(CommandVFX, vfxPosition, CommandVFX.transform.rotation, groundAnchor.transform);
 
-                    var particles = vfx.GetComponent<ParticleSystem>();
+                        var vfxRect = vfx.GetComponent<RectTransform>();
+                        if (vfxRect != null) vfxRect.anchoredPosition = vfxPosition;
+                    }
+                    else
+                    {
+                        var vfxPosition = new Vector3(bounds.min.x + bounds.extents.x, bounds.min.y + bounds.extents.y, 0f);
+                        vfx = Instantiate(CommandVFX, vfxPosition, CommandVFX.transform.rotation, target.transform);
+                    }
 
-                    particles.Play();
+                    commandParticles = vfx.GetComponent<ParticleSystem>();
+
+                    commandParticles.Play();
                 }
 
                 targetEntity.GameObject.GetComponent<TeamComponent>().Convert(team.Team);
@@ -117,6 +131,13 @@ namespace Pandora.Command
 
                 lifeComponent.AssignDamage(lifeComponent.lifeValue, new UnitCommand(gameObject));
             }
+        }
+
+        void Update()
+        {
+            // Remove the SFX when completed
+            if (commandParticles != null && !commandParticles.IsAlive())
+                Destroy(commandParticles.gameObject);
         }
     }
 }

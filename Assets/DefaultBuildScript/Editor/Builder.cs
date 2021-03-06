@@ -24,7 +24,7 @@ namespace UnityBuilderAction
             // Manage the correct profile
             var version = options["buildVersion"];
             var splittedVersion = version.Split('.');
-            var minorVersion = Int32.Parse(splittedVersion.Last());
+            var minorVersion = Int32.Parse(splittedVersion[1]); // We should just let it crash...
             var profileName = minorVersion % 2 == 0 ? StagingProfile : ProductionProfile;
 
             // Setting the correct profile
@@ -33,6 +33,7 @@ namespace UnityBuilderAction
             AddressableAssetSettingsDefaultObject.Settings.activeProfileId = profileId;
 
             // Execute the build
+            AddressableAssetSettings.CleanPlayerContent();
             AddressableAssetSettings.BuildPlayerContent();
 
             // Gather values from project
