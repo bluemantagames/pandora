@@ -32,7 +32,6 @@ namespace Pandora.Network
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
         public int? PlayerId = null;
-        public Boolean IsActive = false;
 
         private static NetworkControllerSingleton privateInstance = null;
 
@@ -73,8 +72,6 @@ namespace Pandora.Network
 
         public async UniTaskVoid ExecMatchmaking(List<string> deck, bool isDev)
         {
-            IsActive = true;
-
             // Wait for the game scene to be loaded before actually trying to join a match
             if (GameSceneLoading != null) {
                 await UniTask.WaitUntil(() => GameSceneLoading.progress >= 0.9f);
@@ -99,6 +96,7 @@ namespace Pandora.Network
                 }
             }
         }
+
 
         public void StartMatch()
         {
@@ -175,6 +173,12 @@ namespace Pandora.Network
 
                 Thread.Sleep(100);
             }
+        }
+
+        public void StopMatch() {
+            networkThread.Abort();
+
+            networkThread = null;
         }
 
         public void ReceiveLoop()

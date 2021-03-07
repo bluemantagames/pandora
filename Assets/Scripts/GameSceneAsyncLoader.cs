@@ -62,6 +62,12 @@ public class GameSceneAsyncLoader : MonoBehaviour
 
         Logger.Debug("Preloading game scene...");
 
+        var gameScene = SceneManager.GetSceneByName("GameScene");
+
+        if (gameScene.IsValid()) {
+            await SceneManager.UnloadSceneAsync(gameScene);
+        }
+
         networkControllerSingleton.GameSceneLoading = SceneManager.LoadSceneAsync("GameScene");
         networkControllerSingleton.GameSceneLoading.allowSceneActivation = false;
 

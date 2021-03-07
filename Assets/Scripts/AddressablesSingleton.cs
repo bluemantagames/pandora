@@ -72,7 +72,8 @@ namespace Pandora
 
                     Logger.Debug($"Loaded addressable unit: {unitName}");
 
-                    units.Add(unitName, loadedUnit);
+                    if (!units.ContainsKey(unitName))
+                        units.Add(unitName, loadedUnit);
                 })
                 .ToUniTask(progress: progressManager);
         }

@@ -1,12 +1,20 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
+using Pandora.Network;
+using Pandora.Deck;
 
 namespace Pandora.UI.HUD
 {
     public class BackButtonBehaviour : MonoBehaviour
     {
+
+
         public void OnButtonPress()
         {
+            NetworkControllerSingleton.instance.StopMatch();
+            LocalDeck.Instance.Reset();
+
             SceneManager.LoadScene("HomeScene");
         }
 

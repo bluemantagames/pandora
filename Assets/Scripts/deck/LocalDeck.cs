@@ -116,5 +116,11 @@ namespace Pandora.Deck
         {
             EventBus.Dispatch(new MulliganRejected());
         }
+
+        public void Reset() {
+            _eventBus.Clear();
+            _instance = null;
+            _deck = null;
+        }
     }
 }
