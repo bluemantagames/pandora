@@ -175,12 +175,6 @@ namespace Pandora.Network
             }
         }
 
-        public void StopMatch() {
-            networkThread.Abort();
-
-            networkThread = null;
-        }
-
         public void ReceiveLoop()
         {
             while (true)
@@ -305,7 +299,10 @@ namespace Pandora.Network
         public void Stop()
         {
             receiveThread?.Abort();
+            receiveThread = null;
+
             networkThread?.Abort();
+            networkThread = null;
         }
 
         public static SpawnMessage GenerateSpawnMessage(StepCommand command)

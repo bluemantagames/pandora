@@ -12,7 +12,7 @@ namespace Pandora.UI.HUD
 
         public void OnButtonPress()
         {
-            NetworkControllerSingleton.instance.StopMatch();
+            NetworkControllerSingleton.instance.Stop();
             LocalDeck.Instance.Reset();
 
             SceneManager.LoadScene("HomeScene");
