@@ -200,5 +200,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SerializationTimeStep: 0.1
-  SerializationMaxTime: 1
+  AnimationName: testAnimation
+  SerializationTimeStep: 10
+  SerializationMaxTime: 100
+  AnimationCurrentTime: 0

@@ -24,7 +24,7 @@ public class AnimationBezierEditor : Editor
             Debug.Log("Serializing animation to JSON...");
             var serializedSteps = JsonUtility.ToJson(collection);
 
-            CreateAnimationFile(serializedSteps, "testAnimation");
+            CreateAnimationFile(serializedSteps, animationBezier.AnimationName);
         }
     }
 
