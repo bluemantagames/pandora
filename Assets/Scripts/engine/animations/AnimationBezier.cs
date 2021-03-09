@@ -12,7 +12,10 @@ namespace Pandora.Engine.Animations
         public int SerializationTimeStep = 10;
         public int SerializationMaxTime = 100;
         public int AnimationCurrentTime = 0;
+        public int AnimationLength = 10;
+
         SerializedAnimationsSingleton serializedAnimationsSingleton;
+        int passedTicks = 0;
 
         public List<AnimationStep> GetSteps(int speed)
         {
@@ -52,12 +55,15 @@ namespace Pandora.Engine.Animations
 
         public void NextStep()
         {
-            var nextStep = AnimationCurrentTime + SerializationTimeStep;
+            passedTicks += 1;
 
-            if (nextStep > SerializationMaxTime)
-                AnimationCurrentTime = 0;
-            else
-                AnimationCurrentTime = nextStep;
+            if (passedTicks >= AnimationLength)
+            {
+                if (AnimationCurrentTime < SerializationMaxTime)
+                    AnimationCurrentTime += SerializationTimeStep;
+
+                passedTicks = 0;
+            }
         }
 
         private AnimationStepCollection GetSavedAnimation()
