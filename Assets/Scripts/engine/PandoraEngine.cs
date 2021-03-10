@@ -357,6 +357,8 @@ namespace Pandora.Engine
 
                 var computedSpeed = animatedSpeed != null ? Decimal.ToInt32(((Decimal)animatedSpeed)) : entity.Speed;
 
+                Logger.Debug($"Used speed: {computedSpeed}");
+
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, computedSpeed));
 
                 if (entity.Path == null || entity.IsMovementPaused) continue;
