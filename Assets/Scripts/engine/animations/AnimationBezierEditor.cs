@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEditor;
 using Pandora.Engine.Animations;
 using Pandora.Combat;
+using Pandora.Movement;
 using System.IO;
 
 [CustomEditor(typeof(AnimationBezier))]
@@ -20,7 +21,13 @@ public class AnimationBezierEditor : Editor
         if (GUILayout.Button("Serialize animation"))
         {
             var projectileBehaviour = targetGameObject.GetComponent<ProjectileBehaviour>();
-            var speed = projectileBehaviour != null ? projectileBehaviour.Speed : 130;
+            var movementBehaviour = targetGameObject.GetComponent<MovementComponent>();
+
+            var speed = projectileBehaviour != null
+                ? projectileBehaviour.Speed
+                : movementBehaviour != null
+                ? movementBehaviour.Speed
+                : 0;
 
             Debug.Log("Generating animation...");
             var steps = animationBezier.GetSteps(speed);

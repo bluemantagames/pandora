@@ -12,7 +12,8 @@ namespace Pandora.Engine.Animations
         public int AnimationTimeStep = 10;
         public int AnimationMaxTime = 100;
         public int AnimationCurrentTime = 0;
-        public int AnimationLength = 10;
+        public int AnimationLength = 1;
+        public bool Loop = false;
         public bool Disable = false;
 
         SerializedAnimationsSingleton serializedAnimationsSingleton;
@@ -62,7 +63,9 @@ namespace Pandora.Engine.Animations
 
             if (passedTicks >= AnimationLength)
             {
-                if (AnimationCurrentTime < AnimationMaxTime)
+                if (Loop && AnimationCurrentTime >= AnimationMaxTime)
+                    AnimationCurrentTime = 0;
+                else if (AnimationCurrentTime < AnimationMaxTime)
                     AnimationCurrentTime += AnimationTimeStep;
 
                 passedTicks = 0;
