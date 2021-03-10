@@ -9,8 +9,8 @@ namespace Pandora.Engine.Animations
     {
         public AnimationCurve Curve;
         public string AnimationName = "testAnimation";
-        public int SerializationTimeStep = 10;
-        public int SerializationMaxTime = 100;
+        public int AnimationTimeStep = 10;
+        public int AnimationMaxTime = 100;
         public int AnimationCurrentTime = 0;
         public int AnimationLength = 10;
         public bool Disable = false;
@@ -22,7 +22,7 @@ namespace Pandora.Engine.Animations
         {
             var steps = new List<AnimationStep>();
 
-            for (var step = 0; step <= SerializationMaxTime; step += SerializationTimeStep)
+            for (var step = 0; step <= AnimationMaxTime; step += AnimationTimeStep)
             {
                 var stepDecimal = step / 100f;
                 var computedSpeed = speed * Curve.Evaluate(stepDecimal);
@@ -62,8 +62,8 @@ namespace Pandora.Engine.Animations
 
             if (passedTicks >= AnimationLength)
             {
-                if (AnimationCurrentTime < SerializationMaxTime)
-                    AnimationCurrentTime += SerializationTimeStep;
+                if (AnimationCurrentTime < AnimationMaxTime)
+                    AnimationCurrentTime += AnimationTimeStep;
 
                 passedTicks = 0;
             }
