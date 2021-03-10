@@ -349,15 +349,28 @@ namespace Pandora.Engine
             // Move units
             foreach (var entity in Entities)
             {
+                int computedSpeed;
+
                 var animationBehaviour = entity.GameObject?.GetComponent<AnimationBezier>();
-                var animatedSpeed = animationBehaviour?.GetCurrentAnimatedSpeed();
-                animationBehaviour?.NextStep();
+                var animatedRawSpeed = animationBehaviour?.GetCurrentAnimatedSpeed();
 
-                Logger.Debug($"Animated speed: {animatedSpeed}");
+                // Here we are going to use the animated speed
+                // if possible (transforming it into an integer).
+                // The normal entity speed otherwise.
+                if (animatedRawSpeed != null)
+                {
+                    var animatedSpeed = GetSpeed(Decimal.ToInt32(((Decimal)animatedRawSpeed)));
 
-                var computedSpeed = animatedSpeed != null ? Decimal.ToInt32(((Decimal)animatedSpeed)) : entity.Speed;
+                    Logger.Debug($"Using animated speed: {animatedSpeed}");
 
-                Logger.Debug($"Used speed: {computedSpeed}");
+                    computedSpeed = animatedSpeed;
+
+                    animationBehaviour?.NextStep();
+                }
+                else
+                {
+                    computedSpeed = entity.Speed;
+                }
 
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, computedSpeed));
 

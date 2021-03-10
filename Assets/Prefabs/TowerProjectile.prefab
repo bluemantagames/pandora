@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cb915e9a2682074cb3c4ce721a3acce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 180
+  speed: 3600
   StartRotationDegrees: 0
   IsAoe: 0
   ShouldHitAllies: 0
@@ -180,28 +180,38 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.0015207145
+      time: 0.004580102
       value: 0.99145913
-      inSlope: 0.42796576
-      outSlope: 0.42796576
+      inSlope: 9.227841
+      outSlope: 9.227841
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.042808533
+      outWeight: 0.031156125
     - serializedVersion: 3
-      time: 0.99542236
-      value: -0.001914978
-      inSlope: -1.3989809
-      outSlope: -1.3989809
+      time: 0.5346397
+      value: 0.6550738
+      inSlope: -3.6615129
+      outSlope: -3.6615129
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.06478137
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99449134
+      value: -0.00976333
+      inSlope: -0.1793344
+      outSlope: -0.1793344
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.2006649
       outWeight: 0
     m_PreInfinity: 2
-    m_PostInfinity: 2
+    m_PostInfinity: 0
     m_RotationOrder: 4
   AnimationName: testAnimation
-  SerializationTimeStep: 5
+  SerializationTimeStep: 10
   SerializationMaxTime: 100
   AnimationCurrentTime: 0
   AnimationLength: 2
+  Disable: 0

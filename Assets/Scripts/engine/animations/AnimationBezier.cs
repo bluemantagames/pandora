@@ -13,6 +13,7 @@ namespace Pandora.Engine.Animations
         public int SerializationMaxTime = 100;
         public int AnimationCurrentTime = 0;
         public int AnimationLength = 10;
+        public bool Disable = false;
 
         SerializedAnimationsSingleton serializedAnimationsSingleton;
         int passedTicks = 0;
@@ -40,6 +41,8 @@ namespace Pandora.Engine.Animations
 
         public Decimal? GetCurrentAnimatedSpeed()
         {
+            if (Disable) return null;
+
             var animation = serializedAnimationsSingleton.GetAnimation(AnimationName);
 
             if (animation == null) return null;
