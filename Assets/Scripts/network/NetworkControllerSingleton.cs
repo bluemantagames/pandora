@@ -20,8 +20,9 @@ namespace Pandora.Network
 
         string userMatchToken = null;
         Socket matchSocket = null;
-        Thread networkThread = null;
-        Thread receiveThread = null;
+        volatile Thread networkThread = null;
+        volatile Thread receiveThread = null;
+        volatile bool stopNetworkThread = false, stopReceiveThread = false;
         public AsyncOperation GameSceneLoading;
         ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
         ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
@@ -150,11 +151,18 @@ namespace Pandora.Network
 
             while (true)
             {
+                if (stopNetworkThread) {
+                    stopNetworkThread = false;
+
+                    return;
+                }
+
                 // Return to matchmaking if match does not start in the predefined timeframe
                 if (!matchStarted && DateTime.Now.Subtract(startTime).Seconds > matchStartTimeout)
                 {
-                    receiveThread.Abort();
+                    stopReceiveThread = true;
 
+                    receiveThread = null;
                     networkThread = null;
 
                     StartMatchmaking();
@@ -180,6 +188,12 @@ namespace Pandora.Network
             while (true)
             {
                 // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+
+                if (stopReceiveThread) {
+                    stopReceiveThread = false;
+
+                    return;
+                }
 
                 var sizeBytes = new Byte[4];
 
@@ -298,10 +312,10 @@ namespace Pandora.Network
 
         public void Stop()
         {
-            receiveThread?.Abort();
+            stopReceiveThread = true;
             receiveThread = null;
 
-            networkThread?.Abort();
+            stopNetworkThread = true;
             networkThread = null;
         }
 
