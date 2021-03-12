@@ -24,7 +24,8 @@ namespace Pandora.Deck
         ///</summary>
         public static List<Card> Deck;
 
-        public string ComponentName {
+        public string ComponentName
+        {
             get => "HandBehaviour";
         }
 
@@ -51,7 +52,8 @@ namespace Pandora.Deck
 
         static private HandBehaviour _instance = null;
 
-        static public HandBehaviour Instance {
+        static public HandBehaviour Instance
+        {
             get => _instance;
         }
 
@@ -96,7 +98,7 @@ namespace Pandora.Deck
             // Assign this component to the engine
             var engineComponent = GetComponent<EngineComponent>();
 
-            if (engineComponent != null) 
+            if (engineComponent != null)
             {
                 engineComponent.Engine.AddBehaviour(this);
             }
@@ -122,10 +124,6 @@ namespace Pandora.Deck
                         "Zombies"
                     };
 
-                    cardNames = new List<string> {
-                        "Clerics"
-                    };
-
                     //var cardNames = new List<string> { "Troll" };
 
                     cards =
@@ -141,12 +139,14 @@ namespace Pandora.Deck
             }
         }
 
-        async UniTaskVoid SetDeck(List<Card> cards) {
+        async UniTaskVoid SetDeck(List<Card> cards)
+        {
             // Wait for 10 frames before setting the deck,
             // in order to give the layout component time to adjust children positions
             await UniTask.DelayFrame(10);
 
-            if (deck is LocalDeck localDeck) {
+            if (deck is LocalDeck localDeck)
+            {
                 localDeck.Deck = cards;
             }
         }
@@ -156,7 +156,7 @@ namespace Pandora.Deck
             if (mulligansAvailable > 0)
             {
                 mulliganTimePassed += timeLapsed;
-                
+
                 if (mulliganTimePassed % mulliganMsDuration <= 0) DisableMulligan();
 
                 UpdateMulliganText();
@@ -167,7 +167,7 @@ namespace Pandora.Deck
         {
             var startTransform =
                 (fromIdx < 0) ?
-                    card.GetComponent<RectTransform>() : 
+                    card.GetComponent<RectTransform>() :
                     UIHandSlots[fromIdx].GetComponent<RectTransform>();
 
             var cardTransform = card.GetComponent<RectTransform>();
@@ -372,7 +372,8 @@ namespace Pandora.Deck
         {
             SelectedCards.Add(card);
 
-            if (card.CardObject.GetComponent<CardHighlighter>() == null) {
+            if (card.CardObject.GetComponent<CardHighlighter>() == null)
+            {
                 card.CardObject.AddComponent<CardHighlighter>();
             }
         }
@@ -397,7 +398,7 @@ namespace Pandora.Deck
             {
                 return;
             }
-            
+
             var textComponent = MulliganTimerText.GetComponent<Text>();
             var timeLeft = mulliganMsDuration - mulliganTimePassed;
 
