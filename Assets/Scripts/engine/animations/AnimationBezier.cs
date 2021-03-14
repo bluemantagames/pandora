@@ -8,17 +8,55 @@ namespace Pandora.Engine.Animations
     public class AnimationBezier : MonoBehaviour
     {
         public AnimationCurve Curve;
+
+        /// <summary>
+        /// The animation name (the serialized file will have this name too).
+        /// </summary>
         public string AnimationName = "testAnimation";
+
+        /// <summary>
+        /// The animation step, this defines the animation's granularity.
+        /// Every engine tick the animation time will be increased by this value.
+        /// </summary>
         public int AnimationTimeStep = 10;
+
+        /// <summary>
+        /// The animation max time is the last step value.
+        /// When the animation time will reach this value the animation
+        /// is considered complete.
+        /// </summary>
         public int AnimationMaxTime = 100;
+
+        /// <summary>
+        /// The inizial animation time value.
+        /// </summary>
         public int AnimationCurrentTime = 0;
-        public int AnimationLength = 1;
+
+        /// <summary>
+        /// How many engine ticks are needed the the animation
+        /// time increment.
+        /// </summary>
+        public int TicksForAnimationStep = 1;
+
+        /// <summary>
+        /// Defines if the speed has to restart when the animation
+        /// is complete.
+        /// </summary>
         public bool Loop = false;
+
+        /// <summary>
+        /// Disable the animation and fallback to the regular
+        /// engine movement.
+        /// </summary>
         public bool Disable = false;
 
         SerializedAnimationsSingleton serializedAnimationsSingleton;
         int passedTicks = 0;
 
+        /// <summary>
+        /// Takes the unit speed as a parameter and return
+        /// a list of computed animation steps.
+        /// </summary>
         public List<AnimationStep> GetSteps(int speed)
         {
             var steps = new List<AnimationStep>();
@@ -40,6 +78,10 @@ namespace Pandora.Engine.Animations
             return steps;
         }
 
+        /// <summary>
+        /// Retrieve the current animated speed based on the
+        /// internal animation status.
+        /// </summary>
         public Decimal? GetCurrentAnimatedSpeed()
         {
             if (Disable) return null;
@@ -57,11 +99,14 @@ namespace Pandora.Engine.Animations
             return value;
         }
 
+        /// <summary>
+        /// Update the animation status to the next step.
+        /// </summary>
         public void NextStep()
         {
             passedTicks += 1;
 
-            if (passedTicks >= AnimationLength)
+            if (passedTicks >= TicksForAnimationStep)
             {
                 if (Loop && AnimationCurrentTime >= AnimationMaxTime)
                     AnimationCurrentTime = 0;
