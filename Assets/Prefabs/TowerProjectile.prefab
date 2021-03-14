@@ -210,8 +210,10 @@ MonoBehaviour:
     m_PostInfinity: 0
     m_RotationOrder: 4
   AnimationName: testAnimation
-  SerializationTimeStep: 10
-  SerializationMaxTime: 100
+  AnimationTimeStep: 10
+  AnimationMaxTime: 100
   AnimationCurrentTime: 0
-  AnimationLength: 2
+  TicksForAnimationStep: 2
+  Loop: 0
   Disable: 0
+  DevMode: 0
