@@ -365,10 +365,10 @@ MonoBehaviour:
   AnimationTimeStep: 10
   AnimationMaxTime: 100
   AnimationCurrentTime: 0
-  TicksForAnimationStep: 2
+  TicksForAnimationStep: 1
   Loop: 1
   Disable: 0
-  DevMode: 1
+  DevMode: 0
 --- !u!1 &4421198389732778068
 GameObject:
   m_ObjectHideFlags: 0

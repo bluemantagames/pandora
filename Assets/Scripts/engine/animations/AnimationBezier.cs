@@ -121,23 +121,23 @@ namespace Pandora.Engine.Animations
         /// Retrieve the current animated speed based on the
         /// internal animation status.
         /// </summary>
-        public Decimal? GetCurrentAnimatedSpeed()
+        public int? GetCurrentAnimatedSpeed()
         {
             if (Disable) return null;
 
             if (DevMode)
             {
-                var computedSpeed = EvaluateSpeed(devUnitSpeed, AnimationCurrentTime);
-                var decimalSpeed = new Decimal(computedSpeed);
+                var computedSpeed = (int)EvaluateSpeed(devUnitSpeed, AnimationCurrentTime);
+                var engineSpeed = PandoraEngine.GetSpeed(computedSpeed);
 
-                return decimalSpeed;
+                return engineSpeed;
             }
 
             var animation = serializedAnimationsSingleton.GetAnimation(AnimationName);
 
             if (animation == null) return null;
 
-            Decimal value;
+            int value;
 
             animation.TryGetValue(AnimationCurrentTime, out value);
 
@@ -180,14 +180,17 @@ namespace Pandora.Engine.Animations
             return parsedAnimation;
         }
 
-        private Dictionary<int, Decimal> GenerateAnimationMap(AnimationStepCollection savedAnimation)
+        private Dictionary<int, int> GenerateAnimationMap(AnimationStepCollection savedAnimation)
         {
-            var result = new Dictionary<int, Decimal>();
+            var result = new Dictionary<int, int>();
 
             foreach (AnimationStep step in savedAnimation.steps)
             {
-                var decodedDecimal = Decimal.Parse(step.speed);
-                result.Add(step.stepPercentage, decodedDecimal);
+                var decodedSpeedDecimal = Decimal.Parse(step.speed);
+                var decodedSpeed = Decimal.ToInt32(decodedSpeedDecimal);
+                var engineSpeed = PandoraEngine.GetSpeed(decodedSpeed);
+
+                result.Add(step.stepPercentage, engineSpeed);
             }
 
             return result;

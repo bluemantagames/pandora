@@ -7,7 +7,7 @@ namespace Pandora
     public class SerializedAnimationsSingleton
     {
         static SerializedAnimationsSingleton _instance = null;
-        Dictionary<string, Dictionary<int, decimal>> serializedAnimations = new Dictionary<string, Dictionary<int, decimal>>();
+        Dictionary<string, Dictionary<int, int>> serializedAnimations = new Dictionary<string, Dictionary<int, int>>();
 
         static public SerializedAnimationsSingleton Instance
         {
@@ -22,16 +22,16 @@ namespace Pandora
             }
         }
 
-        public Dictionary<int, decimal> GetAnimation(string animationName)
+        public Dictionary<int, int> GetAnimation(string animationName)
         {
-            Dictionary<int, decimal> animation = null;
+            Dictionary<int, int> animation = null;
 
             serializedAnimations.TryGetValue(animationName, out animation);
 
             return animation;
         }
 
-        public void SetAnimation(string animationName, Dictionary<int, decimal> animationSteps)
+        public void SetAnimation(string animationName, Dictionary<int, int> animationSteps)
         {
             serializedAnimations.Add(animationName, animationSteps);
         }

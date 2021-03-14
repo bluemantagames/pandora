@@ -18,7 +18,7 @@ namespace Pandora.Engine
     [Serializable]
     public class PandoraEngine : ScriptableObject
     {
-        public uint TickTime = 40; // milliseconds in a tick
+        public static uint TickTime = 40; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         public List<EngineEntity> Entities = new List<EngineEntity> { };
         public List<EngineBehaviour> Behaviours = new List<EngineBehaviour> { };
@@ -130,7 +130,7 @@ namespace Pandora.Engine
             centerComponent.Entity = centerEntity;
         }
 
-        public int GetSpeed(int engineUnitsPerSecond) =>
+        public static int GetSpeed(int engineUnitsPerSecond) =>
             Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * TickTime);
 
         public IEnumerator<GridCell> FindPath(EngineEntity entity, Vector2Int target)
@@ -352,18 +352,16 @@ namespace Pandora.Engine
                 int computedSpeed;
 
                 var animationBehaviour = entity.GameObject?.GetComponent<AnimationBezier>();
-                var animatedRawSpeed = animationBehaviour?.GetCurrentAnimatedSpeed();
+                var animatedSpeed = animationBehaviour?.GetCurrentAnimatedSpeed();
 
                 // Here we are going to use the animated speed
                 // if possible (transforming it into an integer).
                 // The normal entity speed otherwise.
-                if (animatedRawSpeed != null)
+                if (animatedSpeed != null)
                 {
-                    var animatedSpeed = GetSpeed(Decimal.ToInt32(((Decimal)animatedRawSpeed)));
-
                     Logger.Debug($"Using animated speed: {animatedSpeed}");
 
-                    computedSpeed = animatedSpeed;
+                    computedSpeed = (int)animatedSpeed;
 
                     animationBehaviour?.NextStep();
                 }
