@@ -2,6 +2,8 @@
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using Pandora.Combat;
+using Pandora.Movement;
 
 namespace Pandora.Engine.Animations
 {
@@ -50,8 +52,46 @@ namespace Pandora.Engine.Animations
         /// </summary>
         public bool Disable = false;
 
+        /// <summary>
+        /// Enable the development mode, in which the animation is
+        /// calculated at runtime.
+        /// </summary>
+        public bool DevMode = false;
+
+
         SerializedAnimationsSingleton serializedAnimationsSingleton;
         int passedTicks = 0;
+        int devUnitSpeed = 0;
+
+        /// <summary>
+        /// Retrieve the base unit speed.
+        /// </summary>
+        public int GetUnitSpeed(GameObject targetGameObject)
+        {
+            var projectileBehaviour = targetGameObject.GetComponent<ProjectileBehaviour>();
+            var movementBehaviour = targetGameObject.GetComponent<MovementComponent>();
+
+            var speed = projectileBehaviour != null
+                ? projectileBehaviour.Speed
+                : movementBehaviour != null
+                ? movementBehaviour.Speed
+                : 0;
+
+            return speed;
+        }
+
+        /// <summary>
+        /// Evaluate the unit speed based on the provided step.
+        /// This function is non-deterministic and unsafe, it should only
+        /// be used in the editor or before a serialization.
+        /// </summary>
+        public float EvaluateSpeed(int unitSpeed, int step)
+        {
+            var stepDecimal = step / 100f;
+            var computedSpeed = unitSpeed * Curve.Evaluate(stepDecimal);
+
+            return computedSpeed;
+        }
 
         /// <summary>
         /// Takes the unit speed as a parameter and return
@@ -63,8 +103,7 @@ namespace Pandora.Engine.Animations
 
             for (var step = 0; step <= AnimationMaxTime; step += AnimationTimeStep)
             {
-                var stepDecimal = step / 100f;
-                var computedSpeed = speed * Curve.Evaluate(stepDecimal);
+                var computedSpeed = EvaluateSpeed(speed, step);
 
                 var animationStep = new AnimationStep
                 {
@@ -85,6 +124,14 @@ namespace Pandora.Engine.Animations
         public Decimal? GetCurrentAnimatedSpeed()
         {
             if (Disable) return null;
+
+            if (DevMode)
+            {
+                var computedSpeed = EvaluateSpeed(devUnitSpeed, AnimationCurrentTime);
+                var decimalSpeed = new Decimal(computedSpeed);
+
+                return decimalSpeed;
+            }
 
             var animation = serializedAnimationsSingleton.GetAnimation(AnimationName);
 
@@ -150,7 +197,7 @@ namespace Pandora.Engine.Animations
         {
             serializedAnimationsSingleton = SerializedAnimationsSingleton.Instance;
 
-            if (!serializedAnimationsSingleton.IsAnimationAlreadyRetrieved(AnimationName))
+            if (!serializedAnimationsSingleton.IsAnimationAlreadyRetrieved(AnimationName) && !DevMode)
             {
                 Logger.Debug($"Animation not cached, retrieving...");
 
@@ -158,6 +205,11 @@ namespace Pandora.Engine.Animations
                 var decodedAnimation = GenerateAnimationMap(retrievedAnimation);
 
                 serializedAnimationsSingleton.SetAnimation(AnimationName, decodedAnimation);
+            }
+
+            if (DevMode)
+            {
+                devUnitSpeed = GetUnitSpeed(gameObject);
             }
         }
     }
