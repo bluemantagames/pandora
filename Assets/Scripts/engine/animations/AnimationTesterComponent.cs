@@ -12,11 +12,19 @@ namespace Pandora.Engine.Animations
         public int TrackStartX = 5;
         public int TrackStartY = 4;
         public int TrackLength = 5;
+        public bool Disabled = false;
+
         bool isSpawned = false;
         bool isTurnedBack = false;
         MapComponent mapComponent = null;
         EngineEntity unitEntity = null;
         string logPrefix = "[AnimationTesterComponent]";
+
+        void Awake()
+        {
+            // This should never be enabled in production
+            Disabled = !Disabled ? !Debug.isDebugBuild : true;
+        }
 
         void Start()
         {
@@ -25,7 +33,7 @@ namespace Pandora.Engine.Animations
 
         void Update()
         {
-            if (mapComponent == null) return;
+            if (mapComponent == null || Disabled) return;
 
             if (!isSpawned)
             {
