@@ -199,6 +199,7 @@ namespace Pandora.Engine.Animations
         void Awake()
         {
             serializedAnimationsSingleton = SerializedAnimationsSingleton.Instance;
+            devUnitSpeed = GetUnitSpeed(gameObject);
 
             if (!serializedAnimationsSingleton.IsAnimationAlreadyRetrieved(AnimationName) && !DevMode)
             {
@@ -208,11 +209,6 @@ namespace Pandora.Engine.Animations
                 var decodedAnimation = GenerateAnimationMap(retrievedAnimation);
 
                 serializedAnimationsSingleton.SetAnimation(AnimationName, decodedAnimation);
-            }
-
-            if (DevMode)
-            {
-                devUnitSpeed = GetUnitSpeed(gameObject);
             }
         }
     }
