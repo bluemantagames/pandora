@@ -14,6 +14,7 @@ namespace Pandora.UI.HUD
         {
             NetworkControllerSingleton.instance.Stop();
             LocalDeck.Instance.Reset();
+            EndGameSingleton.Reset();
 
             SceneManager.LoadScene("HomeScene");
         }

@@ -21,6 +21,10 @@ class EndGameSingleton {
         }
     }
 
+    public static void Reset() {
+        _instance = null;
+    }
+
     public void SetWinner(int winnerTeam, ulong elapsedMs)
     {
         if (GameEnded) return;

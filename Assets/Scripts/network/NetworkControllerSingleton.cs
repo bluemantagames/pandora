@@ -22,7 +22,7 @@ namespace Pandora.Network
         Socket matchSocket = null;
         volatile Thread networkThread = null;
         volatile Thread receiveThread = null;
-        volatile bool stopNetworkThread = false, stopReceiveThread = false;
+        volatile bool stopNetworkThread = false;
         public AsyncOperation GameSceneLoading;
         ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
         ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
@@ -98,6 +98,10 @@ namespace Pandora.Network
             }
         }
 
+        public class StopSignal {
+            public bool Stop = false; 
+        }
+
 
         public void StartMatch()
         {
@@ -143,9 +147,10 @@ namespace Pandora.Network
                 envelope.ToByteArray()
             );
 
-            receiveThread = new Thread(new ThreadStart(ReceiveLoop));
+            var stopSignal = new StopSignal();
 
-            receiveThread.Start();
+            receiveThread = new Thread(new ParameterizedThreadStart(ReceiveLoop));
+            receiveThread.Start(stopSignal);
 
             Message message;
 
@@ -160,7 +165,7 @@ namespace Pandora.Network
                 // Return to matchmaking if match does not start in the predefined timeframe
                 if (!matchStarted && DateTime.Now.Subtract(startTime).Seconds > matchStartTimeout)
                 {
-                    stopReceiveThread = true;
+                    stopSignal.Stop = true;
 
                     receiveThread = null;
                     networkThread = null;
@@ -183,16 +188,16 @@ namespace Pandora.Network
             }
         }
 
-        public void ReceiveLoop()
+        public void ReceiveLoop(object param)
         {
+            var signal = param as StopSignal;
+
             while (true)
             {
                 // TODO: Check if this impacts CPU and let the thread sleep a while if it does
 
-                if (stopReceiveThread) {
-                    stopReceiveThread = false;
-
-                    return;
+                if (signal.Stop || matchSocket == null) {
+                    break;
                 }
 
                 var sizeBytes = new Byte[4];
@@ -312,7 +317,12 @@ namespace Pandora.Network
 
         public void Stop()
         {
-            stopReceiveThread = true;
+            if (matchSocket != null) {
+                matchSocket.Shutdown(SocketShutdown.Both);
+
+                matchSocket = null;
+            }
+
             receiveThread = null;
 
             stopNetworkThread = true;
