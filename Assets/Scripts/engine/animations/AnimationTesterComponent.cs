@@ -16,9 +16,10 @@ namespace Pandora.Engine.Animations
     public class AnimationTesterComponent : MonoBehaviour
     {
         public string UnitName;
-        public int TrackStartX = 5;
-        public int TrackStartY = 4;
-        public int TrackLength = 5;
+        public int UnitX = 9;
+        public int UnitY = 5;
+        public int MovementLength = 5;
+        public int EnemyX = 8;
         public int EnemyY = 12;
         public TestMode Mode = TestMode.Movement;
         public bool Disabled = false;
@@ -56,18 +57,18 @@ namespace Pandora.Engine.Animations
             {
                 var currentCell = unitEntity.GetCurrentCell();
 
-                if (currentCell.vector.y >= (TrackStartY + TrackLength) && !isTurnedBack)
+                if (currentCell.vector.y >= (UnitY + MovementLength) && !isTurnedBack)
                 {
                     Logger.Debug($"{logPrefix} Turning back...");
-                    unitEntity.SetTarget(new GridCell(TrackStartX, TrackStartY));
+                    unitEntity.SetTarget(new GridCell(UnitX, UnitY));
 
                     isTurnedBack = true;
                 }
 
-                if (currentCell.vector.y <= TrackStartY && isTurnedBack)
+                if (currentCell.vector.y <= UnitY && isTurnedBack)
                 {
                     Logger.Debug($"{logPrefix} Turning back...");
-                    unitEntity.SetTarget(new GridCell(TrackStartX, TrackStartY + TrackLength));
+                    unitEntity.SetTarget(new GridCell(UnitX, UnitY + MovementLength));
 
                     isTurnedBack = false;
                 }
@@ -80,7 +81,7 @@ namespace Pandora.Engine.Animations
 
             Logger.Debug($"{logPrefix} Spawning unit: {UnitName}");
 
-            mapComponent.SpawnCard(UnitName, 1, new GridCell(TrackStartX, TrackStartY));
+            mapComponent.SpawnCard(UnitName, 1, new GridCell(UnitX, UnitY));
 
             var entities = mapComponent.engine.Entities;
             var unitEntity = entities[entities.Count - 1];
@@ -94,12 +95,12 @@ namespace Pandora.Engine.Animations
 
             if (Mode == TestMode.Movement)
             {
-                unitEntity.SetTarget(new GridCell(TrackStartX, TrackStartY + TrackLength));
+                unitEntity.SetTarget(new GridCell(UnitX, UnitY + MovementLength));
             }
             else if (Mode == TestMode.Attack)
             {
                 // Spawn the enemy
-                mapComponent.SpawnCard(UnitName, 2, new GridCell(TrackStartX, EnemyY));
+                mapComponent.SpawnCard(UnitName, 2, new GridCell(EnemyX, EnemyY));
                 var enemyEntity = entities[entities.Count - 1];
 
                 var unitCombatBehaviour = unitEntity.GameObject.GetComponent<CombatBehaviour>();
