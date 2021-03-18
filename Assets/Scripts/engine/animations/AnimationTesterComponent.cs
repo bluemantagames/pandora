@@ -1,4 +1,5 @@
 using UnityEngine;
+using Pandora.Combat;
 using System.Collections.Generic;
 using Pandora.Movement;
 using Cysharp.Threading.Tasks;
@@ -6,12 +7,20 @@ using UnityEngine.AddressableAssets;
 
 namespace Pandora.Engine.Animations
 {
+    public enum TestMode
+    {
+        Movement,
+        Attack
+    }
+
     public class AnimationTesterComponent : MonoBehaviour
     {
         public string UnitName;
         public int TrackStartX = 5;
         public int TrackStartY = 4;
         public int TrackLength = 5;
+        public int EnemyY = 12;
+        public TestMode Mode = TestMode.Movement;
         public bool Disabled = false;
 
         bool isSpawned = false;
@@ -43,7 +52,7 @@ namespace Pandora.Engine.Animations
                 isSpawned = true;
             }
 
-            if (isSpawned && unitEntity != null)
+            if (isSpawned && unitEntity != null && Mode == TestMode.Movement)
             {
                 var currentCell = unitEntity.GetCurrentCell();
 
@@ -74,12 +83,37 @@ namespace Pandora.Engine.Animations
             mapComponent.SpawnCard(UnitName, 1, new GridCell(TrackStartX, TrackStartY));
 
             var entities = mapComponent.engine.Entities;
-            var entity = entities[entities.Count - 1];
+            var unitEntity = entities[entities.Count - 1];
+            var combatBehaviour = unitEntity.GameObject?.GetComponent<RangedCombatBehaviour>();
 
-            entity.SetEmptyPath();
-            entity.SetTarget(new GridCell(TrackStartX, TrackStartY + TrackLength));
+            // entity.IsMovementPaused = true;
 
-            return entity;
+            // var enemy = new Enemy(entities[3].GameObject);
+            // enemy.IsTower = true;
+            // combatBehaviour.AttackEnemy(enemy, 10);
+
+            if (Mode == TestMode.Movement)
+            {
+                unitEntity.SetTarget(new GridCell(TrackStartX, TrackStartY + TrackLength));
+            }
+            else if (Mode == TestMode.Attack)
+            {
+                // Spawn the enemy
+                mapComponent.SpawnCard(UnitName, 2, new GridCell(TrackStartX, EnemyY));
+                var enemyEntity = entities[entities.Count - 1];
+
+                var unitCombatBehaviour = unitEntity.GameObject.GetComponent<CombatBehaviour>();
+                var enemyCombatBehaviour = enemyEntity.GameObject.GetComponent<CombatBehaviour>();
+
+                enemyEntity.IsMovementPaused = true;
+                unitEntity.IsMovementPaused = true;
+
+                unitCombatBehaviour.ChangeDamage(0);
+                enemyCombatBehaviour.ChangeDamage(0);
+                enemyCombatBehaviour.IsDisabled = true;
+            }
+
+            return unitEntity;
         }
     }
 }

@@ -1,10 +1,16 @@
 using Pandora;
 using UnityEngine;
 
-namespace Pandora.Combat {
-    public interface CombatBehaviour {
+namespace Pandora.Combat
+{
+    public interface CombatBehaviour
+    {
         /// <summary>True if the unit is currently in combat</summary>
         bool isAttacking { get; }
+
+        /// <summary>True if the combat is disabled for this unit</summary>
+        bool IsDisabled { get; set; }
+
         /// <summary>Combat type of this behaviour</summary>
         CombatType combatType { get; }
 
@@ -28,5 +34,8 @@ namespace Pandora.Combat {
 
         /// <summary>Returns whether the unit is in attack range</summary>
         bool IsInAttackRange(Enemy enemy);
+
+        /// <summary>Change the unit damage value</summary>
+        void ChangeDamage(int newDamage);
     }
 }
