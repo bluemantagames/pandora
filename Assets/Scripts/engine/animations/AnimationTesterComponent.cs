@@ -23,6 +23,7 @@ namespace Pandora.Engine.Animations
         public int EnemyY = 12;
         public TestMode Mode = TestMode.Movement;
         public bool Disabled = false;
+        public bool DisableAttack = false;
 
         bool isSpawned = false;
         bool isTurnedBack = false;
@@ -50,7 +51,7 @@ namespace Pandora.Engine.Animations
                 var unit = SpawnUnit();
 
                 unitEntity = unit;
-                isSpawned = true;
+                isSpawned = unit != null;
             }
 
             if (isSpawned && unitEntity != null && Mode == TestMode.Movement)
@@ -77,21 +78,15 @@ namespace Pandora.Engine.Animations
 
         private EngineEntity SpawnUnit()
         {
-            if (mapComponent == null) return null;
-
             Logger.Debug($"{logPrefix} Spawning unit: {UnitName}");
 
             mapComponent.SpawnCard(UnitName, 1, new GridCell(UnitX, UnitY));
 
             var entities = mapComponent.engine.Entities;
             var unitEntity = entities[entities.Count - 1];
-            var combatBehaviour = unitEntity.GameObject?.GetComponent<RangedCombatBehaviour>();
+            var unitLifeComponent = unitEntity.GameObject.GetComponent<LifeComponent>();
 
-            // entity.IsMovementPaused = true;
-
-            // var enemy = new Enemy(entities[3].GameObject);
-            // enemy.IsTower = true;
-            // combatBehaviour.AttackEnemy(enemy, 10);
+            unitLifeComponent.DisableDamage = true;
 
             if (Mode == TestMode.Movement)
             {
@@ -105,12 +100,14 @@ namespace Pandora.Engine.Animations
 
                 var unitCombatBehaviour = unitEntity.GameObject.GetComponent<CombatBehaviour>();
                 var enemyCombatBehaviour = enemyEntity.GameObject.GetComponent<CombatBehaviour>();
+                var enemyLifeComponent = enemyEntity.GameObject.GetComponent<LifeComponent>();
+
+                enemyLifeComponent.DisableDamage = true;
 
                 enemyEntity.IsMovementPaused = true;
                 unitEntity.IsMovementPaused = true;
 
-                unitCombatBehaviour.ChangeDamage(0);
-                enemyCombatBehaviour.ChangeDamage(0);
+                unitCombatBehaviour.IsDisabled = DisableAttack;
                 enemyCombatBehaviour.IsDisabled = true;
             }
 

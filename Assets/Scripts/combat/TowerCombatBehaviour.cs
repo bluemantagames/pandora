@@ -285,10 +285,5 @@ namespace Pandora.Combat
         {
             return false; // attack is managed by TickUpdate
         }
-
-        public void ChangeDamage(int newDamege)
-        {
-            damage = newDamege;
-        }
     }
 }

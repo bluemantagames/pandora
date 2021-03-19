@@ -34,8 +34,5 @@ namespace Pandora.Combat
 
         /// <summary>Returns whether the unit is in attack range</summary>
         bool IsInAttackRange(Enemy enemy);
-
-        /// <summary>Change the unit damage value</summary>
-        void ChangeDamage(int newDamage);
     }
 }

@@ -150,10 +150,5 @@ namespace Pandora.Combat
 
             return Vector2.Distance(cell.vector, engineComponent.Entity.GetCurrentCell().vector) <= AggroRangeCells;
         }
-
-        public void ChangeDamage(int newDamege)
-        {
-            damage = newDamege;
-        }
     }
 }

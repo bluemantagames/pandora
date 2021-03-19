@@ -163,10 +163,5 @@ namespace Pandora.Combat
 
             return engine.IsInHitboxRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
         }
-
-        public void ChangeDamage(int newDamege)
-        {
-            Damage = newDamege;
-        }
     }
 }
