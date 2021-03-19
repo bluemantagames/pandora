@@ -59,6 +59,13 @@ namespace Pandora.Network
             NetworkControllerSingleton.instance.StartMatch();
         }
 
+        public void PlayDevMatch()
+        {
+            Logger.Debug("Starting a dev match...");
+
+            SceneManager.LoadScene("GameScene");
+        }
+
         void LoadGameScene()
         {
             GameSceneToLoad = true;

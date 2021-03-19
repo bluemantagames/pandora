@@ -52,6 +52,11 @@ namespace Pandora.Events {
             }
         }
 
+        /// <summary>Clears subscribers from this event bus</summary>
+        public void Clear() {
+            subscribers.Clear();
+        }
+
     }
 
 }

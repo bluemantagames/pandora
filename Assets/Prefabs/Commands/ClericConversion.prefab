@@ -14677,6 +14677,7 @@ GameObject:
   - component: {fileID: 424561135788082990}
   - component: {fileID: 5389838460377274635}
   - component: {fileID: 5389838460377274634}
+  - component: {fileID: -4620768233275105521}
   m_Layer: 9
   m_Name: ClericConversion
   m_TagString: Untagged
@@ -19544,3 +19545,15 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &-4620768233275105521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389838460377274629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5899fb3d18eea650b26dd8336a86a2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -3,6 +3,7 @@ using Pandora.Combat;
 using Pandora.Engine;
 using System.Collections.Generic;
 using Pandora.UI;
+using Pandora.VFX;
 
 namespace Pandora.Command
 {
@@ -42,25 +43,7 @@ namespace Pandora.Command
                 if (CommandVFX != null)
                 {
                     var target = targetEntity.GameObject;
-                    var targetSpriteRenderer = target.GetComponent<SpriteRenderer>();
-                    var groundAnchor = target.GetComponentInChildren<UnitGroundAnchor>();
-                    var bounds = targetSpriteRenderer.bounds;
-
-                    GameObject vfx;
-
-                    if (groundAnchor != null)
-                    {
-                        var vfxPosition = new Vector3(0f, 0f, 0f);
-                        vfx = Instantiate(CommandVFX, vfxPosition, CommandVFX.transform.rotation, groundAnchor.transform);
-
-                        var vfxRect = vfx.GetComponent<RectTransform>();
-                        if (vfxRect != null) vfxRect.anchoredPosition = vfxPosition;
-                    }
-                    else
-                    {
-                        var vfxPosition = new Vector3(bounds.min.x + bounds.extents.x, bounds.min.y + bounds.extents.y, 0f);
-                        vfx = Instantiate(CommandVFX, vfxPosition, CommandVFX.transform.rotation, target.transform);
-                    }
+                    var vfx = CommandVFX.GetComponent<VFXApplier>().Apply(target);
 
                     commandParticles = vfx.GetComponent<ParticleSystem>();
 

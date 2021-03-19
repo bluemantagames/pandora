@@ -5,7 +5,7 @@ using QFSW.QC;
 
 public class ConsoleCommandEnabler : MonoBehaviour
 {
-    public KeyCode EventKeyCode = KeyCode.Space;
+    public KeyCode EventKeyCode = KeyCode.BackQuote;
     public GameObject Console;
 
     bool isEnabled = false;

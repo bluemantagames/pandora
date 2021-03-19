@@ -20,8 +20,9 @@ namespace Pandora.Network
 
         string userMatchToken = null;
         Socket matchSocket = null;
-        Thread networkThread = null;
-        Thread receiveThread = null;
+        volatile Thread networkThread = null;
+        volatile Thread receiveThread = null;
+        volatile bool stopNetworkThread = false;
         public AsyncOperation GameSceneLoading;
         ConcurrentQueue<Message> queue = new ConcurrentQueue<Message>();
         ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
@@ -32,7 +33,6 @@ namespace Pandora.Network
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
         public int? PlayerId = null;
-        public Boolean IsActive = false;
 
         private static NetworkControllerSingleton privateInstance = null;
 
@@ -73,8 +73,6 @@ namespace Pandora.Network
 
         public async UniTaskVoid ExecMatchmaking(List<string> deck, bool isDev)
         {
-            IsActive = true;
-
             // Wait for the game scene to be loaded before actually trying to join a match
             if (GameSceneLoading != null) {
                 await UniTask.WaitUntil(() => GameSceneLoading.progress >= 0.9f);
@@ -99,6 +97,11 @@ namespace Pandora.Network
                 }
             }
         }
+
+        public class StopSignal {
+            public bool Stop = false; 
+        }
+
 
         public void StartMatch()
         {
@@ -144,19 +147,27 @@ namespace Pandora.Network
                 envelope.ToByteArray()
             );
 
-            receiveThread = new Thread(new ThreadStart(ReceiveLoop));
+            var stopSignal = new StopSignal();
 
-            receiveThread.Start();
+            receiveThread = new Thread(new ParameterizedThreadStart(ReceiveLoop));
+            receiveThread.Start(stopSignal);
 
             Message message;
 
             while (true)
             {
+                if (stopNetworkThread) {
+                    stopNetworkThread = false;
+
+                    return;
+                }
+
                 // Return to matchmaking if match does not start in the predefined timeframe
                 if (!matchStarted && DateTime.Now.Subtract(startTime).Seconds > matchStartTimeout)
                 {
-                    receiveThread.Abort();
+                    stopSignal.Stop = true;
 
+                    receiveThread = null;
                     networkThread = null;
 
                     StartMatchmaking();
@@ -177,11 +188,17 @@ namespace Pandora.Network
             }
         }
 
-        public void ReceiveLoop()
+        public void ReceiveLoop(object param)
         {
+            var signal = param as StopSignal;
+
             while (true)
             {
                 // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+
+                if (signal.Stop || matchSocket == null) {
+                    break;
+                }
 
                 var sizeBytes = new Byte[4];
 
@@ -300,8 +317,16 @@ namespace Pandora.Network
 
         public void Stop()
         {
-            receiveThread?.Abort();
-            networkThread?.Abort();
+            if (matchSocket != null) {
+                matchSocket.Shutdown(SocketShutdown.Both);
+
+                matchSocket = null;
+            }
+
+            receiveThread = null;
+
+            stopNetworkThread = true;
+            networkThread = null;
         }
 
         public static SpawnMessage GenerateSpawnMessage(StepCommand command)
