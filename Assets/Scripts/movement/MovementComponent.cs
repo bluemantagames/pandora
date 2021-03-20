@@ -14,7 +14,7 @@ using System.Threading;
 
 namespace Pandora.Movement
 {
-    public class MovementComponent : MonoBehaviour, CollisionCallback, MovementBehaviour
+    public class MovementComponent : MonoBehaviour, MovementBehaviour
     {
         Rigidbody2D body;
         GridCell currentTarget;
@@ -23,7 +23,7 @@ namespace Pandora.Movement
         List<GridCell> currentPath;
         TeamComponent team;
         Enemy targetEnemy;
-        bool isEvading;
+        bool isEvading = true;
         CombatBehaviour combatBehaviour;
         uint? collisionTotalElapsed = null;
         /// <summary>Enables log on the A* implementation</summary>
@@ -122,7 +122,9 @@ namespace Pandora.Movement
 
             var updatedPosition = engineEntity.GetWorldPosition();
 
-            WalkingDirection = (updatedPosition - (Vector2) transform.position).normalized;
+            var currentDirection = (updatedPosition - (Vector2) transform.position).normalized;
+    
+            WalkingDirection = currentDirection;
 
             transform.position = updatedPosition;
 
@@ -173,8 +175,6 @@ namespace Pandora.Movement
         private void AdvancePosition(GridCell currentPosition)
         {
             engineEntity.IsEvading = isEvading;
-
-            isEvading = false;
 
             if (!engineEntity.IsEvading)
             {
@@ -303,44 +303,6 @@ namespace Pandora.Movement
         private GridCell CurrentCellPosition()
         {
             return engineEntity.GetCurrentCell();
-        }
-
-        public void Collided(EngineEntity entity, uint totalElapsed)
-        {
-            var shouldNotCheckEvading =
-                gameObject.layer == Constants.FLYING_LAYER ||
-                !entity.IsRigid ||
-                engineEntity.IsEvading ||
-                lastEnemyTargeted?.enemyCell.vector.y == map.bottomMapSizeY ||
-                GetComponent<CombatBehaviour>().isAttacking;
-
-            if (shouldNotCheckEvading) return;
-
-            if (!collisionTotalElapsed.HasValue)
-            {
-                collisionTotalElapsed = totalElapsed;
-            }
-
-            if (lastCollisionPosition == engineEntity.Position && totalElapsed - (collisionTotalElapsed ?? 0) >= 1000)
-            {
-                Logger.Debug("Finally evading");
-
-                // we don't set engineEntity.IsEvading directly because
-                // the collision system might use it
-                isEvading = true;
-
-                engineEntity.EvadedUnit = entity;
-
-                currentPath = null;
-
-                lastCollisionPosition = null;
-                collisionTotalElapsed = null;
-            }
-            else
-            {
-                lastCollisionPosition = engineEntity.Position;
-            }
-
         }
     }
 }
