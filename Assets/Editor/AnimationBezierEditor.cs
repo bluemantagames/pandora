@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using Pandora.Engine.Animations;
 using System.IO;
+using Pandora;
 
 [CustomEditor(typeof(AnimationBezier))]
 public class AnimationBezierEditor : Editor
@@ -31,8 +32,9 @@ public class AnimationBezierEditor : Editor
 
     private void CreateAnimationFile(string animationJson, string animationName)
     {
-        var projectPath = Application.dataPath;
-        var animationPath = $"{projectPath}/GeneratedAnimations/{animationName}.json";
+        var animationsPath = SerializedAnimationsSingleton.Instance.GetAnimationsDirectory();
+        var animationFile = SerializedAnimationsSingleton.Instance.GenerateAnimationFileName(animationName);
+        var animationPath = $"{animationsPath}/{animationFile}";
 
         Debug.Log($"Generating animation file: {animationPath}");
 

@@ -5,6 +5,7 @@ using Pandora.Engine;
 using Pandora.Engine.Animations;
 using System.IO;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Networking;
 
 namespace Pandora
 {
@@ -60,7 +61,7 @@ namespace Pandora
         /// </summary>
         public string GetAnimationsDirectory()
         {
-            var projectPath = Application.dataPath;
+            var projectPath = Application.streamingAssetsPath;
             var animationPath = $"{projectPath}/GeneratedAnimations";
 
             return animationPath;
@@ -109,40 +110,45 @@ namespace Pandora
         /// </summary>
         public async UniTask<AnimationStepCollection> LoadSingleAnimationFile(string animationFile)
         {
+            string retrievedRawAnimation;
+
             var animationsPath = GetAnimationsDirectory();
             var animationPath = $"{animationsPath}/{animationFile}";
 
-            using (var reader = File.OpenText(animationPath))
+            if (Application.platform == RuntimePlatform.Android)
             {
-                var fileContent = await reader.ReadToEndAsync();
-
-                reader.Close();
-
-                Logger.Debug($"Retrieved saved animation {animationFile}");
-
-                var parsedAnimation = JsonUtility.FromJson<AnimationStepCollection>(fileContent);
-
-                return parsedAnimation;
+                var request = await UnityWebRequest.Get(animationPath).SendWebRequest();
+                retrievedRawAnimation = request.downloadHandler.text;
             }
+            else
+            {
+                var reader = File.OpenText(animationPath);
+                retrievedRawAnimation = await reader.ReadToEndAsync();
+                reader.Close();
+            }
+
+            Logger.Debug($"Retrieved saved animation {animationFile}");
+
+            var parsedAnimation = JsonUtility.FromJson<AnimationStepCollection>(retrievedRawAnimation);
+
+            return parsedAnimation;
         }
 
         /// <summary>
         /// Load all the animations in the specific directory.
         /// </summary>
-        public async UniTask LoadAllAnimations()
+        public async UniTask LoadAllAnimations(string[] animationNames)
         {
             var animationsPath = GetAnimationsDirectory();
 
             // We probably can load all the animation
             // not waiting the one before
-            foreach (string file in Directory.EnumerateFiles(animationsPath, $"*.{animationsFileFormat}"))
+            foreach (string animationName in animationNames)
             {
-                var fileInfo = new FileInfo(file);
-                var fileName = fileInfo.Name;
+                var fileName = GenerateAnimationFileName(animationName);
 
                 Logger.Debug($"Loading {fileName} animation...");
 
-                var animationName = RetrieveAnimationNameFromFile(fileName);
                 var parsedFile = await LoadSingleAnimationFile(fileName);
                 var animationMap = GenerateAnimationMap(parsedFile);
 

@@ -142,8 +142,6 @@ namespace Pandora.Engine.Animations
 
             animation.TryGetValue(AnimationCurrentTime, out value);
 
-            Logger.Debug($"Retrieved animated speed: {value}");
-
             return value;
         }
 

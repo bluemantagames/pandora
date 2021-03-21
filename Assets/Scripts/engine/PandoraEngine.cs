@@ -359,8 +359,6 @@ namespace Pandora.Engine
                 // The normal entity speed otherwise.
                 if (animatedSpeed != null)
                 {
-                    Logger.Debug($"Using animated speed: {animatedSpeed}");
-
                     computedSpeed = (int)animatedSpeed;
 
                     animationBehaviour?.NextStep();
