@@ -18,6 +18,9 @@ namespace Pandora
         EngineComponent engineComponent;
         TeamComponent teamComponent;
         public bool DebugMove = false;
+        int animationSmoothingCount = 0, animationSmoothingThreshold = 1, directions = 12;
+        Vector2? targetDirection = null;
+        List<Vector2> blendTreePoints = new List<Vector2> {};
 
         // represents whether we are handling movement / animation or another component is doing it
         bool areWePaused = false;
@@ -60,6 +63,14 @@ namespace Pandora
             Logger.Debug($"CombatBehaviour is {combatBehaviour}");
 
             SetupAnimationControllers();
+
+            var angle = 360 / directions;
+
+            for (var i = 0; i < directions; i++) {
+                blendTreePoints.Add(
+                    Quaternion.Euler(0f, 0f, angle * i) * Vector2.up
+                );
+            }
         }
 
         public void SetupAnimationControllers()
@@ -154,8 +165,30 @@ namespace Pandora
         {
             animator.speed = 0;
 
-            animator.SetFloat("BlendX", movementBehaviour.WalkingDirection.x);
-            animator.SetFloat("BlendY", movementBehaviour.WalkingDirection.y);
+            Vector2? blendedPoint = null;
+            float? minBlendedSquaredDistance = null;
+
+            foreach (var point in blendTreePoints) {
+                var blendedSquaredDistance = (point -movementBehaviour.WalkingDirection).sqrMagnitude;
+
+                if (!minBlendedSquaredDistance.HasValue || minBlendedSquaredDistance.Value > blendedSquaredDistance) {
+                    minBlendedSquaredDistance = blendedSquaredDistance;
+                    blendedPoint = point;
+                }
+            }
+
+            if (!targetDirection.HasValue || targetDirection.Value != blendedPoint.Value) {
+                targetDirection = blendedPoint;
+
+                animationSmoothingCount = 0;
+            } else {
+                animationSmoothingCount++;
+            }
+
+            if (animationSmoothingCount > animationSmoothingThreshold) {
+                animator.SetFloat("BlendX", movementBehaviour.WalkingDirection.x);
+                animator.SetFloat("BlendY", movementBehaviour.WalkingDirection.y);
+            }
 
             animator.Play(animationName, 0, timePercent);
 
