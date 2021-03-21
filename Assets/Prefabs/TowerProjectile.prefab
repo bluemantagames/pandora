@@ -180,36 +180,36 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.004580102
-      value: 0.99145913
-      inSlope: 9.227841
-      outSlope: 9.227841
+      time: 0.0015368499
+      value: 1.0019069
+      inSlope: 0.037310123
+      outSlope: 0.037310123
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.031156125
+      outWeight: 0.21151085
     - serializedVersion: 3
-      time: 0.5346397
-      value: 0.6550738
-      inSlope: -3.6615129
-      outSlope: -3.6615129
+      time: 0.66450024
+      value: 0.8172501
+      inSlope: -0.7796286
+      outSlope: -0.7796286
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0.12202308
+      outWeight: 0.15458782
     - serializedVersion: 3
-      time: 0.99449134
-      value: -0.00976333
-      inSlope: -0.1793344
-      outSlope: -0.1793344
+      time: 0.98975486
+      value: 0.49434128
+      inSlope: -1.3140073
+      outSlope: -1.3140073
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.2006649
+      inWeight: 0.21628541
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 0
     m_RotationOrder: 4
-  AnimationName: testAnimation
+  AnimationName: towerProjectileAnimation
   AnimationTimeStep: 10
   AnimationMaxTime: 100
   AnimationCurrentTime: 0
