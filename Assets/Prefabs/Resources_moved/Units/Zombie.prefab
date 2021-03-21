@@ -146,6 +146,7 @@ MonoBehaviour:
   lifeValue: 10
   maxLife: 0
   IsDead: 0
+  DisableDamage: 0
   DeathVFX: {fileID: 2685581498212572552, guid: 83f603f9e61cdbd4c8da4a6ec28e3dc1,
     type: 3}
   DeathVFXSpeedMultiplier: 2
@@ -341,8 +342,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.7986742
     - serializedVersion: 3
-      time: 0.5962323
-      value: 0.9830021
+      time: 0.4796521
+      value: 0.9908048
       inSlope: -0.1878161
       outSlope: -2.651439
       tangentMode: 1
@@ -350,8 +351,8 @@ MonoBehaviour:
       inWeight: 0.07708067
       outWeight: 0.16985485
     - serializedVersion: 3
-      time: 0.69970894
-      value: -0.00011563953
+      time: 0.5488955
+      value: 0.011600111
       inSlope: -5.824006
       outSlope: -5.824006
       tangentMode: 0
