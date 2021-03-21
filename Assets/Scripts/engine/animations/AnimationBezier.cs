@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pandora.Combat;
 using Pandora.Movement;
+using Cysharp.Threading.Tasks;
 
 namespace Pandora.Engine.Animations
 {
@@ -164,36 +165,13 @@ namespace Pandora.Engine.Animations
             }
         }
 
-        private AnimationStepCollection GetSavedAnimation()
+        async UniTaskVoid LoadAnimation()
         {
-            var projectPath = Application.dataPath;
-            var animationPath = $"{projectPath}/GeneratedAnimations/{AnimationName}.json";
+            var animationFile = serializedAnimationsSingleton.GenerateAnimationFileName(AnimationName);
+            var retrievedAnimation = await serializedAnimationsSingleton.LoadSingleAnimationFile(animationFile);
+            var decodedAnimation = serializedAnimationsSingleton.GenerateAnimationMap(retrievedAnimation);
 
-            var sr = new StreamReader(animationPath);
-            var fileContent = sr.ReadToEnd();
-            sr.Close();
-
-            Logger.Debug($"Retrieved saved animation: {fileContent}");
-
-            var parsedAnimation = JsonUtility.FromJson<AnimationStepCollection>(fileContent);
-
-            return parsedAnimation;
-        }
-
-        private Dictionary<int, int> GenerateAnimationMap(AnimationStepCollection savedAnimation)
-        {
-            var result = new Dictionary<int, int>();
-
-            foreach (AnimationStep step in savedAnimation.steps)
-            {
-                var decodedSpeedDecimal = Decimal.Parse(step.speed);
-                var decodedSpeed = Decimal.ToInt32(decodedSpeedDecimal);
-                var engineSpeed = PandoraEngine.GetSpeed(decodedSpeed);
-
-                result.Add(step.stepPercentage, engineSpeed);
-            }
-
-            return result;
+            serializedAnimationsSingleton.SetAnimation(AnimationName, decodedAnimation);
         }
 
         void Awake()
@@ -204,11 +182,7 @@ namespace Pandora.Engine.Animations
             if (!serializedAnimationsSingleton.IsAnimationAlreadyRetrieved(AnimationName) && !DevMode)
             {
                 Logger.Debug($"Animation not cached, retrieving...");
-
-                var retrievedAnimation = GetSavedAnimation();
-                var decodedAnimation = GenerateAnimationMap(retrievedAnimation);
-
-                serializedAnimationsSingleton.SetAnimation(AnimationName, decodedAnimation);
+                _ = LoadAnimation();
             }
         }
     }
