@@ -22,6 +22,8 @@ namespace Pandora.Combat
         public bool IsDisabled { get; set; } = false;
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 2000;
         public GameObject[] EffectObjects;
+        public int ProjectileAdjustmentX = 0;
+        public int ProjectileAdjustmentY = 0;
 
         public CombatType combatType
         {
@@ -102,7 +104,9 @@ namespace Pandora.Combat
 
             var timestamp = engineEntity.Timestamp.AddMilliseconds(map.engine.TotalElapsed);
 
-            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, engineEntity.Position, false, timestamp);
+            var projectilePosition = CalculateProjectilePosition(engineEntity);
+
+            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, projectilePosition, false, timestamp);
 
             projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
 
@@ -162,6 +166,16 @@ namespace Pandora.Combat
             var engine = engineComponent.Engine;
 
             return engine.IsInHitboxRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
+        }
+
+        private Vector2Int CalculateProjectilePosition(EngineEntity unitEntity)
+        {
+            var basePosition = unitEntity.Position;
+            var computedPosition = new Vector2Int(basePosition.x + ProjectileAdjustmentX, basePosition.y + ProjectileAdjustmentY);
+
+            Logger.Debug($"Calculated projectile position: ({computedPosition.x}, {computedPosition.y})");
+
+            return computedPosition;
         }
     }
 }
