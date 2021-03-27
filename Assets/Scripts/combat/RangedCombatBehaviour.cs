@@ -92,6 +92,21 @@ namespace Pandora.Combat
 
             var map = MapComponent.Instance;
 
+            var unitEngineComponent = GetComponent<EngineComponent>();
+            var engine = unitEngineComponent.Engine;
+            var engineEntity = unitEngineComponent.Entity;
+            var rawDirection = target.enemyEntity.Position - engineEntity.Position;
+
+            // FIXME: This should be optimized or abstracted.
+            // At the moment there are problem with the direct up-down-left-right
+            // directions since they should be ~precise
+            var direction = new Vector2Int(
+                rawDirection.x > 0 ? 1 : rawDirection.x < 0 ? -1 : 0,
+                rawDirection.y > 0 ? 1 : rawDirection.y < 0 ? -1 : 0
+            );
+
+            var projectilePosition = CalculateProjectilePosition(engineEntity, engine, direction);
+
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
@@ -100,11 +115,7 @@ namespace Pandora.Combat
             projectileBehaviour.originalPrefab = projectile;
             projectileBehaviour.map = map;
 
-            var engineEntity = GetComponent<EngineComponent>().Entity;
-
             var timestamp = engineEntity.Timestamp.AddMilliseconds(map.engine.TotalElapsed);
-
-            var projectilePosition = CalculateProjectilePosition(engineEntity);
 
             var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, projectilePosition, false, timestamp);
 
@@ -168,14 +179,15 @@ namespace Pandora.Combat
             return engine.IsInHitboxRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
         }
 
-        private Vector2Int CalculateProjectilePosition(EngineEntity unitEntity)
+        private Vector2Int CalculateProjectilePosition(EngineEntity unitEntity, PandoraEngine engine, Vector2Int direction)
         {
             var basePosition = unitEntity.Position;
             var computedPosition = new Vector2Int(basePosition.x + ProjectileAdjustmentX, basePosition.y + ProjectileAdjustmentY);
+            var rotatedPosition = engine.RotateFigureByDirection(new List<Vector2Int>() { computedPosition }, basePosition, direction)[0];
 
-            Logger.Debug($"Calculated projectile position: ({computedPosition.x}, {computedPosition.y})");
+            Logger.Debug($"Calculated projectile position: ({rotatedPosition.x}, {rotatedPosition.y}) for direction {direction}");
 
-            return computedPosition;
+            return rotatedPosition;
         }
     }
 }

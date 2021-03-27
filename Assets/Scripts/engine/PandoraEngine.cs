@@ -1379,7 +1379,7 @@ namespace Pandora.Engine
         /// <param name="pivot">The point of rotation</param>
         /// <param name="direction">A Vertex2int direction</param>
         /// <returns>The rotated figure</returns>
-        List<Vector2Int> RotateFigureByDirection(List<Vector2Int> figure, Vector2Int pivot, Vector2Int direction)
+        public List<Vector2Int> RotateFigureByDirection(List<Vector2Int> figure, Vector2Int pivot, Vector2Int direction)
         {
             if (direction.x == -1 && direction.y == 1)
                 return RotateFigureByAngle(figure, pivot, 45);
