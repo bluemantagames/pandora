@@ -112,12 +112,14 @@ MonoBehaviour:
     m_TableEntryReference:
       m_KeyId: 0
       m_Key: 
+    m_FallbackState: 0
   LocalizedCardSkillDescription:
     m_TableReference:
       m_TableCollectionName: 
     m_TableEntryReference:
       m_KeyId: 0
       m_Key: 
+    m_FallbackState: 0
   Dragging: 0
 --- !u!223 &-4787545923695219553
 Canvas:
@@ -230,10 +232,10 @@ RectTransform:
   m_Father: {fileID: 1069214256245577549}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -31.433998, y: 32.934208}
-  m_SizeDelta: {x: -0.13201904, y: -0.13162231}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -11.4339905, y: 12.934219}
+  m_SizeDelta: {x: 96.382324, y: 102.61441}
   m_Pivot: {x: 0.5000001, y: 0.49999982}
 --- !u!114 &6895691708715838108
 MonoBehaviour:
