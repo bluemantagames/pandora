@@ -146,6 +146,7 @@ MonoBehaviour:
   lifeValue: 250
   maxLife: 0
   IsDead: 0
+  DisableDamage: 0
   DeathVFX: {fileID: 2685581498212572552, guid: 83f603f9e61cdbd4c8da4a6ec28e3dc1,
     type: 3}
   DeathVFXSpeedMultiplier: 2
@@ -207,6 +208,9 @@ MonoBehaviour:
   AggroRangeCells: 3
   AttackRangeEngineUnits: 1600
   EffectObjects: []
+  ProjectileAdjustmentX: 450
+  ProjectileAdjustmentY: 450
+  ProjectileDirectionThreshold: 1
 --- !u!61 &7105882005904317285
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -270,7 +274,7 @@ Animator:
   m_GameObject: {fileID: 1341249731494315628}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a72dcd18b92716a48a7fb41236c4a825, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
