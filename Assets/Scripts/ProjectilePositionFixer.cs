@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Pandora.Engine;
+using Pandora.Pool;
 
 namespace Pandora
 {
@@ -16,17 +17,18 @@ namespace Pandora
 
         public Vector2Int CalculateProjectilePosition(Vector2Int basePosition, PandoraEngine engine, Vector2Int direction)
         {
-            var computedBasePosition = new Vector2Int(
-                basePosition.x + PivotAdjustmentX,
-                basePosition.y + PivotAdjustmentY
-            );
+            var computedBasePosition = PoolInstances.Vector2IntPool.GetObject();
+            computedBasePosition.x = basePosition.x + PivotAdjustmentX;
+            computedBasePosition.y = basePosition.y + PivotAdjustmentY;
 
-            var computedPosition = new Vector2Int(
-                computedBasePosition.x + ProjectileAdjustmentX,
-                computedBasePosition.y + ProjectileAdjustmentY
-            );
+            var computedPosition = PoolInstances.Vector2IntPool.GetObject();
+            computedPosition.x = computedBasePosition.x + ProjectileAdjustmentX;
+            computedPosition.y = computedBasePosition.y + ProjectileAdjustmentY;
 
             var rotatedPosition = engine.RotateFigureByDirection(new List<Vector2Int>() { computedPosition }, computedBasePosition, direction)[0];
+
+            PoolInstances.Vector2IntPool.ReturnObject(computedBasePosition);
+            PoolInstances.Vector2IntPool.ReturnObject(computedPosition);
 
             return rotatedPosition;
         }
@@ -35,13 +37,11 @@ namespace Pandora
         {
             var rawDirection = enemyEntity.GetCurrentCell().vector - unitEntity.GetCurrentCell().vector;
 
-            var direction = new Vector2Int(
-                rawDirection.x > projectileDirectionThreshold ? 1 : rawDirection.x < -projectileDirectionThreshold ? -1 : 0,
-                rawDirection.y > projectileDirectionThreshold ? 1 : rawDirection.y < -projectileDirectionThreshold ? -1 : 0
-            );
+            var direction = PoolInstances.Vector2IntPool.GetObject();
+            direction.x = rawDirection.x > projectileDirectionThreshold ? 1 : rawDirection.x < -projectileDirectionThreshold ? -1 : 0;
+            direction.y = rawDirection.y > projectileDirectionThreshold ? 1 : rawDirection.y < -projectileDirectionThreshold ? -1 : 0;
 
             Logger.Debug($"Calculated direction for projectiles ({direction.x}, {direction.y}) using the gridcell ({rawDirection.x}, {rawDirection.y})");
-
 
             return direction;
         }
