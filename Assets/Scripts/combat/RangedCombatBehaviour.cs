@@ -95,12 +95,24 @@ namespace Pandora.Combat
             if (target == null) return;
 
             var map = MapComponent.Instance;
-
             var unitEngineComponent = GetComponent<EngineComponent>();
             var engine = unitEngineComponent.Engine;
             var engineEntity = unitEngineComponent.Entity;
 
-            var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
+            Vector2Int projectilePosition;
+
+            if (projectilePositionFixer != null)
+            {
+                var direction = projectilePositionFixer.CalculateDirection(engineEntity, target.enemyEntity);
+                projectilePosition = projectilePositionFixer.CalculateProjectilePosition(engineEntity.Position, engine, direction);
+            }
+            else
+            {
+                projectilePosition = engineEntity.Position;
+            }
+
+            var projectileWorldPosition = map.engine.PhysicsToMapWorld(projectilePosition);
+            var projectileObject = Instantiate(projectile, projectileWorldPosition, Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
             projectileBehaviour.target = target;
@@ -109,18 +121,7 @@ namespace Pandora.Combat
             projectileBehaviour.map = map;
 
             var timestamp = engineEntity.Timestamp.AddMilliseconds(map.engine.TotalElapsed);
-            EngineEntity projectileEngineEntity;
-
-            if (projectilePositionFixer != null)
-            {
-                var direction = projectilePositionFixer.CalculateDirection(engineEntity, target.enemyEntity);
-                var projectilePosition = projectilePositionFixer.CalculateProjectilePosition(engineEntity, engine, direction);
-                projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, projectilePosition, false, timestamp);
-            }
-            else
-            {
-                projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, engineEntity.Position, false, timestamp);
-            }
+            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, projectilePosition, false, timestamp);
 
             projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
 

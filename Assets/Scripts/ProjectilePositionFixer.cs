@@ -7,16 +7,26 @@ namespace Pandora
 {
     public class ProjectilePositionFixer : MonoBehaviour
     {
+        public int PivotAdjustmentX = 0;
+        public int PivotAdjustmentY = 0;
         public int ProjectileAdjustmentX = 0;
         public int ProjectileAdjustmentY = 0;
 
         int projectileDirectionThreshold = 1;
 
-        public Vector2Int CalculateProjectilePosition(EngineEntity unitEntity, PandoraEngine engine, Vector2Int direction)
+        public Vector2Int CalculateProjectilePosition(Vector2Int basePosition, PandoraEngine engine, Vector2Int direction)
         {
-            var basePosition = unitEntity.Position;
-            var computedPosition = new Vector2Int(basePosition.x + ProjectileAdjustmentX, basePosition.y + ProjectileAdjustmentY);
-            var rotatedPosition = engine.RotateFigureByDirection(new List<Vector2Int>() { computedPosition }, basePosition, direction)[0];
+            var computedBasePosition = new Vector2Int(
+                basePosition.x + PivotAdjustmentX,
+                basePosition.y + PivotAdjustmentY
+            );
+
+            var computedPosition = new Vector2Int(
+                computedBasePosition.x + ProjectileAdjustmentX,
+                computedBasePosition.y + ProjectileAdjustmentY
+            );
+
+            var rotatedPosition = engine.RotateFigureByDirection(new List<Vector2Int>() { computedPosition }, computedBasePosition, direction)[0];
 
             return rotatedPosition;
         }

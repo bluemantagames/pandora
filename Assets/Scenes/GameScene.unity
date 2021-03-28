@@ -3662,15 +3662,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 933e0f6a085354e1e895bf95c1be8e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitName: Troll
-  UnitX: 11
-  UnitY: 13
+  UnitName: HalfOrc
+  UnitX: 7
+  UnitY: 10
   MovementLength: 5
-  EnemyX: 4
-  EnemyY: 13
+  EnemyX: 10
+  EnemyY: 16
   Mode: 1
-  Disabled: 1
-  DisableAttack: 1
+  Disabled: 0
+  DisableAttack: 0
 --- !u!1001 &1110013713
 PrefabInstance:
   m_ObjectHideFlags: 0
