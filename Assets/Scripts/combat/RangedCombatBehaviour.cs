@@ -24,6 +24,7 @@ namespace Pandora.Combat
         public GameObject[] EffectObjects;
         public int ProjectileAdjustmentX = 0;
         public int ProjectileAdjustmentY = 0;
+        public int ProjectileDirectionThreshold = 1;
 
         public CombatType combatType
         {
@@ -95,16 +96,8 @@ namespace Pandora.Combat
             var unitEngineComponent = GetComponent<EngineComponent>();
             var engine = unitEngineComponent.Engine;
             var engineEntity = unitEngineComponent.Entity;
-            var rawDirection = target.enemyEntity.Position - engineEntity.Position;
 
-            // FIXME: This should be optimized or abstracted.
-            // At the moment there are problem with the direct up-down-left-right
-            // directions since they should be ~precise
-            var direction = new Vector2Int(
-                rawDirection.x > 0 ? 1 : rawDirection.x < 0 ? -1 : 0,
-                rawDirection.y > 0 ? 1 : rawDirection.y < 0 ? -1 : 0
-            );
-
+            var direction = CalculateDirection(engineEntity, target.enemyEntity, ProjectileDirectionThreshold);
             var projectilePosition = CalculateProjectilePosition(engineEntity, engine, direction);
 
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
@@ -185,9 +178,22 @@ namespace Pandora.Combat
             var computedPosition = new Vector2Int(basePosition.x + ProjectileAdjustmentX, basePosition.y + ProjectileAdjustmentY);
             var rotatedPosition = engine.RotateFigureByDirection(new List<Vector2Int>() { computedPosition }, basePosition, direction)[0];
 
-            Logger.Debug($"Calculated projectile position: ({rotatedPosition.x}, {rotatedPosition.y}) for direction {direction}");
-
             return rotatedPosition;
+        }
+
+        private Vector2Int CalculateDirection(EngineEntity unitEntity, EngineEntity enemyEntity, int threshold)
+        {
+            var rawDirection = target.enemyEntity.GetCurrentCell().vector - unitEntity.GetCurrentCell().vector;
+
+            var direction = new Vector2Int(
+                rawDirection.x > threshold ? 1 : rawDirection.x < -threshold ? -1 : 0,
+                rawDirection.y > threshold ? 1 : rawDirection.y < -threshold ? -1 : 0
+            );
+
+            Logger.Debug($"Calculated direction for projectiles ({direction.x}, {direction.y}) using the gridcell ({rawDirection.x}, {rawDirection.y})");
+
+
+            return direction;
         }
     }
 }
