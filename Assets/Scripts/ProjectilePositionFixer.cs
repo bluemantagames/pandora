@@ -25,10 +25,14 @@ namespace Pandora
             computedPosition.x = computedBasePosition.x + ProjectileAdjustmentX;
             computedPosition.y = computedBasePosition.y + ProjectileAdjustmentY;
 
-            var rotatedPosition = engine.RotateFigureByDirection(new List<Vector2Int>() { computedPosition }, computedBasePosition, direction)[0];
+            var figure = PoolInstances.Vector2IntListPool.GetObject();
+            figure.Add(computedPosition);
+
+            var rotatedPosition = engine.RotateFigureByDirection(figure, computedBasePosition, direction)[0];
 
             PoolInstances.Vector2IntPool.ReturnObject(computedBasePosition);
             PoolInstances.Vector2IntPool.ReturnObject(computedPosition);
+            PoolInstances.Vector2IntListPool.ReturnObject(figure);
 
             return rotatedPosition;
         }
