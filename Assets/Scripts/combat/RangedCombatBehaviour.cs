@@ -22,9 +22,12 @@ namespace Pandora.Combat
         public bool IsDisabled { get; set; } = false;
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 2000;
         public GameObject[] EffectObjects;
-        public int ProjectileAdjustmentX = 0;
-        public int ProjectileAdjustmentY = 0;
-        public int ProjectileDirectionThreshold = 1;
+        ProjectilePositionFixer projectilePositionFixer;
+
+        void Awake()
+        {
+            projectilePositionFixer = GetComponent<ProjectilePositionFixer>();
+        }
 
         public CombatType combatType
         {
@@ -97,9 +100,6 @@ namespace Pandora.Combat
             var engine = unitEngineComponent.Engine;
             var engineEntity = unitEngineComponent.Entity;
 
-            var direction = CalculateDirection(engineEntity, target.enemyEntity, ProjectileDirectionThreshold);
-            var projectilePosition = CalculateProjectilePosition(engineEntity, engine, direction);
-
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
@@ -109,8 +109,18 @@ namespace Pandora.Combat
             projectileBehaviour.map = map;
 
             var timestamp = engineEntity.Timestamp.AddMilliseconds(map.engine.TotalElapsed);
+            EngineEntity projectileEngineEntity;
 
-            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, projectilePosition, false, timestamp);
+            if (projectilePositionFixer != null)
+            {
+                var direction = projectilePositionFixer.CalculateDirection(engineEntity, target.enemyEntity);
+                var projectilePosition = projectilePositionFixer.CalculateProjectilePosition(engineEntity, engine, direction);
+                projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, projectilePosition, false, timestamp);
+            }
+            else
+            {
+                projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, engineEntity.Position, false, timestamp);
+            }
 
             projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
 
@@ -170,30 +180,6 @@ namespace Pandora.Combat
             var engine = engineComponent.Engine;
 
             return engine.IsInHitboxRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
-        }
-
-        private Vector2Int CalculateProjectilePosition(EngineEntity unitEntity, PandoraEngine engine, Vector2Int direction)
-        {
-            var basePosition = unitEntity.Position;
-            var computedPosition = new Vector2Int(basePosition.x + ProjectileAdjustmentX, basePosition.y + ProjectileAdjustmentY);
-            var rotatedPosition = engine.RotateFigureByDirection(new List<Vector2Int>() { computedPosition }, basePosition, direction)[0];
-
-            return rotatedPosition;
-        }
-
-        private Vector2Int CalculateDirection(EngineEntity unitEntity, EngineEntity enemyEntity, int threshold)
-        {
-            var rawDirection = target.enemyEntity.GetCurrentCell().vector - unitEntity.GetCurrentCell().vector;
-
-            var direction = new Vector2Int(
-                rawDirection.x > threshold ? 1 : rawDirection.x < -threshold ? -1 : 0,
-                rawDirection.y > threshold ? 1 : rawDirection.y < -threshold ? -1 : 0
-            );
-
-            Logger.Debug($"Calculated direction for projectiles ({direction.x}, {direction.y}) using the gridcell ({rawDirection.x}, {rawDirection.y})");
-
-
-            return direction;
         }
     }
 }
