@@ -3420,6 +3420,7 @@ GameObject:
   - component: {fileID: 996488296}
   - component: {fileID: 996488297}
   - component: {fileID: 996488298}
+  - component: {fileID: 996488299}
   m_Layer: 13
   m_Name: Arena
   m_TagString: Untagged
@@ -3649,6 +3650,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MatchClip: {fileID: 8300000, guid: 6a466988dfd744b949fe856fe1c97bcb, type: 3}
+--- !u!114 &996488299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996488287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 933e0f6a085354e1e895bf95c1be8e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UnitName: Troll
+  UnitX: 11
+  UnitY: 13
+  MovementLength: 5
+  EnemyX: 4
+  EnemyY: 13
+  Mode: 1
+  Disabled: 1
+  DisableAttack: 1
 --- !u!1001 &1110013713
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4055,8 +4077,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1130516806}
   m_HandleRect: {fileID: 1130516805}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.99999994
+  m_Value: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7614,7 +7636,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1530874139}
   m_HandleRect: {fileID: 1530874138}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
