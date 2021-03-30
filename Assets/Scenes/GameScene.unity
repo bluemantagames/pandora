@@ -2879,6 +2879,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &738133541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738133527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PivotAdjustmentX: -100
+  PivotAdjustmentY: 800
+  ProjectileAdjustmentX: 0
+  ProjectileAdjustmentY: 0
 --- !u!1 &800929993
 GameObject:
   m_ObjectHideFlags: 0
@@ -3663,10 +3679,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitName: HalfOrc
-  UnitX: 7
-  UnitY: 5
+  UnitX: 5
+  UnitY: 16
   MovementLength: 5
-  EnemyX: 5
+  EnemyX: 10
   EnemyY: 12
   Mode: 1
   Disabled: 0
@@ -5689,6 +5705,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1559341021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559341007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PivotAdjustmentX: -100
+  PivotAdjustmentY: 800
+  ProjectileAdjustmentX: 0
+  ProjectileAdjustmentY: 0
 --- !u!1 &1571493266
 GameObject:
   m_ObjectHideFlags: 0
@@ -7696,6 +7728,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2011908166}
   m_CullTransparentMesh: 0
+--- !u!1 &2021472101 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2693967325251540133, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 2693967325521330708}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2021472110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021472101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PivotAdjustmentX: -100
+  PivotAdjustmentY: 800
+  ProjectileAdjustmentX: 0
+  ProjectileAdjustmentY: 0
 --- !u!1 &2063161276
 GameObject:
   m_ObjectHideFlags: 0
