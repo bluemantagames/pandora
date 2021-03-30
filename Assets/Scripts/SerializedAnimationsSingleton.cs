@@ -45,7 +45,8 @@ namespace Pandora
         /// </summary>
         public void SetAnimation(string animationName, Dictionary<int, int> animationSteps)
         {
-            serializedAnimations.Add(animationName, animationSteps);
+            if (!serializedAnimations.ContainsKey(animationName))
+                serializedAnimations.Add(animationName, animationSteps);
         }
 
         /// <summary>
