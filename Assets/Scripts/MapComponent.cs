@@ -288,9 +288,9 @@ namespace Pandora
             {
                 localTime += Time.deltaTime;
 
-                if (localTime * 1000 >= PandoraEngine.TickTime)
+                if (localTime * 1000 >= engine.TickTime)
                 {
-                    engine.Process(PandoraEngine.TickTime);
+                    engine.Process(engine.TickTime);
 
                     localTime = 0;
                 }

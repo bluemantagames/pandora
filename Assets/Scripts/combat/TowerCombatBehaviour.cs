@@ -46,7 +46,6 @@ namespace Pandora.Combat
         public GameObject Balista;
         Animator balistaAnimator;
         public string AttackingStateName = "Attacking";
-        public bool IsDisabled { get; set; } = false;
 
         TowerTeamComponent teamComponent;
         Vector2 worldTowerPosition
@@ -172,11 +171,11 @@ namespace Pandora.Combat
 
                 if (balistaAnimator != null)
                 {
-                    var animationPercent = (float)lastAttackTimeLapse / cooldownMs;
+                    var animationPercent = (float) lastAttackTimeLapse / cooldownMs;
 
                     balistaAnimator.Play(AttackingStateName, 0, animationPercent);
 
-                    var direction = ((Vector2)CurrentTarget.transform.position - (Vector2)transform.position).normalized;
+                    var direction = ((Vector2) CurrentTarget.transform.position - (Vector2) transform.position).normalized;
 
                     balistaAnimator.SetFloat("BlendX", direction.x);
                     balistaAnimator.SetFloat("BlendY", direction.y);
@@ -195,7 +194,7 @@ namespace Pandora.Combat
 
         public void AttackEnemy(Enemy target, uint timeLapse)
         {
-            if (CurrentTarget == null || IsDisabled) return;
+            if (CurrentTarget == null) return;
 
             Logger.Debug("Lapse: firing");
             Logger.Debug($"Attacking {target} - {isMiddle} - {targetLifeComponent}");
@@ -207,7 +206,7 @@ namespace Pandora.Combat
             var projectileObject = Instantiate(projectile, MapComponent.Instance.engine.PhysicsToMapWorld(towerEntity.Position), Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
-            var rotationDegrees =
+            var rotationDegrees = 
                 (projectileBehaviour is SimpleProjectileBehaviour simpleBehaviour) ? simpleBehaviour.StartRotationDegrees : 0;
 
             var direction = (target.enemy.transform.position - gameObject.transform.position).normalized;

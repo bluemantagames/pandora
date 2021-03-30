@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5709001385554795573}
   - component: {fileID: 4685403503152784519}
   - component: {fileID: 4061167875481412185}
-  - component: {fileID: 336038504776493487}
   m_Layer: 11
   m_Name: TowerProjectile
   m_TagString: Untagged
@@ -125,7 +124,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.75, y: 0.75}
+    oldSize: {x: 3, y: 3}
     newSize: {x: 0.35, y: 0.45}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -164,56 +163,3 @@ MonoBehaviour:
   IsAoe: 0
   ShouldHitAllies: 0
   EngineUnitsRadius: 0
---- !u!114 &336038504776493487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5687362912629012028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6fe64e3937f94aa1836719e773e4fad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Curve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.0015368499
-      value: 1.0019069
-      inSlope: 0.037310123
-      outSlope: 0.037310123
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.21151085
-    - serializedVersion: 3
-      time: 0.66450024
-      value: 0.8172501
-      inSlope: -0.7796286
-      outSlope: -0.7796286
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.12202308
-      outWeight: 0.15458782
-    - serializedVersion: 3
-      time: 0.98975486
-      value: 0.49434128
-      inSlope: -1.3140073
-      outSlope: -1.3140073
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.21628541
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 0
-    m_RotationOrder: 4
-  AnimationName: towerProjectileAnimation
-  AnimationTimeStep: 10
-  AnimationMaxTime: 100
-  AnimationCurrentTime: 0
-  TicksForAnimationStep: 2
-  Loop: 0
-  Disable: 0
-  DevMode: 0

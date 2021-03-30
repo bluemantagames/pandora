@@ -1,16 +1,10 @@
 using Pandora;
 using UnityEngine;
 
-namespace Pandora.Combat
-{
-    public interface CombatBehaviour
-    {
+namespace Pandora.Combat {
+    public interface CombatBehaviour {
         /// <summary>True if the unit is currently in combat</summary>
         bool isAttacking { get; }
-
-        /// <summary>True if the combat is disabled for this unit</summary>
-        bool IsDisabled { get; set; }
-
         /// <summary>Combat type of this behaviour</summary>
         CombatType combatType { get; }
 
