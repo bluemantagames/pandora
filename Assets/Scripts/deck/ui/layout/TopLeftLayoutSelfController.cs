@@ -47,7 +47,7 @@ namespace Pandora.UI.Layout
             RectTransform rectTransform = GetComponent<RectTransform>();
             var parentRectTransform = transform.parent.GetComponent<RectTransform>();
 
-            var upperLeft = parentRectTransform.TransformPoint(new Vector2(parentRectTransform.rect.xMin, parentRectTransform.rect.yMax));
+            var upperLeft = parentRectTransform.TransformPoint(new Vector2(parentRectTransform.rect.xMin + 20, parentRectTransform.rect.yMax - 20));
 
             //Change the position and rotation of the RectTransform
             rectTransform.SetPositionAndRotation(upperLeft, Quaternion.identity);

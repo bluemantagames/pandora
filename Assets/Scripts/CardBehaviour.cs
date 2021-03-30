@@ -61,11 +61,6 @@ namespace Pandora
                     menuCardBehaviour.Load();
 
                     disabled = true;
-
-                    foreach (Transform child in transform)
-                    {
-                        Destroy(child.gameObject);
-                    }
                 }
             }
         }
@@ -228,13 +223,11 @@ namespace Pandora
             {
                 Destroy(gameObject);
             }
-            else if (!_isUI)
-            {
-                var manaText = GetComponentInChildren<Text>();
 
-                if (manaText != null)
-                    manaText.text = (RequiredMana / 10).ToString();
-            }
+            var manaText = GetComponentInChildren<Text>();
+
+            if (manaText != null)
+                manaText.text = (RequiredMana / 10).ToString();
         }
 
 

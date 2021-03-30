@@ -25,12 +25,22 @@ namespace Pandora.Deck.UI
         GameObject placeholderCard;
         CancellationTokenSource draggingCancellationToken;
         bool isSelected = false;
+        float manaImageReduction = 0.13f;
 
         public void Load()
         {
             originalParent = transform.parent.gameObject;
             deckSpotParentBehaviour = Canvas.GetComponentInChildren<DeckSpotParentBehaviour>();
             menuCardSiblingIndex = gameObject.transform.GetSiblingIndex();
+
+            var sizePercent = 1 - manaImageReduction;
+
+            var manaImage = transform.Find("ManaImage");
+
+            var manaImageRectTransform = manaImage.GetComponent<Image>().rectTransform;
+
+            manaImageRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, manaImageRectTransform.rect.width * sizePercent);
+            manaImageRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, manaImageRectTransform.rect.height * sizePercent);
         }
 
         public void Reset()

@@ -481,8 +481,6 @@ namespace Pandora
                 unitSpawn.Timestamp
             );
 
-            if (movement != null) engineEntity.CollisionCallback = movement;
-
             if (spell != null)
             {
                 spell.Target = cell;
