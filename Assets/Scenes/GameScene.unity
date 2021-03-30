@@ -3664,10 +3664,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitName: HalfOrc
   UnitX: 7
-  UnitY: 10
+  UnitY: 5
   MovementLength: 5
-  EnemyX: 10
-  EnemyY: 16
+  EnemyX: 5
+  EnemyY: 12
   Mode: 1
   Disabled: 0
   DisableAttack: 0
@@ -7462,6 +7462,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1838545278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838545264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PivotAdjustmentX: -100
+  PivotAdjustmentY: 800
+  ProjectileAdjustmentX: 0
+  ProjectileAdjustmentY: 0
 --- !u!1 &1845265289
 GameObject:
   m_ObjectHideFlags: 0
