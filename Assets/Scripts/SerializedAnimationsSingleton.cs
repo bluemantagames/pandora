@@ -106,6 +106,16 @@ namespace Pandora
         }
 
         /// <summary>
+        /// Parse an animation string.
+        /// </summary>
+        public AnimationStepCollection ParseAnimationString(string fileContent)
+        {
+            var parsedAnimation = JsonUtility.FromJson<AnimationStepCollection>(fileContent);
+
+            return parsedAnimation;
+        }
+
+        /// <summary>
         /// Load and parse a single animation file.
         /// </summary>
         public AnimationStepCollection LoadSingleAnimationFile(string animationName)
@@ -116,7 +126,7 @@ namespace Pandora
 
             Logger.Debug($"Retrieved saved animation {animationName}");
 
-            var parsedAnimation = JsonUtility.FromJson<AnimationStepCollection>(retrievedRawAnimation);
+            var parsedAnimation = ParseAnimationString(retrievedRawAnimation);
 
             return parsedAnimation;
         }
@@ -124,20 +134,21 @@ namespace Pandora
         /// <summary>
         /// Load all the animations in the specific directory.
         /// </summary>
-        public void LoadAllAnimations(string[] animationNames)
+        public void LoadAllAnimations()
         {
             var animationsPath = GetAnimationsDirectory();
+            var animations = Resources.LoadAll<TextAsset>(animationsPath);
 
             // We probably can load all the animation
             // not waiting the one before
-            foreach (string animationName in animationNames)
+            foreach (TextAsset animation in animations)
             {
-                Logger.Debug($"Loading {animationName} animation...");
+                Logger.Debug($"Loading {animation.name} animation...");
 
-                var parsedFile = LoadSingleAnimationFile(animationName);
-                var animationMap = GenerateAnimationMap(parsedFile);
+                var parsedAnimation = ParseAnimationString(animation.text);
+                var animationMap = GenerateAnimationMap(parsedAnimation);
 
-                SetAnimation(animationName, animationMap);
+                SetAnimation(animation.name, animationMap);
             }
         }
     }
