@@ -163,10 +163,9 @@ namespace Pandora.Engine.Animations
             }
         }
 
-        async UniTaskVoid LoadAnimation()
+        void LoadAnimation()
         {
-            var animationFile = serializedAnimationsSingleton.GenerateAnimationFileName(AnimationName);
-            var retrievedAnimation = await serializedAnimationsSingleton.LoadSingleAnimationFile(animationFile);
+            var retrievedAnimation = serializedAnimationsSingleton.LoadSingleAnimationFile(AnimationName);
             var decodedAnimation = serializedAnimationsSingleton.GenerateAnimationMap(retrievedAnimation);
 
             serializedAnimationsSingleton.SetAnimation(AnimationName, decodedAnimation);
@@ -180,7 +179,7 @@ namespace Pandora.Engine.Animations
             if (!serializedAnimationsSingleton.IsAnimationAlreadyRetrieved(AnimationName) && !DevMode)
             {
                 Logger.Debug($"Animation not cached, retrieving...");
-                _ = LoadAnimation();
+                LoadAnimation();
             }
         }
     }

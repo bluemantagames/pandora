@@ -71,7 +71,7 @@ public class GameSceneAsyncLoader : MonoBehaviour
             .Select(animationBezier => animationBezier.AnimationName)
             .ToArray();
 
-        await SerializedAnimationsSingleton.Instance.LoadAllAnimations(animationNames);
+        SerializedAnimationsSingleton.Instance.LoadAllAnimations(animationNames);
 
         Logger.Debug("Preloading game scene...");
 

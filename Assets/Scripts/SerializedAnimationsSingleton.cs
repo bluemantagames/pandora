@@ -62,8 +62,7 @@ namespace Pandora
         /// </summary>
         public string GetAnimationsDirectory()
         {
-            var projectPath = Application.streamingAssetsPath;
-            var animationPath = $"{projectPath}/GeneratedAnimations";
+            var animationPath = $"Text/GeneratedAnimations";
 
             return animationPath;
         }
@@ -109,26 +108,13 @@ namespace Pandora
         /// <summary>
         /// Load and parse a single animation file.
         /// </summary>
-        public async UniTask<AnimationStepCollection> LoadSingleAnimationFile(string animationFile)
+        public AnimationStepCollection LoadSingleAnimationFile(string animationName)
         {
-            string retrievedRawAnimation;
-
             var animationsPath = GetAnimationsDirectory();
-            var animationPath = $"{animationsPath}/{animationFile}";
+            var animationPath = $"{animationsPath}/{animationName}";
+            var retrievedRawAnimation = Resources.Load<TextAsset>(animationPath).text;
 
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                var request = await UnityWebRequest.Get(animationPath).SendWebRequest();
-                retrievedRawAnimation = request.downloadHandler.text;
-            }
-            else
-            {
-                var reader = File.OpenText(animationPath);
-                retrievedRawAnimation = await reader.ReadToEndAsync();
-                reader.Close();
-            }
-
-            Logger.Debug($"Retrieved saved animation {animationFile}");
+            Logger.Debug($"Retrieved saved animation {animationName}");
 
             var parsedAnimation = JsonUtility.FromJson<AnimationStepCollection>(retrievedRawAnimation);
 
@@ -138,7 +124,7 @@ namespace Pandora
         /// <summary>
         /// Load all the animations in the specific directory.
         /// </summary>
-        public async UniTask LoadAllAnimations(string[] animationNames)
+        public void LoadAllAnimations(string[] animationNames)
         {
             var animationsPath = GetAnimationsDirectory();
 
@@ -146,11 +132,9 @@ namespace Pandora
             // not waiting the one before
             foreach (string animationName in animationNames)
             {
-                var fileName = GenerateAnimationFileName(animationName);
+                Logger.Debug($"Loading {animationName} animation...");
 
-                Logger.Debug($"Loading {fileName} animation...");
-
-                var parsedFile = await LoadSingleAnimationFile(fileName);
+                var parsedFile = LoadSingleAnimationFile(animationName);
                 var animationMap = GenerateAnimationMap(parsedFile);
 
                 SetAnimation(animationName, animationMap);
