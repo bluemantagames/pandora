@@ -34,7 +34,7 @@ public class AnimationBezierEditor : Editor
     {
         var animationsPath = SerializedAnimationsSingleton.Instance.GetAnimationsDirectory();
         var animationFile = SerializedAnimationsSingleton.Instance.GenerateAnimationFileName(animationName);
-        var animationPath = $"{animationsPath}/{animationFile}";
+        var animationPath = $"{Application.dataPath}/Resources/{animationsPath}/{animationFile}";
 
         Debug.Log($"Generating animation file: {animationPath}");
 

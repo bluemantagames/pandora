@@ -349,6 +349,8 @@ namespace Pandora.Engine
             // Move units
             foreach (var entity in Entities)
             {
+                if (entity.Path == null || entity.IsMovementPaused) continue;
+
                 int computedSpeed;
 
                 var animationBehaviour = entity.GameObject?.GetComponent<AnimationBezier>();
@@ -369,8 +371,6 @@ namespace Pandora.Engine
                 }
 
                 var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, computedSpeed));
-
-                if (entity.Path == null || entity.IsMovementPaused) continue;
 
                 for (var i = 0; i < unitsMoved; i++)
                 {

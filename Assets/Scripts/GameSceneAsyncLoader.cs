@@ -64,14 +64,7 @@ public class GameSceneAsyncLoader : MonoBehaviour
 
         Logger.Debug("Preloading animations...");
 
-        var animationNames = AddressablesSingleton.instance.units.Values
-            .Select(card => card?.GetComponent<AnimationBezier>())
-            .ToList()
-            .FindAll(animationBezier => animationBezier != null)
-            .Select(animationBezier => animationBezier.AnimationName)
-            .ToArray();
-
-        await SerializedAnimationsSingleton.Instance.LoadAllAnimations(animationNames);
+        SerializedAnimationsSingleton.Instance.LoadAllAnimations();
 
         Logger.Debug("Preloading game scene...");
 

@@ -45,7 +45,8 @@ namespace Pandora
         /// </summary>
         public void SetAnimation(string animationName, Dictionary<int, int> animationSteps)
         {
-            serializedAnimations.Add(animationName, animationSteps);
+            if (!serializedAnimations.ContainsKey(animationName))
+                serializedAnimations.Add(animationName, animationSteps);
         }
 
         /// <summary>
@@ -61,8 +62,7 @@ namespace Pandora
         /// </summary>
         public string GetAnimationsDirectory()
         {
-            var projectPath = Application.streamingAssetsPath;
-            var animationPath = $"{projectPath}/GeneratedAnimations";
+            var animationPath = $"Text/GeneratedAnimations";
 
             return animationPath;
         }
@@ -106,30 +106,27 @@ namespace Pandora
         }
 
         /// <summary>
+        /// Parse an animation string.
+        /// </summary>
+        public AnimationStepCollection ParseAnimationString(string fileContent)
+        {
+            var parsedAnimation = JsonUtility.FromJson<AnimationStepCollection>(fileContent);
+
+            return parsedAnimation;
+        }
+
+        /// <summary>
         /// Load and parse a single animation file.
         /// </summary>
-        public async UniTask<AnimationStepCollection> LoadSingleAnimationFile(string animationFile)
+        public AnimationStepCollection LoadSingleAnimationFile(string animationName)
         {
-            string retrievedRawAnimation;
-
             var animationsPath = GetAnimationsDirectory();
-            var animationPath = $"{animationsPath}/{animationFile}";
+            var animationPath = $"{animationsPath}/{animationName}";
+            var retrievedRawAnimation = Resources.Load<TextAsset>(animationPath).text;
 
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                var request = await UnityWebRequest.Get(animationPath).SendWebRequest();
-                retrievedRawAnimation = request.downloadHandler.text;
-            }
-            else
-            {
-                var reader = File.OpenText(animationPath);
-                retrievedRawAnimation = await reader.ReadToEndAsync();
-                reader.Close();
-            }
+            Logger.Debug($"Retrieved saved animation {animationName}");
 
-            Logger.Debug($"Retrieved saved animation {animationFile}");
-
-            var parsedAnimation = JsonUtility.FromJson<AnimationStepCollection>(retrievedRawAnimation);
+            var parsedAnimation = ParseAnimationString(retrievedRawAnimation);
 
             return parsedAnimation;
         }
@@ -137,22 +134,21 @@ namespace Pandora
         /// <summary>
         /// Load all the animations in the specific directory.
         /// </summary>
-        public async UniTask LoadAllAnimations(string[] animationNames)
+        public void LoadAllAnimations()
         {
             var animationsPath = GetAnimationsDirectory();
+            var animations = Resources.LoadAll<TextAsset>(animationsPath);
 
             // We probably can load all the animation
             // not waiting the one before
-            foreach (string animationName in animationNames)
+            foreach (TextAsset animation in animations)
             {
-                var fileName = GenerateAnimationFileName(animationName);
+                Logger.Debug($"Loading {animation.name} animation...");
 
-                Logger.Debug($"Loading {fileName} animation...");
+                var parsedAnimation = ParseAnimationString(animation.text);
+                var animationMap = GenerateAnimationMap(parsedAnimation);
 
-                var parsedFile = await LoadSingleAnimationFile(fileName);
-                var animationMap = GenerateAnimationMap(parsedFile);
-
-                SetAnimation(animationName, animationMap);
+                SetAnimation(animation.name, animationMap);
             }
         }
     }
