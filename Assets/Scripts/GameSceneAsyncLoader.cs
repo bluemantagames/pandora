@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -8,7 +7,6 @@ using Pandora;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Localization;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Pandora.Engine.Animations;
 
 public class GameSceneAsyncLoader : MonoBehaviour
 {
@@ -62,23 +60,11 @@ public class GameSceneAsyncLoader : MonoBehaviour
 
         await AddressablesSingleton.instance.LoadUnits();
 
-        Logger.Debug("Preloading animations...");
-
-        var animationNames = AddressablesSingleton.instance.units.Values
-            .Select(card => card?.GetComponent<AnimationBezier>())
-            .ToList()
-            .FindAll(animationBezier => animationBezier != null)
-            .Select(animationBezier => animationBezier.AnimationName)
-            .ToArray();
-
-        await SerializedAnimationsSingleton.Instance.LoadAllAnimations(animationNames);
-
         Logger.Debug("Preloading game scene...");
 
         var gameScene = SceneManager.GetSceneByName("GameScene");
 
-        if (gameScene.IsValid())
-        {
+        if (gameScene.IsValid()) {
             await SceneManager.UnloadSceneAsync(gameScene);
         }
 

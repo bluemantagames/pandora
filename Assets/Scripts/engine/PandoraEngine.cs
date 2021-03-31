@@ -9,7 +9,6 @@ using UnityEngine.Profiling;
 using Pandora.Engine.Grid;
 using Pandora.Network;
 using Pandora.Network.Messages;
-using Pandora.Engine.Animations;
 using System.Threading.Tasks;
 using System.Threading;
 
@@ -18,12 +17,12 @@ namespace Pandora.Engine
     [Serializable]
     public class PandoraEngine : ScriptableObject
     {
-        public static uint TickTime = 40; // milliseconds in a tick
+        public uint TickTime = 40; // milliseconds in a tick
         public int UnitsPerCell = 400; // physics engine units per grid cell
         public List<EngineEntity> Entities = new List<EngineEntity> { };
         public List<EngineBehaviour> Behaviours = new List<EngineBehaviour> { };
 
-        List<EngineSnapshotMessage> snapshotMessages = new List<EngineSnapshotMessage>() { };
+        List<EngineSnapshotMessage> snapshotMessages = new List<EngineSnapshotMessage>() {};
         [NonSerialized] public MapComponent Map;
         public uint TotalElapsed = 0;
         BoxBounds mapBounds, riverBounds;
@@ -130,7 +129,7 @@ namespace Pandora.Engine
             centerComponent.Entity = centerEntity;
         }
 
-        public static int GetSpeed(int engineUnitsPerSecond) =>
+        public int GetSpeed(int engineUnitsPerSecond) =>
             Mathf.FloorToInt((engineUnitsPerSecond / 1000f) * TickTime);
 
         public IEnumerator<GridCell> FindPath(EngineEntity entity, Vector2Int target)
@@ -349,26 +348,7 @@ namespace Pandora.Engine
             // Move units
             foreach (var entity in Entities)
             {
-                int computedSpeed;
-
-                var animationBehaviour = entity.GameObject?.GetComponent<AnimationBezier>();
-                var animatedSpeed = animationBehaviour?.GetCurrentAnimatedSpeed();
-
-                // Here we are going to use the animated speed
-                // if possible (transforming it into an integer).
-                // The normal entity speed otherwise.
-                if (animatedSpeed != null)
-                {
-                    computedSpeed = (int)animatedSpeed;
-
-                    animationBehaviour?.NextStep();
-                }
-                else
-                {
-                    computedSpeed = entity.Speed;
-                }
-
-                var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, computedSpeed));
+                var unitsMoved = Mathf.FloorToInt(Mathf.Max(1f, entity.Speed));
 
                 if (entity.Path == null || entity.IsMovementPaused) continue;
 
@@ -611,8 +591,7 @@ namespace Pandora.Engine
             }
         }
 
-        void enqueueSnapshot()
-        {
+        void enqueueSnapshot() {
             SerializableBehaviours.Clear();
 
             foreach (var behaviour in Behaviours)
@@ -729,8 +708,7 @@ namespace Pandora.Engine
             return distance <= radius;
         }
 
-        public (Vector2Int, Vector2Int, Vector2Int) CalculateRotatedTriangleVertices(Vector2Int position, int width, int height, int unitsLeniency, Vector2Int direction)
-        {
+        public (Vector2Int, Vector2Int, Vector2Int) CalculateRotatedTriangleVertices(Vector2Int position, int width, int height, int unitsLeniency, Vector2Int direction) {
             var v1 = PoolInstances.Vector2IntPool.GetObject();
             v1.x = position.x - (width / 2);
             v1.y = position.y + height - unitsLeniency;
