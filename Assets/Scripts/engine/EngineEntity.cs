@@ -44,7 +44,8 @@ namespace Pandora.Engine
         public bool IsEvading = false;
         public EngineEntity EvadedUnit = null;
 
-        public string Name {
+        public string Name
+        {
             get => GameObject.name;
         }
 
@@ -54,7 +55,7 @@ namespace Pandora.Engine
 
         public void SetSpeedUnitsPerSecond(int engineUnitsPerSecond)
         {
-            Speed = Engine.GetSpeed(engineUnitsPerSecond);
+            Speed = PandoraEngine.GetSpeed(engineUnitsPerSecond);
         }
 
         public void SetTarget(GridCell cell)
@@ -83,11 +84,13 @@ namespace Pandora.Engine
 
                 IsEvading = false;
 
-                if (path.MoveNext()) {
+                if (path.MoveNext())
+                {
                     path.MoveNext();
                 }
 
-                if (path.Current != null) {
+                if (path.Current != null)
+                {
                     Logger.Debug($"Pathfinding evading found next move {path.Current}");
 
                     var targetCell = Engine.GridCellToPhysics(path.Current);
@@ -96,10 +99,12 @@ namespace Pandora.Engine
                     targetCell.y += Engine.UnitsPerCell / 2;
 
                     return Bresenham.GetEnumerator(position, targetCell);
-                } else {
+                }
+                else
+                {
                     Logger.DebugWarning($"Empty path found while evading for {position} -> {target}");
 
-                    return (new LinkedList<Vector2Int>() {}).GetEnumerator();
+                    return (new LinkedList<Vector2Int>() { }).GetEnumerator();
                 }
 
             }

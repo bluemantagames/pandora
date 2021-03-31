@@ -164,6 +164,7 @@ GameObject:
   - component: {fileID: 8066852147643236097}
   - component: {fileID: 3679560021763947257}
   - component: {fileID: 910348243161794103}
+  - component: {fileID: -1028279971654260167}
   m_Layer: 9
   m_Name: Troll
   m_TagString: Untagged
@@ -288,6 +289,7 @@ MonoBehaviour:
   lifeValue: 1250
   maxLife: 0
   IsDead: 0
+  DisableDamage: 0
   DeathVFX: {fileID: 2685581498212572552, guid: 83f603f9e61cdbd4c8da4a6ec28e3dc1,
     type: 3}
   DeathVFXSpeedMultiplier: 2
@@ -465,6 +467,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Shadow: {fileID: 2103948611786811515, guid: a7ff30ab552991847bdceb2b7f1e6c8d, type: 3}
+--- !u!114 &-1028279971654260167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076880815249732036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6fe64e3937f94aa1836719e773e4fad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0060761226
+      value: 0.40574977
+      inSlope: -0.07200993
+      outSlope: -0.07200993
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.7986742
+    - serializedVersion: 3
+      time: 0.741203
+      value: 0.9868604
+      inSlope: -0.1878161
+      outSlope: -2.651439
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.07708067
+      outWeight: 0.16985485
+    - serializedVersion: 3
+      time: 0.80855405
+      value: 0.007687304
+      inSlope: -5.824006
+      outSlope: -5.824006
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.09899722
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  AnimationName: trollMovementAnimation
+  AnimationTimeStep: 10
+  AnimationMaxTime: 100
+  AnimationCurrentTime: 0
+  TicksForAnimationStep: 1
+  Loop: 1
+  Disable: 0
+  DevMode: 0
 --- !u!1001 &945724254938945743
 PrefabInstance:
   m_ObjectHideFlags: 0

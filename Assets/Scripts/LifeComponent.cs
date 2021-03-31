@@ -20,6 +20,7 @@ namespace Pandora
         public int maxLife;
         public bool IsDead = false;
         public GridCell DeathPosition = null;
+        public bool DisableDamage = false;
         WalletsComponent walletsComponent;
         TeamComponent teamComponent;
         TowerTeamComponent towerTeamComponent;
@@ -101,7 +102,8 @@ namespace Pandora
             DeathPosition = sourceEntity.GetCurrentCell();
         }
 
-        public void Kill(DamageSource source) {
+        public void Kill(DamageSource source)
+        {
             AssignDamage(lifeValue, source);
         }
 
@@ -119,6 +121,8 @@ namespace Pandora
 
         public void AssignDamage(int value, DamageSource source)
         {
+            if (DisableDamage) return;
+
             lifeValue -= value;
 
             RefreshHealthbar();
@@ -143,12 +147,14 @@ namespace Pandora
 
                 var groupComponent = GetComponent<GroupComponent>();
 
-                if (DeathVFX != null) {
+                if (DeathVFX != null)
+                {
                     var vfx = Instantiate(DeathVFX, transform.position, DeathVFX.transform.rotation);
 
                     multiplySpeed(vfx.GetComponent<ParticleSystem>());
 
-                    foreach (var system in vfx.GetComponentsInChildren<ParticleSystem>()) {
+                    foreach (var system in vfx.GetComponentsInChildren<ParticleSystem>())
+                    {
                         multiplySpeed(system);
                     }
                 }
@@ -169,7 +175,7 @@ namespace Pandora
                 {
                     CommandViewportBehaviour.Instance.RemoveCommand(idComponent.Id);
                 }
-                
+
                 SetDeathPosition();
                 Remove();
 
@@ -213,7 +219,8 @@ namespace Pandora
             mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lifePercent * maskOriginalSize);
         }
 
-        void multiplySpeed(ParticleSystem system) {
+        void multiplySpeed(ParticleSystem system)
+        {
             system.Stop();
 
             var main = system.main;
