@@ -15,9 +15,10 @@ namespace Pandora.Combat
         bool isBackswinging = false;
         public int attackCooldownMs = 500, backswingMs = 400;
         public bool isAttacking { get; private set; } = false;
+        public bool IsDisabled { get; set; } = false;
         public string animationStateName = "Attacking";
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 0;
-        public List<Effect> Effects = new List<Effect> {};
+        public List<Effect> Effects = new List<Effect> { };
         public GameObject MultipliedVFX;
 
         /// <summary>Multiplier applied for the next attack</summary>
@@ -34,6 +35,8 @@ namespace Pandora.Combat
         /** Returns true if enemy has died */
         public void AttackEnemy(Enemy target, uint timeLapse)
         {
+            if (IsDisabled) return;
+
             var animator = GetComponent<Animator>();
 
             var cappedBackswingMs = Math.Max(1, backswingMs);
@@ -91,10 +94,12 @@ namespace Pandora.Combat
 
             var inflictedDamage = damage;
 
-            if (NextAttackMultiplier.HasValue) {
+            if (NextAttackMultiplier.HasValue)
+            {
                 inflictedDamage = NextAttackMultiplier.Value * damage;
 
-                if (MultipliedVFX != null) {
+                if (MultipliedVFX != null)
+                {
                     var vfx = Instantiate(MultipliedVFX, target.transform.position, MultipliedVFX.transform.rotation);
 
                     var callback = vfx.GetComponent<CombatVFXCallback>();

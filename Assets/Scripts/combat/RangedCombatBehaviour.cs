@@ -19,6 +19,7 @@ namespace Pandora.Combat
         public string animationStateName;
         uint timeSinceLastProjectile = 0; // ms
         bool isBackswinging = false;
+        public bool IsDisabled { get; set; } = false;
         public int AggroRangeCells = 3, AttackRangeEngineUnits = 2000;
         public GameObject[] EffectObjects;
 
@@ -33,6 +34,8 @@ namespace Pandora.Combat
         /** Returns true if enemy has died */
         public void AttackEnemy(Enemy target, uint timeLapse)
         {
+            if (IsDisabled) return;
+
             var animator = GetComponent<Animator>();
 
             var cappedBackswingMs = Math.Max(1, backswingMs);
@@ -48,7 +51,7 @@ namespace Pandora.Combat
                 isAttacking = true;
             }
 
-            var direction = ((Vector2) target.enemy.transform.position - (Vector2) transform.position).normalized;
+            var direction = ((Vector2)target.enemy.transform.position - (Vector2)transform.position).normalized;
 
             animator.SetFloat("BlendX", direction.x);
             animator.SetFloat("BlendY", direction.y);
@@ -62,7 +65,8 @@ namespace Pandora.Combat
                 SpawnProjectile();
 
                 isBackswinging = true;
-            } else if (timeSinceLastProjectile >= cappedAttackCooldownMs + cappedBackswingMs)
+            }
+            else if (timeSinceLastProjectile >= cappedAttackCooldownMs + cappedBackswingMs)
             {
                 timeSinceLastProjectile = 0;
 
@@ -83,7 +87,7 @@ namespace Pandora.Combat
         public void SpawnProjectile()
         {
             if (target == null) return;
- 
+
             var map = MapComponent.Instance;
 
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
