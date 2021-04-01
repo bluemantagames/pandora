@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pandora.Engine;
 using Pandora.Engine.Animations;
+using System.Globalization;
 using System.IO;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Networking;
@@ -95,8 +96,12 @@ namespace Pandora
 
             foreach (AnimationStep step in savedAnimation.steps)
             {
-                var decodedSpeedDecimal = Decimal.Parse(step.speed);
+                var parseStyle = NumberStyles.AllowDecimalPoint;
+                var parseProvider = new CultureInfo("en-US");
+                var decodedSpeedDecimal = Decimal.Parse(step.speed, parseStyle, parseProvider);
+
                 var decodedSpeed = Decimal.ToInt32(decodedSpeedDecimal);
+
                 var engineSpeed = PandoraEngine.GetSpeed(decodedSpeed);
 
                 result.Add(step.stepPercentage, engineSpeed);
@@ -124,8 +129,6 @@ namespace Pandora
             var animationPath = $"{animationsPath}/{animationName}";
             var retrievedRawAnimation = Resources.Load<TextAsset>(animationPath).text;
 
-            Logger.Debug($"Retrieved saved animation {animationName}");
-
             var parsedAnimation = ParseAnimationString(retrievedRawAnimation);
 
             return parsedAnimation;
@@ -143,7 +146,7 @@ namespace Pandora
             // not waiting the one before
             foreach (TextAsset animation in animations)
             {
-                Logger.Debug($"Loading {animation.name} animation...");
+                Logger.Debug($"[AnimationCurves] Loading {animation.name} animation...");
 
                 var parsedAnimation = ParseAnimationString(animation.text);
                 var animationMap = GenerateAnimationMap(parsedAnimation);
