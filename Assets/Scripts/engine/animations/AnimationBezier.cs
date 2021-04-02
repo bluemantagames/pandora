@@ -178,7 +178,7 @@ namespace Pandora.Engine.Animations
 
             if (!serializedAnimationsSingleton.IsAnimationAlreadyRetrieved(AnimationName) && !DevMode)
             {
-                Logger.Debug($"Animation not cached, retrieving...");
+                Logger.Debug($"[AnimationCurves] Animation {AnimationName} not cached, retrieving...");
                 LoadAnimation();
             }
         }
