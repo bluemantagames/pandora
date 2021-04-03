@@ -17,12 +17,15 @@ namespace Pandora.Network
 
         /// <summary>Forces a game without authentication</summary>
         public bool DevMatchmaking = false;
+        public GameObject TextLoader;
 
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
 
         public void Connect()
         {
             Logger.Debug("Connecting");
+
+            TextLoader.GetComponent<MatchmakingLodaderTextBehaviour>().Enable();
 
             AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATCHMAKING_START);
 
@@ -76,6 +79,8 @@ namespace Pandora.Network
             if (GameSceneToLoad)
             {
                 AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATHCMAKING_MATCH_FOUND);
+
+                TextLoader.GetComponent<MatchmakingLodaderTextBehaviour>().Disable();
 
                 var networkController = NetworkControllerSingleton.instance;
 

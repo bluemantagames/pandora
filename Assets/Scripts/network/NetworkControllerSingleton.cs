@@ -29,7 +29,8 @@ namespace Pandora.Network
         ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
         JWT jwt;
-        int matchStartTimeout = 5, notificationWaitTimeout = 30; // seconds
+        int matchStartTimeout = 5; // seconds
+        public int NotificationWaitTimeout = 30; // seconds
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
@@ -83,7 +84,7 @@ namespace Pandora.Network
 
             var cancellationSource = new CancellationTokenSource();
 
-            var _ = Task.Delay(notificationWaitTimeout * 1000, cancellationSource.Token).ContinueWith(task => {
+            var _ = Task.Delay(NotificationWaitTimeout * 1000, cancellationSource.Token).ContinueWith(task => {
                 apiControllerSingleton.SendMatchmakingNotification(isDev, playerModelSingleton.Token, cancellationSource.Token);
             });
 
