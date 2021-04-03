@@ -16,7 +16,7 @@ namespace Pandora.Network
         public bool IsDebugBuild = Debug.isDebugBuild;
         UnityJsonSerializer customSerializer = new UnityJsonSerializer();
 
-        string prodEndpoint = "http://pandora.bluemanta.games:8080/api";
+        string prodEndpoint = "https://pandora.bluemanta.games/api";
 
         private string apiHost
         {
