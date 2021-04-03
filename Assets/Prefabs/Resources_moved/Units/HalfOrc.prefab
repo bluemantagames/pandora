@@ -331,9 +331,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ProjectileAdjustmentX: 450
-  ProjectileAdjustmentY: 450
-  ProjectileDirectionThreshold: 1
+  PivotAdjustmentX: 0
+  PivotAdjustmentY: 0
+  ProjectileAdjustmentX: 250
+  ProjectileAdjustmentY: 300
 --- !u!1 &2409834720673952193
 GameObject:
   m_ObjectHideFlags: 0
