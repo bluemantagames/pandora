@@ -11,6 +11,7 @@ using Pandora.Network.Messages;
 using System.Collections.Concurrent;
 using Pandora.Network.Data.Matchmaking;
 using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace Pandora.Network
 {
@@ -28,7 +29,7 @@ namespace Pandora.Network
         ApiControllerSingleton apiControllerSingleton = ApiControllerSingleton.instance;
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
         JWT jwt;
-        int matchStartTimeout = 5; // seconds
+        int matchStartTimeout = 5, notificationWaitTimeout = 30; // seconds
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
@@ -80,9 +81,18 @@ namespace Pandora.Network
                 Debug.Log($"Starting matchmaking with progress {GameSceneLoading.progress}");
             }
 
+            var cancellationSource = new CancellationTokenSource();
+
+            var _ = Task.Delay(notificationWaitTimeout * 1000, cancellationSource.Token).ContinueWith(task => {
+                apiControllerSingleton.SendMatchmakingNotification(isDev, playerModelSingleton.Token, cancellationSource.Token);
+            });
+
+
             var response = isDev
                 ? await apiControllerSingleton.StartDevMatchmaking(deck, playerModelSingleton.Token)
                 : await apiControllerSingleton.StartMatchmaking(deck, playerModelSingleton.Token);
+
+            cancellationSource.Cancel();
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
