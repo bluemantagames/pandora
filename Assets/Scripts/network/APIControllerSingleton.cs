@@ -6,6 +6,8 @@ using Pandora.Network.Data.Matchmaking;
 using System.Threading.Tasks;
 using System.Net;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Pandora.Network
 {
@@ -14,7 +16,7 @@ namespace Pandora.Network
         public bool IsDebugBuild = Debug.isDebugBuild;
         UnityJsonSerializer customSerializer = new UnityJsonSerializer();
 
-        string prodEndpoint = "http://pandora.bluemanta.games:8080/api";
+        string prodEndpoint = "https://pandora.bluemanta.games/api";
 
         private string apiHost
         {
@@ -69,6 +71,17 @@ namespace Pandora.Network
             }
         }
 
+        public Task<ApiResponse<EmptyResponse>> SendMatchmakingNotification(bool isDev, string token, CancellationToken? cancel = null) {
+            Debug.Log("Asking the server for a notification...");
+
+            var request = new RestRequest(
+                isDev ? "/dev-matchmaking/notification" : "/matchmaking/notification",
+                Method.POST
+            );
+
+            return ExecuteApiRequest<EmptyResponse>(request, token, cancel);
+        }
+
         /// <summary>
         /// Execute a RestSharp request and return an ApiResponse instead.
         /// ApiResponse can have a deserialized response object or an ApiError inside.
@@ -76,7 +89,7 @@ namespace Pandora.Network
         /// <param name="request"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private Task<ApiResponse<T>> ExecuteApiRequest<T>(RestRequest request, string token = null)
+        private Task<ApiResponse<T>> ExecuteApiRequest<T>(RestRequest request, string token = null, CancellationToken? cancel = null)
         {
             if (token != null)
             {
@@ -86,7 +99,10 @@ namespace Pandora.Network
 
             Logger.Debug($"Executing {request.Method} {apiHost}{request.Resource}");
 
-            return client.ExecuteTaskAsync<T>(request).ContinueWith<ApiResponse<T>>(reqTask =>
+            var clientTask = 
+                cancel.HasValue ? client.ExecuteTaskAsync<T>(request, cancel.Value) : client.ExecuteTaskAsync<T>(request);
+
+            return clientTask.ContinueWith<ApiResponse<T>>(reqTask =>
             {
                 var response = reqTask.Result;
 

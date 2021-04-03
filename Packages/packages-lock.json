@@ -7,6 +7,31 @@
       "dependencies": {},
       "hash": "80704e489df82c35c70ff4f8908ab7fdbebf96c2"
     },
+    "com.google.external-dependency-manager": {
+      "version": "1.2.164",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unityregistry-pa.googleapis.com"
+    },
+    "com.google.firebase.app": {
+      "version": "7.1.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.google.external-dependency-manager": "1.2.164"
+      },
+      "url": "https://unityregistry-pa.googleapis.com"
+    },
+    "com.google.firebase.messaging": {
+      "version": "7.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.google.firebase.app": "7.1.0"
+      },
+      "url": "https://unityregistry-pa.googleapis.com"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
@@ -118,6 +143,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "2.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.postprocessing": {
       "version": "2.3.0",
       "depth": 1,
@@ -140,6 +172,25 @@
       "source": "registry",
       "dependencies": {
         "com.unity.timeline": "1.2.17"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.remote-config": {
+      "version": "2.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "2.0.0",
+        "com.unity.remote-config-runtime": "1.0.1"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.remote-config-runtime": {
+      "version": "1.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "2.0.0"
       },
       "url": "https://packages.unity.com"
     },
