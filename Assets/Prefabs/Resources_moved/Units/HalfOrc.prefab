@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 6143504571528556948}
   - component: {fileID: -5040991384820823885}
   - component: {fileID: 1088177903361132395}
+  - component: {fileID: -2265523975830079739}
   m_Layer: 9
   m_Name: HalfOrc
   m_TagString: Untagged
@@ -146,6 +147,7 @@ MonoBehaviour:
   lifeValue: 250
   maxLife: 0
   IsDead: 0
+  DisableDamage: 0
   DeathVFX: {fileID: 2685581498212572552, guid: 83f603f9e61cdbd4c8da4a6ec28e3dc1,
     type: 3}
   DeathVFXSpeedMultiplier: 2
@@ -270,7 +272,7 @@ Animator:
   m_GameObject: {fileID: 1341249731494315628}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a72dcd18b92716a48a7fb41236c4a825, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -317,6 +319,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Shadow: {fileID: 6558252514521026299, guid: 00433c58c2d98ba499f66efd1598cde7, type: 3}
+--- !u!114 &-2265523975830079739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341249731494315628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PivotAdjustmentX: 0
+  PivotAdjustmentY: 0
+  ProjectileAdjustmentX: 250
+  ProjectileAdjustmentY: 300
 --- !u!1 &2409834720673952193
 GameObject:
   m_ObjectHideFlags: 0

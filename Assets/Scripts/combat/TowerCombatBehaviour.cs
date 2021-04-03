@@ -81,6 +81,7 @@ namespace Pandora.Combat
         uint lastAttackTimeLapse = 0;
         TowerPositionComponent towerPosition;
         EngineComponent engineComponent;
+        ProjectilePositionFixer projectilePositionFixer;
 
 
         /** Begins attacking an enemy */
@@ -91,6 +92,8 @@ namespace Pandora.Combat
             engineComponent = GetComponent<EngineComponent>();
 
             balistaAnimator = Balista?.GetComponent<Animator>();
+
+            projectilePositionFixer = GetComponent<ProjectilePositionFixer>();
 
             if (balistaAnimator != null)
             {
@@ -203,8 +206,20 @@ namespace Pandora.Combat
             isAttacking = true;
 
             var towerEntity = GetComponent<TowerPositionComponent>().TowerEntity;
+            Vector2Int projectilePosition;
 
-            var projectileObject = Instantiate(projectile, MapComponent.Instance.engine.PhysicsToMapWorld(towerEntity.Position), Quaternion.identity);
+            if (projectilePositionFixer != null)
+            {
+                var projectileDirection = projectilePositionFixer.CalculateDirection(towerEntity, target.enemyEntity);
+                projectilePosition = projectilePositionFixer.CalculateProjectilePosition(towerEntity.Position, MapComponent.Instance.engine, projectileDirection);
+            }
+            else
+            {
+                projectilePosition = towerEntity.Position;
+            }
+
+            var projectileWorldPosition = MapComponent.Instance.engine.PhysicsToMapWorld(projectilePosition);
+            var projectileObject = Instantiate(projectile, projectileWorldPosition, Quaternion.identity);
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
             var rotationDegrees =
@@ -224,8 +239,8 @@ namespace Pandora.Combat
             projectileBehaviour.map = map;
 
             var epoch = System.DateTime.MinValue;
-
-            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, towerEntity.Position, false, epoch.AddSeconds((int)towerPosition.EngineTowerPosition * 10));
+            var timestamp = epoch.AddSeconds((int)towerPosition.EngineTowerPosition * 10);
+            var projectileEngineEntity = map.engine.AddEntity(projectileObject, projectileBehaviour.Speed, projectilePosition, false, timestamp);
 
             projectileEngineEntity.CollisionCallback = projectileBehaviour as CollisionCallback;
 
