@@ -18,7 +18,11 @@ namespace Pandora.Analytics
 
         void ApplyRemoteSettings(ConfigResponse configResponse)
         {
-            NetworkControllerSingleton.instance.NotificationWaitTimeout = ConfigManager.appConfig.GetInt("MATCHMAKING_NOTIFICATION_TIMEOUT_SECONDS");
+            var matchmakingNotificationTimeout = ConfigManager.appConfig.GetInt("MATCHMAKING_NOTIFICATION_TIMEOUT_SECONDS");
+
+            // Set a safe lower limit in case of misconfigurations
+            if (matchmakingNotificationTimeout > 5)
+                NetworkControllerSingleton.instance.NotificationWaitTimeout = matchmakingNotificationTimeout;
 
             UnityEngine.Debug.Log($"Applied Remote Config {configResponse} {NetworkControllerSingleton.instance.NotificationWaitTimeout}");
         }
