@@ -362,16 +362,8 @@ namespace Pandora.Engine
                 if (entity.animationBezier != null)
                 {
                     var animatedSpeed = entity.animationBezier?.GetCurrentAnimatedSpeed();
-
-                    if (animatedSpeed != null)
-                    {
-                        computedSpeed = (int)animatedSpeed;
-                        entity.animationBezier?.NextStep();
-                    }
-                    else
-                    {
-                        computedSpeed = entity.Speed;
-                    }
+                    computedSpeed = animatedSpeed != null ? (int)animatedSpeed : entity.Speed;
+                    entity.animationBezier?.NextStep();
                 }
                 else
                 {
