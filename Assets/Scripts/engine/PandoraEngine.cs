@@ -236,6 +236,8 @@ namespace Pandora.Engine
 
             var hitboxComponent = gameObject.GetComponent<DiscreteHitboxComponent>();
 
+            var animationBezierComponent = gameObject.GetComponent<AnimationBezier>();
+
             var entity = new EngineEntity
             {
                 Speed = speed,
@@ -248,7 +250,8 @@ namespace Pandora.Engine
                 Timestamp = timestamp,
                 DiscreteHitbox = hitboxComponent,
                 UnitName = (idComponent != null) ? idComponent.UnitName : null,
-                UnitId = (idComponent != null) ? idComponent.Id : null
+                UnitId = (idComponent != null) ? idComponent.Id : null,
+                animationBezier = animationBezierComponent
             };
 
             if (hitboxComponent != null) hitboxComponent.Load();
@@ -353,17 +356,14 @@ namespace Pandora.Engine
 
                 int computedSpeed;
 
-                var animationBehaviour = entity.GameObject?.GetComponent<AnimationBezier>();
-                var animatedSpeed = animationBehaviour?.GetCurrentAnimatedSpeed();
-
                 // Here we are going to use the animated speed
                 // if possible (transforming it into an integer).
                 // The normal entity speed otherwise.
-                if (animatedSpeed != null)
+                if (entity.animationBezier != null)
                 {
-                    computedSpeed = (int)animatedSpeed;
-
-                    animationBehaviour?.NextStep();
+                    var animatedSpeed = entity.animationBezier?.GetCurrentAnimatedSpeed();
+                    computedSpeed = animatedSpeed != null ? (int)animatedSpeed : entity.Speed;
+                    entity.animationBezier?.NextStep();
                 }
                 else
                 {

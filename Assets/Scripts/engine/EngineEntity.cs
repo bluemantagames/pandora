@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Pandora.Engine.Animations;
 
 namespace Pandora.Engine
 {
@@ -52,6 +53,7 @@ namespace Pandora.Engine
         public string UnitName = null;
         public string UnitId = null;
         [NonSerialized] public DiscreteHitboxComponent DiscreteHitbox = null;
+        [NonSerialized] public AnimationBezier animationBezier = null;
 
         public void SetSpeedUnitsPerSecond(int engineUnitsPerSecond)
         {
