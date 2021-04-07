@@ -63,6 +63,7 @@ namespace Pandora.Engine.Animations
         SerializedAnimationsSingleton serializedAnimationsSingleton;
         int passedTicks = 0;
         int devUnitSpeed = 0;
+        Dictionary<int, int> loadedAnimation = null;
 
         /// <summary>
         /// Retrieve the base unit speed.
@@ -133,16 +134,18 @@ namespace Pandora.Engine.Animations
 
                 return engineSpeed;
             }
+            else if (loadedAnimation != null)
+            {
+                int value;
 
-            var animation = serializedAnimationsSingleton.GetAnimation(AnimationName);
+                loadedAnimation.TryGetValue(AnimationCurrentTime, out value);
 
-            if (animation == null) return null;
-
-            int value;
-
-            animation.TryGetValue(AnimationCurrentTime, out value);
-
-            return value;
+                return value;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -181,6 +184,9 @@ namespace Pandora.Engine.Animations
                 Logger.Debug($"[AnimationCurves] Animation {AnimationName} not cached, retrieving...");
                 LoadAnimation();
             }
+
+            // Loading the cached animation
+            loadedAnimation = serializedAnimationsSingleton.GetAnimation(AnimationName);
         }
     }
 }
