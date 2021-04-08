@@ -23,6 +23,13 @@ namespace Pandora.Network
 
         public void Connect()
         {
+            var activeDeck = playerModelSingleton
+                .GetActiveDeck()
+                ?.Where(cardName => cardName.Count() > 0)
+                ?.ToList();
+
+            if (activeDeck == null || activeDeck.Count != Constants.DECK_CARDS_NUMBER) return;
+
             Logger.Debug("Connecting");
 
             TextLoader.GetComponent<MatchmakingLodaderTextBehaviour>().Enable();
@@ -33,10 +40,6 @@ namespace Pandora.Network
             {
                 NetworkControllerSingleton.instance.IsDebugBuild = false;
             }
-
-            var activeDeck = playerModelSingleton.GetActiveDeck();
-
-            if (activeDeck == null) return;
 
             var deck = activeDeck.Select(cardName => new Card(cardName)).ToList();
             var deckStr = deck.Select(card => card.Name).ToList();
