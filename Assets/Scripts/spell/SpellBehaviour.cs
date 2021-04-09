@@ -45,7 +45,10 @@ namespace Pandora.Spell
 
                 GridCell lastTargetCell = null;
 
-                foreach (var entity in MapComponent.Instance.engine.Entities) {
+                // copy entities here since they could die in the loop
+                var entities = new List<EngineEntity>(MapComponent.Instance.engine.Entities);
+
+                foreach (var entity in entities) {
                     if (lastTargetCell != null) {
                         PoolInstances.GridCellPool.ReturnObject(lastTargetCell);
                     }
