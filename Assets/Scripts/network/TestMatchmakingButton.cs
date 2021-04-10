@@ -8,6 +8,7 @@ using System.Linq;
 using Pandora.Events;
 using Pandora.UI.Menu;
 using Pandora.UI.Menu.Event;
+using Pandora.UI.Menu.Home;
 
 namespace Pandora.Network
 {
@@ -22,6 +23,7 @@ namespace Pandora.Network
         public bool DevMatchmaking = false;
         public Text TextLoader;
         public Text TextPlay;
+        public MatchmakingWarningTextBehaviour matchmakingWarningComponent;
 
         MenuEventsSingleton menuEventsSingleton;
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
@@ -125,8 +127,16 @@ namespace Pandora.Network
             var activeDeck = GetActiveDeck();
             var isValid = IsDeckValid(activeDeck);
 
-            if (isValid) EnableButton();
-            else DisableButton();
+            if (!isValid)
+            {
+                DisableButton();
+                matchmakingWarningComponent.SetWarning(MatchmakingWarning.NotEnoughCards);
+            }
+            else
+            {
+                EnableButton();
+                matchmakingWarningComponent.SetWarning(null);
+            }
         }
 
         public void WatchLive()
