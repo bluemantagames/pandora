@@ -3953,8 +3953,8 @@ MonoBehaviour:
   GameSceneToLoad: 0
   ProdMatchmaking: 1
   DevMatchmaking: 0
-  TextLoader: {fileID: 1637654645}
-  TextPlay: {fileID: 1953143945}
+  TextLoader: {fileID: 1637654647}
+  TextPlay: {fileID: 1953143947}
 --- !u!1001 &740634787
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8401,7 +8401,7 @@ GameObject:
   - component: {fileID: 1637654647}
   - component: {fileID: 1637654649}
   m_Layer: 5
-  m_Name: MatchmakingLoaderText
+  m_Name: LoaderText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
