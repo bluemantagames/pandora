@@ -5,6 +5,9 @@ using Pandora.Deck;
 using Pandora.Deck.UI;
 using System.Collections.Generic;
 using System.Linq;
+using Pandora.Events;
+using Pandora.UI.Menu;
+using Pandora.UI.Menu.Event;
 
 namespace Pandora.Network
 {
@@ -20,17 +23,15 @@ namespace Pandora.Network
         public Text TextLoader;
         public Text TextPlay;
 
+        MenuEventsSingleton menuEventsSingleton;
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
         string oldPlayText = null;
 
         public void Connect()
         {
-            var activeDeck = playerModelSingleton
-                .GetActiveDeck()
-                ?.Where(cardName => cardName.Count() > 0)
-                ?.ToList();
+            var activeDeck = GetActiveDeck();
 
-            if (activeDeck == null || activeDeck.Count != Constants.DECK_CARDS_NUMBER) return;
+            if (!IsDeckValid(activeDeck)) return;
 
             Logger.Debug("Connecting");
 
@@ -82,6 +83,14 @@ namespace Pandora.Network
             GameSceneToLoad = true;
         }
 
+        void Awake()
+        {
+            menuEventsSingleton = MenuEventsSingleton.instance;
+            menuEventsSingleton.EventBus.Subscribe<ViewActive>(new EventSubscriber<MenuEvent>(ViewActiveHandler, "ViewActiveHandler"));
+
+            CheckActive();
+        }
+
         void Update()
         {
             if (GameSceneToLoad)
@@ -109,6 +118,17 @@ namespace Pandora.Network
             }
         }
 
+        public void CheckActive()
+        {
+            Logger.Debug("Checking if the matchmaking button is active...");
+
+            var activeDeck = GetActiveDeck();
+            var isValid = IsDeckValid(activeDeck);
+
+            if (isValid) EnableButton();
+            else DisableButton();
+        }
+
         public void WatchLive()
         {
             SceneManager.LoadScene("LiveMenuScene");
@@ -127,6 +147,43 @@ namespace Pandora.Network
             temp = TextPlay.color;
             temp.a = 0.5f;
             TextPlay.color = temp;
+        }
+
+        void EnableButton()
+        {
+            GetComponent<Button>().interactable = true;
+
+            Color temp;
+
+            temp = TextLoader.color;
+            temp.a = 1f;
+            TextLoader.color = temp;
+
+            temp = TextPlay.color;
+            temp.a = 1f;
+            TextPlay.color = temp;
+        }
+
+        List<string> GetActiveDeck()
+        {
+            var activeDeck = playerModelSingleton
+                .GetActiveDeck()
+                ?.Where(cardName => cardName.Count() > 0)
+                ?.ToList();
+
+            return activeDeck;
+        }
+
+        bool IsDeckValid(List<string> activeDeck)
+        {
+            var isValid = activeDeck != null && activeDeck.Count == Constants.DECK_CARDS_NUMBER;
+
+            return isValid;
+        }
+
+        void ViewActiveHandler(MenuEvent ev)
+        {
+            CheckActive();
         }
     }
 

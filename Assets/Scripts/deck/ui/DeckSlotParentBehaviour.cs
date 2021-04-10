@@ -16,6 +16,7 @@ public class DeckSlotParentBehaviour : MonoBehaviour
     public GameObject DeckSpotsParent;
     public Button DeckSlotButton;
     public bool DeckSlotsOnly;
+    public TestMatchmakingButton matchmakingButton;
     PlayerModelSingleton playerModelSingleton;
     ApiControllerSingleton apiControllerSingleton;
     MenuEventsSingleton menuEventsSingleton;
@@ -123,6 +124,8 @@ public class DeckSlotParentBehaviour : MonoBehaviour
                 deckSpotParentBehaviour.Reset();
                 deckSpotParentBehaviour.LoadSavedDeck(deckSlotId);
             }
+
+            matchmakingButton?.CheckActive();
         }
     }
 
