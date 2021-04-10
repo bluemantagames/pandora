@@ -168,7 +168,7 @@ namespace Pandora.Network
         {
             var activeDeck = playerModelSingleton
                 .GetActiveDeck()
-                ?.Where(cardName => cardName.Count() > 0)
+                ?.Where(cardName => cardName?.Count() > 0)
                 ?.ToList();
 
             return activeDeck;
