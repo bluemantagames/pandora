@@ -3954,6 +3954,7 @@ MonoBehaviour:
   ProdMatchmaking: 1
   DevMatchmaking: 0
   TextLoader: {fileID: 1637654645}
+  TextPlay: {fileID: 1953143945}
 --- !u!1001 &740634787
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8422,8 +8423,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 131}
-  m_SizeDelta: {x: -257.09882, y: -88.71742}
+  m_AnchoredPosition: {x: 25, y: 0.000015258789}
+  m_SizeDelta: {x: -196.26941, y: -59.658234}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1637654647
 MonoBehaviour:
@@ -8447,12 +8448,12 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 0d4ff071e72754353a29138faa82d9a5, type: 3}
-    m_FontSize: 14
+    m_FontSize: 65
     m_FontStyle: 0
-    m_BestFit: 1
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 4
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 104
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -9729,7 +9730,7 @@ GameObject:
   - component: {fileID: 1953143947}
   - component: {fileID: 1953143949}
   m_Layer: 5
-  m_Name: Text
+  m_Name: PlayText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9777,7 +9778,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: 0d4ff071e72754353a29138faa82d9a5, type: 3}
     m_FontSize: 82
-    m_FontStyle: 1
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 6
     m_MaxSize: 82
