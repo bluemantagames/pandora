@@ -5,6 +5,10 @@ using Pandora.Deck;
 using Pandora.Deck.UI;
 using System.Collections.Generic;
 using System.Linq;
+using Pandora.Events;
+using Pandora.UI.Menu;
+using Pandora.UI.Menu.Event;
+using Pandora.UI.Menu.Home;
 
 namespace Pandora.Network
 {
@@ -17,15 +21,26 @@ namespace Pandora.Network
 
         /// <summary>Forces a game without authentication</summary>
         public bool DevMatchmaking = false;
-        public GameObject TextLoader;
+        public Text TextLoader;
+        public Text TextPlay;
+        public MatchmakingWarningTextBehaviour matchmakingWarningComponent;
 
+        MenuEventsSingleton menuEventsSingleton;
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
+        string oldPlayText = null;
 
         public void Connect()
         {
+            var activeDeck = GetActiveDeck();
+
+            if (!IsDeckValid(activeDeck)) return;
+
             Logger.Debug("Connecting");
 
+            // Show loader text
             TextLoader.GetComponent<MatchmakingLodaderTextBehaviour>().Enable();
+            oldPlayText = TextPlay.text;
+            TextPlay.text = "";
 
             AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATCHMAKING_START);
 
@@ -33,10 +48,6 @@ namespace Pandora.Network
             {
                 NetworkControllerSingleton.instance.IsDebugBuild = false;
             }
-
-            var activeDeck = playerModelSingleton.GetActiveDeck();
-
-            if (activeDeck == null) return;
 
             var deck = activeDeck.Select(cardName => new Card(cardName)).ToList();
             var deckStr = deck.Select(card => card.Name).ToList();
@@ -74,13 +85,23 @@ namespace Pandora.Network
             GameSceneToLoad = true;
         }
 
+        void Awake()
+        {
+            menuEventsSingleton = MenuEventsSingleton.instance;
+            menuEventsSingleton.EventBus.Subscribe<ViewActive>(new EventSubscriber<MenuEvent>(ViewActiveHandler, "ViewActiveHandler"));
+
+            CheckActive();
+        }
+
         void Update()
         {
             if (GameSceneToLoad)
             {
                 AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATHCMAKING_MATCH_FOUND);
 
+                // Hide loader text
                 TextLoader.GetComponent<MatchmakingLodaderTextBehaviour>().Disable();
+                TextPlay.text = oldPlayText;
 
                 var networkController = NetworkControllerSingleton.instance;
 
@@ -99,6 +120,25 @@ namespace Pandora.Network
             }
         }
 
+        public void CheckActive()
+        {
+            Logger.Debug("Checking if the matchmaking button is active...");
+
+            var activeDeck = GetActiveDeck();
+            var isValid = IsDeckValid(activeDeck);
+
+            if (!isValid)
+            {
+                DisableButton();
+                matchmakingWarningComponent.SetWarning(MatchmakingWarning.NotEnoughCards);
+            }
+            else
+            {
+                EnableButton();
+                matchmakingWarningComponent.SetWarning(null);
+            }
+        }
+
         public void WatchLive()
         {
             SceneManager.LoadScene("LiveMenuScene");
@@ -107,6 +147,53 @@ namespace Pandora.Network
         void DisableButton()
         {
             GetComponent<Button>().interactable = false;
+
+            Color temp;
+
+            temp = TextLoader.color;
+            temp.a = 0.5f;
+            TextLoader.color = temp;
+
+            temp = TextPlay.color;
+            temp.a = 0.5f;
+            TextPlay.color = temp;
+        }
+
+        void EnableButton()
+        {
+            GetComponent<Button>().interactable = true;
+
+            Color temp;
+
+            temp = TextLoader.color;
+            temp.a = 1f;
+            TextLoader.color = temp;
+
+            temp = TextPlay.color;
+            temp.a = 1f;
+            TextPlay.color = temp;
+        }
+
+        List<string> GetActiveDeck()
+        {
+            var activeDeck = playerModelSingleton
+                .GetActiveDeck()
+                ?.Where(cardName => cardName?.Count() > 0)
+                ?.ToList();
+
+            return activeDeck;
+        }
+
+        bool IsDeckValid(List<string> activeDeck)
+        {
+            var isValid = activeDeck != null && activeDeck.Count == Constants.DECK_CARDS_NUMBER;
+
+            return isValid;
+        }
+
+        void ViewActiveHandler(MenuEvent ev)
+        {
+            CheckActive();
         }
     }
 
