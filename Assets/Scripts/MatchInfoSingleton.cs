@@ -1,14 +1,29 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Pandora.Network;
 
 namespace Pandora
 {
+    [System.Serializable]
     public class UnitDamageLog
     {
         public string UnitName;
         public int Team;
         public int Damage;
+    }
+
+    [System.Serializable]
+    public class SerializableTowersDamages
+    {
+        public TowerPosition Tower;
+        public List<UnitDamageLog> CardsDamages;
+    }
+
+    [System.Serializable]
+    public class SerializableTowersDamagesCollection
+    {
+        public List<SerializableTowersDamages> Damages;
     }
 
     public class MatchInfoSingleton
@@ -39,12 +54,12 @@ namespace Pandora
             var unitIdComponent = unit.GetComponent<UnitIdComponent>();
             var teamComponent = unit.GetComponent<TeamComponent>();
 
-            if (towersDamages[towerPosition] == null)
+            if (!towersDamages.ContainsKey(towerPosition))
             {
                 towersDamages[towerPosition] = new Dictionary<string, UnitDamageLog>();
             }
 
-            if (towersDamages[towerPosition][unitIdComponent.Id] == null)
+            if (!towersDamages[towerPosition].ContainsKey(unitIdComponent.Id))
             {
                 towersDamages[towerPosition][unitIdComponent.Id] = new UnitDamageLog
                 {
@@ -57,6 +72,8 @@ namespace Pandora
             {
                 towersDamages[towerPosition][unitIdComponent.Id].Damage += damage;
             }
+
+            Logger.Debug($"Updated towers damages structure: {JsonUtility.ToJson(GetSerializableTowersDamages())}");
         }
 
         /// <summary>
@@ -73,6 +90,30 @@ namespace Pandora
         public Dictionary<TowerPosition, Dictionary<string, UnitDamageLog>> RetrieveTowersDamages()
         {
             return towersDamages;
+        }
+
+        /// <summary>
+        /// Return a serializable Towers Damage structure.
+        /// </summary>
+        public SerializableTowersDamagesCollection GetSerializableTowersDamages()
+        {
+            List<SerializableTowersDamages> serializableStructure = new List<SerializableTowersDamages>();
+
+            foreach (var entry in towersDamages)
+            {
+                var towerStruct = new SerializableTowersDamages
+                {
+                    Tower = entry.Key,
+                    CardsDamages = entry.Value.Values.ToList()
+                };
+
+                serializableStructure.Add(towerStruct);
+            }
+
+            return new SerializableTowersDamagesCollection
+            {
+                Damages = serializableStructure
+            };
         }
     }
 }

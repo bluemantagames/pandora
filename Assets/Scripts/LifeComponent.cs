@@ -24,7 +24,9 @@ namespace Pandora
         WalletsComponent walletsComponent;
         TeamComponent teamComponent;
         TowerTeamComponent towerTeamComponent;
+        TowerPositionComponent towerPositionComponent;
         GroupComponent groupComponent;
+        MatchInfoSingleton matchInfoSingleton;
 
         public GameObject DeathVFX;
         public float DeathVFXSpeedMultiplier = 2f;
@@ -49,7 +51,10 @@ namespace Pandora
             walletsComponent = MapComponent.Instance.GetComponent<WalletsComponent>();
 
             towerTeamComponent = GetComponent<TowerTeamComponent>();
+            towerPositionComponent = GetComponent<TowerPositionComponent>();
             teamComponent = GetComponent<TeamComponent>();
+
+            matchInfoSingleton = MatchInfoSingleton.Instance;
 
             var groupComponent = GetComponent<GroupComponent>();
 
@@ -209,6 +214,16 @@ namespace Pandora
                 }
 
                 // TODO: Play "die" animation
+            }
+
+            // Tower damage analytics
+            if (isTower && towerPositionComponent != null)
+            {
+                matchInfoSingleton.AddUnitTowerDamage(
+                    towerPositionComponent.WorldTowerPosition,
+                    source.GameObject,
+                    value
+                );
             }
         }
 
