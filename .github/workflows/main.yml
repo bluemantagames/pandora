@@ -99,6 +99,49 @@ jobs:
         with:
           name: bundles-Android
 
+  ReleaseBeta:
+    name: Release to the Google Play Store
+    runs-on: self-hosted
+    needs: [ReleaseType, BuildAndroid, UploadBundles]
+    if: ${{ needs.ReleaseType.outputs.release_type == 'production' }}
+    env:
+      GOOGLE_PLAY_KEY_FILE: ${{ secrets.GOOGLE_PLAY_KEY_FILE }}
+      GOOGLE_PLAY_KEY_FILE_PATH: ${{ format('{0}/fastlane/google-fastlane.json', github.workspace) }}
+      ANDROID_BUILD_FILE_PATH: ${{ format('{0}/Android.aab/Android.aab', github.workspace) }}
+      ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME }}
+      ImageOS: ubuntu20
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout LFS objects
+        run: git lfs checkout
+      - name: Download Android Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-Android
+          path: Android.aab
+      - name: Prepare for Upload
+        run: echo "$GOOGLE_PLAY_KEY_FILE" > $GOOGLE_PLAY_KEY_FILE_PATH
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+      - name: Install Fastlane
+        run: bundle install
+      - name: Upload to Google Play Internal
+        uses: maierj/fastlane-action@v2.0.0
+        with:
+          lane: 'android beta'
+      - name: Tidy up artifact to avoid storage limit
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: build-Android
+      - name: Tidy up artifact to avoid storage limit
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: bundles-Android
+
   UploadBundles:
     runs-on: self-hosted
     needs: [BuildAndroid]
