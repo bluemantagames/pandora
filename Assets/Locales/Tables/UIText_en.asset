@@ -282,9 +282,64 @@ MonoBehaviour:
     m_Localized: Not enough cards in your deck
     m_Metadata:
       m_Items: []
+  - m_Id: 32595191211302912
+    m_Localized: Strong
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595496892178432
+    m_Localized: Medium
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595646767243264
+    m_Localized: Weak
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595699422535680
+    m_Localized: High
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595761154301952
+    m_Localized: Medium
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595806662500352
+    m_Localized: Low
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595864619393024
+    m_Localized: Fast
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595906797314048
+    m_Localized: Medium
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595951831556096
+    m_Localized: Slow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32596021977096192
+    m_Localized: 'Movement speed: {amount} {label}'
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 32596218023059456
+    m_Localized: 'HP: {amount} {label}'
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 32596267327102976
+    m_Localized: 'Damage: {amount} {label}'
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 32597106162737152
+    m_Localized: Stats
+    m_Metadata:
+      m_Items: []
   references:
     version: 1
     00000000:
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00e0afb6a7240000
+        m_Entries: 00e0afb6a72400000020496c16ce7300002009c7e8cd7300002009e721ce7300

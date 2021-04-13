@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: it
   m_SharedData: {fileID: 11400000, guid: 84069264adda04a569a6b13abc1da97e, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - id: 0
   m_TableData:
   - m_Id: 40478132133888
     m_Localized: Filtri
@@ -282,5 +283,64 @@ MonoBehaviour:
     m_Localized: Non hai abbastanza carte nel mazzo
     m_Metadata:
       m_Items: []
+  - m_Id: 32595191211302912
+    m_Localized: Forte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595496892178432
+    m_Localized: Medio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595646767243264
+    m_Localized: Debole
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595699422535680
+    m_Localized: Alto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595761154301952
+    m_Localized: Medio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595806662500352
+    m_Localized: Basso
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595864619393024
+    m_Localized: Veloce
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595906797314048
+    m_Localized: Medio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32595951831556096
+    m_Localized: Lento
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32596021977096192
+    m_Localized: 'Velocita'': {amount} {label}'
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 32596218023059456
+    m_Localized: 'HP: {amount} {label}'
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 32596267327102976
+    m_Localized: 'Danno: {amount} {label}'
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 32597106162737152
+    m_Localized: Statistiche
+    m_Metadata:
+      m_Items: []
   references:
     version: 1
+    00000000:
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 002009e721ce73000020496c16ce7300002009c7e8cd7300

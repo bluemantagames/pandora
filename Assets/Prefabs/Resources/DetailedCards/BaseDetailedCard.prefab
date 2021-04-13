@@ -274,6 +274,96 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentCardBehaviour: {fileID: 0}
+  HPString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32596218023059456
+      m_Key: 
+    m_FallbackState: 0
+  DamageString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32596267327102976
+      m_Key: 
+    m_FallbackState: 0
+  MovementSpeedString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32596021977096192
+      m_Key: 
+    m_FallbackState: 0
+  HPLowString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32595646767243264
+      m_Key: 
+    m_FallbackState: 0
+  HPMediumString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32595496892178432
+      m_Key: 
+    m_FallbackState: 0
+  HPHighString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32595191211302912
+      m_Key: 
+    m_FallbackState: 0
+  DamageLowString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32595806662500352
+      m_Key: 
+    m_FallbackState: 0
+  DamageMediumString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32595761154301952
+      m_Key: 
+    m_FallbackState: 0
+  DamageHighString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32595699422535680
+      m_Key: 
+    m_FallbackState: 0
+  MovementSpeedLowString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32595951831556096
+      m_Key: 
+    m_FallbackState: 0
+  MovementSpeedMediumString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32595906797314048
+      m_Key: 
+    m_FallbackState: 0
+  MovementSpeedHighString:
+    m_TableReference:
+      m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
+    m_TableEntryReference:
+      m_KeyId: 32595864619393024
+      m_Key: 
+    m_FallbackState: 0
+  HPMediumThreshold: 0
+  HPHighThreshold: 0
+  DamageMediumThreshold: 0
+  DamageHighThreshold: 0
+  MovementSpeedMediumThreshold: 0
+  MovementSpeedHighThreshold: 0
 --- !u!1 &4401392562471580478
 GameObject:
   m_ObjectHideFlags: 0
@@ -537,6 +627,7 @@ MonoBehaviour:
     m_TableEntryReference:
       m_KeyId: 10845841324498944
       m_Key: 
+    m_FallbackState: 0
   m_FormatArguments: []
   m_UpdateString:
     m_PersistentCalls:

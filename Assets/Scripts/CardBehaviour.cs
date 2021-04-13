@@ -39,6 +39,8 @@ namespace Pandora
         Vector2? lastMousePosition = null;
         GameObject targetCard = null;
 
+        public float Damage, MovementSpeed, HP;
+
         public bool IsDeckBuilderUI
         {
             get => _isUI;
