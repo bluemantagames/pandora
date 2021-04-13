@@ -1,12 +1,12 @@
 platform :android do
   desc "Upload a new Android version to the Google Play Store"
   lane :internal do
-    upload_to_play_store(track: 'internal',release_status: 'completed',aab: "#{ENV['ANDROID_BUILD_FILE_PATH']}")
+    upload_to_play_store(track: 'internal', release_status: 'completed', aab: "#{ENV['ANDROID_BUILD_FILE_PATH']}")
     qa_publish(webhook_url: 'https://discord.com/api/webhooks/785154510417952788/CHxgMU5ijlgbvPsYXHgE4f0-2zRSvGUjKjXxbw8Cl15P--uBGrmTJ9SaxDt1X2JusEZq', webhook_body: '{"content":"<@&813477342101897246> Released new version on the internal track","embeds":null}')
   end
 
-  lane :beta do
-    upload_to_play_store(track: 'beta',release_status: 'completed',aab: "#{ENV['ANDROID_BUILD_FILE_PATH']}")
+  lane :alpha do
+    upload_to_play_store(track: 'alpha', release_status: 'completed', aab: "#{ENV['ANDROID_BUILD_FILE_PATH']}")
     qa_publish(webhook_url: 'https://discord.com/api/webhooks/785154510417952788/CHxgMU5ijlgbvPsYXHgE4f0-2zRSvGUjKjXxbw8Cl15P--uBGrmTJ9SaxDt1X2JusEZq', webhook_body: '{"content":"<@&813477342101897246> Released new version on the beta track","embeds":null}')
   end
 end

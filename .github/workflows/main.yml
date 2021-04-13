@@ -60,7 +60,7 @@ jobs:
     name: Release to the Google Play Store
     runs-on: self-hosted
     needs: [ReleaseType, BuildAndroid, UploadBundles]
-    if: ${{ needs.ReleaseType.outputs.release_type == 'staging' }}
+    if: ${{ needs.ReleaseType.outputs.release_type == 'internal' }}
     env:
       GOOGLE_PLAY_KEY_FILE: ${{ secrets.GOOGLE_PLAY_KEY_FILE }}
       GOOGLE_PLAY_KEY_FILE_PATH: ${{ format('{0}/fastlane/google-fastlane.json', github.workspace) }}
@@ -99,11 +99,11 @@ jobs:
         with:
           name: bundles-Android
 
-  ReleaseBeta:
+  ReleaseAlpha:
     name: Release to the Google Play Store
     runs-on: self-hosted
     needs: [ReleaseType, BuildAndroid, UploadBundles]
-    if: ${{ needs.ReleaseType.outputs.release_type == 'production' }}
+    if: ${{ needs.ReleaseType.outputs.release_type == 'alpha' }}
     env:
       GOOGLE_PLAY_KEY_FILE: ${{ secrets.GOOGLE_PLAY_KEY_FILE }}
       GOOGLE_PLAY_KEY_FILE_PATH: ${{ format('{0}/fastlane/google-fastlane.json', github.workspace) }}
@@ -132,7 +132,7 @@ jobs:
       - name: Upload to Google Play Internal
         uses: maierj/fastlane-action@v2.0.0
         with:
-          lane: 'android beta'
+          lane: 'android alpha'
       - name: Tidy up artifact to avoid storage limit
         uses: geekyeggo/delete-artifact@v1
         with:
