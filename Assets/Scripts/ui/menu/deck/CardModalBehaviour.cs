@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Localization;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Localization.SmartFormat.Core.Settings;
 
 namespace Pandora.UI.Menu.Deck
 {
@@ -36,8 +38,8 @@ namespace Pandora.UI.Menu.Deck
                 cardNameText.text = name;
         }
 
-        object buildArguments(float amount, string label) {
-            return new { amount = amount.ToString(), label = label };
+        object[] buildArguments(float amount, string label) {
+            return new[] { amount.ToString(), label };
         }
 
         private async UniTaskVoid LoadSkillDescription()
@@ -57,7 +59,9 @@ namespace Pandora.UI.Menu.Deck
 
             var hpLabelString = await HPLabel.GetLocalizedString();
 
-            var hpString = await HPString.GetLocalizedString(buildArguments(CurrentCardBehaviour.HP, hpLabelString));
+            var hps = await HPString.GetLocalizedString();
+
+            var hpString = String.Format(hps, buildArguments(CurrentCardBehaviour.HP, hpLabelString));
 
             var damageLabel = 
                 (CurrentCardBehaviour.Damage > DamageMediumThreshold) ?
@@ -66,7 +70,7 @@ namespace Pandora.UI.Menu.Deck
 
             var damageLabelString = await damageLabel.GetLocalizedString();
 
-            var damageString = await DamageString.GetLocalizedString(buildArguments(CurrentCardBehaviour.Damage, damageLabelString));
+            var damageString = String.Format(await DamageString.GetLocalizedString(), buildArguments(CurrentCardBehaviour.Damage, damageLabelString));
 
             var movementSpeedLabel = 
                 (CurrentCardBehaviour.MovementSpeed > MovementSpeedMediumThreshold) ?
@@ -75,7 +79,7 @@ namespace Pandora.UI.Menu.Deck
 
             var movementSpeedLabelString = await movementSpeedLabel.GetLocalizedString();
 
-            var movementSpeedString = await MovementSpeedString.GetLocalizedString(buildArguments(CurrentCardBehaviour.MovementSpeed, movementSpeedLabelString));
+            var movementSpeedString = String.Format(await MovementSpeedString.GetLocalizedString(), buildArguments(CurrentCardBehaviour.MovementSpeed, movementSpeedLabelString));
 
             if (cardSkillDescriptionText)
                 cardSkillDescriptionText.text = description + "\n\n" + 

@@ -119,10 +119,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
         type: 3}
+      propertyPath: HP
+      value: 1250
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
       propertyPath: Card
       value: 
       objectReference: {fileID: 8076880815249732036, guid: cbd2acd6812f90e45aa0f9b348f67ac6,
         type: 3}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: Damage
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
         type: 3}
       propertyPath: Puppet
@@ -148,6 +158,11 @@ PrefabInstance:
         type: 3}
       propertyPath: RequiredMana
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: MovementSpeed
+      value: 375
       objectReference: {fileID: 0}
     - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
         type: 3}

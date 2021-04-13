@@ -319,20 +319,17 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 32596021977096192
-    m_Localized: 'Movement speed: {amount} {label}'
+    m_Localized: 'Movement speed: {0} {1}'
     m_Metadata:
-      m_Items:
-      - id: 0
+      m_Items: []
   - m_Id: 32596218023059456
-    m_Localized: 'HP: {amount} {label}'
+    m_Localized: 'HP: {0} {1}'
     m_Metadata:
-      m_Items:
-      - id: 0
+      m_Items: []
   - m_Id: 32596267327102976
-    m_Localized: 'Damage: {amount} {label}'
+    m_Localized: 'Damage: {0} {1}'
     m_Metadata:
-      m_Items:
-      - id: 0
+      m_Items: []
   - m_Id: 32597106162737152
     m_Localized: Stats
     m_Metadata:
@@ -342,4 +339,4 @@ MonoBehaviour:
     00000000:
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00e0afb6a72400000020496c16ce7300002009c7e8cd7300002009e721ce7300
+        m_Entries: 00e0afb6a7240000
