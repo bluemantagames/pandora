@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Animations;
 using Pandora.Events;
 using Pandora.Network;
@@ -11,6 +12,8 @@ namespace Pandora.Resource.Mana
         AnimationCurve spentCurve = null;
         public int TimePassed = 0;
         public float SpentAnimationTime = 0.5f;
+        public GameObject ManaTextObject;
+        Text manaText;
 
         float? animationTimeEnd = null;
 
@@ -20,11 +23,16 @@ namespace Pandora.Resource.Mana
 
             walletsComponent.ManaWallet.Bus.Subscribe<ManaEarned>(new EventSubscriber<ManaEvent>(OnManaEarned, "UIManaEarned"));
             walletsComponent.ManaWallet.Bus.Subscribe<ManaSpent>(new EventSubscriber<ManaEvent>(OnManaSpent, "UIManaSpent"));
+
+            manaText = ManaTextObject?.GetComponent<Text>();
         }
 
         void OnManaEarned(ManaEvent manaEvent)
         {
             var manaEarned = manaEvent as ManaEarned;
+
+            if (manaText != null)
+                manaText.text = Mathf.FloorToInt(manaEarned.CurrentAmount / 10).ToString();
 
             UpdateManaUI(manaEarned.CurrentAmount, false);
         }
@@ -32,6 +40,9 @@ namespace Pandora.Resource.Mana
         void OnManaSpent(ManaEvent manaEvent)
         {
             var manaSpent = manaEvent as ManaSpent;
+
+            if (manaText != null)
+                manaText.text = Mathf.FloorToInt(manaSpent.CurrentAmount / 10).ToString();
 
             UpdateManaUISpent(manaSpent.CurrentAmount, manaSpent.AmountSpent);
         }

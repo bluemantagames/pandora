@@ -32,7 +32,9 @@ namespace Pandora.Audio {
         public void PlayMatchAudio() {
             audioSource.clip = MatchClip;
 
+#if !UNITY_EDITOR
             audioSource.Play();
+#endif
         }
     }
 }
