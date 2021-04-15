@@ -160,5 +160,14 @@ namespace Pandora
                 MulliganCards = mulliganCards
             };
         }
+
+        /// <summary>
+        /// Clear all the match info.
+        /// </summary>
+        public void ClearAll()
+        {
+            ClearTowersDamages();
+            ClearMulliganCards();
+        }
     }
 }

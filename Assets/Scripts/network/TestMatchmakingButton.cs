@@ -114,6 +114,10 @@ namespace Pandora.Network
                     SceneManager.LoadScene("GameScene");
                 }
 
+                // Clear the MatchInfo singleton for
+                // a new match
+                MatchInfoSingleton.Instance.ClearAll();
+
                 AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATCHMAKING_MATCH_START);
 
                 GameSceneToLoad = false;
