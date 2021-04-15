@@ -3,11 +3,11 @@ using UnityEngine;
 using Pandora.Network.Data;
 using Pandora.Network.Data.Users;
 using Pandora.Network.Data.Matchmaking;
+using Pandora.Network.Data.Analytics;
 using System.Threading.Tasks;
 using System.Net;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Pandora.Network
 {
@@ -23,10 +23,10 @@ namespace Pandora.Network
             get
             {
 #if UNITY_EDITOR
-                    if (IsDebugBuild)
-                        return "http://127.0.0.1:8080/api";
-                    else
-                        return prodEndpoint;
+                if (IsDebugBuild)
+                    return "http://127.0.0.1:8080/api";
+                else
+                    return prodEndpoint;
 #else
                     return prodEndpoint;
 #endif
@@ -71,7 +71,8 @@ namespace Pandora.Network
             }
         }
 
-        public Task<ApiResponse<EmptyResponse>> SendMatchmakingNotification(bool isDev, string token, CancellationToken? cancel = null) {
+        public Task<ApiResponse<EmptyResponse>> SendMatchmakingNotification(bool isDev, string token, CancellationToken? cancel = null)
+        {
             Debug.Log("Asking the server for a notification...");
 
             var request = new RestRequest(
@@ -99,7 +100,7 @@ namespace Pandora.Network
 
             Logger.Debug($"Executing {request.Method} {apiHost}{request.Resource}");
 
-            var clientTask = 
+            var clientTask =
                 cancel.HasValue ? client.ExecuteTaskAsync<T>(request, cancel.Value) : client.ExecuteTaskAsync<T>(request);
 
             return clientTask.ContinueWith<ApiResponse<T>>(reqTask =>
@@ -251,6 +252,19 @@ namespace Pandora.Network
             request.AddJsonBody(param);
 
             return ExecuteApiRequest<MatchmakingResponse>(request, token);
+        }
+
+        /// <summary>
+        /// Send generic analytics to the server.
+        /// </summary>
+        public Task<ApiResponse<string>> SendAnalytics(string matchId, string message, string token)
+        {
+            var request = new RestRequest($"/analytics/{matchId}", Method.POST);
+            var param = new PostAnalyticsRequest { message = message };
+
+            request.AddJsonBody(param);
+
+            return ExecuteApiRequest<string>(request, token);
         }
     }
 }

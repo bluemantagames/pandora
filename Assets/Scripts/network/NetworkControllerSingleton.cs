@@ -35,6 +35,7 @@ namespace Pandora.Network
         public bool matchStarted = false;
         public UnityEvent matchStartEvent = new UnityEvent();
         public int? PlayerId = null;
+        public string CurrentMatchToken = null;
 
         private static NetworkControllerSingleton privateInstance = null;
 
@@ -76,7 +77,8 @@ namespace Pandora.Network
         public async UniTaskVoid ExecMatchmaking(List<string> deck, bool isDev)
         {
             // Wait for the game scene to be loaded before actually trying to join a match
-            if (GameSceneLoading != null) {
+            if (GameSceneLoading != null)
+            {
                 await UniTask.WaitUntil(() => GameSceneLoading.progress >= 0.9f);
 
                 Debug.Log($"Starting matchmaking with progress {GameSceneLoading.progress}");
@@ -84,7 +86,8 @@ namespace Pandora.Network
 
             var cancellationSource = new CancellationTokenSource();
 
-            var _ = Task.Delay(NotificationWaitTimeout * 1000, cancellationSource.Token).ContinueWith(task => {
+            var _ = Task.Delay(NotificationWaitTimeout * 1000, cancellationSource.Token).ContinueWith(task =>
+            {
                 apiControllerSingleton.SendMatchmakingNotification(isDev, playerModelSingleton.Token, cancellationSource.Token);
             });
 
@@ -109,8 +112,9 @@ namespace Pandora.Network
             }
         }
 
-        public class StopSignal {
-            public bool Stop = false; 
+        public class StopSignal
+        {
+            public bool Stop = false;
         }
 
 
@@ -132,6 +136,8 @@ namespace Pandora.Network
 
             var userMatchTokenClaims = jwt.DecodeJwtPayload<UserMatchTokenPayload>(userMatchToken);
             var matchToken = userMatchTokenClaims.matchToken;
+
+            CurrentMatchToken = matchToken;
 
             Debug.Log($"Decoded user match JWT, match token is: {matchToken}");
 
@@ -167,7 +173,8 @@ namespace Pandora.Network
 
             while (true)
             {
-                if (stopNetworkThread) {
+                if (stopNetworkThread)
+                {
                     stopNetworkThread = false;
 
                     return;
@@ -207,7 +214,8 @@ namespace Pandora.Network
             {
                 // TODO: Check if this impacts CPU and let the thread sleep a while if it does
 
-                if (signal.Stop || matchSocket == null) {
+                if (signal.Stop || matchSocket == null)
+                {
                     break;
                 }
 
@@ -328,7 +336,8 @@ namespace Pandora.Network
 
         public void Stop()
         {
-            if (matchSocket != null) {
+            if (matchSocket != null)
+            {
                 matchSocket.Shutdown(SocketShutdown.Both);
 
                 matchSocket = null;
