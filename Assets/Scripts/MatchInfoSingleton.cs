@@ -26,12 +26,20 @@ namespace Pandora
         public List<SerializableTowersDamages> Damages;
     }
 
+    [System.Serializable]
+    public class SerializableMulliganCards
+    {
+        public List<string> MulliganCards;
+    }
+
     public class MatchInfoSingleton
     {
         static MatchInfoSingleton _instance = null;
 
         Dictionary<TowerPosition, Dictionary<string, UnitDamageLog>> towersDamages =
             new Dictionary<TowerPosition, Dictionary<string, UnitDamageLog>>();
+
+        List<string> mulliganCards = null;
 
         static public MatchInfoSingleton Instance
         {
@@ -113,6 +121,33 @@ namespace Pandora
             return new SerializableTowersDamagesCollection
             {
                 Damages = serializableStructure
+            };
+        }
+
+        /// <summary>
+        /// Add the mulligan cards.
+        /// </summary>
+        public void AddMulliganCards(List<string> cards)
+        {
+            mulliganCards = cards;
+        }
+
+        /// <summary>
+        /// Clear the mulligan cards.
+        /// </summary>
+        public void ClearMulliganCards()
+        {
+            mulliganCards?.Clear();
+        }
+
+        /// <summary>
+        /// Return a serializable Mulligan Cards structure.
+        /// </summary>
+        public SerializableMulliganCards GetSerializableMulliganCards()
+        {
+            return new SerializableMulliganCards
+            {
+                MulliganCards = mulliganCards
             };
         }
     }

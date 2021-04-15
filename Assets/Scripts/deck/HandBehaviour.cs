@@ -329,6 +329,8 @@ namespace Pandora.Deck
 
         void MulliganTaken(DeckEvent ev)
         {
+            List<string> mulliganCards = new List<string>();
+
             if (mulligansAvailable <= 0 || SelectedCards.Count <= 0)
             {
                 return;
@@ -340,6 +342,8 @@ namespace Pandora.Deck
 
                 LocalDeck.Instance.DiscardCard(new Card(handCard.Name));
                 SelectedCards.RemoveAt(i);
+
+                mulliganCards.Add(handCard.Name);
             }
 
             mulligansAvailable -= 1;
@@ -348,6 +352,9 @@ namespace Pandora.Deck
             {
                 DisableMulliganUI();
             }
+
+            // Add mulligan analytics
+            MatchInfoSingleton.Instance.AddMulliganCards(mulliganCards);
         }
 
         void MulliganRejected(DeckEvent ev)

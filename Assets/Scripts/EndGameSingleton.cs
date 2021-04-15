@@ -52,9 +52,12 @@ class EndGameSingleton
         if (token != null && matchToken != null)
         {
             Logger.Debug("Sending towers damages analytics to the server...");
-
             var towersDamages = JsonUtility.ToJson(MatchInfoSingleton.Instance.GetSerializableTowersDamages());
             _ = ApiControllerSingleton.instance.SendAnalytics(matchToken, towersDamages, token);
+
+            Logger.Debug("Sending mulligan analytics to the server...");
+            var mulliganCards = JsonUtility.ToJson(MatchInfoSingleton.Instance.GetSerializableMulliganCards());
+            _ = ApiControllerSingleton.instance.SendAnalytics(matchToken, mulliganCards, token);
         }
 
         var container = GameObject.Find("MatchEndPanelContainer");
