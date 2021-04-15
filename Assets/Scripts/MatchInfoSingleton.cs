@@ -6,6 +6,12 @@ using Pandora.Network;
 namespace Pandora
 {
     [System.Serializable]
+    public class GenericAnalytics
+    {
+        public string Name;
+    }
+
+    [System.Serializable]
     public class UnitDamageLog
     {
         public string UnitName;
@@ -21,13 +27,13 @@ namespace Pandora
     }
 
     [System.Serializable]
-    public class SerializableTowersDamagesCollection
+    public class SerializableTowersDamagesCollection : GenericAnalytics
     {
         public List<SerializableTowersDamages> Damages;
     }
 
     [System.Serializable]
-    public class SerializableMulliganCards
+    public class SerializableMulliganCards : GenericAnalytics
     {
         public List<string> MulliganCards;
     }
@@ -36,9 +42,11 @@ namespace Pandora
     {
         static MatchInfoSingleton _instance = null;
 
+        string towersDamagesAnalyticsName = "towers_damages_analytics";
         Dictionary<TowerPosition, Dictionary<string, UnitDamageLog>> towersDamages =
             new Dictionary<TowerPosition, Dictionary<string, UnitDamageLog>>();
 
+        string mulliganAnalyticsName = "mulligan_analytics";
         List<string> mulliganCards = null;
 
         static public MatchInfoSingleton Instance
@@ -120,6 +128,7 @@ namespace Pandora
 
             return new SerializableTowersDamagesCollection
             {
+                Name = towersDamagesAnalyticsName,
                 Damages = serializableStructure
             };
         }
@@ -147,6 +156,7 @@ namespace Pandora
         {
             return new SerializableMulliganCards
             {
+                Name = mulliganAnalyticsName,
                 MulliganCards = mulliganCards
             };
         }
