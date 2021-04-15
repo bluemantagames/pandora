@@ -1,9 +1,11 @@
 using Pandora.Network;
 using Pandora.Network.Messages;
 using UnityEngine;
+using Pandora;
 using Pandora.UI.HUD;
 
-class EndGameSingleton {
+class EndGameSingleton
+{
     static EndGameSingleton _instance = null;
     public bool GameEnded { get; private set; } = false;
     public int WinnerTeam { get; private set; } = 0;
@@ -21,7 +23,8 @@ class EndGameSingleton {
         }
     }
 
-    public static void Reset() {
+    public static void Reset()
+    {
         _instance = null;
     }
 
@@ -34,13 +37,25 @@ class EndGameSingleton {
 
         Logger.Debug($"[ENDGAME] TEAM {WinnerTeam} WON!");
 
-        var matchFinishedMessage = new MatchFinishedMessage 
-        { 
+        var matchFinishedMessage = new MatchFinishedMessage
+        {
             WinnerTeam = winnerTeam,
             ElapsedMs = elapsedMs
         };
 
         NetworkControllerSingleton.instance.EnqueueMessage(matchFinishedMessage);
+
+        // Send endgame analytics
+        var token = PlayerModelSingleton.instance.Token;
+        var matchToken = NetworkControllerSingleton.instance.CurrentMatchToken;
+
+        if (token != null && matchToken != null)
+        {
+            Logger.Debug("Sending towers damages analytics to the server...");
+
+            var towersDamages = JsonUtility.ToJson(MatchInfoSingleton.Instance.GetSerializableTowersDamages());
+            _ = ApiControllerSingleton.instance.SendAnalytics(matchToken, towersDamages, token);
+        }
 
         var container = GameObject.Find("MatchEndPanelContainer");
 
