@@ -24,7 +24,7 @@ public class LeaderboardButtonBehaviour : MonoBehaviour
         var leaderboardContainerCopy = Instantiate(LeaderboardContainer, transform.parent, true);
         var leaderboardCopyCanvas = leaderboardContainerCopy.GetComponent<Canvas>();
 
-        modalContainer.AppendComponent(leaderboardContainerCopy);
+        modalContainer.AppendComponent(leaderboardContainerCopy, new Vector3(1.3f, 1.3f, 1.3f));
         if (leaderboardCopyCanvas != null) leaderboardCopyCanvas.enabled = true;
 
         modalContainer.Show();
