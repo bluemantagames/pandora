@@ -12,5 +12,8 @@ namespace Pandora
 
         // Deck
         public static int DECK_CARDS_NUMBER = 6;
+
+        // GameObjects
+        public static string MAIN_CANVAS_OBJECT_NAME = "Main";
     }
 }
