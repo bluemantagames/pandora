@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using Pandora.Network;
 using Pandora;
 using System.Net;
+using Pandora.Network.Data.Leaderboard;
 
 namespace Pandora.UI.Menu.Leaderboard
 {
@@ -27,6 +28,11 @@ namespace Pandora.UI.Menu.Leaderboard
 
             var players = response.Body.players;
 
+            AddPlayers(players);
+        }
+
+        private void AddPlayers(List<LeaderboardValue> players)
+        {
             foreach (var player in players)
             {
                 var playerContainer = Instantiate(SingleValueContainer, ValuesContainer.transform, false);
@@ -41,9 +47,6 @@ namespace Pandora.UI.Menu.Leaderboard
 
                 positionText.text = $"{player.position}.";
                 usernameText.text = $"{player.username}";
-
-                // LayoutRebuilder.ForceRebuildLayoutImmediate(position?.GetComponent<RectTransform>());
-                // LayoutRebuilder.ForceRebuildLayoutImmediate(username?.GetComponent<RectTransform>());
 
                 if (playerContainerCanvas != null) playerContainerCanvas.enabled = true;
             }
