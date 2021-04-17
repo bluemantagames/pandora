@@ -16,6 +16,7 @@ namespace Pandora.UI.Menu.Leaderboard
         public GameObject SingleValueContainer;
         public GameObject ValuesContainer;
         public ScrollRect ScrollerContainer;
+        public bool EnableInfiniteScroll = true;
         public float InfiniteScrollThreshold = 0.2f;
 
         private bool isLoading = false;
@@ -45,6 +46,8 @@ namespace Pandora.UI.Menu.Leaderboard
 
         public void OnEndDragDelegate()
         {
+            if (!EnableInfiniteScroll) return;
+
             var verticalPosition = ScrollerContainer.verticalNormalizedPosition;
 
             if (verticalPosition < InfiniteScrollThreshold && !isLoading && lastResultCount > 0)
