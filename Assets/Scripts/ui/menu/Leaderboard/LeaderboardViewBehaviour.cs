@@ -12,23 +12,46 @@ namespace Pandora.UI.Menu.Leaderboard
 {
     public class LeaderboardViewBehaviour : MonoBehaviour
     {
-        public int UsersPerPage = 50;
+        public int UsersPerPage = 20;
         public GameObject SingleValueContainer;
         public GameObject ValuesContainer;
+        public ScrollRect ScrollerContainer;
+        public float InfiniteScrollThreshold = 0.2f;
 
-        public async UniTaskVoid LoadLeaderboard(int page)
+        private bool isLoading = false;
+        private int currentPage = 1;
+        private int lastResultCount = 0;
+
+        public async UniTaskVoid LoadLeaderboard()
         {
+            Logger.Debug($"Triggered leaderboard load with page {currentPage}");
+
             var token = PlayerModelSingleton.instance.Token;
 
             if (token == null) return;
 
-            var response = await ApiControllerSingleton.instance.GetLeaderboard(page, UsersPerPage, token);
+            isLoading = true;
+            var response = await ApiControllerSingleton.instance.GetLeaderboard(currentPage, UsersPerPage, token);
+            isLoading = false;
 
             if (response.StatusCode != HttpStatusCode.OK) return;
 
             var players = response.Body.players;
 
+            lastResultCount = players.Count;
+
             AddPlayers(players);
+        }
+
+        public void OnEndDragDelegate()
+        {
+            var verticalPosition = ScrollerContainer.verticalNormalizedPosition;
+
+            if (verticalPosition < InfiniteScrollThreshold && !isLoading && lastResultCount > 0)
+            {
+                currentPage += 1;
+                _ = LoadLeaderboard();
+            }
         }
 
         private void AddPlayers(List<LeaderboardValue> players)

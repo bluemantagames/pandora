@@ -27,7 +27,7 @@ namespace Pandora.UI.Menu.Leaderboard
             var leaderboardCopyCanvas = leaderboardContainerCopy.GetComponent<Canvas>();
             var leaderboardView = leaderboardContainerCopy.GetComponent<LeaderboardViewBehaviour>();
 
-            _ = leaderboardView.LoadLeaderboard(1);
+            _ = leaderboardView.LoadLeaderboard();
 
             modalContainer.AppendComponent(leaderboardContainerCopy.gameObject, new Vector3(1.3f, 1.3f, 1.3f));
             if (leaderboardCopyCanvas != null) leaderboardCopyCanvas.enabled = true;
