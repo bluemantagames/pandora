@@ -8,6 +8,7 @@ namespace Pandora
         public string Token = null;
         public User User = null;
         public List<DeckSlot> DeckSlots = null;
+        public int leaderboardPosition;
 
         private static PlayerModelSingleton privateInstance = null;
 
