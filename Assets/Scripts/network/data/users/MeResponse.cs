@@ -7,5 +7,6 @@ namespace Pandora.Network.Data.Users
     {
         public User user;
         public List<DeckSlot> deckSlots;
+        public int leaderboardPosition;
     }
 }
