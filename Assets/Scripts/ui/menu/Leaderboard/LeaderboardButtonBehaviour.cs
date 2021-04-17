@@ -6,7 +6,7 @@ namespace Pandora.UI.Menu.Leaderboard
 {
     public class LeaderboardButtonBehaviour : MonoBehaviour
     {
-        public GameObject LeaderboardContainer;
+        public LeaderboardViewBehaviour LeaderboardView;
 
         private MenuModalBehaviour modalContainer;
 
@@ -15,18 +15,21 @@ namespace Pandora.UI.Menu.Leaderboard
             var mainCanvas = GameObject.Find(Constants.MAIN_CANVAS_OBJECT_NAME).gameObject;
             modalContainer = mainCanvas.GetComponentInChildren<MenuModalBehaviour>();
 
-            var leaderboardCanvas = LeaderboardContainer?.GetComponent<Canvas>();
+            var leaderboardCanvas = LeaderboardView?.GetComponent<Canvas>();
             if (leaderboardCanvas != null) leaderboardCanvas.enabled = false;
         }
 
         public void OpenLeaderboard()
         {
-            if (LeaderboardContainer == null) return;
+            if (LeaderboardView == null) return;
 
-            var leaderboardContainerCopy = Instantiate(LeaderboardContainer, transform.parent, true);
+            var leaderboardContainerCopy = Instantiate(LeaderboardView, transform.parent, true);
             var leaderboardCopyCanvas = leaderboardContainerCopy.GetComponent<Canvas>();
+            var leaderboardView = leaderboardContainerCopy.GetComponent<LeaderboardViewBehaviour>();
 
-            modalContainer.AppendComponent(leaderboardContainerCopy, new Vector3(1.3f, 1.3f, 1.3f));
+            _ = leaderboardView.LoadLeaderboard(1);
+
+            modalContainer.AppendComponent(leaderboardContainerCopy.gameObject, new Vector3(1.3f, 1.3f, 1.3f));
             if (leaderboardCopyCanvas != null) leaderboardCopyCanvas.enabled = true;
 
             modalContainer.Show();

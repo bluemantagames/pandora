@@ -13,5 +13,6 @@ namespace Pandora.Network.Data.Leaderboard
     {
         public string username;
         public int position;
+        public int points;
     }
 }

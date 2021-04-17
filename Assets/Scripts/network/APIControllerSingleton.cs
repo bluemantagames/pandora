@@ -17,7 +17,7 @@ namespace Pandora.Network
         public bool IsDebugBuild = Debug.isDebugBuild;
         UnityJsonSerializer customSerializer = new UnityJsonSerializer();
 
-        string prodEndpoint = "https://pandora.bluemanta.games/api";
+        string prodEndpoint = "http://127.0.0.1:8080/api";
 
         private string apiHost
         {
@@ -273,7 +273,7 @@ namespace Pandora.Network
         /// </summary>
         public Task<ApiResponse<GetLeaderboardResponse>> GetLeaderboard(int page, int size, string token)
         {
-            var request = new RestRequest($"/users/leaderboard", Method.POST);
+            var request = new RestRequest($"/users/leaderboard", Method.GET);
 
             request.AddParameter("page", page);
             request.AddParameter("size", size);
