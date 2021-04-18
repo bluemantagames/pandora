@@ -67,12 +67,15 @@ namespace Pandora.UI.Menu.Leaderboard
                 var playerContainerCanvas = playerContainer.GetComponent<Canvas>();
                 var position = playerContainer.GetComponentInChildren<LeaderboardPosition>();
                 var username = playerContainer.GetComponentInChildren<LeaderboardUsername>();
+                var points = playerContainer.GetComponentInChildren<LeaderboardPoints>();
 
                 var positionText = position?.GetComponent<Text>();
                 var usernameText = username?.GetComponent<Text>();
+                var pointsText = points?.GetComponent<Text>();
 
                 positionText.text = $"{player.position}.";
                 usernameText.text = $"{player.username}";
+                pointsText.text = $"({player.points})";
 
                 if (playerContainerCanvas != null) playerContainerCanvas.enabled = true;
             }
