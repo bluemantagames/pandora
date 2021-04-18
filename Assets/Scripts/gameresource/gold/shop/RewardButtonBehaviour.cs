@@ -7,6 +7,7 @@ using Pandora.Network;
 using Pandora.Resource;
 using Pandora.UI.Modal;
 using Pandora.Events;
+using Pandora.Network.Data;
 
 namespace Pandora.Resource.Gold.Shop
 {
@@ -39,7 +40,7 @@ namespace Pandora.Resource.Gold.Shop
             }
         }
 
-        void OnMatchStart() {
+        void OnMatchStart(Opponent opponent) {
             button.interactable = false;
         }
 

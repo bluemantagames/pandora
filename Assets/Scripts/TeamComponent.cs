@@ -5,6 +5,7 @@
     using Pandora.Command;
     using UnityEngine;
     using Pandora.Network;
+    using Pandora.Network.Data;
     using Pandora.Combat;
 
     public class TeamComponent : MonoBehaviour
@@ -28,6 +29,13 @@
                 }
             }
         }
+
+        public static Opponent Opponent = null;
+
+        static public void Reset() {
+            Opponent = null;
+        }
+
 
 
         /// <summary>

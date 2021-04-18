@@ -9,9 +9,11 @@ using Google.Protobuf;
 using UnityEngine.Events;
 using Pandora.Network.Messages;
 using System.Collections.Concurrent;
+using System.Linq;
 using Pandora.Network.Data.Matchmaking;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
+using Pandora.Network.Data;
 
 namespace Pandora.Network
 {
@@ -33,7 +35,7 @@ namespace Pandora.Network
         public int NotificationWaitTimeout = 30; // seconds
         public ConcurrentQueue<StepMessage> stepsQueue = new ConcurrentQueue<StepMessage>();
         public bool matchStarted = false;
-        public UnityEvent matchStartEvent = new UnityEvent();
+        public UnityEvent<Opponent> matchStartEvent = new UnityEvent<Opponent>();
         public int? PlayerId = null;
         public string CurrentMatchToken = null;
 
@@ -255,7 +257,14 @@ namespace Pandora.Network
 
                 Debug.Log($"We're team {TeamComponent.assignedTeam}");
 
-                matchStartEvent.Invoke();
+                var player = envelope.Start.Teams.First(team => team.TeamNumber == TeamComponent.opponentTeam)?.Players[0];
+
+                TeamComponent.Opponent = new Opponent {
+                    Name = player.Name,
+                    Position = (player.LeaderboardPosition != 0) ? player.LeaderboardPosition as int? : null
+                };
+
+                matchStartEvent.Invoke(TeamComponent.Opponent);
             }
 
             if (envelope.MessageCase == ServerEnvelope.MessageOneofCase.Step)
