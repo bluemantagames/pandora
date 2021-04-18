@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Pandora.Network.Data;
 
 namespace Pandora.Network
 {
@@ -36,7 +37,7 @@ namespace Pandora.Network
             }
         }
 
-        void MatchStarted() {
+        void MatchStarted(Opponent opponent) {
             matchStarted = true;
         }
 

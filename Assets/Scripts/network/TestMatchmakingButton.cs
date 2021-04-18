@@ -9,6 +9,7 @@ using Pandora.Events;
 using Pandora.UI.Menu;
 using Pandora.UI.Menu.Event;
 using Pandora.UI.Menu.Home;
+using Pandora.Network.Data;
 
 namespace Pandora.Network
 {
@@ -80,7 +81,7 @@ namespace Pandora.Network
             SceneManager.LoadScene("GameScene");
         }
 
-        void LoadGameScene()
+        void LoadGameScene(Opponent opponent)
         {
             GameSceneToLoad = true;
         }

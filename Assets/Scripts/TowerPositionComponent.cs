@@ -4,6 +4,7 @@ using UnityEngine;
 using Pandora.Combat;
 using Pandora.Engine;
 using Pandora.Network;
+using Pandora.Network.Data;
 
 namespace Pandora
 {
@@ -85,7 +86,7 @@ namespace Pandora
             }
         }
 
-        public void RefreshTower() {
+        public void RefreshTower(Opponent opponent) {
             shouldRefresh = true;
         }
 
