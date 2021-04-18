@@ -12,6 +12,7 @@ namespace Pandora.UI.HUD
     {
         // Start is called before the first frame update
         public float FadeDuration = 1.5f;
+        public Color[] PositionColors;
 
         void Start()
         {
@@ -19,13 +20,18 @@ namespace Pandora.UI.HUD
 
             if (opponent != null)
             {
-                GetComponent<Image>().DOFade(1f, FadeDuration);
+                var image = GetComponent<Image>();
+                image.DOFade(1f, FadeDuration);
 
                 var text = GetComponentInChildren<Text>();
 
                 text.text = opponent.Name;
 
                 text.DOFade(1f, FadeDuration);
+
+                if (opponent.Position <= 3 && PositionColors.Length >= opponent.Position) {
+                    image.color = PositionColors[opponent.Position.Value - 1];
+                }
             }
         }
     }

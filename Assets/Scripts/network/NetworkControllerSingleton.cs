@@ -253,7 +253,7 @@ namespace Pandora.Network
 
                 TeamComponent.Opponent = new Opponent {
                     Name = player.Name,
-                    Position = player.LeaderboardPosition
+                    Position = (player.LeaderboardPosition != 0) ? player.LeaderboardPosition as int? : null
                 };
 
                 matchStartEvent.Invoke(TeamComponent.Opponent);

@@ -6894,7 +6894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 23cf4c6d91f7bf9e387350e83591a9ca, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -6933,6 +6933,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FadeDuration: 3
+  PositionColors:
+  - {r: 1, g: 0.84313726, b: 0, a: 0}
+  - {r: 0.48235294, g: 0.48235294, b: 0.48235294, a: 0}
+  - {r: 0.8039216, g: 0.49803922, b: 0.19607843, a: 0}
 --- !u!1 &1793146098
 GameObject:
   m_ObjectHideFlags: 0
