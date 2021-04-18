@@ -273,10 +273,11 @@ namespace Pandora.Network
         /// </summary>
         public Task<ApiResponse<GetLeaderboardResponse>> GetLeaderboard(int page, int size, string token)
         {
-            var request = new RestRequest($"/users/leaderboard", Method.GET);
-
-            request.AddParameter("page", page);
-            request.AddParameter("size", size);
+            // Here we are hardcoding the GET parameters
+            // because ILCPP is stripping away intetnal stuff
+            // used by request.AddParameter.
+            // We should probably fix it for real.
+            var request = new RestRequest($"/users/leaderboard?page={page}&size={size}", Method.GET);
 
             return ExecuteApiRequest<GetLeaderboardResponse>(request, token);
         }
