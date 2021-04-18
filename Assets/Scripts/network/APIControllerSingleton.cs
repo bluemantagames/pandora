@@ -4,6 +4,7 @@ using Pandora.Network.Data;
 using Pandora.Network.Data.Users;
 using Pandora.Network.Data.Matchmaking;
 using Pandora.Network.Data.Analytics;
+using Pandora.Network.Data.Leaderboard;
 using System.Threading.Tasks;
 using System.Net;
 using System.Collections.Generic;
@@ -265,6 +266,20 @@ namespace Pandora.Network
             request.AddJsonBody(param);
 
             return ExecuteApiRequest<string>(request, token);
+        }
+
+        /// <summary>
+        /// Get the leaderboard.
+        /// </summary>
+        public Task<ApiResponse<GetLeaderboardResponse>> GetLeaderboard(int page, int size, string token)
+        {
+            // Here we are hardcoding the GET parameters
+            // because ILCPP is stripping away intetnal stuff
+            // used by request.AddParameter.
+            // We should probably fix it for real.
+            var request = new RestRequest($"/users/leaderboard?page={page}&size={size}", Method.GET);
+
+            return ExecuteApiRequest<GetLeaderboardResponse>(request, token);
         }
     }
 }

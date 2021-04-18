@@ -17,13 +17,14 @@ namespace Pandora.UI.Menu.Deck
         void Awake()
         {
             // Disable this in-game
-            if (GameObject.Find("Arena") != null) {
+            if (GameObject.Find("Arena") != null)
+            {
                 this.enabled = false;
-                
+
                 return;
             }
 
-            var mainCanvas = GameObject.Find("Main").gameObject;
+            var mainCanvas = GameObject.Find(Constants.MAIN_CANVAS_OBJECT_NAME).gameObject;
 
             modalContainer = mainCanvas.GetComponentInChildren<MenuModalBehaviour>();
 

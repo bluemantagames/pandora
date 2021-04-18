@@ -56,6 +56,7 @@ namespace Pandora
             {
                 playerModelSingleton.User = meResponse.Body.user;
                 playerModelSingleton.DeckSlots = meResponse.Body.deckSlots;
+                playerModelSingleton.leaderboardPosition = meResponse.Body.leaderboardPosition;
 
                 return true;
             }
