@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Pandora.Engine;
@@ -14,7 +15,6 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
     }
     public Text TitleComponent;
     public Text TimerComponent;
-    public List<GameObject> Towers;
     private uint msDuration;
     private uint timePassed;
     private bool winnerTextSet = false;
@@ -75,7 +75,12 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
         List<GameObject> bottomTowers = new List<GameObject>();
         List<GameObject> topTowers = new List<GameObject>();
 
-        foreach (var tower in Towers)
+        var towers = 
+            from entity in MapComponent.Instance.engine.Entities
+            where entity.GameObject.GetComponent<TowerPositionComponent>() != null
+            select entity.GameObject;
+
+        foreach (var tower in towers)
         {
             var towerPositionComponent = tower.GetComponent<TowerPositionComponent>();
             var lifeComponent = tower.GetComponent<LifeComponent>();
