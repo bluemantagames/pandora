@@ -29,19 +29,25 @@ namespace Pandora.Network
         MenuEventsSingleton menuEventsSingleton;
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
         string oldPlayText = null;
+        bool isLoading = false;
 
         public void Connect()
         {
-            var activeDeck = GetActiveDeck();
+            // Clear the MatchInfo singleton for
+            // a new match
+            MatchInfoSingleton.Instance.ClearAll();
 
-            if (!IsDeckValid(activeDeck)) return;
+            var activeDeck = GetActiveDeck();
+            var isDeckValid = DevMatchmaking ? true : IsDeckValid(activeDeck);
+
+            if (!isDeckValid) return;
 
             Logger.Debug("Connecting");
 
+            isLoading = true;
+
             // Show loader text
-            TextLoader.GetComponent<MatchmakingLodaderTextBehaviour>().Enable();
-            oldPlayText = TextPlay.text;
-            TextPlay.text = "";
+            SetLoading();
 
             AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATCHMAKING_START);
 
@@ -50,8 +56,8 @@ namespace Pandora.Network
                 NetworkControllerSingleton.instance.IsDebugBuild = false;
             }
 
-            var deck = activeDeck.Select(cardName => new Card(cardName)).ToList();
-            var deckStr = deck.Select(card => card.Name).ToList();
+            var deck = activeDeck?.Select(cardName => new Card(cardName))?.ToList();
+            var deckStr = deck?.Select(card => card.Name)?.ToList();
 
             if (DevMatchmaking)
             {
@@ -101,8 +107,7 @@ namespace Pandora.Network
                 AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATHCMAKING_MATCH_FOUND);
 
                 // Hide loader text
-                TextLoader.GetComponent<MatchmakingLodaderTextBehaviour>().Disable();
-                TextPlay.text = oldPlayText;
+                SetPlay();
 
                 var networkController = NetworkControllerSingleton.instance;
 
@@ -127,10 +132,12 @@ namespace Pandora.Network
 
         public void CheckActive()
         {
+            if (isLoading) return;
+
             Logger.Debug("Checking if the matchmaking button is active...");
 
             var activeDeck = GetActiveDeck();
-            var isValid = IsDeckValid(activeDeck);
+            var isValid = DevMatchmaking ? true : IsDeckValid(activeDeck);
 
             if (!isValid)
             {
@@ -199,6 +206,22 @@ namespace Pandora.Network
         void ViewActiveHandler(MenuEvent ev)
         {
             CheckActive();
+
+            if (isLoading) SetLoading();
+            else SetPlay();
+        }
+
+        void SetLoading()
+        {
+            TextLoader.GetComponent<MatchmakingLodaderTextBehaviour>().Enable();
+            oldPlayText = TextPlay.text;
+            TextPlay.text = "";
+        }
+
+        void SetPlay()
+        {
+            TextLoader.GetComponent<MatchmakingLodaderTextBehaviour>().Disable();
+            TextPlay.text = oldPlayText;
         }
     }
 

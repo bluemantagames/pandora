@@ -14,6 +14,7 @@ public class MatchmakingLodaderTextBehaviour : MonoBehaviour
     Text text;
     int ticks = 0;
     string prefixText = null;
+    bool loaderExecuting = false;
 
     void Awake()
     {
@@ -37,8 +38,12 @@ public class MatchmakingLodaderTextBehaviour : MonoBehaviour
 
     public async UniTaskVoid StartLoader()
     {
+        if (loaderExecuting) return;
+
         while (Enabled)
         {
+            loaderExecuting = true;
+
             if (++ticks > 3)
             {
                 ticks = 1;
@@ -49,6 +54,8 @@ public class MatchmakingLodaderTextBehaviour : MonoBehaviour
 
             await UniTask.Delay(TickTimeMs);
         }
+
+        loaderExecuting = false;
     }
 
     public void Disable()
