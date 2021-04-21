@@ -87,6 +87,29 @@ namespace Pandora
         }
 
         /// <summary>
+        /// Generate a string from a number, taking i18n into consideration.
+        /// </summary>
+        public string FormatNumber(float n)
+        {
+            var provider = new CultureInfo("en-US");
+            var formattedNumber = new Decimal(n).ToString(provider);
+
+            return formattedNumber;
+        }
+
+        /// <summary>
+        /// Generate a decimal from a string, taking i18n into consideration.
+        /// </summary>
+        public Decimal ParseNumber(string n)
+        {
+            var parseStyle = NumberStyles.AllowDecimalPoint;
+            var parseProvider = new CultureInfo("en-US");
+            var decodedDecimal = Decimal.Parse(n, parseStyle, parseProvider);
+
+            return decodedDecimal;
+        }
+
+        /// <summary>
         /// Takes a parsed animation file as a parameter and create
         /// a cached calculated animation.
         /// </summary>
@@ -96,12 +119,8 @@ namespace Pandora
 
             foreach (AnimationStep step in savedAnimation.steps)
             {
-                var parseStyle = NumberStyles.AllowDecimalPoint;
-                var parseProvider = new CultureInfo("en-US");
-                var decodedSpeedDecimal = Decimal.Parse(step.speed, parseStyle, parseProvider);
-
+                var decodedSpeedDecimal = ParseNumber(step.speed);
                 var decodedSpeed = Decimal.ToInt32(decodedSpeedDecimal);
-
                 var engineSpeed = PandoraEngine.GetSpeed(decodedSpeed);
 
                 result.Add(step.stepPercentage, engineSpeed);

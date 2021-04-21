@@ -5,7 +5,7 @@ using UnityEngine;
 using Pandora.Combat;
 using Pandora.Movement;
 using Cysharp.Threading.Tasks;
-
+using System.Globalization;
 namespace Pandora.Engine.Animations
 {
     public class AnimationBezier : MonoBehaviour
@@ -103,14 +103,18 @@ namespace Pandora.Engine.Animations
         {
             var steps = new List<AnimationStep>();
 
+            if (serializedAnimationsSingleton == null)
+                serializedAnimationsSingleton = SerializedAnimationsSingleton.Instance;
+
             for (var step = 0; step <= AnimationMaxTime; step += AnimationTimeStep)
             {
                 var computedSpeed = EvaluateSpeed(speed, step);
+                var strComputedSpeed = serializedAnimationsSingleton.FormatNumber(computedSpeed);
 
                 var animationStep = new AnimationStep
                 {
                     stepPercentage = step,
-                    speed = $"{computedSpeed}"
+                    speed = $"{strComputedSpeed}"
                 };
 
                 steps.Add(animationStep);
