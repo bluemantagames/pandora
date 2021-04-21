@@ -88,10 +88,17 @@ namespace Pandora.Network
 
             var cancellationSource = new CancellationTokenSource();
 
-            var _ = Task.Delay(NotificationWaitTimeout * 1000, cancellationSource.Token).ContinueWith(task =>
+            if (!Application.isEditor)
             {
-                apiControllerSingleton.SendMatchmakingNotification(isDev, playerModelSingleton.Token, cancellationSource.Token);
-            });
+                var _ = Task.Delay(NotificationWaitTimeout * 1000, cancellationSource.Token).ContinueWith(task =>
+                {
+                    apiControllerSingleton.SendMatchmakingNotification(isDev, playerModelSingleton.Token, cancellationSource.Token);
+                });
+            }
+            else
+            {
+                Logger.Debug("Push notification not sent because we are in the Unity Editor");
+            }
 
 
             var response = isDev
@@ -259,7 +266,8 @@ namespace Pandora.Network
 
                 var player = envelope.Start.Teams.First(team => team.TeamNumber == TeamComponent.opponentTeam)?.Players[0];
 
-                TeamComponent.Opponent = new Opponent {
+                TeamComponent.Opponent = new Opponent
+                {
                     Name = player.Name,
                     Position = (player.LeaderboardPosition != 0) ? player.LeaderboardPosition as int? : null
                 };
