@@ -2,7 +2,7 @@
 using Cysharp.Threading.Tasks;
 using Pandora.Network;
 using System.Net;
-using System.Collections;
+using Pandora.Deck;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
 using DG.Tweening;
@@ -67,7 +67,7 @@ namespace Pandora
         /// <summary>
         /// Load the main menu scene
         /// </summary>
-        public async UniTaskVoid LoadMainMenu()
+        public async UniTask LoadMainMenu()
         {
             var showTask = Show();
 
@@ -93,6 +93,20 @@ namespace Pandora
                 Logger.Debug("[LoadingBehaviour] Loading complete, exiting!");
                 Hide();
             }
+        }
+
+        /// <summary>
+        /// Handle end game cleanup
+        /// and load the main menu scene.
+        /// </summary>
+        public async UniTask EndGameToMainMenu()
+        {
+            NetworkControllerSingleton.instance.Stop();
+            LocalDeck.Instance.Reset();
+            EndGameSingleton.Reset();
+            TeamComponent.Reset();
+
+            await LoadMainMenu();
         }
 
         void Awake()

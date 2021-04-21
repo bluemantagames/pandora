@@ -23,7 +23,7 @@ namespace Pandora.UI.Signup
         void Awake()
         {
             playerModelSingleton = PlayerModelSingleton.instance;
-            loadingBehaviour = GameObject.Find("LoadingCanvas")?.GetComponent<LoadingBehaviour>();
+            loadingBehaviour = GameObject.Find(Constants.LOADING_CANVAS_OBJECT_NAME)?.GetComponent<LoadingBehaviour>();
         }
 
         public async UniTaskVoid ExecuteSignup(string username, string email, string password)
