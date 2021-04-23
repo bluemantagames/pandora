@@ -237,9 +237,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733e88c63e6713f4fa432c8e37a8f31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeValue: 100
+  lifeValue: 150
   maxLife: 0
   IsDead: 0
+  DisableDamage: 0
   DeathVFX: {fileID: 2685581498212572552, guid: 83f603f9e61cdbd4c8da4a6ec28e3dc1,
     type: 3}
   DeathVFXSpeedMultiplier: 2
@@ -255,7 +256,7 @@ Animator:
   m_GameObject: {fileID: 1060352442105845753}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 22980af4a525ecf4ebe03eef68adfdaa, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

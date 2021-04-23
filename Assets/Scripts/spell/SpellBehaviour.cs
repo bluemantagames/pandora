@@ -12,7 +12,7 @@ namespace Pandora.Spell
     {
         public GridCell Target { get; set; }
         public GridCell StartCell { get; set; }
-        public int DelayMs = 1500, VFXDelayMS = 300, damage = 20, radius = 3, Speed = 0;
+        public int DelayMs = 1500, VFXDelayMS = 300, damage = 20, radius = 3, Speed = 0, towerDamage = 400;
         uint totalElapsed = 0;
         bool done = false, vfxPlayed = false;
         public GameObject VFX;
@@ -77,11 +77,16 @@ namespace Pandora.Spell
 
                         var towerComponent = lifeComponent.gameObject.GetComponent<TowerPositionComponent>();
 
-                        var isMiddleTower = towerComponent != null && towerComponent.EngineTowerPosition.IsMiddle();
+                        var isTower = towerComponent != null;
+                        var isMiddleTower = isTower && towerComponent.EngineTowerPosition.IsMiddle();
+
+                        var dealtDamage = 
+                            (isMiddleTower) ? damage / 4 :
+                            (isTower)       ? towerDamage : damage;
 
                         Logger.Debug($"Hitting {lifeComponent.gameObject}");
 
-                        lifeComponent.AssignDamage((!isMiddleTower) ? damage : damage / 4, new SpellDamage(gameObject));
+                        lifeComponent.AssignDamage(dealtDamage, new SpellDamage(gameObject));
                     }
                 }
 

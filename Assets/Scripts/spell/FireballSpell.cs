@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Pandora.Spell {
     public class FireballSpell : MonoBehaviour, ProjectileSpell {
         public MapComponent map { get; set; }
-        public int damage = 20;
+        public int damage = 20, towerDamage = 400;
         public int radius = 3;
 
         public void SpellCollided(GridCell cell) {
@@ -42,11 +42,16 @@ namespace Pandora.Spell {
 
                     var towerComponent = lifeComponent.gameObject.GetComponent<TowerPositionComponent>();
 
-                    var isMiddleTower = towerComponent != null && towerComponent.EngineTowerPosition.IsMiddle();
+                    var isTower = towerComponent != null;
+                    var isMiddleTower = isTower && towerComponent.EngineTowerPosition.IsMiddle();
+
+                    var dealtDamage = 
+                        (isMiddleTower) ? damage / 4 :
+                        (isTower)       ? towerDamage : damage;
 
                     Logger.Debug($"Hitting {lifeComponent.gameObject}");
 
-                    lifeComponent.AssignDamage((!isMiddleTower) ? damage : damage / 4, new SpellDamage(gameObject));
+                    lifeComponent.AssignDamage(dealtDamage, new SpellDamage(gameObject));
                 }
             }
 

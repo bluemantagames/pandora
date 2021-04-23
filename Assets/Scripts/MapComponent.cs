@@ -887,7 +887,7 @@ namespace Pandora
         {
             var selectedCards = HandBehaviour.Instance.SelectedCards;
 
-            if (selectedCards.Count > 0)
+            if (selectedCards.Count > 0 && selectedCards[0]?.CardObject?.GetComponent<CardBehaviour>() != null)
             {
                 Logger.Debug($"Dragging {selectedCards}");
 
