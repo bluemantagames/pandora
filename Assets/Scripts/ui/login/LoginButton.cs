@@ -23,7 +23,7 @@ namespace Pandora.UI.Login
         void Awake()
         {
             playerModelSingleton = PlayerModelSingleton.instance;
-            loadingBehaviour = GameObject.Find("LoadingCanvas")?.GetComponent<LoadingBehaviour>();
+            loadingBehaviour = GameObject.Find(Constants.LOADING_CANVAS_OBJECT_NAME)?.GetComponent<LoadingBehaviour>();
         }
 
         void Start()
@@ -98,14 +98,17 @@ namespace Pandora.UI.Login
 #if UNITY_ANDROID            
             var authenticated = await PlayGames.instance.Authenticate();
 
-            if (authenticated) {
+            if (authenticated)
+            {
                 _ = loadingBehaviour.LoadMainMenu();
-                
+
                 AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.LOGIN, new Dictionary<string, object>() {
                     {"mode", "google-play"},
                     {"failed", false}
                 });
-            } else {
+            }
+            else
+            {
                 AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.LOGIN, new Dictionary<string, object>() {
                     {"mode", "google-play"},
                     {"failed", true}

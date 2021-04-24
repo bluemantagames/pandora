@@ -15,5 +15,6 @@ namespace Pandora
 
         // GameObjects
         public static string MAIN_CANVAS_OBJECT_NAME = "Main";
+        public static string LOADING_CANVAS_OBJECT_NAME = "LoadingCanvas";
     }
 }
