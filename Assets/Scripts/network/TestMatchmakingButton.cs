@@ -221,7 +221,9 @@ namespace Pandora.Network
         void SetPlay()
         {
             TextLoader.GetComponent<MatchmakingLodaderTextBehaviour>().Disable();
-            TextPlay.text = oldPlayText;
+
+            if (string.IsNullOrEmpty(TextPlay.text) && !string.IsNullOrEmpty(oldPlayText))
+                TextPlay.text = oldPlayText;
         }
     }
 
