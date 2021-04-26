@@ -15,15 +15,23 @@ namespace Pandora
 
         int projectileDirectionThreshold = 1;
 
-        public Vector2Int CalculateProjectilePosition(Vector2Int basePosition, PandoraEngine engine, Vector2Int direction)
+        public Vector2Int CalculateProjectilePosition(
+            int pivotAdjX,
+            int pivotAdjY,
+            int adjX,
+            int adjY,
+            Vector2Int basePosition,
+            PandoraEngine engine,
+            Vector2Int direction
+        )
         {
             var computedBasePosition = PoolInstances.Vector2IntPool.GetObject();
-            computedBasePosition.x = basePosition.x + PivotAdjustmentX;
-            computedBasePosition.y = basePosition.y + PivotAdjustmentY;
+            computedBasePosition.x = basePosition.x + pivotAdjX;
+            computedBasePosition.y = basePosition.y + pivotAdjY;
 
             var computedPosition = PoolInstances.Vector2IntPool.GetObject();
-            computedPosition.x = computedBasePosition.x + ProjectileAdjustmentX;
-            computedPosition.y = computedBasePosition.y + ProjectileAdjustmentY;
+            computedPosition.x = computedBasePosition.x + adjX;
+            computedPosition.y = computedBasePosition.y + adjY;
 
             var figure = PoolInstances.Vector2IntListPool.GetObject();
             figure.Add(computedPosition);
@@ -35,6 +43,34 @@ namespace Pandora
             PoolInstances.Vector2IntListPool.ReturnObject(figure);
 
             return rotatedPosition;
+        }
+
+        public Vector2Int CalculateProjectilePosition(Vector2Int basePosition, PandoraEngine engine, Vector2Int direction)
+        {
+            return CalculateProjectilePosition(
+                PivotAdjustmentX,
+                PivotAdjustmentY,
+                ProjectileAdjustmentX,
+                ProjectileAdjustmentY,
+                basePosition,
+                engine,
+                direction
+            );
+        }
+
+        public Vector2Int CalculateTowerProjectilePosition(Vector2Int basePosition, PandoraEngine engine, Vector2Int direction)
+        {
+            var computedPivotAdjustmentY = TeamComponent.assignedTeam == 2 ? -PivotAdjustmentY : PivotAdjustmentY;
+
+            return CalculateProjectilePosition(
+                PivotAdjustmentX,
+                computedPivotAdjustmentY,
+                ProjectileAdjustmentX,
+                ProjectileAdjustmentY,
+                basePosition,
+                engine,
+                direction
+            );
         }
 
         public Vector2Int CalculateDirection(EngineEntity unitEntity, EngineEntity enemyEntity)

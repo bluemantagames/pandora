@@ -211,7 +211,7 @@ namespace Pandora.Combat
             if (projectilePositionFixer != null)
             {
                 var projectileDirection = projectilePositionFixer.CalculateDirection(towerEntity, target.enemyEntity);
-                projectilePosition = projectilePositionFixer.CalculateProjectilePosition(towerEntity.Position, MapComponent.Instance.engine, projectileDirection);
+                projectilePosition = projectilePositionFixer.CalculateTowerProjectilePosition(towerEntity.Position, MapComponent.Instance.engine, projectileDirection);
             }
             else
             {
