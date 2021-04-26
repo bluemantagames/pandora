@@ -24,6 +24,7 @@ namespace Pandora.Network
         public bool DevMatchmaking = false;
         public Text TextLoader;
         public Text TextPlay;
+        public bool BypassCheck = false;
         public MatchmakingWarningTextBehaviour matchmakingWarningComponent;
 
         MenuEventsSingleton menuEventsSingleton;
@@ -133,6 +134,7 @@ namespace Pandora.Network
         public void CheckActive()
         {
             if (isLoading) return;
+            if (BypassCheck) return;
 
             Logger.Debug("Checking if the matchmaking button is active...");
 
