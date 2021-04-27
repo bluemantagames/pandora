@@ -2896,6 +2896,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PivotAdjustmentX: -100
   PivotAdjustmentY: 800
+  SpecularPivotAdjustmentX: 0
+  SpecularPivotAdjustmentY: 350
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
 --- !u!1 &800929993
@@ -3683,13 +3685,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitName: HalfOrc
   UnitX: 5
-  UnitY: 16
+  UnitY: 17
   MovementLength: 5
-  EnemyX: 10
-  EnemyY: 12
+  EnemyX: 5
+  EnemyY: 19
   Mode: 1
-  Disabled: 1
-  DisableAttack: 0
+  Disabled: 0
+  DisableAttack: 1
 --- !u!1001 &1110013713
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4175,8 +4177,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1130516806}
   m_HandleRect: {fileID: 1130516805}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.99999994
+  m_Value: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5801,6 +5803,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PivotAdjustmentX: -100
   PivotAdjustmentY: 800
+  SpecularPivotAdjustmentX: 0
+  SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
 --- !u!1 &1571493266
@@ -6760,7 +6764,6 @@ MonoBehaviour:
   GameDurationSeconds: 180
   TitleComponent: {fileID: 0}
   TimerComponent: {fileID: 0}
-  Towers: []
 --- !u!1 &1760840886
 GameObject:
   m_ObjectHideFlags: 0
@@ -7684,6 +7687,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PivotAdjustmentX: -100
   PivotAdjustmentY: 800
+  SpecularPivotAdjustmentX: 0
+  SpecularPivotAdjustmentY: 350
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
 --- !u!1 &1845265289
@@ -7813,7 +7818,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 6.4000244, y: -4.0999756}
+  m_AnchoredPosition: {x: 6.3999023, y: -4.0996094}
   m_SizeDelta: {x: -62.59836, y: -96.35918}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1949382572
@@ -7939,7 +7944,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1530874139}
   m_HandleRect: {fileID: 1530874138}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -8003,6 +8008,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PivotAdjustmentX: -100
   PivotAdjustmentY: 800
+  SpecularPivotAdjustmentX: 0
+  SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
 --- !u!1 &2063161276
@@ -8127,6 +8134,24 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 819278249}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2089915467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089915458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PivotAdjustmentX: 500
+  PivotAdjustmentY: 1000
+  SpecularPivotAdjustmentX: -500
+  SpecularPivotAdjustmentY: 200
+  ProjectileAdjustmentX: 0
+  ProjectileAdjustmentY: 0
 --- !u!1001 &2119402720
 PrefabInstance:
   m_ObjectHideFlags: 0
