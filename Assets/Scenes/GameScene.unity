@@ -2537,6 +2537,11 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
+      propertyPath: m_SortingOrder
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
@@ -2768,6 +2773,11 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 2693967325692397661, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
+      propertyPath: m_SortingOrder
+      value: 101
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325692397661, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
@@ -2897,7 +2907,7 @@ MonoBehaviour:
   PivotAdjustmentX: -100
   PivotAdjustmentY: 800
   SpecularPivotAdjustmentX: 0
-  SpecularPivotAdjustmentY: 350
+  SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
 --- !u!1 &800929993
@@ -3684,13 +3694,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitName: HalfOrc
-  UnitX: 5
-  UnitY: 17
+  UnitX: 2
+  UnitY: 13
   MovementLength: 5
-  EnemyX: 5
-  EnemyY: 19
+  EnemyX: 2
+  EnemyY: 13
   Mode: 1
-  Disabled: 0
+  Disabled: 1
   DisableAttack: 1
 --- !u!1001 &1110013713
 PrefabInstance:
@@ -5802,7 +5812,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PivotAdjustmentX: -100
-  PivotAdjustmentY: 800
+  PivotAdjustmentY: 0
   SpecularPivotAdjustmentX: 0
   SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
@@ -7314,7 +7324,7 @@ PrefabInstance:
     - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
@@ -7570,7 +7580,7 @@ PrefabInstance:
     - target: {fileID: 2693967325692397661, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 101
       objectReference: {fileID: 0}
     - target: {fileID: 2693967325692397661, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
@@ -7685,10 +7695,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PivotAdjustmentX: -100
-  PivotAdjustmentY: 800
+  PivotAdjustmentX: -200
+  PivotAdjustmentY: 0
   SpecularPivotAdjustmentX: 0
-  SpecularPivotAdjustmentY: 350
+  SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
 --- !u!1 &1845265289
@@ -8148,8 +8158,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PivotAdjustmentX: 500
   PivotAdjustmentY: 1000
-  SpecularPivotAdjustmentX: -500
-  SpecularPivotAdjustmentY: 200
+  SpecularPivotAdjustmentX: 0
+  SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
 --- !u!1001 &2119402720
