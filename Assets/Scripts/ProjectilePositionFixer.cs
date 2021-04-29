@@ -62,8 +62,9 @@ namespace Pandora
 
         public Vector2Int CalculateTowerProjectilePosition(Vector2Int basePosition, PandoraEngine engine, Vector2Int direction)
         {
+            var isSpecular = TeamComponent.assignedTeam == 2;
             var computedPivotAdjustmentX = PivotAdjustmentX;
-            var computedPivotAdjustmentY = PivotAdjustmentY;
+            var computedPivotAdjustmentY = isSpecular ? -1 * PivotAdjustmentY : PivotAdjustmentY;
 
             return CalculateProjectilePosition(
                 computedPivotAdjustmentX,

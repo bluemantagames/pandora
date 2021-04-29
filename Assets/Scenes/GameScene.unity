@@ -2538,7 +2538,7 @@ PrefabInstance:
     - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
@@ -2774,7 +2774,7 @@ PrefabInstance:
     - target: {fileID: 2693967325692397661, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 101
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2693967325692397661, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
@@ -3519,7 +3519,7 @@ MonoBehaviour:
   TopMiddleTowerPosition: {x: 7, y: 22}
   BottomLeftTowerPosition: {x: 2, y: 2}
   BottomRightTowerPosition: {x: 13, y: 2}
-  BottomMiddleTowerPosition: {x: 7, y: 1}
+  BottomMiddleTowerPosition: {x: 7, y: 0}
   TopLeftAggroOrigin: {x: 0, y: 12}
   TopLeftAggroEnd: {x: 8, y: 22}
   TopMiddleAggroOrigin: {x: 0, y: 17}
@@ -7324,7 +7324,7 @@ PrefabInstance:
     - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2693967323959284761, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
@@ -7580,7 +7580,7 @@ PrefabInstance:
     - target: {fileID: 2693967325692397661, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 101
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2693967325692397661, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
@@ -7695,8 +7695,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PivotAdjustmentX: -200
-  PivotAdjustmentY: 0
+  PivotAdjustmentX: -100
+  PivotAdjustmentY: 1000
   SpecularPivotAdjustmentX: 0
   SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
