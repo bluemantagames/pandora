@@ -38,8 +38,12 @@ namespace Pandora.Network
         public UnityEvent<Opponent> matchStartEvent = new UnityEvent<Opponent>();
         public int? PlayerId = null;
         public string CurrentMatchToken = null;
+        long? lastEnvelopeId = null;
+        int reconnectionWaitMs = 500;
 
         private static NetworkControllerSingleton privateInstance = null;
+
+        public static bool InjectException = false;
 
         public static NetworkControllerSingleton instance
         {
@@ -129,7 +133,6 @@ namespace Pandora.Network
 
         public void StartMatch()
         {
-
             Debug.Log($"Connecting to the game server with token {userMatchToken}");
 
             var startTime = DateTime.Now;
@@ -154,11 +157,34 @@ namespace Pandora.Network
 
             Logger.Debug($"Connecting to {matchHost}:{matchPort}");
 
-            matchSocket.Connect(ipe);
+            var connected = false;
+
+            while (!connected) {
+                try {
+                    matchSocket.Connect(ipe);
+
+                    connected = true;
+                } catch (Exception e) {
+                    Debug.LogError(e.Message);
+
+                    Thread.Sleep(reconnectionWaitMs);
+
+                    Debug.Log("Trying to reconnect..");
+                }
+            }
+
+            ReplayFrom replayFromId = null;
+
+            if (lastEnvelopeId != null) {
+                replayFromId = new ReplayFrom {
+                    ReplayFromId = lastEnvelopeId.Value
+                };
+            }
 
             var join = new Join
             {
-                UserMatchToken = userMatchToken
+                UserMatchToken = userMatchToken,
+                ReplayFromId = replayFromId
             };
 
             var envelope = new ClientEnvelope
@@ -217,37 +243,62 @@ namespace Pandora.Network
 
         public void ReceiveLoop(object param)
         {
-            var signal = param as StopSignal;
-
-            while (true)
+            try
             {
-                // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+                var signal = param as StopSignal;
 
-                if (signal.Stop || matchSocket == null)
+                while (true)
                 {
-                    break;
+                    // TODO: Check if this impacts CPU and let the thread sleep a while if it does
+                    if (signal.Stop || matchSocket == null)
+                    {
+                        break;
+                    }
+
+                    // Reconnection dev purpose
+                    if (InjectException)
+                    {
+                        InjectException = false;
+
+                        throw new Exception("Injected exception");
+                    }
+
+                    var sizeBytes = new Byte[4];
+
+                    matchSocket.Receive(sizeBytes, sizeBytes.Length, 0);
+
+                    if (BitConverter.IsLittleEndian)
+                    { // we receive bytes in big endian
+                        Array.Reverse(sizeBytes);
+                    }
+
+                    var size = BitConverter.ToInt32(sizeBytes, 0);
+
+                    if (size == 0) {
+                        throw new Exception("Empty Receive call");
+                    }
+
+                    Logger.Debug($"Asking for {size} bytes");
+
+                    var messageBytes = new Byte[size];
+
+                    matchSocket.Receive(messageBytes, messageBytes.Length, 0);
+
+                    var envelope = ServerEnvelope.Parser.ParseFrom(messageBytes);
+
+                    HandleServerEnvelope(envelope);
                 }
+            }
+            catch (Exception e)
+            {
+                try {
+                    matchSocket.Close();
+                } finally {
+                    Debug.LogError(e.Message);
 
-                var sizeBytes = new Byte[4];
-
-                matchSocket.Receive(sizeBytes, sizeBytes.Length, 0);
-
-                if (BitConverter.IsLittleEndian)
-                { // we receive bytes in big endian
-                    Array.Reverse(sizeBytes);
+                    if (matchSocket != null)
+                        StartMatch();
                 }
-
-                var size = BitConverter.ToInt32(sizeBytes, 0);
-
-                Logger.Debug($"Asking for {size} bytes");
-
-                var messageBytes = new Byte[size];
-
-                matchSocket.Receive(messageBytes, messageBytes.Length, 0);
-
-                var envelope = ServerEnvelope.Parser.ParseFrom(messageBytes);
-
-                HandleServerEnvelope(envelope);
             }
         }
 
@@ -325,6 +376,8 @@ namespace Pandora.Network
 
                 Debug.Log($"Enqueuing Step {envelope.Step.TimePassedMs}");
 
+                lastEnvelopeId = envelope.EnvelopeId;
+
                 stepsQueue.Enqueue(new StepMessage(envelope.Step.TimePassedMs, commands, mana));
             }
         }
@@ -364,6 +417,7 @@ namespace Pandora.Network
 
             stopNetworkThread = true;
             networkThread = null;
+            lastEnvelopeId = null;
         }
 
         public static SpawnMessage GenerateSpawnMessage(StepCommand command)
