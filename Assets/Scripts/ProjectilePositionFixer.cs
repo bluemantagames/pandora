@@ -10,20 +10,31 @@ namespace Pandora
     {
         public int PivotAdjustmentX = 0;
         public int PivotAdjustmentY = 0;
+        public int SpecularPivotAdjustmentX = 0;
+        public int SpecularPivotAdjustmentY = 0;
         public int ProjectileAdjustmentX = 0;
         public int ProjectileAdjustmentY = 0;
+        public int InitialHideTime = 0;
 
         int projectileDirectionThreshold = 1;
 
-        public Vector2Int CalculateProjectilePosition(Vector2Int basePosition, PandoraEngine engine, Vector2Int direction)
+        public Vector2Int CalculateProjectilePosition(
+            int pivotAdjX,
+            int pivotAdjY,
+            int adjX,
+            int adjY,
+            Vector2Int basePosition,
+            PandoraEngine engine,
+            Vector2Int direction
+        )
         {
             var computedBasePosition = PoolInstances.Vector2IntPool.GetObject();
-            computedBasePosition.x = basePosition.x + PivotAdjustmentX;
-            computedBasePosition.y = basePosition.y + PivotAdjustmentY;
+            computedBasePosition.x = basePosition.x + pivotAdjX;
+            computedBasePosition.y = basePosition.y + pivotAdjY;
 
             var computedPosition = PoolInstances.Vector2IntPool.GetObject();
-            computedPosition.x = computedBasePosition.x + ProjectileAdjustmentX;
-            computedPosition.y = computedBasePosition.y + ProjectileAdjustmentY;
+            computedPosition.x = computedBasePosition.x + adjX;
+            computedPosition.y = computedBasePosition.y + adjY;
 
             var figure = PoolInstances.Vector2IntListPool.GetObject();
             figure.Add(computedPosition);
@@ -37,6 +48,36 @@ namespace Pandora
             return rotatedPosition;
         }
 
+        public Vector2Int CalculateProjectilePosition(Vector2Int basePosition, PandoraEngine engine, Vector2Int direction)
+        {
+            return CalculateProjectilePosition(
+                PivotAdjustmentX,
+                PivotAdjustmentY,
+                ProjectileAdjustmentX,
+                ProjectileAdjustmentY,
+                basePosition,
+                engine,
+                direction
+            );
+        }
+
+        public Vector2Int CalculateTowerProjectilePosition(Vector2Int basePosition, PandoraEngine engine, Vector2Int direction)
+        {
+            var isSpecular = TeamComponent.assignedTeam == 2;
+            var computedPivotAdjustmentX = PivotAdjustmentX;
+            var computedPivotAdjustmentY = isSpecular ? -1 * PivotAdjustmentY : PivotAdjustmentY;
+
+            return CalculateProjectilePosition(
+                computedPivotAdjustmentX,
+                computedPivotAdjustmentY,
+                ProjectileAdjustmentX,
+                ProjectileAdjustmentY,
+                basePosition,
+                engine,
+                direction
+            );
+        }
+
         public Vector2Int CalculateDirection(EngineEntity unitEntity, EngineEntity enemyEntity)
         {
             var rawDirection = enemyEntity.GetCurrentCell().vector - unitEntity.GetCurrentCell().vector;
@@ -48,6 +89,19 @@ namespace Pandora
             Logger.Debug($"Calculated direction for projectiles ({direction.x}, {direction.y}) using the gridcell ({rawDirection.x}, {rawDirection.y})");
 
             return direction;
+        }
+
+        public GameObject InstantiateHiddenProjectile(GameObject projectile, Vector3 position, Quaternion rotation)
+        {
+            var instantiatedProjectile = Instantiate(projectile, position, rotation);
+            var hideFixer = instantiatedProjectile.GetComponent<ProjectileHideFixer>();
+
+            if (hideFixer != null)
+            {
+                hideFixer.ShowAfterFrames = InitialHideTime;
+            }
+
+            return instantiatedProjectile;
         }
     }
 }

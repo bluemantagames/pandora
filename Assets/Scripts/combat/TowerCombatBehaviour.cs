@@ -211,7 +211,7 @@ namespace Pandora.Combat
             if (projectilePositionFixer != null)
             {
                 var projectileDirection = projectilePositionFixer.CalculateDirection(towerEntity, target.enemyEntity);
-                projectilePosition = projectilePositionFixer.CalculateProjectilePosition(towerEntity.Position, MapComponent.Instance.engine, projectileDirection);
+                projectilePosition = projectilePositionFixer.CalculateTowerProjectilePosition(towerEntity.Position, MapComponent.Instance.engine, projectileDirection);
             }
             else
             {
@@ -219,7 +219,11 @@ namespace Pandora.Combat
             }
 
             var projectileWorldPosition = MapComponent.Instance.engine.PhysicsToMapWorld(projectilePosition);
-            var projectileObject = Instantiate(projectile, projectileWorldPosition, Quaternion.identity);
+
+            var projectileObject = projectilePositionFixer.InstantiateHiddenProjectile(
+                projectile, projectileWorldPosition, Quaternion.identity
+            );
+
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
             var rotationDegrees =

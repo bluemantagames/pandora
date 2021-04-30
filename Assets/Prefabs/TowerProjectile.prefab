@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4685403503152784519}
   - component: {fileID: 4061167875481412185}
   - component: {fileID: 336038504776493487}
+  - component: {fileID: -643605042166273896}
   m_Layer: 11
   m_Name: TowerProjectile
   m_TagString: Untagged
@@ -30,8 +31,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5687362912629012028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 555.17, y: 281.86, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 555.0221, y: 281.7773, z: 0}
+  m_LocalScale: {x: 0.6055571, y: 0.6055571, z: 0.6055571}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -52,7 +53,7 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 512
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 11
+  m_SortingOrder: 100
   m_Sprite: {fileID: 21300000, guid: e485be152512e4e88ab43007e6c78f70, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -85,7 +86,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 2
   m_SpriteSortPoint: 0
 --- !u!50 &5687362912629012029
 Rigidbody2D:
@@ -217,3 +218,16 @@ MonoBehaviour:
   Loop: 0
   Disable: 0
   DevMode: 0
+--- !u!114 &-643605042166273896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5687362912629012028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4596996430fdd4919ad65a55b6069893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FramesToHide: 0
