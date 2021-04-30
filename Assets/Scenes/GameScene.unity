@@ -1447,7 +1447,7 @@ Transform:
   m_GameObject: {fileID: 469086611}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.086, y: -0.127, z: 0}
-  m_LocalScale: {x: 0.24963988, y: 0.30358347, z: 0.3626226}
+  m_LocalScale: {x: 0.24963988, y: 0.30355698, z: 0.3626226}
   m_Children: []
   m_Father: {fileID: 738133526}
   m_RootOrder: 3
@@ -2986,7 +2986,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PivotAdjustmentX: -100
-  PivotAdjustmentY: 1000
+  PivotAdjustmentY: 0
   SpecularPivotAdjustmentX: 0
   SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
@@ -3775,10 +3775,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitName: HalfOrc
-  UnitX: 2
+  UnitX: 4
   UnitY: 13
   MovementLength: 5
-  EnemyX: 2
+  EnemyX: 4
   EnemyY: 13
   Mode: 1
   Disabled: 0
@@ -5893,7 +5893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PivotAdjustmentX: -100
-  PivotAdjustmentY: -1000
+  PivotAdjustmentY: 0
   SpecularPivotAdjustmentX: 0
   SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
@@ -7777,7 +7777,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PivotAdjustmentX: -100
-  PivotAdjustmentY: 1000
+  PivotAdjustmentY: 0
   SpecularPivotAdjustmentX: 0
   SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
@@ -8128,8 +8128,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2038244545}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.025, y: -0.123, z: 0}
-  m_LocalScale: {x: 0.24964002, y: 0.30358693, z: 0.43541533}
+  m_LocalPosition: {x: 0.025, y: -0.1323, z: 0}
+  m_LocalScale: {x: 0.24964002, y: 0.31884447, z: 0.43541533}
   m_Children: []
   m_Father: {fileID: 1838545263}
   m_RootOrder: 3
