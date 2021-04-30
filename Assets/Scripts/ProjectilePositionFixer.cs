@@ -14,6 +14,7 @@ namespace Pandora
         public int SpecularPivotAdjustmentY = 0;
         public int ProjectileAdjustmentX = 0;
         public int ProjectileAdjustmentY = 0;
+        public int InitialHideTime = 0;
 
         int projectileDirectionThreshold = 1;
 
@@ -88,6 +89,19 @@ namespace Pandora
             Logger.Debug($"Calculated direction for projectiles ({direction.x}, {direction.y}) using the gridcell ({rawDirection.x}, {rawDirection.y})");
 
             return direction;
+        }
+
+        public GameObject InstantiateHiddenProjectile(GameObject projectile, Vector3 position, Quaternion rotation)
+        {
+            var instantiatedProjectile = Instantiate(projectile, position, rotation);
+            var hideFixer = instantiatedProjectile.GetComponent<ProjectileHideFixer>();
+
+            if (hideFixer != null)
+            {
+                hideFixer.ShowAfterFrames = InitialHideTime;
+            }
+
+            return instantiatedProjectile;
         }
     }
 }

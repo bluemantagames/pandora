@@ -2985,12 +2985,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PivotAdjustmentX: -100
+  PivotAdjustmentX: -150
   PivotAdjustmentY: 0
   SpecularPivotAdjustmentX: 0
   SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
+  InitialHideTime: 15
 --- !u!1 &800929993
 GameObject:
   m_ObjectHideFlags: 0
@@ -3775,13 +3776,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitName: HalfOrc
-  UnitX: 4
+  UnitX: 2
   UnitY: 13
   MovementLength: 5
-  EnemyX: 4
+  EnemyX: 2
   EnemyY: 13
   Mode: 1
-  Disabled: 0
+  Disabled: 1
   DisableAttack: 1
 --- !u!1001 &1110013713
 PrefabInstance:
@@ -5892,12 +5893,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PivotAdjustmentX: -100
+  PivotAdjustmentX: -150
   PivotAdjustmentY: 0
   SpecularPivotAdjustmentX: 0
   SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
+  InitialHideTime: 0
 --- !u!1 &1571493266
 GameObject:
   m_ObjectHideFlags: 0
@@ -7776,12 +7778,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PivotAdjustmentX: -100
+  PivotAdjustmentX: -150
   PivotAdjustmentY: 0
   SpecularPivotAdjustmentX: 0
   SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
+  InitialHideTime: 15
 --- !u!1 &1845265289
 GameObject:
   m_ObjectHideFlags: 0
@@ -8097,12 +8100,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PivotAdjustmentX: -100
-  PivotAdjustmentY: -1000
+  PivotAdjustmentX: -150
+  PivotAdjustmentY: 0
   SpecularPivotAdjustmentX: 0
   SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
+  InitialHideTime: 0
 --- !u!1 &2038244545
 GameObject:
   m_ObjectHideFlags: 0
@@ -8324,6 +8328,7 @@ MonoBehaviour:
   SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
   ProjectileAdjustmentY: 0
+  InitialHideTime: 0
 --- !u!1001 &2119402720
 PrefabInstance:
   m_ObjectHideFlags: 0

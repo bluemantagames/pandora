@@ -219,7 +219,11 @@ namespace Pandora.Combat
             }
 
             var projectileWorldPosition = MapComponent.Instance.engine.PhysicsToMapWorld(projectilePosition);
-            var projectileObject = Instantiate(projectile, projectileWorldPosition, Quaternion.identity);
+
+            var projectileObject = projectilePositionFixer.InstantiateHiddenProjectile(
+                projectile, projectileWorldPosition, Quaternion.identity
+            );
+
             var projectileBehaviour = projectileObject.GetComponent<ProjectileBehaviour>();
 
             var rotationDegrees =
