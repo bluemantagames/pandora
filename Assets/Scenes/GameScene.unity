@@ -792,6 +792,25 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &231804839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231804828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfc97566aa63496ca69a5037eac7b7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PivotAdjustmentX: 500
+  PivotAdjustmentY: 0
+  SpecularPivotAdjustmentX: 0
+  SpecularPivotAdjustmentY: 0
+  ProjectileAdjustmentX: 0
+  ProjectileAdjustmentY: 0
+  InitialHideTime: 0
 --- !u!1001 &235130427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3776,13 +3795,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitName: HalfOrc
-  UnitX: 2
-  UnitY: 13
+  UnitX: 5
+  UnitY: 17
   MovementLength: 5
-  EnemyX: 2
-  EnemyY: 13
+  EnemyX: 6
+  EnemyY: 16
   Mode: 1
-  Disabled: 1
+  Disabled: 0
   DisableAttack: 1
 --- !u!1001 &1110013713
 PrefabInstance:
@@ -7673,7 +7692,7 @@ PrefabInstance:
     - target: {fileID: 7414980683904416699, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.059
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7414980683904416699, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
@@ -7912,7 +7931,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 6.3999023, y: -4.0996094}
+  m_AnchoredPosition: {x: 6.399872, y: -4.0996094}
   m_SizeDelta: {x: -62.59836, y: -96.35918}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1949382572
@@ -8323,7 +8342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PivotAdjustmentX: 500
-  PivotAdjustmentY: 1000
+  PivotAdjustmentY: 0
   SpecularPivotAdjustmentX: 0
   SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 0
@@ -9650,6 +9669,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3866240383038811720, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: lifeValue
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
