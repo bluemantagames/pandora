@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4685403503152784519}
   - component: {fileID: 4061167875481412185}
   - component: {fileID: 336038504776493487}
+  - component: {fileID: -643605042166273896}
   m_Layer: 11
   m_Name: TowerProjectile
   m_TagString: Untagged
@@ -217,3 +218,16 @@ MonoBehaviour:
   Loop: 0
   Disable: 0
   DevMode: 0
+--- !u!114 &-643605042166273896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5687362912629012028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4596996430fdd4919ad65a55b6069893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FramesToHide: 0
