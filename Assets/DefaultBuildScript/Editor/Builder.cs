@@ -23,8 +23,8 @@ namespace UnityBuilderAction
 
             // Manage the correct profile
             var version = options["buildVersion"];
-            var splittedVersion = version.Split('.');
-            var minorVersion = Int32.Parse(splittedVersion[1]); // We should just let it crash...
+            var splitVersion = version.Split('.');
+            var minorVersion = Int32.Parse(splitVersion[1]); // We should just let it crash...
             var profileName = minorVersion % 2 == 0 ? StagingProfile : ProductionProfile;
 
             // Setting the correct profile
