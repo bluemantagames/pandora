@@ -62,6 +62,6 @@ class EndGameSingleton
 
         var container = GameObject.Find("MatchEndPanelContainer");
 
-        container.GetComponent<MatchEndPanelAnimation>().StartAnimation();
+        container.GetComponent<MatchEndPanelAnimation>().StartAnimation(winnerTeam);
     }
 }

@@ -139,7 +139,20 @@ namespace Pandora.Network
 
             var matchHost = (IsDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
             var matchPort = 9090;
-            var dns = Dns.GetHostEntry(matchHost);
+
+            IPHostEntry dns = null; 
+            
+            while (dns == null) {
+                try {
+                    dns = Dns.GetHostEntry(matchHost);
+                } catch (Exception e) {
+                    Debug.LogError(e.Message);
+
+                    Thread.Sleep(reconnectionWaitMs);
+
+                    Debug.Log("Trying to reconnect to DNS..");
+                }
+            }
 
             Logger.Debug($"Dns: {dns}");
 
