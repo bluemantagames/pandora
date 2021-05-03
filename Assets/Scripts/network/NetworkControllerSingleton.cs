@@ -139,7 +139,14 @@ namespace Pandora.Network
 
             var matchHost = (IsDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
             var matchPort = 9090;
-            var dns = Dns.GetHostEntry(matchHost);
+
+            IPHostEntry dns = null;
+            
+            while (dns == null) {
+                dns = Dns.GetHostEntry(matchHost);
+
+                Thread.Sleep(reconnectionWaitMs);
+            }
 
             Logger.Debug($"Dns: {dns}");
 
@@ -157,13 +164,9 @@ namespace Pandora.Network
 
             Logger.Debug($"Connecting to {matchHost}:{matchPort}");
 
-            var connected = false;
-
-            while (!connected) {
+            while (!matchSocket.Connected) {
                 try {
                     matchSocket.Connect(ipe);
-
-                    connected = true;
                 } catch (Exception e) {
                     Debug.LogError(e.Message);
 
