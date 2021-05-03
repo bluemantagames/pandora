@@ -400,8 +400,10 @@ namespace Pandora.Network
                 Array.Reverse(lengthBytes);
             }
 
-            matchSocket.Send(lengthBytes);
-            matchSocket.Send(message);
+            if (matchSocket != null && matchSocket.Connected) {
+                matchSocket.Send(lengthBytes);
+                matchSocket.Send(message);
+            }
         }
 
         public void Stop()
