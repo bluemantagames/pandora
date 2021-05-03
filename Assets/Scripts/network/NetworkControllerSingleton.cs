@@ -295,7 +295,7 @@ namespace Pandora.Network
             catch (Exception e)
             {
                 try {
-                    matchSocket.Close();
+                    matchSocket?.Close();
                 } finally {
                     Debug.LogError(e.Message);
 
