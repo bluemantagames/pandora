@@ -98,7 +98,8 @@ namespace Pandora.Resource.Mana
                 var manaIndex = ManaBarChildIndex(animationMana);
                 var unitPercent = ManaBarChildPercent(animationMana, manaIndex);
 
-                for (var i = manaIndex + 1; i < 10; i++) {
+                for (var i = manaIndex + 1; i < 10; i++)
+                {
                     ChildMaskComponent(i).Reset();
                 }
 
@@ -121,7 +122,7 @@ namespace Pandora.Resource.Mana
 
         float ManaBarChildPercent(int currentMana, int childIndex) => ((float)currentMana - (childIndex * 10)) / 10f;
 
-        ManaMaskComponent ChildMaskComponent(int childIndex) => 
+        ManaMaskComponent ChildMaskComponent(int childIndex) =>
             transform.GetChild(childIndex).GetComponent<ManaBarComponent>().MaskComponent;
     }
 }

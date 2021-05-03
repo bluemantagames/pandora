@@ -277,11 +277,6 @@ namespace Pandora
                         goldReward.RewardApply(this, goldRewardMessage.team, goldRewardMessage.playerId);
                     }
                 }
-
-                if (step.mana != null)
-                {
-                    ManaSingleton.UpdateMana((float)step.mana);
-                }
             }
 
             if (!matchStarted)

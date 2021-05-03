@@ -51,10 +51,12 @@ public class LocalManaBehaviourScript : MonoBehaviour
                 roundingTimer = RoundingTimelapse;
 
                 UpdateMana(ManaSingleton.manaUnit);
+                UpdateEnemyMana(ManaSingleton.manaUnit);
             }
             else
             {
                 UpdateMana(ManaSingleton.manaValue + manaPerStep);
+                UpdateEnemyMana(ManaSingleton.manaValue + manaPerStep);
             }
         }
     }
@@ -67,5 +69,15 @@ public class LocalManaBehaviourScript : MonoBehaviour
         }
 
         ManaSingleton.UpdateMana(value);
+    }
+
+    void UpdateEnemyMana(float value)
+    {
+        if (!Enabled)
+        {
+            return;
+        }
+
+        ManaSingleton.UpdateEnemyMana(value);
     }
 }

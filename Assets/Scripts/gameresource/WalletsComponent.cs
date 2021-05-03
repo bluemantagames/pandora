@@ -20,5 +20,11 @@ namespace Pandora.Resource
             (resource, amount) => new ManaSpent(resource, amount),
             100
         );
+
+        public ResourceWallet<ManaEvent> EnemyManaWallet = new ResourceWallet<ManaEvent>(
+            (resource, amount) => new EnemyManaEarned(resource, amount),
+            (resource, amount) => new EnemyManaSpent(resource, amount),
+            100
+        );
     }
 }

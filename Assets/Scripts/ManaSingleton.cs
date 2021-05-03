@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pandora.Resource;
 using Pandora;
+using Pandora.Resource.Mana;
 
 public class ManaSingleton
 {
@@ -13,29 +14,29 @@ public class ManaSingleton
     // This is only used in dev
     public static float manaUnit { get; set; } = 0;
 
-    public static void UpdateMana(float newValue)
+    public static void UpdateMana(float newValue, ResourceWallet<ManaEvent> manaWallet)
     {
-        if (newValue <= minMana)
+        var difference = Mathf.FloorToInt(newValue - manaWallet.Resource);
+
+        if (difference < 0)
         {
-            manaValue = minMana;
-        }
-        else if (newValue >= maxMana)
-        {
-            manaValue = maxMana;
+            manaWallet.SpendResource(-difference);
         }
         else
         {
-            manaValue = newValue;
-        }
-
-        var manaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().ManaWallet;
-
-        var difference = Mathf.FloorToInt(newValue - manaWallet.Resource);
-
-        if (difference < 0) {
-            manaWallet.SpendResource(-difference);
-        } else {
             manaWallet.AddResource(difference);
         }
+    }
+
+    public static void UpdateMana(float newValue)
+    {
+        var manaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().ManaWallet;
+        UpdateMana(newValue, manaWallet);
+    }
+
+    public static void UpdateEnemyMana(float newValue)
+    {
+        var manaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().EnemyManaWallet;
+        UpdateMana(newValue, manaWallet);
     }
 }
