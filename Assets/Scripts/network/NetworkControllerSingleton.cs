@@ -143,9 +143,14 @@ namespace Pandora.Network
             IPHostEntry dns = null;
             
             while (dns == null) {
-                dns = Dns.GetHostEntry(matchHost);
+                try {
+                    dns = Dns.GetHostEntry(matchHost);
 
-                Thread.Sleep(reconnectionWaitMs);
+                } catch (Exception e) {
+                    Debug.LogError(e.Message);
+
+                    Thread.Sleep(reconnectionWaitMs);
+                }
             }
 
             Logger.Debug($"Dns: {dns}");
