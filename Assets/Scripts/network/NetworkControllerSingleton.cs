@@ -159,12 +159,16 @@ namespace Pandora.Network
 
             var connected = false;
 
-            while (!connected) {
-                try {
+            while (!connected)
+            {
+                try
+                {
                     matchSocket.Connect(ipe);
 
                     connected = true;
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Debug.LogError(e.Message);
 
                     Thread.Sleep(reconnectionWaitMs);
@@ -175,8 +179,10 @@ namespace Pandora.Network
 
             ReplayFrom replayFromId = null;
 
-            if (lastEnvelopeId != null) {
-                replayFromId = new ReplayFrom {
+            if (lastEnvelopeId != null)
+            {
+                replayFromId = new ReplayFrom
+                {
                     ReplayFromId = lastEnvelopeId.Value
                 };
             }
@@ -274,7 +280,8 @@ namespace Pandora.Network
 
                     var size = BitConverter.ToInt32(sizeBytes, 0);
 
-                    if (size == 0) {
+                    if (size == 0)
+                    {
                         throw new Exception("Empty Receive call");
                     }
 
@@ -291,9 +298,12 @@ namespace Pandora.Network
             }
             catch (Exception e)
             {
-                try {
+                try
+                {
                     matchSocket.Close();
-                } finally {
+                }
+                finally
+                {
                     Debug.LogError(e.Message);
 
                     if (matchSocket != null)
@@ -361,16 +371,6 @@ namespace Pandora.Network
                                 GenerateCommandMessage(command)
                             );
                         }
-                    }
-                }
-
-                // (I don't really like the foreach here...)
-                foreach (var playerInfo in envelope.Step.PlayerInfo)
-                {
-                    if (playerInfo.Id == PlayerId)
-                    {
-                        mana = playerInfo.Mana;
-                        Debug.Log($"Player ({PlayerId}) received mana: {mana}");
                     }
                 }
 

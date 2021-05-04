@@ -346,9 +346,21 @@ namespace Pandora.Engine
             gridSampler.End();
         }
 
+        void IncreaseMana()
+        {
+            var manaSingleton = ManaSingleton.Instance;
+            var nextValue = manaSingleton.ManaValue + manaSingleton.ManaPerTick;
+
+            manaSingleton.UpdateMana(nextValue);
+        }
+
         public void NextTick()
         {
             if (DebugEngine) movementSampler.Begin();
+
+            // Handle mana per tick
+            IncreaseMana();
+
             // Move units
             foreach (var entity in Entities)
             {
@@ -596,7 +608,6 @@ namespace Pandora.Engine
                     DelayedJobs[i] = (updatedPassed, job);
                 }
             }
-
 
             // Snapshot
             if (TotalElapsed % snapshotEvery == 0)

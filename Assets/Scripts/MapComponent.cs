@@ -353,7 +353,7 @@ namespace Pandora
             var elapsedMs = engine.TotalElapsed;
 
             // TODO: Notify player somehow if they lack mana
-            if (manaEnabled && ManaSingleton.Instance.manaValue < requiredMana)
+            if (manaEnabled && ManaSingleton.Instance.ManaValue < requiredMana)
             {
                 return false;
             }
@@ -372,6 +372,9 @@ namespace Pandora
 
             NetworkControllerSingleton.instance.EnqueueMessage(message);
 
+            // Handle mana change
+            ManaSingleton.Instance.UpdateMana(ManaSingleton.Instance.ManaValue - requiredMana);
+
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
                 message.team = team;
@@ -379,8 +382,7 @@ namespace Pandora
 
                 SpawnUnit(new UnitSpawn(message));
 
-                ManaSingleton.Instance.UpdateMana(ManaSingleton.Instance.manaValue - requiredMana);
-                ManaSingleton.Instance.manaUnit -= requiredMana;
+                ManaSingleton.Instance.ManaUnit -= requiredMana;
             }
 
             return true;

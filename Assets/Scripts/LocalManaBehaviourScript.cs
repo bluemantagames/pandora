@@ -32,7 +32,7 @@ public class LocalManaBehaviourScript : MonoBehaviour
         roundingTimer -= Time.deltaTime;
         timer -= Time.deltaTime;
 
-        if (Mathf.Approximately(ManaSingleton.Instance.manaValue, ManaSingleton.Instance.maxMana))
+        if (Mathf.Approximately(ManaSingleton.Instance.ManaValue, ManaSingleton.Instance.MaxMana))
         {
             return;
         }
@@ -46,16 +46,16 @@ public class LocalManaBehaviourScript : MonoBehaviour
 
             if (isRoundingTimerEnd)
             {
-                ManaSingleton.Instance.manaUnit += ManaEveryTimelapse;
+                ManaSingleton.Instance.ManaUnit += ManaEveryTimelapse;
                 roundingTimer = RoundingTimelapse;
 
-                UpdateMana(ManaSingleton.Instance.manaUnit);
-                UpdateEnemyMana(ManaSingleton.Instance.manaUnit);
+                UpdateMana(ManaSingleton.Instance.ManaUnit);
+                UpdateEnemyMana(ManaSingleton.Instance.ManaUnit);
             }
             else
             {
-                UpdateMana(ManaSingleton.Instance.manaValue + manaPerStep);
-                UpdateEnemyMana(ManaSingleton.Instance.manaValue + manaPerStep);
+                UpdateMana(ManaSingleton.Instance.ManaValue + manaPerStep);
+                UpdateEnemyMana(ManaSingleton.Instance.ManaValue + manaPerStep);
             }
         }
     }

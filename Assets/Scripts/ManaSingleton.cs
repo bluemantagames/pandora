@@ -9,7 +9,7 @@ public class ManaSingleton
     ResourceWallet<ManaEvent> manaWallet;
     ResourceWallet<ManaEvent> enemyManaWallet;
 
-    public int manaValue
+    public int ManaValue
     {
         get
         {
@@ -17,7 +17,7 @@ public class ManaSingleton
         }
     }
 
-    public int maxMana
+    public int MaxMana
     {
         get
         {
@@ -25,7 +25,7 @@ public class ManaSingleton
         }
     }
 
-    public int minMana
+    public int MinMana
     {
         get
         {
@@ -33,8 +33,10 @@ public class ManaSingleton
         }
     }
 
+    public Decimal ManaPerTick = 1m;
+
     // This is only used in dev
-    public int manaUnit { get; set; } = 0;
+    public int ManaUnit { get; set; } = 0;
 
     static public ManaSingleton Instance
     {
@@ -51,8 +53,10 @@ public class ManaSingleton
 
     public ManaSingleton()
     {
-        manaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().ManaWallet;
-        enemyManaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().EnemyManaWallet;
+        var walletsComponent = MapComponent.Instance.GetComponent<WalletsComponent>();
+
+        manaWallet = walletsComponent.ManaWallet;
+        enemyManaWallet = walletsComponent.EnemyManaWallet;
     }
 
     public void UpdateMana(Decimal newValue, ResourceWallet<ManaEvent> manaWallet)
@@ -60,13 +64,9 @@ public class ManaSingleton
         var difference = Decimal.ToInt32(Decimal.Floor(newValue - manaWallet.Resource));
 
         if (difference < 0)
-        {
             manaWallet.SpendResource(-difference);
-        }
         else
-        {
             manaWallet.AddResource(difference);
-        }
     }
 
     public void UpdateMana(Decimal newValue)
