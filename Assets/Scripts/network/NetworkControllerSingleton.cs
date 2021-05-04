@@ -251,9 +251,10 @@ namespace Pandora.Network
 
         public void ReceiveLoop(object param)
         {
+            var signal = param as StopSignal;
+
             try
             {
-                var signal = param as StopSignal;
 
                 while (true)
                 {
@@ -418,9 +419,13 @@ namespace Pandora.Network
         {
             if (matchSocket != null)
             {
-                matchSocket.Shutdown(SocketShutdown.Both);
+                var socket = matchSocket;
 
+                // It's important to set the matchSocket to null before shutting it down so that
+                // the ReceiveLoop thread knows this wasn't an unwanted disconnect, and doesn't try to reconnect again
                 matchSocket = null;
+
+                socket.Shutdown(SocketShutdown.Both);
             }
 
             receiveThread = null;
@@ -428,6 +433,8 @@ namespace Pandora.Network
             stopNetworkThread = true;
             networkThread = null;
             lastEnvelopeId = null;
+
+            stepsQueue = new ConcurrentQueue<StepMessage>();
         }
 
         public static SpawnMessage GenerateSpawnMessage(StepCommand command)
