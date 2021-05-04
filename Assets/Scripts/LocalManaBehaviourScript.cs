@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using Pandora.Network;
 
@@ -68,7 +67,7 @@ public class LocalManaBehaviourScript : MonoBehaviour
             return;
         }
 
-        ManaSingleton.Instance.UpdateMana(value);
+        ManaSingleton.Instance.UpdateMana(new Decimal(value));
     }
 
     void UpdateEnemyMana(float value)
@@ -78,6 +77,6 @@ public class LocalManaBehaviourScript : MonoBehaviour
             return;
         }
 
-        ManaSingleton.Instance.UpdateEnemyMana(value);
+        ManaSingleton.Instance.UpdateEnemyMana(new Decimal(value));
     }
 }

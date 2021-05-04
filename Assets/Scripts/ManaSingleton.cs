@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
 using Pandora.Resource;
 using Pandora;
 using Pandora.Resource.Mana;
@@ -11,7 +9,7 @@ public class ManaSingleton
     ResourceWallet<ManaEvent> manaWallet;
     ResourceWallet<ManaEvent> enemyManaWallet;
 
-    public float manaValue
+    public int manaValue
     {
         get
         {
@@ -19,7 +17,7 @@ public class ManaSingleton
         }
     }
 
-    public float maxMana
+    public int maxMana
     {
         get
         {
@@ -27,7 +25,7 @@ public class ManaSingleton
         }
     }
 
-    public float minMana
+    public int minMana
     {
         get
         {
@@ -36,7 +34,7 @@ public class ManaSingleton
     }
 
     // This is only used in dev
-    public float manaUnit { get; set; } = 0;
+    public int manaUnit { get; set; } = 0;
 
     static public ManaSingleton Instance
     {
@@ -57,10 +55,9 @@ public class ManaSingleton
         enemyManaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().EnemyManaWallet;
     }
 
-
-    public void UpdateMana(float newValue, ResourceWallet<ManaEvent> manaWallet)
+    public void UpdateMana(Decimal newValue, ResourceWallet<ManaEvent> manaWallet)
     {
-        var difference = Mathf.FloorToInt(newValue - manaWallet.Resource);
+        var difference = Decimal.ToInt32(Decimal.Floor(newValue - manaWallet.Resource));
 
         if (difference < 0)
         {
@@ -72,15 +69,13 @@ public class ManaSingleton
         }
     }
 
-    public void UpdateMana(float newValue)
+    public void UpdateMana(Decimal newValue)
     {
-        var manaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().ManaWallet;
         UpdateMana(newValue, manaWallet);
     }
 
-    public void UpdateEnemyMana(float newValue)
+    public void UpdateEnemyMana(Decimal newValue)
     {
-        var manaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().EnemyManaWallet;
-        UpdateMana(newValue, manaWallet);
+        UpdateMana(newValue, enemyManaWallet);
     }
 }
