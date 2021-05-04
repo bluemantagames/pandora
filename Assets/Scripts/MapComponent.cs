@@ -353,7 +353,7 @@ namespace Pandora
             var elapsedMs = engine.TotalElapsed;
 
             // TODO: Notify player somehow if they lack mana
-            if (manaEnabled && ManaSingleton.manaValue < requiredMana)
+            if (manaEnabled && ManaSingleton.Instance.manaValue < requiredMana)
             {
                 return false;
             }
@@ -379,8 +379,8 @@ namespace Pandora
 
                 SpawnUnit(new UnitSpawn(message));
 
-                ManaSingleton.UpdateMana(ManaSingleton.manaValue - requiredMana);
-                ManaSingleton.manaUnit -= requiredMana;
+                ManaSingleton.Instance.UpdateMana(ManaSingleton.Instance.manaValue - requiredMana);
+                ManaSingleton.Instance.manaUnit -= requiredMana;
             }
 
             return true;

@@ -7,14 +7,58 @@ using Pandora.Resource.Mana;
 
 public class ManaSingleton
 {
-    public static float manaValue { get; private set; } = 0;
-    public static float maxMana = 100f;
-    public static float minMana = 0f;
+    static ManaSingleton _instance = null;
+    ResourceWallet<ManaEvent> manaWallet;
+    ResourceWallet<ManaEvent> enemyManaWallet;
+
+    public float manaValue
+    {
+        get
+        {
+            return manaWallet.Resource;
+        }
+    }
+
+    public float maxMana
+    {
+        get
+        {
+            return manaWallet.ResourceUpperCap.Value;
+        }
+    }
+
+    public float minMana
+    {
+        get
+        {
+            return manaWallet.ResourceLowerCap.Value;
+        }
+    }
 
     // This is only used in dev
-    public static float manaUnit { get; set; } = 0;
+    public float manaUnit { get; set; } = 0;
 
-    public static void UpdateMana(float newValue, ResourceWallet<ManaEvent> manaWallet)
+    static public ManaSingleton Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new ManaSingleton();
+            }
+
+            return _instance;
+        }
+    }
+
+    public ManaSingleton()
+    {
+        manaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().ManaWallet;
+        enemyManaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().EnemyManaWallet;
+    }
+
+
+    public void UpdateMana(float newValue, ResourceWallet<ManaEvent> manaWallet)
     {
         var difference = Mathf.FloorToInt(newValue - manaWallet.Resource);
 
@@ -28,13 +72,13 @@ public class ManaSingleton
         }
     }
 
-    public static void UpdateMana(float newValue)
+    public void UpdateMana(float newValue)
     {
         var manaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().ManaWallet;
         UpdateMana(newValue, manaWallet);
     }
 
-    public static void UpdateEnemyMana(float newValue)
+    public void UpdateEnemyMana(float newValue)
     {
         var manaWallet = MapComponent.Instance.GetComponent<WalletsComponent>().EnemyManaWallet;
         UpdateMana(newValue, manaWallet);

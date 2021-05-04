@@ -6,11 +6,12 @@ namespace Pandora.Resource
 {
     public class ResourceWallet<T>
     {
-        private int _resource = 0;
+        private int _resource;
         private Func<int, int, T> resourceEarnedEventFactory;
         private Func<int, int, T> resourceLostEventFactory;
 
-        public int? ResourceCap { get; private set; }
+        public int? ResourceUpperCap { get; private set; }
+        public int? ResourceLowerCap { get; private set; }
 
         public int Resource
         {
@@ -31,21 +32,26 @@ namespace Pandora.Resource
         public ResourceWallet(
             Func<int, int, T> resourceEarnedEventFactory,
             Func<int, int, T> resourceLostEventFactory,
-            int? cap
+            int? lowerCap,
+            int? upperCap
         )
         {
             this.resourceEarnedEventFactory = resourceEarnedEventFactory;
             this.resourceLostEventFactory = resourceLostEventFactory;
 
-            ResourceCap = cap;
+            ResourceUpperCap = upperCap;
+            ResourceLowerCap = lowerCap;
+
+            _resource = lowerCap != null ? lowerCap.Value : 0;
 
             Bus = new EventBus<T>();
         }
 
         public void AddResource(int amount)
         {
-            if (ResourceCap != null && Resource + amount > ResourceCap.Value) {
-                amount = ResourceCap.Value - Resource;
+            if (ResourceUpperCap != null && Resource + amount > ResourceUpperCap.Value)
+            {
+                amount = ResourceUpperCap.Value - Resource;
             }
 
             _resource += amount;
