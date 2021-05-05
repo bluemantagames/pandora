@@ -11,33 +11,27 @@ namespace Pandora.UI.HUD
 {
     public class MatchEndStendardsBehaviour : MonoBehaviour
     {
-        public string WinFileName = "win.webm", LossFileName = "loss.webm";
         public LocalizedString WinText, LossText;
         public GameObject WinTextObject, LossTextObject;
+        public VideoClip WinClip, LossClip;
         
 
         public async UniTaskVoid PlayStendard(bool isWin) {
+            VideoClip clip;
+
             var player = GetComponent<VideoPlayer>();
 
-            string filename;
-
             if (isWin) {
-                filename = WinFileName;
+                clip = WinClip;
 
                 WinTextObject.GetComponent<Text>().text = await WinText.GetLocalizedString();
             } else {
-                filename = LossFileName;
+                clip = LossClip;
 
                 LossTextObject.GetComponent<Text>().text = await LossText.GetLocalizedString();
             }
 
-            var url = $"file://{Application.streamingAssetsPath}/{filename}";
-
-            #if UNITY_ANDROID && !UNITY_EDITOR
-            url = $"jar:file://{Application.dataPath}!/assets/{filename}";
-            #endif
-
-            player.url = url;
+            player.clip = clip;
 
             player.Play();
         }

@@ -5314,8 +5314,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b845f6f405b69db998a1fb9abbe9e2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WinFileName: win.webm
-  LossFileName: loss.webm
   WinText:
     m_TableReference:
       m_TableCollectionName: GUID:84069264adda04a569a6b13abc1da97e
@@ -5332,6 +5330,8 @@ MonoBehaviour:
     m_FallbackState: 0
   WinTextObject: {fileID: 114012150}
   LossTextObject: {fileID: 1019514922}
+  WinClip: {fileID: 32900000, guid: f972458727d5804afb6ddac6918dd1ae, type: 3}
+  LossClip: {fileID: 32900000, guid: 238f581221568af9eb2087806050e167, type: 3}
 --- !u!1001 &1467998382
 PrefabInstance:
   m_ObjectHideFlags: 0
