@@ -204,7 +204,7 @@ namespace Pandora.Editor
 
                     AssetDatabase.CreateAsset(animClip, clipName);
 
-                    var direction = Quaternion.AngleAxis(angle * (360f / clipFrames[clip].Count), Vector3.forward) * Vector2.up;
+                    var direction = Quaternion.AngleAxis(angle * (360f / 12f), Vector3.forward) * Vector2.down;
 
                     blendTrees[clip].AddChild(animClip, direction);
                 }
