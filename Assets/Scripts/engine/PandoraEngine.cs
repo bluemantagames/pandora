@@ -55,6 +55,10 @@ namespace Pandora.Engine
         // This is used just to serialize the behaviours
         public List<SerializableEngineBehaviour> SerializableBehaviours = new List<SerializableEngineBehaviour> { };
 
+        // Mana
+        public static int ManaEveryTimelapse = 10;
+        public static int RoundingTimelapseMs = 2800;
+
         public void Init(MapComponent map)
         {
             Map = map;
@@ -349,9 +353,14 @@ namespace Pandora.Engine
         void IncreaseMana()
         {
             var manaSingleton = ManaSingleton.Instance;
-            var nextValue = manaSingleton.ManaValue + manaSingleton.ManaPerTick;
 
-            manaSingleton.UpdateMana(nextValue);
+            if (TotalElapsed % RoundingTimelapseMs == 0)
+            {
+                Logger.Debug($"Increased mana by {ManaEveryTimelapse} at time {TotalElapsed}");
+
+                manaSingleton.UpdateMana(manaSingleton.ManaValue + ManaEveryTimelapse);
+                manaSingleton.UpdateEnemyMana(manaSingleton.ManaValue + ManaEveryTimelapse);
+            }
         }
 
         public void NextTick()
