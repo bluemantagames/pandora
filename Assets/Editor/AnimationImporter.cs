@@ -21,7 +21,7 @@ namespace Pandora.Editor
             var path = EditorUtility.SaveFilePanelInProject("Choose where to save the SpriteAtlas", "atlas", "spriteatlas", "", "Assets/Art/Sprites/Characters/");
 
             var projectFolder = Path.GetFullPath(Path.Combine(Application.dataPath, "../"));
-            var texturesPath = EditorUtility.OpenFolderPanel("Pick the texture folder", "Assets/Art/Sprites/Characters/", "");
+            var texturesPath = EditorUtility.OpenFolderPanel("Pick the texture folder", Path.GetDirectoryName(path), "");
             var projectTexturesPath = texturesPath.Replace(projectFolder, "");
 
             progressBar("Loading clips from manifest", 1f);
@@ -204,7 +204,7 @@ namespace Pandora.Editor
 
                     AssetDatabase.CreateAsset(animClip, clipName);
 
-                    var direction = Quaternion.AngleAxis(angle * (360f / 12f), Vector3.forward) * Vector2.down;
+                    var direction = Quaternion.AngleAxis(angle * (360f / 12f), Vector3.forward) * Vector2.up;
 
                     blendTrees[clip].AddChild(animClip, direction);
                 }
