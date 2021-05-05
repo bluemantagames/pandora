@@ -79,7 +79,7 @@ namespace Pandora.Editor
 
             progressBar("Parsing animation manifest", 1f);
 
-            var animations = new Dictionary<int, ClipManifest> { };
+            var animations = new Dictionary<int, List<ClipManifest>> { };
             var blendTrees = new Dictionary<string, BlendTree> { };
 
             int? framesNum = null;
@@ -106,7 +106,10 @@ namespace Pandora.Editor
 
                 for (var i = clip.startFrame; i <= clip.endFrame; i++)
                 {
-                    animations[i] = clip;
+                    if (animations.ContainsKey(i))
+                        animations[i].Add(clip);
+                    else
+                        animations[i] = new List<ClipManifest> { clip };
                 }
 
                 var blendTree = new BlendTree();
@@ -145,22 +148,23 @@ namespace Pandora.Editor
 
                 if (!animations.ContainsKey(frameNumber)) continue;
 
-                var clipManifest = animations[frameNumber];
-                var clipName = clipManifest.name;
+                foreach (var clipManifest in animations[frameNumber]) {
+                    var clipName = clipManifest.name;
 
-                if (!clipFrames.ContainsKey(clipManifest.name))
-                {
-                    clipFrames[clipName] = new Dictionary<int, Sprite[]> { };
+                    if (!clipFrames.ContainsKey(clipManifest.name))
+                    {
+                        clipFrames[clipName] = new Dictionary<int, Sprite[]> { };
+                    }
+
+                    if (!clipFrames[clipName].ContainsKey(angle))
+                    {
+                        clipFrames[clipName][angle] = new Sprite[(clipManifest.endFrame - clipManifest.startFrame) + 1];
+                    }
+
+                    clipFrames[clipName][angle][frameNumber - clipManifest.startFrame] = sprite;
+
+                    Debug.Log($"Adding frame {frameNumber} for angle {angle}");
                 }
-
-                if (!clipFrames[clipName].ContainsKey(angle))
-                {
-                    clipFrames[clipName][angle] = new Sprite[(clipManifest.endFrame - clipManifest.startFrame) + 1];
-                }
-
-                clipFrames[clipName][angle][frameNumber - clipManifest.startFrame] = sprite;
-
-                Debug.Log($"Adding frame {frameNumber} for angle {angle}");
             }
 
             resetProgressBar();
