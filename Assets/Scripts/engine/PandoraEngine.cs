@@ -58,6 +58,8 @@ namespace Pandora.Engine
         // Mana
         public static int ManaEveryTimelapse = 10;
         public static int RoundingTimelapseMs = 2800;
+        ManaSingleton manaSingleton;
+        bool manaInitialized = false;
 
         public void Init(MapComponent map)
         {
@@ -98,12 +100,13 @@ namespace Pandora.Engine
             enginePathfindingSampler = CustomSampler.Create("PandoraEngine pathfinding");
 
             grid = new TightGrid(yBounds, xBounds, 19, 32);
+
+            manaSingleton = ManaSingleton.Instance;
         }
 
         public void Process(uint msLapsed)
         {
             var ticksNum = msLapsed / TickTime;
-
 
             for (var tick = 0; tick < ticksNum; tick++)
             {
@@ -350,25 +353,29 @@ namespace Pandora.Engine
             gridSampler.End();
         }
 
-        void IncreaseMana()
+        public void NextTick()
         {
-            var manaSingleton = ManaSingleton.Instance;
+            if (DebugEngine) movementSampler.Begin();
 
+            // Initialize mana, this is used
+            // to trigger the very first mana bar
+            // (we probably should remove this condition
+            // with the really small overhead it creates)
+            if (!manaInitialized)
+            {
+                manaSingleton.UpdateMana(0);
+                manaSingleton.UpdateEnemyMana(0);
+                manaInitialized = true;
+            }
+
+            // Handle mana per tick
             if (TotalElapsed % RoundingTimelapseMs == 0)
             {
                 Logger.Debug($"Increased mana by {ManaEveryTimelapse} at time {TotalElapsed}");
 
                 manaSingleton.UpdateMana(manaSingleton.ManaValue + ManaEveryTimelapse);
-                manaSingleton.UpdateEnemyMana(manaSingleton.ManaValue + ManaEveryTimelapse);
+                manaSingleton.UpdateEnemyMana(manaSingleton.EnemyManaValue + ManaEveryTimelapse);
             }
-        }
-
-        public void NextTick()
-        {
-            if (DebugEngine) movementSampler.Begin();
-
-            // Handle mana per tick
-            IncreaseMana();
 
             // Move units
             foreach (var entity in Entities)

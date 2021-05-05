@@ -67,7 +67,7 @@ public class LocalManaBehaviourScript : MonoBehaviour
             return;
         }
 
-        ManaSingleton.Instance.UpdateMana(new Decimal(value));
+        ManaSingleton.Instance.UpdateMana(Mathf.FloorToInt(value));
     }
 
     void UpdateEnemyMana(float value)
@@ -77,6 +77,6 @@ public class LocalManaBehaviourScript : MonoBehaviour
             return;
         }
 
-        ManaSingleton.Instance.UpdateEnemyMana(new Decimal(value));
+        ManaSingleton.Instance.UpdateEnemyMana(Mathf.FloorToInt(value));
     }
 }

@@ -17,6 +17,14 @@ public class ManaSingleton
         }
     }
 
+    public int EnemyManaValue
+    {
+        get
+        {
+            return enemyManaWallet.Resource;
+        }
+    }
+
     public int MaxMana
     {
         get
@@ -32,8 +40,6 @@ public class ManaSingleton
             return manaWallet.ResourceLowerCap.Value;
         }
     }
-
-    public Decimal ManaPerTick = 1m;
 
     // This is only used in dev
     public int ManaUnit { get; set; } = 0;
@@ -59,9 +65,9 @@ public class ManaSingleton
         enemyManaWallet = walletsComponent.EnemyManaWallet;
     }
 
-    public void UpdateMana(Decimal newValue, ResourceWallet<ManaEvent> manaWallet)
+    public void UpdateMana(int newValue, ResourceWallet<ManaEvent> manaWallet)
     {
-        var difference = Decimal.ToInt32(Decimal.Floor(newValue - manaWallet.Resource));
+        var difference = newValue - manaWallet.Resource;
 
         if (difference < 0)
             manaWallet.SpendResource(-difference);
@@ -69,12 +75,12 @@ public class ManaSingleton
             manaWallet.AddResource(difference);
     }
 
-    public void UpdateMana(Decimal newValue)
+    public void UpdateMana(int newValue)
     {
         UpdateMana(newValue, manaWallet);
     }
 
-    public void UpdateEnemyMana(Decimal newValue)
+    public void UpdateEnemyMana(int newValue)
     {
         UpdateMana(newValue, enemyManaWallet);
     }

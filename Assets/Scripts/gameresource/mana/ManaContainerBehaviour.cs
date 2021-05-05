@@ -29,6 +29,8 @@ namespace Pandora.Resource.Mana
 
         void OnManaEarned(ManaEvent manaEvent)
         {
+            Logger.Debug($"[MANA] Mana earned successful");
+
             var manaEarned = manaEvent as ManaEarned;
 
             if (manaText != null)
@@ -49,12 +51,16 @@ namespace Pandora.Resource.Mana
 
         void UpdateManaUI(int currentMana, bool resync)
         {
+            Logger.Debug($"[MANA] Starting updating mana UI with current mana {currentMana}");
+
             // Stop playing children if we're playing
             if (spentCurve != null) return;
 
             int manaIndex = ManaBarChildIndex(currentMana);
 
             var childMask = ChildMaskComponent(manaIndex);
+
+            Logger.Debug($"[MANA] Updating mana UI, children {manaIndex}");
 
             if (!childMask.IsPlaying)
                 childMask.PlayEarnAnimation();
