@@ -13,6 +13,7 @@ namespace Pandora.UI.HUD
         public bool ShouldAnimationPlay = false;
         Image panelImage;
         public GameObject Camera;
+        public GameObject[] AnimatedAlphaObjects;
 
         AnimationCurve panelCurve, childrenCurve;
 
@@ -38,20 +39,22 @@ namespace Pandora.UI.HUD
 
                 var childrenAlpha = childrenCurve.Evaluate(Time.time);
 
-                foreach (Transform child in Panel.transform)
+                foreach (var animatedObject in AnimatedAlphaObjects)
                 {
-                    var childImage = child.GetComponent<Image>();
+                    var animatedGraphic = animatedObject.GetComponent<Graphic>();
 
-                    if (childImage != null)
+                    if (animatedGraphic != null)
                     {
                         var childColor = new Color(
-                            childImage.color.r,
-                            childImage.color.g,
-                            childImage.color.b,
+                            animatedGraphic.color.r,
+                            animatedGraphic.color.g,
+                            animatedGraphic.color.b,
                             childrenAlpha
                         );
 
-                        childImage.color = childColor;
+                        animatedGraphic.color = childColor;
+                    } else {
+                        Debug.LogWarning($"Could not animate {animatedObject}");
                     }
                 }
 
@@ -66,11 +69,11 @@ namespace Pandora.UI.HUD
             {
                 ShouldAnimationPlay = false;
 
-                StartAnimation();
+                StartAnimation(TeamComponent.assignedTeam);
             }
         }
 
-        public void StartAnimation()
+        public void StartAnimation(int winnerTeam)
         {
             Panel.SetActive(true);
 
@@ -78,6 +81,8 @@ namespace Pandora.UI.HUD
             childrenCurve = AnimationCurve.Linear(Time.time, 0f, Time.time + FadeInTimeSeconds, ChildrenFinalAlpha);
 
             Camera.GetComponent<ZoomOutAnimation>().StartMatchEndAnimation();
+
+            _ = GetComponentInChildren<MatchEndStendardsBehaviour>().PlayStendard(TeamComponent.assignedTeam == winnerTeam);
         }
 
         bool isCurveOver(AnimationCurve curve) =>

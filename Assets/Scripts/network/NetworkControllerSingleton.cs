@@ -139,7 +139,23 @@ namespace Pandora.Network
 
             var matchHost = (IsDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
             var matchPort = 9090;
-            var dns = Dns.GetHostEntry(matchHost);
+
+            IPHostEntry dns = null;
+
+            while (dns == null)
+            {
+                try
+                {
+                    dns = Dns.GetHostEntry(matchHost);
+
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+
+                    Thread.Sleep(reconnectionWaitMs);
+                }
+            }
 
             Logger.Debug($"Dns: {dns}");
 
@@ -157,15 +173,11 @@ namespace Pandora.Network
 
             Logger.Debug($"Connecting to {matchHost}:{matchPort}");
 
-            var connected = false;
-
-            while (!connected)
+            while (!matchSocket.Connected)
             {
                 try
                 {
                     matchSocket.Connect(ipe);
-
-                    connected = true;
                 }
                 catch (Exception e)
                 {
@@ -249,9 +261,10 @@ namespace Pandora.Network
 
         public void ReceiveLoop(object param)
         {
+            var signal = param as StopSignal;
+
             try
             {
-                var signal = param as StopSignal;
 
                 while (true)
                 {
@@ -300,7 +313,7 @@ namespace Pandora.Network
             {
                 try
                 {
-                    matchSocket.Close();
+                    matchSocket?.Close();
                 }
                 finally
                 {
@@ -400,17 +413,24 @@ namespace Pandora.Network
                 Array.Reverse(lengthBytes);
             }
 
-            matchSocket.Send(lengthBytes);
-            matchSocket.Send(message);
+            if (matchSocket != null && matchSocket.Connected)
+            {
+                matchSocket.Send(lengthBytes);
+                matchSocket.Send(message);
+            }
         }
 
         public void Stop()
         {
             if (matchSocket != null)
             {
-                matchSocket.Shutdown(SocketShutdown.Both);
+                var socket = matchSocket;
 
+                // It's important to set the matchSocket to null before shutting it down so that
+                // the ReceiveLoop thread knows this wasn't an unwanted disconnect, and doesn't try to reconnect again
                 matchSocket = null;
+
+                socket.Shutdown(SocketShutdown.Both);
             }
 
             receiveThread = null;
@@ -418,6 +438,8 @@ namespace Pandora.Network
             stopNetworkThread = true;
             networkThread = null;
             lastEnvelopeId = null;
+
+            stepsQueue = new ConcurrentQueue<StepMessage>();
         }
 
         public static SpawnMessage GenerateSpawnMessage(StepCommand command)
