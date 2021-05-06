@@ -94,9 +94,7 @@ namespace Pandora.Resource.Mana
 
         void Update()
         {
-            bool isManaActive =
-                (!NetworkControllerSingleton.instance.matchStarted && MapComponent.Instance.gameObject.GetComponent<LocalManaBehaviourScript>().Enabled) ||
-                 NetworkControllerSingleton.instance.matchStarted;
+            bool isManaActive = true;
 
             if (spentCurve != null && isManaActive)
             {
