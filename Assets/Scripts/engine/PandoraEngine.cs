@@ -56,8 +56,8 @@ namespace Pandora.Engine
         public List<SerializableEngineBehaviour> SerializableBehaviours = new List<SerializableEngineBehaviour> { };
 
         // Mana
-        public static int ManaEveryTimelapse = 10;
-        public static int RoundingTimelapseMs = 2800;
+        public static int ManaEveryTimelapse = 1;
+        public static int RoundingTimelapseMs = 280;
         ManaSingleton manaSingleton;
         bool manaInitialized = false;
 
