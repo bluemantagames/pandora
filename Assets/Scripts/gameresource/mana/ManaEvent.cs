@@ -40,4 +40,34 @@ namespace Pandora.Resource.Mana
     {
         public EnemyManaSpent(int currentAmount, int amountSpent) : base(currentAmount, amountSpent) { }
     }
+
+    public class ManaUpperReserve : ManaEvent
+    {
+        /// <description>Set the mana upper reserve</description>
+        public int UpperReserve;
+
+        /// <description>Current amount of mana</description>
+        public int CurrentAmount;
+
+        public ManaUpperReserve(int currentAmount, int upperReserve)
+        {
+            CurrentAmount = currentAmount;
+            UpperReserve = upperReserve;
+        }
+    }
+
+    public class EnemyManaUpperReserve : ManaEvent
+    {
+        /// <description>Set the enemy's mana upper reserve</description>
+        public int UpperReserve;
+
+        /// <description>Current amount of enemy's mana</description>
+        public int CurrentAmount;
+
+        public EnemyManaUpperReserve(int currentAmount, int upperReserve)
+        {
+            CurrentAmount = currentAmount;
+            UpperReserve = upperReserve;
+        }
+    }
 }

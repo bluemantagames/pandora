@@ -12,6 +12,7 @@ namespace Pandora.Resource
         public ResourceWallet<GoldEvent> GoldWallet = new ResourceWallet<GoldEvent>(
             (resource, amount) => new GoldEarned(resource, amount),
             (resource, amount) => new GoldSpent(resource, amount),
+            (resource, amount) => new GoldUpperReserve(resource, amount),
             0,
             25
         );
@@ -19,6 +20,7 @@ namespace Pandora.Resource
         public ResourceWallet<ManaEvent> ManaWallet = new ResourceWallet<ManaEvent>(
             (resource, amount) => new ManaEarned(resource, amount),
             (resource, amount) => new ManaSpent(resource, amount),
+            (resource, amount) => new ManaUpperReserve(resource, amount),
             0,
             100
         );
@@ -26,6 +28,7 @@ namespace Pandora.Resource
         public ResourceWallet<ManaEvent> EnemyManaWallet = new ResourceWallet<ManaEvent>(
             (resource, amount) => new EnemyManaEarned(resource, amount),
             (resource, amount) => new EnemyManaSpent(resource, amount),
+            (resource, amount) => new EnemyManaUpperReserve(resource, amount),
             0,
             100
         );

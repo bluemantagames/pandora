@@ -9,9 +9,11 @@ namespace Pandora.Resource
         private int _resource;
         private Func<int, int, T> resourceEarnedEventFactory;
         private Func<int, int, T> resourceLostEventFactory;
+        private Func<int, int, T> setUpperReserveEventFactory;
 
         public int? ResourceUpperCap { get; private set; }
         public int? ResourceLowerCap { get; private set; }
+        public int? UpperReserve { get; private set; }
 
         public int Resource
         {
@@ -32,12 +34,14 @@ namespace Pandora.Resource
         public ResourceWallet(
             Func<int, int, T> resourceEarnedEventFactory,
             Func<int, int, T> resourceLostEventFactory,
+            Func<int, int, T> setUpperReserveEventFactory,
             int? lowerCap,
             int? upperCap
         )
         {
             this.resourceEarnedEventFactory = resourceEarnedEventFactory;
             this.resourceLostEventFactory = resourceLostEventFactory;
+            this.setUpperReserveEventFactory = setUpperReserveEventFactory;
 
             ResourceUpperCap = upperCap;
             ResourceLowerCap = lowerCap;
@@ -49,7 +53,13 @@ namespace Pandora.Resource
 
         public void AddResource(int amount)
         {
-            if (ResourceUpperCap != null && Resource + amount > ResourceUpperCap.Value)
+            int? upperCap = ResourceUpperCap.HasValue && UpperReserve.HasValue
+                ? Math.Min(ResourceUpperCap.Value, UpperReserve.Value)
+                : ResourceUpperCap.HasValue
+                ? ResourceUpperCap.Value
+                : null;
+
+            if (upperCap != null && Resource + amount > upperCap)
             {
                 amount = ResourceUpperCap.Value - Resource;
             }
@@ -70,6 +80,14 @@ namespace Pandora.Resource
             Bus.Dispatch(ev);
         }
 
+        public void SetUpperReserve(int amount)
+        {
+            UpperReserve = amount;
+
+            var ev = setUpperReserveEventFactory(_resource, amount);
+
+            Bus.Dispatch(ev);
+        }
     }
 
 }
