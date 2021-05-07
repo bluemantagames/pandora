@@ -1046,7 +1046,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 237795433}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 556.26, y: 282.994, z: 0}
+  m_LocalPosition: {x: 556.49, y: 282.95398, z: 0}
   m_LocalScale: {x: 0.5642804, y: 0.6379903, z: 0.5400396}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2625,7 +2625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &716505428
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2666,7 +2666,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: 876b9c9623fc14c26987e3b2b158278c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7723335ac0e485e168cdeee96239d196, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2685,8 +2685,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 716505427}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 556.402, y: 283.34, z: 0}
-  m_LocalScale: {x: 0.3842069, y: 0.36627343, z: 0.36627343}
+  m_LocalPosition: {x: 556.505, y: 282.948, z: 0}
+  m_LocalScale: {x: 0.24591598, y: 0.27652058, z: 0.24696042}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
@@ -3677,7 +3677,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 996488287}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 554.18, y: 279.56, z: 0}
+  m_LocalPosition: {x: 554.41, y: 279.52, z: 0}
   m_LocalScale: {x: 0.8499, y: 0.8499, z: 0.8499}
   m_Children:
   - {fileID: 1696013675}
@@ -3713,7 +3713,7 @@ MonoBehaviour:
   RiverY: 11
   RiverX: 7
   worldMapSize: {x: 0, y: 0}
-  debugHitboxes: 1
+  debugHitboxes: 0
   localTime: 0
   CommandsViewport: {fileID: 1357662527}
   firstLaneXs: 010000000200000003000000
