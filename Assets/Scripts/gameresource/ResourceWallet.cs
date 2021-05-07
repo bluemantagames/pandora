@@ -53,15 +53,14 @@ namespace Pandora.Resource
 
         public void AddResource(int amount)
         {
-            int? upperCap = ResourceUpperCap.HasValue && UpperReserve.HasValue
-                ? Math.Min(ResourceUpperCap.Value, UpperReserve.Value)
-                : ResourceUpperCap.HasValue
-                ? ResourceUpperCap.Value
-                : null;
-
-            if (upperCap != null && Resource + amount > upperCap)
+            if (ResourceUpperCap.HasValue)
             {
-                amount = ResourceUpperCap.Value - Resource;
+                var upperCap = UpperReserve.HasValue
+                    ? ResourceUpperCap.Value - UpperReserve.Value
+                    : ResourceUpperCap.Value;
+
+                if (Resource + amount > upperCap)
+                    amount = ResourceUpperCap.Value - Resource;
             }
 
             _resource += amount;
