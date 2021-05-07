@@ -42,6 +42,7 @@ namespace Pandora
         CustomSampler aggroSampler, targetValidSampler;
         BoxCollider2D boxCollider;
         public Vector2 WorldBoundsPosition;
+        public bool RefreshTowers = false;
 
         List<GridCell> spawningCells;
 
@@ -233,6 +234,14 @@ namespace Pandora
 
         public void Update()
         {
+            if (RefreshTowers) {
+                RefreshTowers = false;
+
+                foreach (var towerPosition in GetComponentsInChildren<TowerPositionComponent>()) {
+                    towerPosition.RefreshTower(new Network.Data.Opponent());
+                }
+            }
+
             StepMessage step = null;
 
             timeSinceLastStep += (uint)Mathf.FloorToInt(Time.deltaTime * 1000);
