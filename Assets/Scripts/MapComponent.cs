@@ -341,7 +341,7 @@ namespace Pandora
             }
         }
 
-        public bool SpawnCard(string cardName, int team, GridCell cell, int requiredMana = 0)
+        public bool SpawnCard(string cardName, int team, GridCell cell, int requiredMana = 0, int reservedManaBlocks = 0)
         {
             if (IsLive) return false;
 
@@ -374,6 +374,7 @@ namespace Pandora
 
             // Handle mana change
             ManaSingleton.Instance.UpdateMana(ManaSingleton.Instance.ManaValue - requiredMana);
+            ManaSingleton.Instance.SetManaUpperReserve(reservedManaBlocks);
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {

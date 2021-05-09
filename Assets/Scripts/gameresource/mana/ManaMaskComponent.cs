@@ -12,6 +12,7 @@ namespace Pandora.Resource.Mana
         AnimationCurve earnCurve = null;
         bool childSet = false;
         RectTransform childRectTransform;
+        ManaBarComponent manaBarComponent;
 
         float _percent = 0f;
 
@@ -44,6 +45,8 @@ namespace Pandora.Resource.Mana
             Screen.SetResolution(720, 1280, false);
 
             Application.targetFrameRate = 30;
+
+            manaBarComponent = GetComponentInParent<ManaBarComponent>();
         }
 
         public void PlayEarnAnimation()
@@ -110,7 +113,7 @@ namespace Pandora.Resource.Mana
                 childSet = true;
             }
 
-            if (IsPlaying && Percent < 1f)
+            if (IsPlaying && Percent < 1f && !manaBarComponent.Reserved)
                 Percent = earnCurve.Evaluate(Time.time);
         }
     }

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Animations;
 using Pandora.Events;
 using Pandora.Network;
+using static System.Linq.Enumerable;
 
 namespace Pandora.Resource.Mana
 {
@@ -52,7 +53,9 @@ namespace Pandora.Resource.Mana
 
         void OnManaUpperReserve(ManaEvent manaEvent)
         {
-            var manaSpent = manaEvent as ManaUpperReserve;
+            var manaUpperReserve = manaEvent as ManaUpperReserve;
+
+            UpdateManaUIUpperReserve(manaUpperReserve.UpperReserve);
         }
 
         void UpdateManaUI(int currentMana, bool resync)
@@ -79,6 +82,22 @@ namespace Pandora.Resource.Mana
             animationTimeEnd = Time.time + SpentAnimationTime;
 
             spentCurve = AnimationCurve.EaseInOut(Time.time, currentMana + spent, animationTimeEnd.Value, currentMana);
+        }
+
+        void UpdateManaUIUpperReserve(int upperReserve)
+        {
+            var lastManaBarIndex = 10;
+
+            foreach (var index in Range(0, lastManaBarIndex))
+            {
+                var barComponent = ChildBarComponent(index);
+                var maskComponent = ChildMaskComponent(index);
+
+                var reservedBarIndexMin = lastManaBarIndex - upperReserve;
+                var isReserved = index >= reservedBarIndexMin;
+
+                barComponent.Reserved = isReserved;
+            }
         }
 
         void Resync()
@@ -131,6 +150,9 @@ namespace Pandora.Resource.Mana
         int ManaBarChildIndex(int mana) => System.Math.Min(mana / 10, 9);
 
         float ManaBarChildPercent(int currentMana, int childIndex) => ((float)currentMana - (childIndex * 10)) / 10f;
+
+        ManaBarComponent ChildBarComponent(int childIndex) =>
+            transform.GetChild(childIndex).GetComponent<ManaBarComponent>();
 
         ManaMaskComponent ChildMaskComponent(int childIndex) =>
             transform.GetChild(childIndex).GetComponent<ManaBarComponent>().MaskComponent;
