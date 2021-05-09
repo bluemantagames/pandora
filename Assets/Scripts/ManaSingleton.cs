@@ -87,14 +87,14 @@ namespace Pandora
             UpdateMana(newValue, enemyManaWallet);
         }
 
-        public void SetManaUpperReserve(int amount)
+        public void SetManaUpperReserve(string id, int amount)
         {
-            manaWallet.SetUpperReserve(amount);
+            manaWallet.SetUpperReserve(id, amount);
         }
 
-        public void SetEnemyManaUpperReserve(int amount)
+        public void SetEnemyManaUpperReserve(string id, int amount)
         {
-            enemyManaWallet.SetUpperReserve(amount);
+            enemyManaWallet.SetUpperReserve(id, amount);
         }
     }
 }

@@ -374,7 +374,7 @@ namespace Pandora
 
             // Handle mana change
             ManaSingleton.Instance.UpdateMana(ManaSingleton.Instance.ManaValue - requiredMana);
-            ManaSingleton.Instance.SetManaUpperReserve(reservedManaBlocks);
+            ManaSingleton.Instance.SetManaUpperReserve(id, reservedManaBlocks);
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {

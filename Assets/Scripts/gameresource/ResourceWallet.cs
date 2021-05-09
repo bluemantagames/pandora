@@ -1,6 +1,8 @@
 using UnityEngine;
 using Pandora.Events;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Pandora.Resource
 {
@@ -13,7 +15,7 @@ namespace Pandora.Resource
 
         public int? ResourceUpperCap { get; private set; }
         public int? ResourceLowerCap { get; private set; }
-        public int UpperReserve { get; private set; } = 0;
+        public Dictionary<string, int> UpperReserve { get; private set; } = new Dictionary<string, int>();
 
         public int Resource
         {
@@ -55,7 +57,8 @@ namespace Pandora.Resource
         {
             if (ResourceUpperCap.HasValue)
             {
-                var upperCap = ResourceUpperCap.Value - UpperReserve;
+                var upperReserve = GetCurrentUpperReserve();
+                var upperCap = ResourceUpperCap.Value - upperReserve;
 
                 Logger.Debug($"[MANA] Earning amount {amount} with an uppercap of {upperCap}");
 
@@ -79,13 +82,14 @@ namespace Pandora.Resource
             Bus.Dispatch(ev);
         }
 
-        public void SetUpperReserve(int amount)
+        public void SetUpperReserve(string id, int amount)
         {
-            UpperReserve = amount;
+            UpperReserve.Add(id, amount);
 
             if (ResourceUpperCap.HasValue)
             {
-                var upperCap = ResourceUpperCap.Value - UpperReserve;
+                var upperReserve = GetCurrentUpperReserve();
+                var upperCap = ResourceUpperCap.Value - upperReserve;
 
                 if (_resource > upperCap)
                     _resource = upperCap;
@@ -94,6 +98,11 @@ namespace Pandora.Resource
             var ev = setUpperReserveEventFactory(_resource, amount);
 
             Bus.Dispatch(ev);
+        }
+
+        int GetCurrentUpperReserve()
+        {
+            return UpperReserve.Values.Sum();
         }
     }
 
