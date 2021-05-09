@@ -23,6 +23,7 @@ namespace Pandora.Resource.Mana
 
             walletsComponent.ManaWallet.Bus.Subscribe<ManaEarned>(new EventSubscriber<ManaEvent>(OnManaEarned, "UIManaEarned"));
             walletsComponent.ManaWallet.Bus.Subscribe<ManaSpent>(new EventSubscriber<ManaEvent>(OnManaSpent, "UIManaSpent"));
+            walletsComponent.ManaWallet.Bus.Subscribe<ManaUpperReserve>(new EventSubscriber<ManaEvent>(OnManaUpperReserve, "UIManaUpperReserve"));
 
             manaText = ManaTextObject?.GetComponent<Text>();
         }
@@ -47,6 +48,11 @@ namespace Pandora.Resource.Mana
                 manaText.text = Mathf.FloorToInt(manaSpent.CurrentAmount / 10).ToString();
 
             UpdateManaUISpent(manaSpent.CurrentAmount, manaSpent.AmountSpent);
+        }
+
+        void OnManaUpperReserve(ManaEvent manaEvent)
+        {
+            var manaSpent = manaEvent as ManaUpperReserve;
         }
 
         void UpdateManaUI(int currentMana, bool resync)

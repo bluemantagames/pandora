@@ -2,81 +2,84 @@
 using UnityEngine;
 using Pandora.Network;
 
-public class LocalManaBehaviourScript : MonoBehaviour
+namespace Pandora
 {
-    public bool Enabled = true;
-    public int ManaEveryTimelapse = 10;
-    public float StepAmount = 0.2f;
-    static public float RoundingTimelapse = 2.8f;
-
-    float manaPerStep;
-    float timer;
-    float roundingTimer;
-
-    private void Start()
+    public class LocalManaBehaviourScript : MonoBehaviour
     {
-        manaPerStep = StepAmount * ManaEveryTimelapse / RoundingTimelapse;
-        timer = StepAmount;
-        roundingTimer = RoundingTimelapse;
-    }
+        public bool Enabled = true;
+        public int ManaEveryTimelapse = 10;
+        public float StepAmount = 0.2f;
+        static public float RoundingTimelapse = 2.8f;
 
-    private void Update()
-    {
-        if (NetworkControllerSingleton.instance.matchStarted)
+        float manaPerStep;
+        float timer;
+        float roundingTimer;
+
+        private void Start()
         {
-            Destroy(this);
-
-            return;
-        }
-
-        roundingTimer -= Time.deltaTime;
-        timer -= Time.deltaTime;
-
-        if (Mathf.Approximately(ManaSingleton.Instance.ManaValue, ManaSingleton.Instance.MaxMana))
-        {
-            return;
-        }
-
-        bool isTimerEnd = timer < 0 || Mathf.Approximately(timer, 0f);
-        bool isRoundingTimerEnd = roundingTimer < 0 || Mathf.Approximately(roundingTimer, 0f);
-
-        if (isTimerEnd)
-        {
+            manaPerStep = StepAmount * ManaEveryTimelapse / RoundingTimelapse;
             timer = StepAmount;
-
-            if (isRoundingTimerEnd)
-            {
-                ManaSingleton.Instance.ManaUnit += ManaEveryTimelapse;
-                roundingTimer = RoundingTimelapse;
-
-                UpdateMana(ManaSingleton.Instance.ManaUnit);
-                UpdateEnemyMana(ManaSingleton.Instance.ManaUnit);
-            }
-            else
-            {
-                UpdateMana(ManaSingleton.Instance.ManaValue + manaPerStep);
-                UpdateEnemyMana(ManaSingleton.Instance.ManaValue + manaPerStep);
-            }
+            roundingTimer = RoundingTimelapse;
         }
-    }
 
-    void UpdateMana(float value)
-    {
-        if (!Enabled)
+        private void Update()
         {
-            return;
+            if (NetworkControllerSingleton.instance.matchStarted)
+            {
+                Destroy(this);
+
+                return;
+            }
+
+            roundingTimer -= Time.deltaTime;
+            timer -= Time.deltaTime;
+
+            if (Mathf.Approximately(ManaSingleton.Instance.ManaValue, ManaSingleton.Instance.MaxMana))
+            {
+                return;
+            }
+
+            bool isTimerEnd = timer < 0 || Mathf.Approximately(timer, 0f);
+            bool isRoundingTimerEnd = roundingTimer < 0 || Mathf.Approximately(roundingTimer, 0f);
+
+            if (isTimerEnd)
+            {
+                timer = StepAmount;
+
+                if (isRoundingTimerEnd)
+                {
+                    ManaSingleton.Instance.ManaUnit += ManaEveryTimelapse;
+                    roundingTimer = RoundingTimelapse;
+
+                    UpdateMana(ManaSingleton.Instance.ManaUnit);
+                    UpdateEnemyMana(ManaSingleton.Instance.ManaUnit);
+                }
+                else
+                {
+                    UpdateMana(ManaSingleton.Instance.ManaValue + manaPerStep);
+                    UpdateEnemyMana(ManaSingleton.Instance.ManaValue + manaPerStep);
+                }
+            }
         }
 
-        ManaSingleton.Instance.UpdateMana(Mathf.FloorToInt(value));
-    }
-
-    void UpdateEnemyMana(float value)
-    {
-        if (!Enabled)
+        void UpdateMana(float value)
         {
-            return;
+            if (!Enabled)
+            {
+                return;
+            }
+
+            ManaSingleton.Instance.UpdateMana(Mathf.FloorToInt(value));
         }
 
-        ManaSingleton.Instance.UpdateEnemyMana(Mathf.FloorToInt(value));
+        void UpdateEnemyMana(float value)
+        {
+            if (!Enabled)
+            {
+                return;
+            }
+
+            ManaSingleton.Instance.UpdateEnemyMana(Mathf.FloorToInt(value));
+        }
     }
 }

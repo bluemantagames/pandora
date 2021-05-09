@@ -3,85 +3,98 @@ using Pandora.Resource;
 using Pandora;
 using Pandora.Resource.Mana;
 
-public class ManaSingleton
+namespace Pandora
 {
-    static ManaSingleton _instance = null;
-    ResourceWallet<ManaEvent> manaWallet;
-    ResourceWallet<ManaEvent> enemyManaWallet;
-
-    public int ManaValue
+    public class ManaSingleton
     {
-        get
-        {
-            return manaWallet.Resource;
-        }
-    }
+        static ManaSingleton _instance = null;
+        ResourceWallet<ManaEvent> manaWallet;
+        ResourceWallet<ManaEvent> enemyManaWallet;
 
-    public int EnemyManaValue
-    {
-        get
+        public int ManaValue
         {
-            return enemyManaWallet.Resource;
-        }
-    }
-
-    public int MaxMana
-    {
-        get
-        {
-            return manaWallet.ResourceUpperCap.Value;
-        }
-    }
-
-    public int MinMana
-    {
-        get
-        {
-            return manaWallet.ResourceLowerCap.Value;
-        }
-    }
-
-    // This is only used in dev
-    public int ManaUnit { get; set; } = 0;
-
-    static public ManaSingleton Instance
-    {
-        get
-        {
-            if (_instance == null)
+            get
             {
-                _instance = new ManaSingleton();
+                return manaWallet.Resource;
             }
-
-            return _instance;
         }
-    }
 
-    public ManaSingleton()
-    {
-        var walletsComponent = MapComponent.Instance.GetComponent<WalletsComponent>();
+        public int EnemyManaValue
+        {
+            get
+            {
+                return enemyManaWallet.Resource;
+            }
+        }
 
-        manaWallet = walletsComponent.ManaWallet;
-        enemyManaWallet = walletsComponent.EnemyManaWallet;
-    }
+        public int MaxMana
+        {
+            get
+            {
+                return manaWallet.ResourceUpperCap.Value;
+            }
+        }
 
-    public void UpdateMana(int newValue, ResourceWallet<ManaEvent> manaWallet)
-    {
-        var difference = newValue - manaWallet.Resource;
+        public int MinMana
+        {
+            get
+            {
+                return manaWallet.ResourceLowerCap.Value;
+            }
+        }
 
-        if (difference < 0)
-            manaWallet.SpendResource(-difference);
-        else
-            manaWallet.AddResource(difference);
-    }
+        // This is only used in dev
+        public int ManaUnit { get; set; } = 0;
 
-    public void UpdateMana(int newValue)
-    {
-        UpdateMana(newValue, manaWallet);
-    }
+        static public ManaSingleton Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new ManaSingleton();
+                }
 
-    public void UpdateEnemyMana(int newValue)
-    {
-        UpdateMana(newValue, enemyManaWallet);
+                return _instance;
+            }
+        }
+
+        public ManaSingleton()
+        {
+            var walletsComponent = MapComponent.Instance.GetComponent<WalletsComponent>();
+
+            manaWallet = walletsComponent.ManaWallet;
+            enemyManaWallet = walletsComponent.EnemyManaWallet;
+        }
+
+        public void UpdateMana(int newValue, ResourceWallet<ManaEvent> manaWallet)
+        {
+            var difference = newValue - manaWallet.Resource;
+
+            if (difference < 0)
+                manaWallet.SpendResource(-difference);
+            else
+                manaWallet.AddResource(difference);
+        }
+
+        public void UpdateMana(int newValue)
+        {
+            UpdateMana(newValue, manaWallet);
+        }
+
+        public void UpdateEnemyMana(int newValue)
+        {
+            UpdateMana(newValue, enemyManaWallet);
+        }
+
+        public void SetManaUpperReserve(int amount)
+        {
+            manaWallet.SetUpperReserve(amount);
+        }
+
+        public void SetEnemyManaUpperReserve(int amount)
+        {
+            enemyManaWallet.SetUpperReserve(amount);
+        }
     }
 }

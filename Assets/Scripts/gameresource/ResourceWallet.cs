@@ -13,7 +13,7 @@ namespace Pandora.Resource
 
         public int? ResourceUpperCap { get; private set; }
         public int? ResourceLowerCap { get; private set; }
-        public int? UpperReserve { get; private set; }
+        public int UpperReserve { get; private set; } = 0;
 
         public int Resource
         {
@@ -55,9 +55,7 @@ namespace Pandora.Resource
         {
             if (ResourceUpperCap.HasValue)
             {
-                var upperCap = UpperReserve.HasValue
-                    ? ResourceUpperCap.Value - UpperReserve.Value
-                    : ResourceUpperCap.Value;
+                var upperCap = ResourceUpperCap.Value + UpperReserve;
 
                 if (Resource + amount > upperCap)
                     amount = ResourceUpperCap.Value - Resource;
@@ -82,6 +80,14 @@ namespace Pandora.Resource
         public void SetUpperReserve(int amount)
         {
             UpperReserve = amount;
+
+            if (ResourceUpperCap.HasValue)
+            {
+                var upperCap = ResourceUpperCap.Value + UpperReserve;
+
+                if (_resource > upperCap)
+                    _resource = upperCap;
+            }
 
             var ev = setUpperReserveEventFactory(_resource, amount);
 
