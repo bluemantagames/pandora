@@ -87,13 +87,14 @@ namespace Pandora.Resource.Mana
         void UpdateManaUIUpperReserve(int upperReserve)
         {
             var lastManaBarIndex = 10;
+            var reservedBlocks = Mathf.FloorToInt(upperReserve / 10);
 
             foreach (var index in Range(0, lastManaBarIndex))
             {
                 var barComponent = ChildBarComponent(index);
                 var maskComponent = ChildMaskComponent(index);
 
-                var reservedBarIndexMin = lastManaBarIndex - upperReserve;
+                var reservedBarIndexMin = lastManaBarIndex - reservedBlocks;
                 var isReserved = index >= reservedBarIndexMin;
 
                 barComponent.Reserved = isReserved;

@@ -55,10 +55,12 @@ namespace Pandora.Resource
         {
             if (ResourceUpperCap.HasValue)
             {
-                var upperCap = ResourceUpperCap.Value + UpperReserve;
+                var upperCap = ResourceUpperCap.Value - UpperReserve;
 
-                if (Resource + amount > upperCap)
-                    amount = ResourceUpperCap.Value - Resource;
+                Logger.Debug($"[MANA] Earning amount {amount} with an uppercap of {upperCap}");
+
+                if (_resource + amount > upperCap)
+                    amount = upperCap - _resource;
             }
 
             _resource += amount;
@@ -83,7 +85,7 @@ namespace Pandora.Resource
 
             if (ResourceUpperCap.HasValue)
             {
-                var upperCap = ResourceUpperCap.Value + UpperReserve;
+                var upperCap = ResourceUpperCap.Value - UpperReserve;
 
                 if (_resource > upperCap)
                     _resource = upperCap;
