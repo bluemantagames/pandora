@@ -89,12 +89,17 @@ namespace Pandora
 
         public void SetManaUpperReserve(string id, int amount)
         {
-            manaWallet.SetUpperReserve(id, amount);
+            manaWallet.AddUpperReserve(id, amount);
+        }
+
+        public void RemoveManaUpperReserve(string id)
+        {
+            manaWallet.RemoveUpperReserve(id);
         }
 
         public void SetEnemyManaUpperReserve(string id, int amount)
         {
-            enemyManaWallet.SetUpperReserve(id, amount);
+            enemyManaWallet.AddUpperReserve(id, amount);
         }
     }
 }

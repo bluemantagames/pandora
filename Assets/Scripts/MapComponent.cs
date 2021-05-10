@@ -341,7 +341,7 @@ namespace Pandora
             }
         }
 
-        public bool SpawnCard(string cardName, int team, GridCell cell, int requiredMana = 0, int reservedManaBlocks = 0)
+        public bool SpawnCard(string cardName, int team, GridCell cell, int requiredMana = 0)
         {
             if (IsLive) return false;
 
@@ -374,7 +374,6 @@ namespace Pandora
 
             // Handle mana change
             ManaSingleton.Instance.UpdateMana(ManaSingleton.Instance.ManaValue - requiredMana);
-            ManaSingleton.Instance.SetManaUpperReserve(id, reservedManaBlocks);
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
@@ -450,6 +449,17 @@ namespace Pandora
             if (spawn.Team == TeamComponent.assignedTeam && unitObject.GetComponent<SpellBehaviour>() == null)
             {
                 CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
+            }
+
+            // Handle mana reserve
+            var manaReserveBehaviour = card.GetComponent<ManaReserveBehaviour>();
+
+            if (manaReserveBehaviour != null)
+            {
+                if (spawn.Team == TeamComponent.assignedTeam)
+                    ManaSingleton.Instance.SetManaUpperReserve(spawn.Id, manaReserveBehaviour.ReservedMana);
+                else
+                    ManaSingleton.Instance.SetEnemyManaUpperReserve(spawn.Id, manaReserveBehaviour.ReservedMana);
             }
         }
 

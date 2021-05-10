@@ -82,7 +82,7 @@ namespace Pandora.Resource
             Bus.Dispatch(ev);
         }
 
-        public void SetUpperReserve(string id, int amount)
+        public void AddUpperReserve(string id, int amount)
         {
             UpperReserve.Add(id, amount);
 
@@ -96,6 +96,17 @@ namespace Pandora.Resource
             }
 
             var ev = setUpperReserveEventFactory(_resource, amount);
+
+            Bus.Dispatch(ev);
+        }
+
+        public void RemoveUpperReserve(string id)
+        {
+            UpperReserve.Remove(id);
+
+            var upperReserve = GetCurrentUpperReserve();
+
+            var ev = setUpperReserveEventFactory(_resource, upperReserve);
 
             Bus.Dispatch(ev);
         }

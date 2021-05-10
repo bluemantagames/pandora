@@ -21,7 +21,6 @@ namespace Pandora
         public string UnitName;
         public string CardName;
         public int RequiredMana = 0;
-        public int ReservedMana = 0;
         public bool IsAquatic = false;
         public bool FixedInGame = false;
         public bool Global = false;
@@ -190,7 +189,7 @@ namespace Pandora
                 pointed.vector.x = System.Math.Max(0, System.Math.Min(mapComponent.mapSizeX, pointed.vector.x));
                 pointed.vector.y = System.Math.Max(0, System.Math.Min(mapComponent.mapSizeY, pointed.vector.y));
 
-                var spawned = map.SpawnCard(UnitName, Team, pointed, RequiredMana, ReservedMana);
+                var spawned = map.SpawnCard(UnitName, Team, pointed, RequiredMana);
 
                 if (spawned)
                 {
