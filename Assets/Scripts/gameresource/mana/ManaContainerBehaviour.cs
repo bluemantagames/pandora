@@ -99,6 +99,8 @@ namespace Pandora.Resource.Mana
 
                 barComponent.Reserved = isReserved;
             }
+
+            Resync();
         }
 
         void Resync()
