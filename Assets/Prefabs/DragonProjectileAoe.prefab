@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -643605042166273896, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
+        type: 3}
+      propertyPath: ShowAfterFrames
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4061167875481412185, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
         type: 3}
       propertyPath: IsAoe
@@ -62,6 +67,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.r
       value: 0.8117647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5687362912629012030, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5687362912629012031, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
         type: 3}
@@ -131,12 +141,12 @@ PrefabInstance:
     - target: {fileID: 5709001385554795573, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
         type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 0.57
+      value: 0.285
       objectReference: {fileID: 0}
     - target: {fileID: 5709001385554795573, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77,
         type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 1.03
+      value: 0.515
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a2d08bd0a5ae694cb4ff8d7f0ad6a77, type: 3}
