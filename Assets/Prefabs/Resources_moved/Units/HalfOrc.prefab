@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
-  MovementSpeed: 666
+  MovementSpeed: 600
 --- !u!114 &3238954853332854145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,8 +333,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PivotAdjustmentX: 0
   PivotAdjustmentY: 0
+  SpecularPivotAdjustmentX: 0
+  SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 250
   ProjectileAdjustmentY: 300
+  InitialHideTime: 0
 --- !u!1 &2409834720673952193
 GameObject:
   m_ObjectHideFlags: 0
