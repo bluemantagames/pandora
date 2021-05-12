@@ -14,9 +14,12 @@ namespace Pandora.UI.HUD
         public LocalizedString WinText, LossText;
         public GameObject WinTextObject, LossTextObject;
         public VideoClip WinClip, LossClip;
+        public bool IsDisabled = true;
         
 
         public async UniTaskVoid PlayStendard(bool isWin) {
+            if (IsDisabled) return;
+
             VideoClip clip;
 
             var player = GetComponent<VideoPlayer>();
