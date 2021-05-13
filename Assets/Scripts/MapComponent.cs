@@ -377,7 +377,7 @@ namespace Pandora
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
-                message.team = TeamComponent.assignedTeam;
+                message.team = team;
                 message.timestamp = DateTime.Now;
 
                 SpawnUnit(new UnitSpawn(message));

@@ -157,11 +157,12 @@ GameObject:
   - component: {fileID: 4908751350246797797}
   - component: {fileID: 2040455867788288362}
   - component: {fileID: 5654515141237051945}
-  - component: {fileID: 7258290981616491628}
   - component: {fileID: 6440670934494413}
   - component: {fileID: 1585679712934027448}
   - component: {fileID: 3679560021763947257}
   - component: {fileID: 910348243161794103}
+  - component: {fileID: 5737124838986499185}
+  - component: {fileID: 5116619431314447526}
   m_Layer: 9
   m_Name: FragCannon
   m_TagString: Untagged
@@ -324,7 +325,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugMove: 0
-  IsStructure: 1
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
@@ -333,25 +333,6 @@ MonoBehaviour:
   WalkingAnimationStateName: Walking
   WalkingAnimationEnabled: 1
   WalkingAnimationEngineUnits: 600
---- !u!114 &7258290981616491628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8076880815249732036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c2243c9941e6d0488bbe0ced3e3f2d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 300
-  attackCooldownMs: 300
-  backswingMs: 200
-  animationStateName: Attacking
-  AggroRangeCells: 3
-  AttackRangeEngineUnits: 200
-  MultipliedVFX: {fileID: 0}
 --- !u!61 &6440670934494413
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -430,6 +411,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Shadow: {fileID: 6558252514521026299, guid: 0efead7c2130a41a3aedf468cd8baf64, type: 3}
+--- !u!114 &5737124838986499185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076880815249732036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bec2558bfc2eb34da9f6172d2b0f664, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DebugPathfinding: 0
+  MovementSpeed: 0
+--- !u!114 &5116619431314447526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076880815249732036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13a9892cbc13c6c4ca1446776a4deac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 10
+  attackCooldownMs: 600
+  backswingMs: 200
+  projectile: {fileID: 5687362912629012028, guid: ee18aa8a2cbb1ff409e08df0bdadddcc,
+    type: 3}
+  animationStateName: 
+  AggroRangeCells: 5
+  AttackRangeEngineUnits: 2000
+  EffectObjects: []
 --- !u!1001 &945724254938945743
 PrefabInstance:
   m_ObjectHideFlags: 0

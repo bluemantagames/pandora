@@ -18,7 +18,6 @@ namespace Pandora
         EngineComponent engineComponent;
         TeamComponent teamComponent;
         public bool DebugMove = false;
-        public bool IsStructure = false;
         int animationSmoothingCount = 0, animationSmoothingThreshold = 1, directions = 12;
         Vector2? targetDirection = null;
         List<Vector2> blendTreePoints = new List<Vector2> { };
@@ -98,47 +97,44 @@ namespace Pandora
                 return;
             }
 
-            if (!IsStructure && movementBehaviour != null)
+            moveSampler.Begin();
+            var state = movementBehaviour.Move();
+            moveSampler.End();
+
+            movementBehaviour.LastState = state.state;
+
+            if (DebugMove)
             {
-                moveSampler.Begin();
-                var state = movementBehaviour.Move();
-                moveSampler.End();
+                Logger.Debug($"Movement state: {state}");
+            }
 
-                movementBehaviour.LastState = state.state;
+            if (state.state == MovementStateEnum.EnemyApproached)
+            {
+                combatBehaviour.AttackEnemy(state.enemy, timeLapsed);
+            }
+            else if (state.state != MovementStateEnum.EnemyApproached && combatBehaviour.isAttacking)
+            {
+                combatBehaviour.StopAttacking();
 
-                if (DebugMove)
+                walkingAnimationTime = 0;
+            }
+            else if (WalkingAnimationEnabled)
+            {
+                playAnimation(walkingAnimationTime, WalkingAnimationStateName);
+
+                var timePercent = engineComponent.Entity.Speed / ((float)WalkingAnimationEngineUnits);
+
+                walkingAnimationTime += timePercent;
+
+                if (walkingAnimationTime >= 1f)
                 {
-                    Logger.Debug($"Movement state: {state}");
+                    walkingAnimationTime = 0f;
                 }
 
-                if (state.state == MovementStateEnum.EnemyApproached)
+                // Never skip the last frame
+                if (walkingAnimationTime + timePercent >= 1f)
                 {
-                    combatBehaviour.AttackEnemy(state.enemy, timeLapsed);
-                }
-                else if (state.state != MovementStateEnum.EnemyApproached && combatBehaviour.isAttacking)
-                {
-                    combatBehaviour.StopAttacking();
-
-                    walkingAnimationTime = 0;
-                }
-                else if (WalkingAnimationEnabled)
-                {
-                    playAnimation(walkingAnimationTime, WalkingAnimationStateName);
-
-                    var timePercent = engineComponent.Entity.Speed / ((float)WalkingAnimationEngineUnits);
-
-                    walkingAnimationTime += timePercent;
-
-                    if (walkingAnimationTime >= 1f)
-                    {
-                        walkingAnimationTime = 0f;
-                    }
-
-                    // Never skip the last frame
-                    if (walkingAnimationTime + timePercent >= 1f)
-                    {
-                        walkingAnimationTime = 1f;
-                    }
+                    walkingAnimationTime = 1f;
                 }
             }
         }

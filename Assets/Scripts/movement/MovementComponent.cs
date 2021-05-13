@@ -122,8 +122,8 @@ namespace Pandora.Movement
 
             var updatedPosition = engineEntity.GetWorldPosition();
 
-            var currentDirection = (updatedPosition - (Vector2) transform.position).normalized;
-    
+            var currentDirection = (updatedPosition - (Vector2)transform.position).normalized;
+
             WalkingDirection = currentDirection;
 
             transform.position = updatedPosition;
@@ -158,14 +158,16 @@ namespace Pandora.Movement
             }
 
             // if no path has been calculated: calculate one and point the object to the first position in the queue
-            if (currentPath == null || currentPath.Contains(currentPosition) || engineEntity.Path == null)
+            if (Speed > 0 && (currentPath == null || currentPath.Contains(currentPosition) || engineEntity.Path == null))
             {
                 advancePositionSampler.Begin();
                 AdvancePosition(currentPosition);
                 advancePositionSampler.End();
             }
 
-            return new MovementState(null, MovementStateEnum.Moving);
+            var nextState = Speed > 0 ? MovementStateEnum.Moving : MovementStateEnum.Idle;
+
+            return new MovementState(null, nextState);
         }
 
         /**
@@ -236,7 +238,8 @@ namespace Pandora.Movement
 
                         // Only advances possible from bridges are up and down
                         // to avoid units trying to pass on top of the river
-                        if (position.y == MapComponent.Instance.RiverY) {
+                        if (position.y == MapComponent.Instance.RiverY)
+                        {
                             var upAdvance = PoolInstances.Vector2IntPool.GetObject();
 
                             upAdvance.x = position.x;
@@ -246,7 +249,7 @@ namespace Pandora.Movement
 
                             downAdvance.x = position.x;
                             downAdvance.y = position.y - 1;
-                            
+
                             surroundingPositions.Add(upAdvance);
                             surroundingPositions.Add(downAdvance);
 
