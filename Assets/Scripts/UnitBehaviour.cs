@@ -18,9 +18,10 @@ namespace Pandora
         EngineComponent engineComponent;
         TeamComponent teamComponent;
         public bool DebugMove = false;
+        public bool IsStructure = false;
         int animationSmoothingCount = 0, animationSmoothingThreshold = 1, directions = 12;
         Vector2? targetDirection = null;
-        List<Vector2> blendTreePoints = new List<Vector2> {};
+        List<Vector2> blendTreePoints = new List<Vector2> { };
 
         // represents whether we are handling movement / animation or another component is doing it
         bool areWePaused = false;
@@ -66,7 +67,8 @@ namespace Pandora
 
             var angle = 360 / directions;
 
-            for (var i = 0; i < directions; i++) {
+            for (var i = 0; i < directions; i++)
+            {
                 blendTreePoints.Add(
                     Quaternion.Euler(0f, 0f, angle * i) * Vector2.up
                 );
@@ -80,7 +82,6 @@ namespace Pandora
                 animator.runtimeAnimatorController =
                     (teamComponent.Team == TeamComponent.assignedTeam) ? BlueController : RedController;
             }
-
         }
 
         // This is called from PandoraEngine every tick
@@ -97,44 +98,47 @@ namespace Pandora
                 return;
             }
 
-            moveSampler.Begin();
-            var state = movementBehaviour.Move();
-            moveSampler.End();
-
-            movementBehaviour.LastState = state.state;
-
-            if (DebugMove)
+            if (!IsStructure && movementBehaviour != null)
             {
-                Logger.Debug($"Movement state: {state}");
-            }
+                moveSampler.Begin();
+                var state = movementBehaviour.Move();
+                moveSampler.End();
 
-            if (state.state == MovementStateEnum.EnemyApproached)
-            {
-                combatBehaviour.AttackEnemy(state.enemy, timeLapsed);
-            }
-            else if (state.state != MovementStateEnum.EnemyApproached && combatBehaviour.isAttacking)
-            {
-                combatBehaviour.StopAttacking();
+                movementBehaviour.LastState = state.state;
 
-                walkingAnimationTime = 0;
-            }
-            else if (WalkingAnimationEnabled)
-            {
-                playAnimation(walkingAnimationTime, WalkingAnimationStateName);
-
-                var timePercent = engineComponent.Entity.Speed / ((float)WalkingAnimationEngineUnits);
-
-                walkingAnimationTime += timePercent;
-
-                if (walkingAnimationTime >= 1f)
+                if (DebugMove)
                 {
-                    walkingAnimationTime = 0f;
+                    Logger.Debug($"Movement state: {state}");
                 }
 
-                // Never skip the last frame
-                if (walkingAnimationTime + timePercent >= 1f)
+                if (state.state == MovementStateEnum.EnemyApproached)
                 {
-                    walkingAnimationTime = 1f;
+                    combatBehaviour.AttackEnemy(state.enemy, timeLapsed);
+                }
+                else if (state.state != MovementStateEnum.EnemyApproached && combatBehaviour.isAttacking)
+                {
+                    combatBehaviour.StopAttacking();
+
+                    walkingAnimationTime = 0;
+                }
+                else if (WalkingAnimationEnabled)
+                {
+                    playAnimation(walkingAnimationTime, WalkingAnimationStateName);
+
+                    var timePercent = engineComponent.Entity.Speed / ((float)WalkingAnimationEngineUnits);
+
+                    walkingAnimationTime += timePercent;
+
+                    if (walkingAnimationTime >= 1f)
+                    {
+                        walkingAnimationTime = 0f;
+                    }
+
+                    // Never skip the last frame
+                    if (walkingAnimationTime + timePercent >= 1f)
+                    {
+                        walkingAnimationTime = 1f;
+                    }
                 }
             }
         }
@@ -168,24 +172,30 @@ namespace Pandora
             Vector2? blendedPoint = null;
             float? minBlendedSquaredDistance = null;
 
-            foreach (var point in blendTreePoints) {
-                var blendedSquaredDistance = (point -movementBehaviour.WalkingDirection).sqrMagnitude;
+            foreach (var point in blendTreePoints)
+            {
+                var blendedSquaredDistance = (point - movementBehaviour.WalkingDirection).sqrMagnitude;
 
-                if (!minBlendedSquaredDistance.HasValue || minBlendedSquaredDistance.Value > blendedSquaredDistance) {
+                if (!minBlendedSquaredDistance.HasValue || minBlendedSquaredDistance.Value > blendedSquaredDistance)
+                {
                     minBlendedSquaredDistance = blendedSquaredDistance;
                     blendedPoint = point;
                 }
             }
 
-            if (!targetDirection.HasValue || targetDirection.Value != blendedPoint.Value) {
+            if (!targetDirection.HasValue || targetDirection.Value != blendedPoint.Value)
+            {
                 targetDirection = blendedPoint;
 
                 animationSmoothingCount = 0;
-            } else {
+            }
+            else
+            {
                 animationSmoothingCount++;
             }
 
-            if (animationSmoothingCount > animationSmoothingThreshold) {
+            if (animationSmoothingCount > animationSmoothingThreshold)
+            {
                 animator.SetFloat("BlendX", movementBehaviour.WalkingDirection.x);
                 animator.SetFloat("BlendY", movementBehaviour.WalkingDirection.y);
             }

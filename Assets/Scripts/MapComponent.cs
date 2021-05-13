@@ -377,7 +377,7 @@ namespace Pandora
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
-                message.team = team;
+                message.team = TeamComponent.assignedTeam;
                 message.timestamp = DateTime.Now;
 
                 SpawnUnit(new UnitSpawn(message));
@@ -418,6 +418,11 @@ namespace Pandora
             var manaAnimationPosition = GridCellToWorldPosition(manaAnimationGridCell);
 
             var unitObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
+
+            // We should set the TeamComponent before isntantiate
+            // because there are a lot of component doing
+            // initialization stuff on `Awake`.
+            unitObject.GetComponent<TeamComponent>().Team = spawn.Team;
 
             unitObject.name += $"-{spawn.Id}";
 
@@ -467,9 +472,6 @@ namespace Pandora
         public void InitializeComponents(GameObject unit, GridCell cell, UnitSpawn unitSpawn)
         {
             var teamComponent = unit.GetComponent<TeamComponent>();
-
-            teamComponent.Team = unitSpawn.Team;
-
             var movement = unit.GetComponent<MovementComponent>();
             var movementBehaviour = unit.GetComponent<MovementBehaviour>();
             var spell = unit.GetComponent<SpellBehaviour>();
@@ -483,7 +485,7 @@ namespace Pandora
 
             var engineEntity = engine.AddEntity(
                 unit,
-                movementBehaviour?.Speed ?? spell.Speed,
+                movementBehaviour?.Speed ?? spell?.Speed ?? 0,
                 cell,
                 spell == null,
                 unitSpawn.Timestamp
