@@ -12,9 +12,9 @@ using Pandora.Pool;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace Pandora.Movement
+namespace Pandora.AI
 {
-    public class MovementComponent : MonoBehaviour, MovementBehaviour
+    public class BasicEntityController : MonoBehaviour, EntityController
     {
         Rigidbody2D body;
         GridCell currentTarget;

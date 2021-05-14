@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Pandora.Movement;
+using Pandora.AI;
 using Pandora.Spell;
 using Pandora.Network;
 using Pandora.Deck;
@@ -174,7 +174,7 @@ namespace Pandora
         {
             if (disabled) return;
 
-            MovementBehaviour movement = null; /*Card.GetComponent<MovementBehaviour>();*/
+            EntityController movement = null; /*Card.GetComponent<MovementBehaviour>();*/
             ProjectileSpellBehaviour projectileSpell = null; /*Card.GetComponent<ProjectileSpellBehaviour>();*/
 
             if (map != null && canBeSpawned)

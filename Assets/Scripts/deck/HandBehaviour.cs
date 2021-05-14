@@ -121,10 +121,11 @@ namespace Pandora.Deck
                         "Harpies",
                         "Mermaids",
                         "Troll",
-                        "Zombies"
+                        "Zombies",
+                        "FragCannon"
                     };
 
-                    //var cardNames = new List<string> { "Troll" };
+                    // var cardNames = new List<string> { "FragCannon", "Troll" };
 
                     cards =
                         (from card in cardNames

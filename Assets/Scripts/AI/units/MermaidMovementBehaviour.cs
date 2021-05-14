@@ -10,9 +10,9 @@ using UnityEngine.Profiling;
 using Pandora.Engine;
 using Pandora.Pool;
 
-namespace Pandora.Movement
+namespace Pandora.AI
 {
-    public class MermaidMovementBehaviour : MonoBehaviour, MovementBehaviour
+    public class MermaidMovementBehaviour : MonoBehaviour, EntityController
     {
         public MapComponent map { get; set; }
         public MovementStateEnum LastState { get; set; }
@@ -78,14 +78,15 @@ namespace Pandora.Movement
 
                 var targetPosition = currentPosition;
 
-                targetPosition.vector.x = 
+                targetPosition.vector.x =
                     Mathf.Min(MaxX, Mathf.Max(MinX, target.enemyCell.vector.x));
 
                 entity.SetTarget(targetPosition);
 
-                var walkingDirection = ((Vector2)targetPosition.vector - (Vector2) entity.GetCurrentCell().vector).normalized;
+                var walkingDirection = ((Vector2)targetPosition.vector - (Vector2)entity.GetCurrentCell().vector).normalized;
 
-                if (walkingDirection != Vector2.zero) {
+                if (walkingDirection != Vector2.zero)
+                {
                     WalkingDirection = walkingDirection;
                 }
 

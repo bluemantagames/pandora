@@ -10,9 +10,10 @@ using UnityEngine.Profiling;
 using Pandora.Engine;
 using Pandora.Pool;
 
-namespace Pandora.Movement
+namespace Pandora.AI
 {
-    public interface MovementBehaviour {
+    public interface EntityController
+    {
         MapComponent map { set; }
         MovementStateEnum LastState { set; }
         int Speed { get; }

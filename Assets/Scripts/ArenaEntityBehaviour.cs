@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Profiling;
-using Pandora.Movement;
+using Pandora.AI;
 using Pandora.Combat;
 using Pandora.Engine;
 using System;
 
 namespace Pandora
 {
-    public class UnitBehaviour : MonoBehaviour, EngineBehaviour
+    public class ArenaEntityBehaviour : MonoBehaviour, EngineBehaviour
     {
-        MovementBehaviour movementBehaviour;
+        EntityController movementBehaviour;
         CombatBehaviour combatBehaviour;
         LifeComponent lifeComponent;
         EngineComponent engineComponent;
@@ -51,7 +51,7 @@ namespace Pandora
         // Start is called before the first frame update
         void Awake()
         {
-            movementBehaviour = GetComponent<MovementBehaviour>();
+            movementBehaviour = GetComponent<EntityController>();
             combatBehaviour = GetComponent<CombatBehaviour>();
             lifeComponent = GetComponent<LifeComponent>();
 

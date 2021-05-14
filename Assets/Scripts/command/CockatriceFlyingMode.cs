@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Linq;
 using Pandora.Combat;
 using Pandora.Engine;
-using Pandora.Movement;
+using Pandora.AI;
 
 namespace Pandora.Command
 {
@@ -27,7 +27,8 @@ namespace Pandora.Command
 
             totalTimeLapsed += timeLapsed;
 
-            if (totalTimeLapsed >= FlyingTimeMs) {
+            if (totalTimeLapsed >= FlyingTimeMs)
+            {
                 gameObject.layer = Constants.GROUND_LAYER;
 
                 IsDisabled = true;

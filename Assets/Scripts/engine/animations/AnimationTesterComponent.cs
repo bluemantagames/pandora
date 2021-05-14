@@ -1,7 +1,7 @@
 using UnityEngine;
 using Pandora.Combat;
 using System.Collections.Generic;
-using Pandora.Movement;
+using Pandora.AI;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 

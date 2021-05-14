@@ -1,5 +1,5 @@
 using UnityEngine;
-using Pandora.Movement;
+using Pandora.AI;
 using Pandora.Engine;
 
 namespace Pandora
@@ -25,13 +25,16 @@ namespace Pandora
             }
         }
 
-        public EngineEntity enemyEntity {
-            get {
+        public EngineEntity enemyEntity
+        {
+            get
+            {
                 return enemy.GetComponent<EngineComponent>().Entity;
             }
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return $"Enemy(GameObject: {enemy} ({enemy.name}), GridCell: {enemyCell})";
         }
 

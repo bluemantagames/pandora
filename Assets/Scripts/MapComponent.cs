@@ -5,7 +5,7 @@ using System.Collections;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Pandora.Movement;
+using Pandora.AI;
 using Pandora.Spell;
 using Pandora.Combat;
 using Pandora.Deck;
@@ -472,8 +472,8 @@ namespace Pandora
         public void InitializeComponents(GameObject unit, GridCell cell, UnitSpawn unitSpawn)
         {
             var teamComponent = unit.GetComponent<TeamComponent>();
-            var movement = unit.GetComponent<MovementComponent>();
-            var movementBehaviour = unit.GetComponent<MovementBehaviour>();
+            var movement = unit.GetComponent<BasicEntityController>();
+            var movementBehaviour = unit.GetComponent<EntityController>();
             var spell = unit.GetComponent<SpellBehaviour>();
 
             var idComponent = unit.AddComponent<UnitIdComponent>();
@@ -508,7 +508,7 @@ namespace Pandora
 
             manaCostComponent.ManaCost = unitSpawn.ManaUsed;
 
-            var unitBehaviour = unit.GetComponent<UnitBehaviour>();
+            var unitBehaviour = unit.GetComponent<ArenaEntityBehaviour>();
 
             var blueController = unitBehaviour?.BlueController;
             var redController = unitBehaviour?.RedController;
@@ -654,7 +654,7 @@ namespace Pandora
 
             foreach (var entity in engine.Entities)
             {
-                var component = entity.GameObject.GetComponent<UnitBehaviour>();
+                var component = entity.GameObject.GetComponent<ArenaEntityBehaviour>();
 
                 if (component == null) continue;
 
