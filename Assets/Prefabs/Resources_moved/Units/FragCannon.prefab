@@ -33,8 +33,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.043, y: -0.401}
-  m_SizeDelta: {x: 0.5348033, y: 0.35195762}
+  m_AnchoredPosition: {x: 0.0099, y: -0.413}
+  m_SizeDelta: {x: 0.4686395, y: 0.32789803}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2591268629316734736
 MonoBehaviour:
@@ -115,7 +115,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.14352417, y: 0.010383606}
+  m_Offset: {x: -0.0021741688, y: 0.1306814}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -126,7 +126,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.098175, y: 1.0037994}
+  m_Size: {x: 0.75532645, y: 1.2083056}
   m_EdgeRadius: 0
 --- !u!114 &5852102964645280687
 MonoBehaviour:
@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 3679560021763947257}
   - component: {fileID: 910348243161794103}
   - component: {fileID: 5737124838986499185}
-  - component: {fileID: 5116619431314447526}
+  - component: {fileID: 8344411509938485866}
   m_Layer: 9
   m_Name: FragCannon
   m_TagString: Untagged
@@ -346,7 +346,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.10650399, y: -0.31611633}
+  m_Offset: {x: 0.004771486, y: -0.31611633}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -357,7 +357,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.4558974, y: 0.3287506}
+  m_Size: {x: 0.54612064, y: 0.3287506}
   m_EdgeRadius: 0
 --- !u!114 &1585679712934027448
 MonoBehaviour:
@@ -425,7 +425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
   MovementSpeed: 0
---- !u!114 &5116619431314447526
+--- !u!114 &8344411509938485866
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -434,18 +434,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 8076880815249732036}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13a9892cbc13c6c4ca1446776a4deac2, type: 3}
+  m_Script: {fileID: 11500000, guid: 3240ab3376fa145988fe61777f2a2ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 10
+  AggroRangeCells: 10
+  AttackRangeEngineUnits: 2000
+  animationStateName: Attacking
   attackCooldownMs: 600
   backswingMs: 200
-  projectile: {fileID: 5687362912629012028, guid: ee18aa8a2cbb1ff409e08df0bdadddcc,
-    type: 3}
-  animationStateName: 
-  AggroRangeCells: 5
-  AttackRangeEngineUnits: 2000
-  EffectObjects: []
+  AttackVFX: {fileID: 0}
 --- !u!1001 &945724254938945743
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -536,12 +534,12 @@ PrefabInstance:
     - target: {fileID: 613300719426973332, guid: b162e8ef05976444397a5b9c48018bb8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.156
+      value: -0.006
       objectReference: {fileID: 0}
     - target: {fileID: 613300719426973332, guid: b162e8ef05976444397a5b9c48018bb8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.775
+      value: 0.955
       objectReference: {fileID: 0}
     - target: {fileID: 613300719426973332, guid: b162e8ef05976444397a5b9c48018bb8,
         type: 3}
