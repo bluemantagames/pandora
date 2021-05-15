@@ -112,6 +112,8 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
 
     public void SpawnVFX()
     {
+        if (AttackVFX == null) return;
 
+        var areaVfx = Instantiate(AttackVFX, transform, false);
     }
 }
