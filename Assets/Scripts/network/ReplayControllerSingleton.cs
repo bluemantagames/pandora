@@ -14,6 +14,7 @@ namespace Pandora.Network
     {
         private Thread liveThread = null;
         private ClientWebSocket ws = new ClientWebSocket();
+        private LengthPrefixedWebsocketWrapper wsWrapper = new LengthPrefixedWebsocketWrapper(ws);
         public bool IsDebugBuild = Debug.isDebugBuild;
 
         int messageCount = 0;
@@ -105,30 +106,14 @@ namespace Pandora.Network
                     MatchStarted = true;
                 }
 
-                var sizeBytes = new Byte[4];
+                var messageBuffer = await wsWrapper.Receive();
 
-                await ws.ReceiveAsync(new ArraySegment<byte>(sizeBytes), CancellationToken.None);
-
-                if (BitConverter.IsLittleEndian)
-                {
-                    Array.Reverse(sizeBytes);
-                }
-
-                var size = BitConverter.ToInt32(sizeBytes, 0);
-                var messageBuffer = new Byte[size];
-
-                var result = await ws.ReceiveAsync(new ArraySegment<byte>(messageBuffer), CancellationToken.None);
-
-                if (result.MessageType == WebSocketMessageType.Close)
-                {
-                    await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-                    continue;
-                }
-
-                messageCount += 1;
+                // Websocket has been closed
+                if (messageBuffer.Length == 0) continue;
 
                 var envelope = ServerEnvelope.Parser.ParseFrom(messageBuffer);
-                Logger.Debug($"[REPLAY] Received {envelope}, message count is {messageCount}");
+
+                Logger.Debug($"[REPLAY] Received {envelope}, message count is {wsWrapper.MessageCount}");
 
                 networkSingleton.HandleServerEnvelope(envelope);
             }
