@@ -14,7 +14,7 @@ namespace Pandora.Network
     {
         private Thread liveThread = null;
         private ClientWebSocket ws = new ClientWebSocket();
-        private LengthPrefixedWebsocketWrapper wsWrapper = new LengthPrefixedWebsocketWrapper(ws);
+        private LengthPrefixedWebsocketWrapper wsWrapper;
         public bool IsDebugBuild = Debug.isDebugBuild;
 
         int messageCount = 0;
@@ -71,6 +71,8 @@ namespace Pandora.Network
 
         public async void LiveExec(object data)
         {
+            wsWrapper = new LengthPrefixedWebsocketWrapper(ws);
+
             if (data.GetType() != typeof(String))
             {
                 return;
