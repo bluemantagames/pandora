@@ -194,7 +194,6 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
         {
             if (
                 nearTarget == entity ||
-                !nearTarget.IsRigid ||
                 nearTarget.GameObject.GetComponent<TeamComponent>().Team == GetComponent<TeamComponent>().Team
             ) continue;
 
