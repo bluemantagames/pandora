@@ -149,10 +149,7 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
         foreach (var particle in particles)
         {
             particle.Pause();
-
             particle.Simulate(time);
-
-            Debug.Log($"Particle time {particle.time}, animationPercent {animationPercent}");
         }
     }
 
