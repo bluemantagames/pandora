@@ -10,7 +10,6 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
     bool isBackswinging = false;
     Enemy target = null;
     uint timeSinceLastProjectile = 0;
-    float vfxDirectionThreshold = 0.5f;
     public bool isAttacking { get; private set; } = false;
     public bool IsDisabled { get; set; } = false;
     public int AggroRangeCells = 3;
@@ -115,31 +114,9 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
     {
         if (AttackVFX == null) return;
 
-        var direction = new Vector2Int();
-        direction.x = enemyDirection.x > vfxDirectionThreshold ? 1 : enemyDirection.x < -vfxDirectionThreshold ? -1 : 0;
-        direction.y = enemyDirection.y > vfxDirectionThreshold ? 1 : enemyDirection.y < -vfxDirectionThreshold ? -1 : 0;
+        var vfx = Instantiate(AttackVFX, transform, false);
 
-        int rotation = 0;
-
-        if (direction.x == 1 && direction.y == -1)
-            rotation = 45;
-        else if (direction.x == 1 && direction.y == 0)
-            rotation = 90;
-        else if (direction.x == 1 && direction.y == 1)
-            rotation = 135;
-        else if (direction.x == 0 && direction.y == 1)
-            rotation = 180;
-        else if (direction.x == -1 && direction.y == 1)
-            rotation = 225;
-        else if (direction.x == -1 && direction.y == 0)
-            rotation = 270;
-        else if (direction.x == -1 && direction.y == -1)
-            rotation = 315;
-
-        Logger.Debug($"[VFX] Direction {enemyDirection} {direction} {rotation}");
-
-        var areaVFX = Instantiate(AttackVFX, transform, false);
-
-        areaVFX.transform.localRotation = Quaternion.Euler(0, rotation, 0);
+        var vfxShot = vfx.GetComponent<VFXShot>();
+        if (vfxShot != null) vfxShot.EnemyDirection = enemyDirection;
     }
 }
