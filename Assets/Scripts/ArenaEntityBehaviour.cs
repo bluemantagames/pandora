@@ -24,6 +24,7 @@ namespace Pandora
 
         // represents whether we are handling movement / animation or another component is doing it
         bool areWePaused = false;
+        AreaCombarBehaviour areaCombatBehaviour;
         public Bounds hitbox;
         public RuntimeAnimatorController BlueController, RedController;
         public string ComponentName
@@ -54,6 +55,7 @@ namespace Pandora
             movementBehaviour = GetComponent<EntityController>();
             combatBehaviour = GetComponent<CombatBehaviour>();
             lifeComponent = GetComponent<LifeComponent>();
+            areaCombatBehaviour = GetComponent<AreaCombarBehaviour>();
 
             moveSampler = CustomSampler.Create($"Move() {gameObject.name}");
             animator = GetComponent<Animator>();
@@ -136,6 +138,11 @@ namespace Pandora
                 {
                     walkingAnimationTime = 1f;
                 }
+            }
+
+            if (areaCombatBehaviour != null && areaCombatBehaviour.isAttacking)
+            {
+                areaCombatBehaviour.PlayVFXNextFrame(timeLapsed);
             }
         }
 

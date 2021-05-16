@@ -6,16 +6,25 @@ using Pandora.Engine;
 
 public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
 {
-    public int Damage = 10;
     bool isBackswinging = false;
     Enemy target = null;
     uint timeSinceLastProjectile = 0;
+    float shotDirectionThreshold = 0.5f;
+    int vfxTicksElapsed = 0;
+    uint vfxTotalTimeElapsed = 0;
+    Vector2Int enemyDirection;
+    CombatVFXFixer combatVFXFixer;
+    ParticleSystem[] particles = new ParticleSystem[0];
+    public float VfxAnimationStartTime = 0f, VfxEndAnimationTime = 0f;
+    public int VfxAnimationDelay = 0;
+    public int Damage = 10;
     public bool isAttacking { get; private set; } = false;
     public bool IsDisabled { get; set; } = false;
     public int AggroRangeCells = 3;
     public int AttackRangeEngineUnits = 2000;
-    public string animationStateName;
-    public int attackCooldownMs = 600, backswingMs = 200;
+    public string AnimationStateName;
+    public int AttackCooldownMs = 3000, BackswingMs = 200;
+    public GameObject CombatVFX;
     public CombatType combatType
     {
         get
@@ -23,7 +32,15 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
             return CombatType.Ranged;
         }
     }
-    public GameObject AttackVFX;
+
+    public void Awake()
+    {
+        if (CombatVFX != null)
+        {
+            combatVFXFixer = CombatVFX.GetComponent<CombatVFXFixer>();
+            particles = CombatVFX.GetComponentsInChildren<ParticleSystem>();
+        }
+    }
 
     public void StopAttacking()
     {
@@ -35,15 +52,14 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
         animator.SetBool("Attacking", false);
     }
 
-    /** Returns true if enemy has died*/
     public void AttackEnemy(Enemy target, uint timeLapse)
     {
         if (IsDisabled) return;
 
         var animator = GetComponent<Animator>();
 
-        var cappedBackswingMs = Math.Max(1, backswingMs);
-        var cappedAttackCooldownMs = Math.Max(1, attackCooldownMs);
+        var cappedBackswingMs = Math.Max(1, BackswingMs);
+        var cappedAttackCooldownMs = Math.Max(1, AttackCooldownMs);
 
         if (!isAttacking)
         {
@@ -56,17 +72,22 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
         }
 
         var direction = ((Vector2)target.enemy.transform.position - (Vector2)transform.position).normalized;
+        var computedDirection = GetShotDirection(direction);
+
+        if (combatVFXFixer != null && CombatVFX != null)
+            CombatVFX.transform.localRotation = combatVFXFixer.FixedShotRotation(computedDirection);
 
         animator.SetFloat("BlendX", direction.x);
         animator.SetFloat("BlendY", direction.y);
 
-        animator.Play(animationStateName, 0, timeSinceLastProjectile / (float)(cappedAttackCooldownMs + cappedBackswingMs));
+        animator.Play(AnimationStateName, 0, timeSinceLastProjectile / (float)(cappedAttackCooldownMs + cappedBackswingMs));
 
         timeSinceLastProjectile += timeLapse;
 
         if (timeSinceLastProjectile >= cappedAttackCooldownMs && !isBackswinging)
         {
-            SpawnVFX(direction);
+            vfxTicksElapsed = 0;
+            vfxTotalTimeElapsed = 0;
 
             isBackswinging = true;
         }
@@ -110,13 +131,41 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
         return engine.IsInHitboxRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
     }
 
-    public void SpawnVFX(Vector2 enemyDirection)
+    public void PlayVFXNextFrame(uint timeLapsed)
     {
-        if (AttackVFX == null) return;
+        if (CombatVFX == null) return;
 
-        var vfx = Instantiate(AttackVFX, transform, false);
+        vfxTicksElapsed++;
+        vfxTotalTimeElapsed += timeLapsed;
 
-        var vfxShot = vfx.GetComponent<VFXShot>();
-        if (vfxShot != null) vfxShot.EnemyDirection = enemyDirection;
+        float animationPercent = (float)vfxTotalTimeElapsed / AttackCooldownMs;
+
+        var time =
+            vfxTotalTimeElapsed > VfxAnimationDelay
+                ? VfxAnimationStartTime + (animationPercent * (VfxEndAnimationTime - VfxAnimationStartTime))
+                : 0;
+
+
+        foreach (var particle in particles)
+        {
+            particle.Pause();
+
+            particle.Simulate(time);
+
+            Debug.Log($"Particle time {particle.time}, animationPercent {animationPercent}");
+        }
+    }
+
+    Vector2Int GetShotDirection(Vector2 enemyDirection)
+    {
+        var direction = new Vector2Int();
+
+        if (enemyDirection != null)
+        {
+            direction.x = enemyDirection.x > shotDirectionThreshold ? 1 : enemyDirection.x < -shotDirectionThreshold ? -1 : 0;
+            direction.y = enemyDirection.y > shotDirectionThreshold ? 1 : enemyDirection.y < -shotDirectionThreshold ? -1 : 0;
+        }
+
+        return direction;
     }
 }
