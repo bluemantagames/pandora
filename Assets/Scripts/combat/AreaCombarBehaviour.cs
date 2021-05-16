@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Pandora;
 using Pandora.Combat;
@@ -12,9 +13,12 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
     float shotDirectionThreshold = 0.5f;
     int vfxTicksElapsed = 0;
     uint vfxTotalTimeElapsed = 0;
+    int timeSinceLastDamages = 0;
     Vector2Int enemyDirection;
     CombatVFXFixer combatVFXFixer;
     ParticleSystem[] particles = new ParticleSystem[0];
+    Queue<Dictionary<GameObject, int>> delayedDamages = new Queue<Dictionary<GameObject, int>>();
+    EngineComponent engineComponent;
     public float VfxAnimationStartTime = 0f, VfxEndAnimationTime = 0f;
     public int VfxAnimationDelay = 0;
     public int Damage = 10;
@@ -25,6 +29,8 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
     public string AnimationStateName;
     public int AttackCooldownMs = 3000, BackswingMs = 200;
     public GameObject CombatVFX;
+    public uint DamagesDelay = 0;
+    public int EngineUnitsRadius = 200;
     public CombatType combatType
     {
         get
@@ -40,6 +46,8 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
             combatVFXFixer = CombatVFX.GetComponent<CombatVFXFixer>();
             particles = CombatVFX.GetComponentsInChildren<ParticleSystem>();
         }
+
+        engineComponent = GetComponent<EngineComponent>();
     }
 
     public void StopAttacking()
@@ -89,6 +97,10 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
             vfxTicksElapsed = 0;
             vfxTotalTimeElapsed = 0;
 
+            // Apply damage
+            var areaDamages = CalculateAreaDamages();
+            delayedDamages.Enqueue(areaDamages);
+
             isBackswinging = true;
         }
         else if (timeSinceLastProjectile >= cappedAttackCooldownMs + cappedBackswingMs)
@@ -109,7 +121,6 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
 
     public bool IsInAggroRange(Enemy enemy)
     {
-        var engineComponent = GetComponent<EngineComponent>();
         var engine = engineComponent.Engine;
 
         return engine.IsInHitboxRangeCells(engineComponent.Entity, enemy.enemyEntity, AggroRangeCells);
@@ -117,7 +128,6 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
 
     public bool IsInAggroRange(GridCell cell)
     {
-        var engineComponent = GetComponent<EngineComponent>();
         var engine = engineComponent.Engine;
 
         return Vector2.Distance(cell.vector, engineComponent.Entity.GetCurrentCell().vector) < AggroRangeCells;
@@ -125,7 +135,6 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
 
     public bool IsInAttackRange(Enemy enemy)
     {
-        var engineComponent = GetComponent<EngineComponent>();
         var engine = engineComponent.Engine;
 
         return engine.IsInHitboxRange(engineComponent.Entity, enemy.enemyEntity, AttackRangeEngineUnits);
@@ -145,12 +154,54 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
                 ? VfxAnimationStartTime + (animationPercent * (VfxEndAnimationTime - VfxAnimationStartTime))
                 : 0;
 
-
         foreach (var particle in particles)
         {
             particle.Pause();
             particle.Simulate(time);
         }
+    }
+
+    public void ApplyDamages(uint timeLapsed)
+    {
+        if (delayedDamages.Count <= 0) return;
+
+        timeSinceLastDamages += (int)timeLapsed;
+
+        if (timeSinceLastDamages < DamagesDelay) return;
+
+        var damagesToApply = delayedDamages.Dequeue();
+
+        foreach (var damage in damagesToApply)
+        {
+            var lifeComponent = damage.Key.GetComponent<LifeComponent>();
+
+            Logger.Debug($"Damaging entity with damage {damage.Value} | {timeLapsed}");
+
+            if (lifeComponent)
+                lifeComponent.AssignDamage(damage.Value, new BaseAttack(gameObject));
+        }
+
+        timeSinceLastDamages = 0;
+    }
+
+    public Dictionary<GameObject, int> CalculateAreaDamages()
+    {
+        var engine = engineComponent.Engine;
+        var entity = engineComponent.Entity;
+        var damages = new Dictionary<GameObject, int>();
+
+        foreach (var nearTarget in engine.FindInRadius(target.enemyEntity.Position, EngineUnitsRadius, true))
+        {
+            if (
+                nearTarget == entity ||
+                !nearTarget.IsRigid ||
+                nearTarget.GameObject.GetComponent<TeamComponent>().Team == GetComponent<TeamComponent>().Team
+            ) continue;
+
+            damages.Add(nearTarget.GameObject, Damage);
+        }
+
+        return damages;
     }
 
     Vector2Int GetShotDirection(Vector2 enemyDirection)

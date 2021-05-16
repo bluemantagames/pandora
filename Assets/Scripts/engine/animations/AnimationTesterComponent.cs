@@ -24,6 +24,7 @@ namespace Pandora.Engine.Animations
         public TestMode Mode = TestMode.Movement;
         public bool Disabled = false;
         public bool DisableAttack = false;
+        public bool IsEnemyInvulnerable = true;
 
         bool isSpawned = false;
         bool isTurnedBack = false;
@@ -102,7 +103,8 @@ namespace Pandora.Engine.Animations
                 var enemyCombatBehaviour = enemyEntity.GameObject.GetComponent<CombatBehaviour>();
                 var enemyLifeComponent = enemyEntity.GameObject.GetComponent<LifeComponent>();
 
-                enemyLifeComponent.DisableDamage = true;
+                if (IsEnemyInvulnerable)
+                    enemyLifeComponent.DisableDamage = true;
 
                 enemyEntity.IsMovementPaused = true;
                 unitEntity.IsMovementPaused = true;

@@ -143,6 +143,7 @@ namespace Pandora
             if (areaCombatBehaviour != null && areaCombatBehaviour.isAttacking)
             {
                 areaCombatBehaviour.PlayVFXNextFrame(timeLapsed);
+                areaCombatBehaviour.ApplyDamages(timeLapsed);
             }
         }
 

@@ -439,15 +439,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VfxAnimationStartTime: 0
-  VfxEndAnimationTime: 1.2
-  VfxAnimationDelay: 800
-  Damage: 10
+  VfxEndAnimationTime: 0.5
+  VfxAnimationDelay: 0
+  Damage: 20
   AggroRangeCells: 10
   AttackRangeEngineUnits: 2000
   AnimationStateName: Attacking
-  AttackCooldownMs: 1000
-  BackswingMs: 200
+  AttackCooldownMs: 200
+  BackswingMs: 1000
   CombatVFX: {fileID: 7632312015584721506}
+  DamagesDelay: 600
+  EngineUnitsRadius: 200
 --- !u!1001 &945724254938945743
 PrefabInstance:
   m_ObjectHideFlags: 0
