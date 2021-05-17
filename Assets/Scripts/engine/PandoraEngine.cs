@@ -793,7 +793,7 @@ namespace Pandora.Engine
         /// <param name="height">The triangle's height (distance from the source entity)</param>
         /// <param name="unitsLeniency">Fix distance of the source entity from the main vertex</param>
         /// <returns>A boolean describing if the target entity is inside the triangle</returns>
-        public bool IsInTriangularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height, int unitsLeniency, bool debug = false)
+        public bool IsInTriangularRange(EngineEntity sourceEntity, EngineEntity targetEntity, Vector2Int direction, int width, int height, int unitsLeniency, bool debug = false)
         {
             // Using barycentric coordinate system
             // (http://totologic.blogspot.com/2014/01/accurate-point-in-triangle-test.html)
@@ -807,7 +807,7 @@ namespace Pandora.Engine
                 width,
                 height,
                 unitsLeniency,
-                sourceEntity.Direction
+                direction
             );
 
             var target = PoolInstances.Vector2IntPool.GetObject();
@@ -835,6 +835,11 @@ namespace Pandora.Engine
             ReturnBounds(targetEntityBound);
 
             return 0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1;
+        }
+
+        public bool IsInTriangularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height, int unitsLeniency, bool debug = false)
+        {
+            return IsInTriangularRange(sourceEntity, targetEntity, sourceEntity.Direction, width, height, unitsLeniency, debug);
         }
 
         /// <summary>
@@ -1095,6 +1100,28 @@ namespace Pandora.Engine
 
             return targetEntities;
         }
+
+        public List<EngineEntity> FindInTriangularRange(EngineEntity origin, Vector2Int direction, int width, int height, int unitsLeniency, bool countStructures)
+        {
+            List<EngineEntity> targetEntities = new List<EngineEntity> { };
+
+            foreach (var entity in Entities)
+            {
+                var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
+
+                if (isNotTargeted) continue;
+
+                var isInRange = IsInTriangularRange(origin, entity, direction, width, height, unitsLeniency, true);
+
+                if (isInRange)
+                {
+                    targetEntities.Add(entity);
+                }
+            }
+
+            return targetEntities;
+        }
+
 
         public void ReturnBounds(BoxBounds bounds)
         {
@@ -1424,6 +1451,59 @@ namespace Pandora.Engine
                 return RotateFigureByAngle(figure, pivot, 315);
 
             return figure;
+        }
+
+        public int DMagnitude(Vector2Int vector) => ISqrt((vector.x * vector.x) + (vector.y * vector.y));
+        public int DotProduct(Vector2Int a, Vector2Int b) => (a.x * b.x) + (a.y * b.y);
+        public int CrossProduct(Vector2Int a, Vector2Int b) => (a.x * b.y) - (a.y * b.x);
+        public Decimal DRadToDeg(Decimal rad) => Decimal.Divide(180, DPi) * rad;
+
+        /// <summary>
+        /// Polinomially approximated ArcCos.
+        /// (This will have an error, see https://stackoverflow.com/questions/3380628/fast-arc-cos-algorithm/3380723#3380723)
+        /// </summary>
+        public Decimal ACos(Decimal x) =>
+            Decimal.Divide(DPi, 2) + Decimal.Divide(((-0.939115566365855m * x) + (0.9217841528914573m * DPow(x, 3))), (1 + (-1.2845906244690837m * DPow(x, 2)) + (0.295624144969963174m * DPow(x, 4))));
+
+        public Decimal GetAngleFromVectors(Vector2Int source, Vector2Int target)
+        {
+            var v0 = new Vector2Int(source.x, Math.Abs(target.y));
+            var v1 = new Vector2Int(v0.x - source.x, v0.y - source.y);
+            var v2 = new Vector2Int(target.x - source.x, target.y - source.y);
+
+            var dotProduct = DotProduct(v1, v2);
+            var crossProduct = CrossProduct(v1, v2);
+            var sourceMagnitude = DMagnitude(v1);
+            var targetMagnutude = DMagnitude(v2);
+            var cosAngle = Decimal.Divide(dotProduct, sourceMagnitude * targetMagnutude);
+            var sinAngle = Decimal.Divide(crossProduct, sourceMagnitude * targetMagnutude);
+
+            Decimal angle = ACos(cosAngle);
+            if (sinAngle > 0) angle = -angle;
+
+            var degAngle = DRadToDeg(angle);
+            /*var absDegAngle = Math.Abs(degAngle);
+
+            var snapMultiple = 45;
+            Decimal snappedAngle = 0;
+
+            if (absDegAngle < snapMultiple && absDegAngle < Decimal.Divide(snapMultiple, 2))
+                snappedAngle = 0;
+            else if (absDegAngle < snapMultiple && absDegAngle >= Decimal.Divide(snapMultiple, 2))
+                snappedAngle = snapMultiple;
+            else
+            {
+                Decimal n = absDegAngle + Decimal.Divide(snapMultiple, 2);
+                n = n - (n % snapMultiple);
+
+                snappedAngle = n;
+            }
+
+            var resultAngle = degAngle < 0 ? -snappedAngle : snappedAngle;
+
+            Logger.Debug($"[ANGLE] Calculated angle {resultAngle}");*/
+
+            return degAngle;
         }
     }
 }
