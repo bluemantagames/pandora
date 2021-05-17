@@ -10,6 +10,7 @@ using Pandora.UI.Menu;
 using Pandora.UI.Menu.Event;
 using Pandora.UI.Menu.Home;
 using Pandora.Network.Data;
+using Cysharp.Threading.Tasks;
 
 namespace Pandora.Network
 {
@@ -31,6 +32,8 @@ namespace Pandora.Network
         PlayerModelSingleton playerModelSingleton = PlayerModelSingleton.instance;
         string oldPlayText = null;
         bool isLoading = false;
+
+        public GameObject BannerText;
 
         public void Connect()
         {
@@ -74,6 +77,30 @@ namespace Pandora.Network
             NetworkControllerSingleton.instance.matchStartEvent.AddListener(LoadGameScene);
 
             HandBehaviour.Deck = deck;
+
+            startMatchmakingMessageLoop().Forget();
+        }
+
+        async UniTaskVoid startMatchmakingMessageLoop() {
+            var matchmakingMessagesController = new MatchmakingMessagesController();
+
+            Logger.Debug("Connecting to matchmaking websocket..");
+
+            await matchmakingMessagesController.Connect(ProdMatchmaking, PlayerModelSingleton.instance.Token);
+
+            Logger.Debug("Connected to matchmaking websocket");
+
+            while (!NetworkControllerSingleton.instance.matchStarted) {
+                var message = await matchmakingMessagesController.Receive();
+
+                Logger.Debug($"Message received {message}");
+
+                if (BannerText != null) {
+                    BannerText.GetComponent<Text>().text = message.message;
+                }
+            }
+
+            await matchmakingMessagesController.Disconnect();
         }
 
         public void StartMatch(string username, List<string> deck)

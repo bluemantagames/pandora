@@ -30,8 +30,12 @@ namespace Pandora.Network
 
             var size = BitConverter.ToInt32(sizeBytes, 0);
             var messageBuffer = new Byte[size];
+            
+            Logger.Debug($"Receiving message of size {size}..");
 
             var result = await Underlying.ReceiveAsync(new ArraySegment<byte>(messageBuffer), CancellationToken.None);
+
+            Logger.Debug($"Received message of size {size}");
 
             if (result.MessageType == WebSocketMessageType.Close)
             {

@@ -14,6 +14,7 @@ using Pandora.Network.Data.Matchmaking;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using Pandora.Network.Data;
+using Pandora;
 
 namespace Pandora.Network
 {
@@ -230,6 +231,12 @@ namespace Pandora.Network
 
                     receiveThread = null;
                     networkThread = null;
+
+                    var socket = matchSocket;
+                    
+                    matchSocket = null;
+
+                    socket?.Shutdown(SocketShutdown.Both);
 
                     StartMatchmaking();
 

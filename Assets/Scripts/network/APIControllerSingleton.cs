@@ -231,7 +231,10 @@ namespace Pandora.Network
         public Task<ApiResponse<MatchmakingResponse>> StartMatchmaking(List<string> deck, string token)
         {
             var request = new RestRequest("/matchmaking", Method.POST);
-            var param = new MatchmakingRequest { deck = deck };
+            var param = new MatchmakingRequest { 
+                deck = deck,
+                lang = LanguageHelper.GetCurrentISO()
+            };
 
             request.Timeout = int.MaxValue;
             request.AddJsonBody(param);
