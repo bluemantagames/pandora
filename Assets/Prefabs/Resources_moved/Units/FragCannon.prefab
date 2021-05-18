@@ -448,8 +448,7 @@ MonoBehaviour:
   AnimationStateName: Attacking
   AttackCooldownMs: 200
   BackswingMs: 1000
-  CombatVFX: {fileID: 2454860208664661911, guid: 18b8f225314084ad69ce4d5371f798ad,
-    type: 3}
+  CombatVFX: {fileID: 7632312015584721506}
   DamagesDelay: 600
   EngineUnitsRadius: 2000
 --- !u!114 &893321727532433966
@@ -464,6 +463,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8431c2006beb34f559156b4d9be76bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SideDamage: 20
+  CentralDamage: 50
+  ConicSize: 500
 --- !u!1001 &945724254938945743
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -783,6 +785,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18b8f225314084ad69ce4d5371f798ad, type: 3}
+--- !u!1 &7632312015584721506 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2454860208664661911, guid: 18b8f225314084ad69ce4d5371f798ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 5474689453734606325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7632312015584290370 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
