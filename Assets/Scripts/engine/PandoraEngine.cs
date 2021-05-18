@@ -1480,7 +1480,7 @@ namespace Pandora.Engine
 
         public Decimal GetAngleFromVectors(Vector2Int source, Vector2Int target)
         {
-            var v0 = new Vector2Int(source.x, Math.Abs(target.y));
+            var v0 = new Vector2Int(source.x, source.y + Math.Abs(source.y - target.y));
             var v1 = new Vector2Int(v0.x - source.x, v0.y - source.y);
             var v2 = new Vector2Int(target.x - source.x, target.y - source.y);
 
@@ -1516,7 +1516,7 @@ namespace Pandora.Engine
 
             var resultAngle = Mod(Decimal.ToInt32(angle < 0 ? -snappedAngle : snappedAngle), 360);
 
-            Logger.Debug($"[ANGLE] Snapped angle {resultAngle}");
+            Logger.Debug($"[ANGLE] Snapped angle {angle} to {resultAngle}");
 
             return resultAngle;
         }
