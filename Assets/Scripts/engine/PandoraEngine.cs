@@ -1465,10 +1465,29 @@ namespace Pandora.Engine
             return figure;
         }
 
+        /// <summary>
+        /// Calculate a Vector2Int's magnitude.
+        /// </summary>
         public int DMagnitude(Vector2Int vector) => ISqrt((vector.x * vector.x) + (vector.y * vector.y));
+
+        /// <summary>
+        /// Calculate the Dot Product of two Vector2Int.
+        /// </summary>
         public int DotProduct(Vector2Int a, Vector2Int b) => (a.x * b.x) + (a.y * b.y);
+
+        /// <summary>
+        /// Calculate the Cross Product of two Vector2Int.
+        /// </summary>
         public int CrossProduct(Vector2Int a, Vector2Int b) => (a.x * b.y) - (a.y * b.x);
+
+        /// <summary>
+        /// Transform Rad to Deg.
+        /// </summary>
         public Decimal DRadToDeg(Decimal rad) => Decimal.Divide(180, DPi) * rad;
+
+        /// <summary>
+        /// Module implementation.
+        /// </summary>
         public int Mod(int x, int m) => (x % m + m) % m;
 
         /// <summary>
@@ -1478,7 +1497,12 @@ namespace Pandora.Engine
         public Decimal ACos(Decimal x) =>
             Decimal.Divide(DPi, 2) + Decimal.Divide(((-0.939115566365855m * x) + (0.9217841528914573m * DPow(x, 3))), (1 + (-1.2845906244690837m * DPow(x, 2)) + (0.295624144969963174m * DPow(x, 4))));
 
-        public Decimal GetAngleFromVectors(Vector2Int source, Vector2Int target)
+        /// <summary>
+        /// Retrieve the angle in Deg between two Vector2Int.
+        /// This function is used to calculate the direction between
+        /// a unit and its target.
+        /// </summary>
+        public int GetAngleFromVectors(Vector2Int source, Vector2Int target)
         {
             var v0 = new Vector2Int(source.x, source.y + Math.Abs(source.y - target.y));
             var v1 = new Vector2Int(v0.x - source.x, v0.y - source.y);
@@ -1494,15 +1518,18 @@ namespace Pandora.Engine
             Decimal angle = ACos(cosAngle);
             if (sinAngle < 0) angle = -angle;
 
-            var degAngle = DRadToDeg(angle);
+            var degAngle = Mod(Decimal.ToInt32(DRadToDeg(angle)), 360);
 
             return degAngle;
         }
 
-        public Decimal SnapAngleToMultiple(Decimal angle, int multiple)
+        /// <summary>
+        /// Snap an angle in Deg to a determinet Multiple.
+        /// </summary>
+        public int SnapAngleToMultiple(int angle, int multiple)
         {
             var absAngle = Math.Abs(angle);
-            Decimal snappedAngle;
+            int snappedAngle;
 
             if (absAngle < multiple && absAngle < Decimal.Divide(multiple, 2))
                 snappedAngle = 0;
@@ -1511,16 +1538,16 @@ namespace Pandora.Engine
             else
             {
                 var n = absAngle + Decimal.Divide(multiple, 2);
-                snappedAngle = n - (n % multiple);
+                snappedAngle = Decimal.ToInt32(n - (n % multiple));
             }
 
-            var resultAngle = Mod(Decimal.ToInt32(angle < 0 ? -snappedAngle : snappedAngle), 360);
-
-            Logger.Debug($"[ANGLE] Snapped angle {angle} to {resultAngle}");
-
-            return resultAngle;
+            return snappedAngle;
         }
 
+        /// <summary>
+        /// Transform a snapped angle to a Vector2Int representing
+        /// the direction (with magniture = 1).
+        /// </summary>
         public Vector2Int SnappedAngleToDirection(int angle)
         {
             Vector2Int result = new Vector2Int(0, 0);
