@@ -379,7 +379,7 @@ MonoBehaviour:
     Direction: {x: 0, y: 0}
     IsMovementPaused: 0
     IsRigid: 1
-    IsStructure: 0
+    IsStructure: 1
     IsMapObstacle: 0
     Layer: 1
     Target: {x: 0, y: 0}
@@ -449,7 +449,7 @@ MonoBehaviour:
   BackswingMs: 1000
   CombatVFX: {fileID: 7632312015584721506}
   DamagesDelay: 600
-  EngineUnitsRadius: 200
+  EngineUnitsRadius: 2000
 --- !u!1001 &945724254938945743
 PrefabInstance:
   m_ObjectHideFlags: 0

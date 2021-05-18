@@ -46,6 +46,18 @@ namespace Pandora.Engine
             PoolInstances.GridCellListPool
         );
 
+        Dictionary<Vector2Int, int> directionAngleTable = new Dictionary<Vector2Int, int>()
+        {
+            { new Vector2Int(0, 0), 0 },
+            { new Vector2Int(-1, 1), 45 },
+            { new Vector2Int(-1, 0), 90 },
+            { new Vector2Int(-1, -1), 135 },
+            { new Vector2Int(0, -1), 180 },
+            { new Vector2Int(1, -1), 225 },
+            { new Vector2Int(1, 0), 270 },
+            { new Vector2Int(1, 1), 315 },
+        };
+
         // Debug settings
         float debugLinesDuration = 1f;
 
@@ -1457,10 +1469,11 @@ namespace Pandora.Engine
         public int DotProduct(Vector2Int a, Vector2Int b) => (a.x * b.x) + (a.y * b.y);
         public int CrossProduct(Vector2Int a, Vector2Int b) => (a.x * b.y) - (a.y * b.x);
         public Decimal DRadToDeg(Decimal rad) => Decimal.Divide(180, DPi) * rad;
+        public int Mod(int x, int m) => (x % m + m) % m;
 
         /// <summary>
         /// Polinomially approximated ArcCos.
-        /// (This will have an error, see https://stackoverflow.com/questions/3380628/fast-arc-cos-algorithm/3380723#3380723)
+        /// (This will have an error, see https://stackoverflow.com/a/36387954)
         /// </summary>
         public Decimal ACos(Decimal x) =>
             Decimal.Divide(DPi, 2) + Decimal.Divide(((-0.939115566365855m * x) + (0.9217841528914573m * DPow(x, 3))), (1 + (-1.2845906244690837m * DPow(x, 2)) + (0.295624144969963174m * DPow(x, 4))));
@@ -1479,31 +1492,49 @@ namespace Pandora.Engine
             var sinAngle = Decimal.Divide(crossProduct, sourceMagnitude * targetMagnutude);
 
             Decimal angle = ACos(cosAngle);
-            if (sinAngle > 0) angle = -angle;
+            if (sinAngle < 0) angle = -angle;
 
             var degAngle = DRadToDeg(angle);
-            /*var absDegAngle = Math.Abs(degAngle);
-
-            var snapMultiple = 45;
-            Decimal snappedAngle = 0;
-
-            if (absDegAngle < snapMultiple && absDegAngle < Decimal.Divide(snapMultiple, 2))
-                snappedAngle = 0;
-            else if (absDegAngle < snapMultiple && absDegAngle >= Decimal.Divide(snapMultiple, 2))
-                snappedAngle = snapMultiple;
-            else
-            {
-                Decimal n = absDegAngle + Decimal.Divide(snapMultiple, 2);
-                n = n - (n % snapMultiple);
-
-                snappedAngle = n;
-            }
-
-            var resultAngle = degAngle < 0 ? -snappedAngle : snappedAngle;
-
-            Logger.Debug($"[ANGLE] Calculated angle {resultAngle}");*/
 
             return degAngle;
+        }
+
+        public Decimal SnapAngleToMultiple(Decimal angle, int multiple)
+        {
+            var absAngle = Math.Abs(angle);
+            Decimal snappedAngle;
+
+            if (absAngle < multiple && absAngle < Decimal.Divide(multiple, 2))
+                snappedAngle = 0;
+            else if (absAngle < multiple && absAngle >= Decimal.Divide(multiple, 2))
+                snappedAngle = multiple;
+            else
+            {
+                var n = absAngle + Decimal.Divide(multiple, 2);
+                snappedAngle = n - (n % multiple);
+            }
+
+            var resultAngle = Mod(Decimal.ToInt32(angle < 0 ? -snappedAngle : snappedAngle), 360);
+
+            Logger.Debug($"[ANGLE] Snapped angle {resultAngle}");
+
+            return resultAngle;
+        }
+
+        public Vector2Int SnappedAngleToDirection(int angle)
+        {
+            Vector2Int result = new Vector2Int(0, 0);
+
+            foreach (var directionAngle in directionAngleTable)
+            {
+                if (directionAngle.Value == angle)
+                {
+                    result = directionAngle.Key;
+                    break;
+                }
+            }
+
+            return result;
         }
     }
 }

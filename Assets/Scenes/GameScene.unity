@@ -3913,11 +3913,12 @@ MonoBehaviour:
   UnitX: 6
   UnitY: 15
   MovementLength: 5
-  EnemyX: 6
-  EnemyY: 16
+  EnemyX: 3
+  EnemyY: 3
   Mode: 1
   Disabled: 0
   DisableAttack: 1
+  IsEnemyInvulnerable: 0
 --- !u!1 &1019514922
 GameObject:
   m_ObjectHideFlags: 0

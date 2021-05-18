@@ -189,8 +189,11 @@ public class AreaCombarBehaviour : MonoBehaviour, CombatBehaviour
         var engine = engineComponent.Engine;
         var entity = engineComponent.Entity;
         var damages = new Dictionary<GameObject, int>();
+        var angle = engineComponent.Engine.GetAngleFromVectors(entity.Position, target.enemyEntity.Position);
+        var snappedAngle = engineComponent.Engine.SnapAngleToMultiple(angle, 45);
+        var direction = engineComponent.Engine.SnappedAngleToDirection(Decimal.ToInt32(snappedAngle));
 
-        foreach (var nearTarget in engine.FindInRadius(target.enemyEntity.Position, EngineUnitsRadius, true))
+        foreach (var nearTarget in engine.FindInTriangularRange(entity, direction, 500, AttackRangeEngineUnits, 0, true))
         {
             if (
                 nearTarget == entity ||
