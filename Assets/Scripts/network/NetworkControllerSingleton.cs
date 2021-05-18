@@ -232,11 +232,7 @@ namespace Pandora.Network
                     receiveThread = null;
                     networkThread = null;
 
-                    var socket = matchSocket;
-                    
-                    matchSocket = null;
-
-                    socket?.Shutdown(SocketShutdown.Both);
+                    shutdownMatchSocket();
 
                     StartMatchmaking();
 
@@ -426,13 +422,7 @@ namespace Pandora.Network
         {
             if (matchSocket != null)
             {
-                var socket = matchSocket;
-
-                // It's important to set the matchSocket to null before shutting it down so that
-                // the ReceiveLoop thread knows this wasn't an unwanted disconnect, and doesn't try to reconnect again
-                matchSocket = null;
-
-                socket.Shutdown(SocketShutdown.Both);
+                shutdownMatchSocket();
             }
 
             receiveThread = null;
@@ -442,6 +432,8 @@ namespace Pandora.Network
             lastEnvelopeId = null;
 
             stepsQueue = new ConcurrentQueue<StepMessage>();
+
+            matchStarted = false;
         }
 
         public static SpawnMessage GenerateSpawnMessage(StepCommand command)
@@ -479,6 +471,16 @@ namespace Pandora.Network
                 rewardId = command.GoldReward.RewardId,
                 elapsedMs = (int)command.GoldReward.ElapsedMs
             };
+        }
+
+        void shutdownMatchSocket() {
+            var socket = matchSocket;
+            
+            // It's important to set the matchSocket to null before shutting it down so that
+            // the ReceiveLoop thread knows this wasn't an unwanted disconnect, and doesn't try to reconnect again
+            matchSocket = null;
+
+            socket?.Shutdown(SocketShutdown.Both);
         }
 
     }
