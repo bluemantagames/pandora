@@ -18,12 +18,12 @@ namespace Pandora.Network
         private ClientWebSocket ws = new ClientWebSocket();
         private LengthPrefixedWebsocketWrapper wsWrapper = null;
 
-        public async UniTask Connect(bool prodHost, string authToken)
+        public async UniTask Connect(string authToken)
         {
+            var baseUri = NetworkControllerSingleton.instance.ProdMatchmaking ? Hosts.ProdWs : Hosts.DevWs;
+
             var wsURI = new Uri(
-                !prodHost ?
-                    "ws://127.0.0.1:8080/api/matchmaking/matchmaking-messages" :
-                    "ws://pandora.bluemanta.games:8080/api/matchmaking/matchmaking-messages"
+                $"{baseUri}/api/matchmaking/matchmaking-messages"
             );
 
             ws.Options.SetRequestHeader("Authorization", $"Bearer {authToken}");

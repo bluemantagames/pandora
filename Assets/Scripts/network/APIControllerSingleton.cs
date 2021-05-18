@@ -17,20 +17,14 @@ namespace Pandora.Network
         public bool IsDebugBuild = Debug.isDebugBuild;
         UnityJsonSerializer customSerializer = new UnityJsonSerializer();
 
-        string prodEndpoint = "https://pandora.bluemanta.games/api";
-
         private string apiHost
         {
             get
             {
-#if UNITY_EDITOR
-                if (IsDebugBuild)
-                    return "http://127.0.0.1:8080/api";
+                if (NetworkControllerSingleton.instance.ProdMatchmaking)
+                    return $"{Hosts.ProdMatchmaking}/api";
                 else
-                    return prodEndpoint;
-#else
-                    return prodEndpoint;
-#endif
+                    return $"{Hosts.DevMatchmaking}/api";
             }
         }
 
@@ -231,7 +225,8 @@ namespace Pandora.Network
         public Task<ApiResponse<MatchmakingResponse>> StartMatchmaking(List<string> deck, string token)
         {
             var request = new RestRequest("/matchmaking", Method.POST);
-            var param = new MatchmakingRequest { 
+            var param = new MatchmakingRequest
+            {
                 deck = deck,
                 lang = LanguageHelper.GetCurrentISO()
             };

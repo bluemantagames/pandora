@@ -20,7 +20,7 @@ namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {
-        public bool IsDebugBuild = Debug.isDebugBuild;
+        public bool ProdMatchmaking = false;
 
         string userMatchToken = null;
         Socket matchSocket = null;
@@ -62,6 +62,10 @@ namespace Pandora.Network
         private NetworkControllerSingleton()
         {
             jwt = new JWT();
+
+#if !UNITY_EDITOR
+            ProdMatchmaking = true;
+#endif
         }
 
         public void StartMatchmaking()
@@ -138,8 +142,8 @@ namespace Pandora.Network
 
             var startTime = DateTime.Now;
 
-            var matchHost = (IsDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
-            var matchPort = 9090;
+            var matchHost = (ProdMatchmaking) ? Hosts.ProdMatch : Hosts.DevMatch;
+            var matchPort = Hosts.MatchPort;
 
             IPHostEntry dns = null;
             

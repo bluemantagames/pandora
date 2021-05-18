@@ -19,10 +19,7 @@ namespace Pandora.Network
         public bool GameSceneToLoad = false;
 
         /// <summary>Forces matchmaking in prod server if enabled</summary>
-        public bool ProdMatchmaking = false;
 
-        /// <summary>Forces a game without authentication</summary>
-        public bool DevMatchmaking = false;
         public Text TextLoader;
         public Text TextPlay;
         public bool BypassCheck = false;
@@ -42,7 +39,7 @@ namespace Pandora.Network
             MatchInfoSingleton.Instance.ClearAll();
 
             var activeDeck = GetActiveDeck();
-            var isDeckValid = DevMatchmaking ? true : IsDeckValid(activeDeck);
+            var isDeckValid = IsDeckValid(activeDeck);
 
             if (!isDeckValid) return;
 
@@ -55,22 +52,10 @@ namespace Pandora.Network
 
             AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATCHMAKING_START);
 
-            if (ProdMatchmaking)
-            {
-                NetworkControllerSingleton.instance.IsDebugBuild = false;
-            }
-
             var deck = activeDeck?.Select(cardName => new Card(cardName))?.ToList();
             var deckStr = deck?.Select(card => card.Name)?.ToList();
 
-            if (DevMatchmaking)
-            {
-                NetworkControllerSingleton.instance.StartDevMatchmaking(deckStr);
-            }
-            else
-            {
-                NetworkControllerSingleton.instance.StartMatchmaking(deckStr);
-            }
+            NetworkControllerSingleton.instance.StartMatchmaking(deckStr);
 
             DisableButton();
 
@@ -86,7 +71,7 @@ namespace Pandora.Network
 
             Logger.Debug("Connecting to matchmaking websocket..");
 
-            await matchmakingMessagesController.Connect(ProdMatchmaking, PlayerModelSingleton.instance.Token);
+            await matchmakingMessagesController.Connect(PlayerModelSingleton.instance.Token);
 
             Logger.Debug("Connected to matchmaking websocket");
 
@@ -166,7 +151,7 @@ namespace Pandora.Network
             Logger.Debug("Checking if the matchmaking button is active...");
 
             var activeDeck = GetActiveDeck();
-            var isValid = DevMatchmaking ? true : IsDeckValid(activeDeck);
+            var isValid = IsDeckValid(activeDeck);
 
             if (!isValid)
             {
