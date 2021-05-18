@@ -10,6 +10,9 @@ namespace Pandora.Combat
     {
         EngineComponent engineComponent;
         AreaCombatBehaviour areaCombatBehaviour;
+        public int SideDamage = 20;
+        public int CentralDamage = 50;
+        public int ConicSize = 500;
 
         void Awake()
         {
@@ -21,19 +24,31 @@ namespace Pandora.Combat
         {
             var engine = engineComponent.Engine;
             var entity = engineComponent.Entity;
+            var attackRange = areaCombatBehaviour.AttackRangeEngineUnits;
             var damages = new Dictionary<GameObject, int>();
+
             var angle = engineComponent.Engine.GetAngleFromVectors(entity.Position, target.enemyEntity.Position);
             var snappedAngle = engineComponent.Engine.SnapAngleToMultiple(angle, 45);
             var direction = engineComponent.Engine.SnappedAngleToDirection(snappedAngle);
 
-            foreach (var nearTarget in engine.FindInTriangularRange(entity, direction, 500, areaCombatBehaviour.AttackRangeEngineUnits, 0, true))
+            var fullTriangleTargets = engine.FindInTriangularRange(entity, direction, ConicSize, attackRange, 0, true);
+            var centralTriangleTargets = engine.FindInTriangularRange(entity, direction, ConicSize / 3, attackRange, 0, true);
+
+            foreach (var nearTarget in fullTriangleTargets)
             {
                 if (
                     nearTarget == entity ||
                     nearTarget.GameObject.GetComponent<TeamComponent>().Team == GetComponent<TeamComponent>().Team
                 ) continue;
 
-                damages.Add(nearTarget.GameObject, areaCombatBehaviour.Damage);
+                // FIXME: This should be optimized
+                var isCentral = centralTriangleTargets.Contains(nearTarget);
+
+                var damage = isCentral ? CentralDamage : SideDamage;
+
+                Logger.Debug($"[AREADAMAGE] Giving area damage of {damage}");
+
+                damages.Add(nearTarget.GameObject, damage);
             }
 
             return damages;
