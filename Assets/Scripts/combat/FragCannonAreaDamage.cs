@@ -32,26 +32,32 @@ namespace Pandora.Combat
             var direction = engineComponent.Engine.SnappedAngleToDirection(snappedAngle);
 
             var fullTriangleTargets = engine.FindInTriangularRange(entity, direction, ConicSize, attackRange, 0, true);
-            var centralTriangleTargets = engine.FindInTriangularRange(entity, direction, ConicSize / 3, attackRange, 0, true);
+            var centralTriangleTargets = engine.FindInTriangularRange(fullTriangleTargets, entity, direction, ConicSize / 3, attackRange, 0, true);
 
             foreach (var nearTarget in fullTriangleTargets)
             {
-                if (
-                    nearTarget == entity ||
-                    nearTarget.GameObject.GetComponent<TeamComponent>().Team == GetComponent<TeamComponent>().Team
-                ) continue;
+                if (!IsEntityDamageable(nearTarget)) continue;
 
-                // FIXME: This should be optimized
-                var isCentral = centralTriangleTargets.Contains(nearTarget);
+                damages.Add(nearTarget.GameObject, SideDamage);
+            }
 
-                var damage = isCentral ? CentralDamage : SideDamage;
+            foreach (var nearTarget in centralTriangleTargets)
+            {
+                if (!IsEntityDamageable(nearTarget)) continue;
 
-                Logger.Debug($"[AREADAMAGE] Giving area damage of {damage}");
-
-                damages.Add(nearTarget.GameObject, damage);
+                damages[nearTarget.GameObject] = CentralDamage;
             }
 
             return damages;
+        }
+
+        bool IsEntityDamageable(EngineEntity target)
+        {
+            var entity = engineComponent.Entity;
+            var targetTeam = target.GameObject.GetComponent<TeamComponent>().Team;
+            var sourceTeam = GetComponent<TeamComponent>().Team;
+
+            return target != entity && targetTeam != sourceTeam;
         }
     }
 }

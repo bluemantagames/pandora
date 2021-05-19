@@ -1113,11 +1113,11 @@ namespace Pandora.Engine
             return targetEntities;
         }
 
-        public List<EngineEntity> FindInTriangularRange(EngineEntity origin, Vector2Int direction, int width, int height, int unitsLeniency, bool countStructures)
+        public List<EngineEntity> FindInTriangularRange(List<EngineEntity> entities, EngineEntity origin, Vector2Int direction, int width, int height, int unitsLeniency, bool countStructures)
         {
             List<EngineEntity> targetEntities = new List<EngineEntity> { };
 
-            foreach (var entity in Entities)
+            foreach (var entity in entities)
             {
                 var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
 
@@ -1132,6 +1132,11 @@ namespace Pandora.Engine
             }
 
             return targetEntities;
+        }
+
+        public List<EngineEntity> FindInTriangularRange(EngineEntity origin, Vector2Int direction, int width, int height, int unitsLeniency, bool countStructures)
+        {
+            return FindInTriangularRange(Entities, origin, direction, width, height, unitsLeniency, countStructures);
         }
 
 
