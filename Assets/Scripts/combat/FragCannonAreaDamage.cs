@@ -54,10 +54,10 @@ namespace Pandora.Combat
         bool IsEntityDamageable(EngineEntity target)
         {
             var entity = engineComponent.Entity;
-            var targetTeam = target.GameObject.GetComponent<TeamComponent>().Team;
-            var sourceTeam = GetComponent<TeamComponent>().Team;
+            var targetTeam = target.GameObject.GetComponent<TeamComponent>()?.Team;
+            var sourceTeam = GetComponent<TeamComponent>()?.Team;
 
-            return target != entity && targetTeam != sourceTeam;
+            return targetTeam != null && sourceTeam != null && target != entity && targetTeam != sourceTeam;
         }
     }
 }
