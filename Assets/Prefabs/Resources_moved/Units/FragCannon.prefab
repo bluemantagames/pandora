@@ -164,6 +164,7 @@ GameObject:
   - component: {fileID: 5737124838986499185}
   - component: {fileID: 277748629557450594}
   - component: {fileID: 893321727532433966}
+  - component: {fileID: -8745503673302635570}
   m_Layer: 9
   m_Name: FragCannon
   m_TagString: Untagged
@@ -466,6 +467,18 @@ MonoBehaviour:
   SideDamage: 20
   CentralDamage: 50
   ConicSize: 500
+--- !u!114 &-8745503673302635570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076880815249732036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3756fdd159305401696672df33a75a5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &945724254938945743
 PrefabInstance:
   m_ObjectHideFlags: 0
