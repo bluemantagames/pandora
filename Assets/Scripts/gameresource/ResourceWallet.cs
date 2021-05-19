@@ -114,7 +114,7 @@ namespace Pandora.Resource
             Bus.Dispatch(ev);
         }
 
-        int GetCurrentUpperReserve()
+        public int GetCurrentUpperReserve()
         {
             return UpperReserve.Values.Sum();
         }

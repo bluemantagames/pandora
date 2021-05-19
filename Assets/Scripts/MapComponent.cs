@@ -347,13 +347,19 @@ namespace Pandora
 
             ResetAggroPoints();
 
+            var manaSingleton = ManaSingleton.Instance;
             var spawnPosition = cell.vector;
             var id = System.Guid.NewGuid().ToString();
             var manaEnabled = GetComponent<LocalManaBehaviourScript>()?.Enabled ?? true;
             var elapsedMs = engine.TotalElapsed;
+            var requiredManaReserveRaw = GetCardManaReserve(cardName);
+            var requiredManaReserve = requiredManaReserveRaw.HasValue ? requiredManaReserveRaw.Value : 0;
+            var hasEnoughReserve = manaSingleton.MaxMana - manaSingleton.ManaUpperReserve - requiredManaReserve >= 0;
+            var hasEnoughMana = manaSingleton.ManaValue >= requiredMana;
+            var canBeSpawned = hasEnoughMana && hasEnoughReserve;
 
             // TODO: Notify player somehow if they lack mana
-            if (manaEnabled && ManaSingleton.Instance.ManaValue < requiredMana)
+            if (manaEnabled && !canBeSpawned)
             {
                 return false;
             }
@@ -903,6 +909,14 @@ namespace Pandora
 
                 selectedCards[0].CardObject.GetComponent<CardBehaviour>().Dragging = true;
             }
+        }
+
+        int? GetCardManaReserve(string unitName)
+        {
+            var unit = LoadCard(unitName);
+            var manaReserveComponent = unit.GetComponent<ManaReserveBehaviour>();
+            int? manaReserve = manaReserveComponent?.ReservedMana;
+            return manaReserve;
         }
     }
 }

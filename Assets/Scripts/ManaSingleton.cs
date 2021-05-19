@@ -19,6 +19,14 @@ namespace Pandora
             }
         }
 
+        public int ManaUpperReserve
+        {
+            get
+            {
+                return manaWallet.GetCurrentUpperReserve();
+            }
+        }
+
         public int EnemyManaValue
         {
             get
