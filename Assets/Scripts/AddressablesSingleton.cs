@@ -11,7 +11,7 @@ namespace Pandora
     {
         public Dictionary<string, GameObject> units = new Dictionary<string, GameObject> { };
         private static AddressablesSingleton privateInstance = null;
-        string unitsAssetsLabel = "Unit";
+        string remoteAssetsLabel = "Remote", unitAssetsLabel = "Unit";
         float loadingProgress = 0f;
 
         private AddressablesSingleton() { }
@@ -35,7 +35,7 @@ namespace Pandora
         public UniTask<long> GetAddressablesSize()
         {
             return Addressables
-                .GetDownloadSizeAsync(unitsAssetsLabel)
+                .GetDownloadSizeAsync(remoteAssetsLabel)
                 .ToUniTask();
         }
 
@@ -44,7 +44,7 @@ namespace Pandora
         /// </summary>
         public UniTask ClearDependenciesCache()
         {
-            return Addressables.ClearDependencyCacheAsync(unitsAssetsLabel, false).ToUniTask();
+            return Addressables.ClearDependencyCacheAsync(remoteAssetsLabel, false).ToUniTask();
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Pandora
         public UniTask DownloadDependencies(Action<float> progressHandler = null)
         {
             var progressManager = Progress.Create<float>(progressHandler);
-            return Addressables.DownloadDependenciesAsync(unitsAssetsLabel).ToUniTask(progress: progressManager);
+            return Addressables.DownloadDependenciesAsync(remoteAssetsLabel).ToUniTask(progress: progressManager);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Pandora
             var progressManager = Progress.Create<float>(progressHandler);
 
             return Addressables
-                .LoadAssetsAsync<GameObject>(unitsAssetsLabel, loadedUnit =>
+                .LoadAssetsAsync<GameObject>(unitAssetsLabel, loadedUnit =>
                 {
                     var unitName = loadedUnit.name;
 
