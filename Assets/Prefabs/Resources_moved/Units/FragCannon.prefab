@@ -165,6 +165,7 @@ GameObject:
   - component: {fileID: 277748629557450594}
   - component: {fileID: 893321727532433966}
   - component: {fileID: -8745503673302635570}
+  - component: {fileID: 1207490466682929833}
   m_Layer: 9
   m_Name: FragCannon
   m_TagString: Untagged
@@ -287,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733e88c63e6713f4fa432c8e37a8f31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeValue: 1250
+  lifeValue: 300
   maxLife: 0
   IsDead: 0
   DisableDamage: 0
@@ -441,13 +442,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VfxAnimationStartTime: 0
-  VfxEndAnimationTime: 0.5
+  VfxEndAnimationTime: 2.3
   VfxAnimationDelay: 0
   Damage: 20
   AggroRangeCells: 10
-  AttackRangeEngineUnits: 2000
+  AttackRangeEngineUnits: 1000
   AnimationStateName: Attacking
-  AttackCooldownMs: 200
+  AttackCooldownMs: 1000
   BackswingMs: 1000
   CombatVFX: {fileID: 7632312015584721506}
   DamagesDelay: 600
@@ -464,8 +465,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8431c2006beb34f559156b4d9be76bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SideDamage: 20
-  CentralDamage: 50
+  SideDamage: 100
+  CentralDamage: 200
   ConicSize: 500
 --- !u!114 &-8745503673302635570
 MonoBehaviour:
@@ -479,6 +480,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3756fdd159305401696672df33a75a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1207490466682929833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076880815249732036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07eedffa294849379327ec100f10b71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ReservedMana: 40
 --- !u!1001 &945724254938945743
 PrefabInstance:
   m_ObjectHideFlags: 0

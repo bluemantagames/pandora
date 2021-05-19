@@ -16,12 +16,12 @@ namespace Pandora.Combat
         int vfxTicksElapsed = 0;
         uint vfxTotalTimeElapsed = 0;
         int timeSinceLastDamages = 0;
-        Vector2Int enemyDirection;
         CombatVFXFixer combatVFXFixer;
         ParticleSystem[] particles = new ParticleSystem[0];
         Queue<Dictionary<GameObject, int>> delayedDamages = new Queue<Dictionary<GameObject, int>>();
         EngineComponent engineComponent;
         AreaDamage areaDamage;
+        bool isVfxRunning = false;
         public float VfxAnimationStartTime = 0f, VfxEndAnimationTime = 0f;
         public int VfxAnimationDelay = 0;
         public int Damage = 10;
@@ -33,7 +33,6 @@ namespace Pandora.Combat
         public int AttackCooldownMs = 3000, BackswingMs = 200;
         public GameObject CombatVFX;
         public uint DamagesDelay = 0;
-        public int EngineUnitsRadius = 200;
         public CombatType combatType
         {
             get
@@ -100,6 +99,7 @@ namespace Pandora.Combat
             {
                 vfxTicksElapsed = 0;
                 vfxTotalTimeElapsed = 0;
+                isVfxRunning = true;
 
                 // Apply damage
                 var areaDamages = areaDamage.CalculateAreaDamages(target);
@@ -146,7 +146,7 @@ namespace Pandora.Combat
 
         public void PlayVFXNextFrame(uint timeLapsed)
         {
-            if (CombatVFX == null) return;
+            if (CombatVFX == null || !isVfxRunning) return;
 
             vfxTicksElapsed++;
             vfxTotalTimeElapsed += timeLapsed;
