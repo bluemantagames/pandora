@@ -84,6 +84,7 @@ namespace Pandora.Resource
 
         public void AddUpperReserve(string id, int amount)
         {
+            int newUpperReserve = 0;
             UpperReserve.Add(id, amount);
 
             if (ResourceUpperCap.HasValue)
@@ -91,11 +92,13 @@ namespace Pandora.Resource
                 var upperReserve = GetCurrentUpperReserve();
                 var upperCap = ResourceUpperCap.Value - upperReserve;
 
+                newUpperReserve = upperReserve;
+
                 if (_resource > upperCap)
                     _resource = upperCap;
             }
 
-            var ev = setUpperReserveEventFactory(_resource, amount);
+            var ev = setUpperReserveEventFactory(_resource, newUpperReserve);
 
             Bus.Dispatch(ev);
         }

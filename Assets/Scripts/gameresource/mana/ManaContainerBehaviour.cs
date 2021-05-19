@@ -15,6 +15,7 @@ namespace Pandora.Resource.Mana
         public float SpentAnimationTime = 0.5f;
         public GameObject ManaTextObject;
         Text manaText;
+        int lastManaBarIndex = 10;
 
         float? animationTimeEnd = null;
 
@@ -86,8 +87,7 @@ namespace Pandora.Resource.Mana
 
         void UpdateManaUIUpperReserve(int upperReserve)
         {
-            var lastManaBarIndex = 10;
-            var reservedBlocks = Mathf.FloorToInt(upperReserve / 10);
+            var reservedBlocks = Mathf.FloorToInt(upperReserve / lastManaBarIndex);
 
             foreach (var index in Range(0, lastManaBarIndex))
             {
@@ -109,15 +109,20 @@ namespace Pandora.Resource.Mana
             var manaIndex = ManaBarChildIndex(currentMana);
             var unitPercent = ManaBarChildPercent(currentMana, manaIndex);
 
-            for (var i = 0; i < manaIndex; i++)
+            for (var i = 0; i < lastManaBarIndex; i++)
             {
-                ChildMaskComponent(i).Percent = 1f;
+                var manaMaskChild = ChildMaskComponent(i);
+
+                if (i < manaIndex)
+                    manaMaskChild.Percent = 1f;
+                else if (i == manaIndex)
+                {
+                    manaMaskChild.Reset();
+                    manaMaskChild.Percent = unitPercent;
+                }
+                else
+                    manaMaskChild.Reset();
             }
-
-            var manaMask = ChildMaskComponent(manaIndex);
-
-            manaMask.Reset();
-            manaMask.Percent = unitPercent;
         }
 
         void Update()
@@ -130,7 +135,7 @@ namespace Pandora.Resource.Mana
                 var manaIndex = ManaBarChildIndex(animationMana);
                 var unitPercent = ManaBarChildPercent(animationMana, manaIndex);
 
-                for (var i = manaIndex + 1; i < 10; i++)
+                for (var i = manaIndex + 1; i < lastManaBarIndex; i++)
                 {
                     ChildMaskComponent(i).Reset();
                 }
@@ -150,7 +155,7 @@ namespace Pandora.Resource.Mana
             }
         }
 
-        int ManaBarChildIndex(int mana) => System.Math.Min(mana / 10, 9);
+        int ManaBarChildIndex(int mana) => System.Math.Min(mana / lastManaBarIndex, 9);
 
         float ManaBarChildPercent(int currentMana, int childIndex) => ((float)currentMana - (childIndex * 10)) / 10f;
 
