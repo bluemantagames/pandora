@@ -24,53 +24,54 @@ namespace Pandora.Messages {
     static MessagesReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg5tZXNzYWdlcy5wcm90bxIQcGFuZG9yYS5tZXNzYWdlcyIkCgpSZXBsYXlG",
-            "cm9tEhYKDnJlcGxheV9mcm9tX2lkGAEgASgDIlQKBEpvaW4SFgoOdXNlck1h",
-            "dGNoVG9rZW4YBSABKAkSNAoOcmVwbGF5X2Zyb21faWQYBiABKAsyHC5wYW5k",
-            "b3JhLm1lc3NhZ2VzLlJlcGxheUZyb20iNAoGUGxheWVyEgwKBG5hbWUYASAB",
-            "KAkSHAoUbGVhZGVyYm9hcmRfcG9zaXRpb24YAiABKAUiRgoEVGVhbRIpCgdw",
-            "bGF5ZXJzGAEgAygLMhgucGFuZG9yYS5tZXNzYWdlcy5QbGF5ZXISEwoLdGVh",
-            "bV9udW1iZXIYAiABKAUiWwoFU3RhcnQSDAoEdGVhbRgBIAEoBRIRCgl0aW1l",
-            "c3RhbXAYAiABKAQSCgoCaWQYAyABKAUSJQoFdGVhbXMYBCADKAsyFi5wYW5k",
-            "b3JhLm1lc3NhZ2VzLlRlYW0iNAoKUGxheWVySW5mbxIKCgJpZBgBIAEoBRIM",
-            "CgR0ZWFtGAIgASgFEgwKBG1hbmEYAyABKAIiiQEKBVNwYXduEhEKCXBsYXll",
-            "cl9pZBgFIAEoBRIMCgR0ZWFtGAQgASgFEg8KB3VuaXRfaWQYByABKAkSEQoJ",
-            "dW5pdF9uYW1lGAEgASgJEgkKAXgYAiABKAUSCQoBeRgDIAEoBRIRCgltYW5h",
-            "X3VzZWQYBiABKAUSEgoKZWxhcHNlZF9tcxgIIAEoBCJPCgdDb21tYW5kEhEK",
-            "CXBsYXllcl9pZBgFIAEoBRIMCgR0ZWFtGAQgASgFEg8KB3VuaXRfaWQYByAB",
-            "KAkSEgoKZWxhcHNlZF9tcxgIIAEoBCJoCgpHb2xkUmV3YXJkEhEKCXBsYXll",
-            "cl9pZBgBIAEoBRIMCgR0ZWFtGAIgASgFEhIKCmdvbGRfc3BlbnQYAyABKAUS",
-            "EQoJcmV3YXJkX2lkGAQgASgJEhIKCmVsYXBzZWRfbXMYBSABKAQiOAoNTWF0",
-            "Y2hGaW5pc2hlZBITCgt3aW5uZXJfdGVhbRgBIAEoBRISCgplbGFwc2VkX21z",
-            "GAIgASgEImoKDkVuZ2luZVNuYXBzaG90EhAKCHNuYXBzaG90GAEgASgJEhEK",
-            "CXRpbWVzdGFtcBgCIAEoBBISCgplbGFwc2VkX21zGAMgASgEEhEKCXBsYXll",
-            "cl9pZBgFIAEoBRIMCgR0ZWFtGAQgASgFIkYKD0VuZ2luZVNuYXBzaG90cxIz",
-            "CglzbmFwc2hvdHMYASADKAsyIC5wYW5kb3JhLm1lc3NhZ2VzLkVuZ2luZVNu",
-            "YXBzaG90IoIBCgRTdGVwEhYKDnRpbWVfcGFzc2VkX21zGAEgASgNEi8KCGNv",
-            "bW1hbmRzGAIgAygLMh0ucGFuZG9yYS5tZXNzYWdlcy5TdGVwQ29tbWFuZBIx",
-            "CgtwbGF5ZXJfaW5mbxgDIAMoCzIcLnBhbmRvcmEubWVzc2FnZXMuUGxheWVy",
-            "SW5mbyK9AQoLU3RlcENvbW1hbmQSEQoJdGltZXN0YW1wGAIgASgEEigKBXNw",
-            "YXduGAEgASgLMhcucGFuZG9yYS5tZXNzYWdlcy5TcGF3bkgAEjEKDHVuaXRf",
-            "Y29tbWFuZBgDIAEoCzIZLnBhbmRvcmEubWVzc2FnZXMuQ29tbWFuZEgAEjMK",
-            "C2dvbGRfUmV3YXJkGAQgASgLMhwucGFuZG9yYS5tZXNzYWdlcy5Hb2xkUmV3",
-            "YXJkSABCCQoHY29tbWFuZCLZAgoOQ2xpZW50RW52ZWxvcGUSDQoFdG9rZW4Y",
-            "AyABKAkSJgoEam9pbhgCIAEoCzIWLnBhbmRvcmEubWVzc2FnZXMuSm9pbkgA",
-            "EigKBXNwYXduGAEgASgLMhcucGFuZG9yYS5tZXNzYWdlcy5TcGF3bkgAEiwK",
-            "B2NvbW1hbmQYBCABKAsyGS5wYW5kb3JhLm1lc3NhZ2VzLkNvbW1hbmRIABIz",
-            "Cgtnb2xkX3Jld2FyZBgHIAEoCzIcLnBhbmRvcmEubWVzc2FnZXMuR29sZFJl",
-            "d2FyZEgAEjkKDm1hdGNoX2ZpbmlzaGVkGAUgASgLMh8ucGFuZG9yYS5tZXNz",
-            "YWdlcy5NYXRjaEZpbmlzaGVkSAASPQoQZW5naW5lX3NuYXBzaG90cxgGIAEo",
-            "CzIhLnBhbmRvcmEubWVzc2FnZXMuRW5naW5lU25hcHNob3RzSABCCQoHbWVz",
-            "c2FnZSKCAQoOU2VydmVyRW52ZWxvcGUSEwoLZW52ZWxvcGVfaWQYBCABKAMS",
-            "KAoFc3RhcnQYASABKAsyFy5wYW5kb3JhLm1lc3NhZ2VzLlN0YXJ0SAASJgoE",
-            "c3RlcBgDIAEoCzIWLnBhbmRvcmEubWVzc2FnZXMuU3RlcEgAQgkKB21lc3Nh",
-            "Z2ViBnByb3RvMw=="));
+            "Cg5tZXNzYWdlcy5wcm90bxIQcGFuZG9yYS5tZXNzYWdlcxoZY29zbWV0aWNz",
+            "L2Nvc21ldGljcy5wcm90byIkCgpSZXBsYXlGcm9tEhYKDnJlcGxheV9mcm9t",
+            "X2lkGAEgASgDIlQKBEpvaW4SFgoOdXNlck1hdGNoVG9rZW4YBSABKAkSNAoO",
+            "cmVwbGF5X2Zyb21faWQYBiABKAsyHC5wYW5kb3JhLm1lc3NhZ2VzLlJlcGxh",
+            "eUZyb20iZAoGUGxheWVyEgwKBG5hbWUYASABKAkSHAoUbGVhZGVyYm9hcmRf",
+            "cG9zaXRpb24YAiABKAUSLgoJY29zbWV0aWNzGAMgASgLMhsucGFuZG9yYS5t",
+            "ZXNzYWdlcy5Db3NtZXRpY3MiRgoEVGVhbRIpCgdwbGF5ZXJzGAEgAygLMhgu",
+            "cGFuZG9yYS5tZXNzYWdlcy5QbGF5ZXISEwoLdGVhbV9udW1iZXIYAiABKAUi",
+            "WwoFU3RhcnQSDAoEdGVhbRgBIAEoBRIRCgl0aW1lc3RhbXAYAiABKAQSCgoC",
+            "aWQYAyABKAUSJQoFdGVhbXMYBCADKAsyFi5wYW5kb3JhLm1lc3NhZ2VzLlRl",
+            "YW0iNAoKUGxheWVySW5mbxIKCgJpZBgBIAEoBRIMCgR0ZWFtGAIgASgFEgwK",
+            "BG1hbmEYAyABKAIiiQEKBVNwYXduEhEKCXBsYXllcl9pZBgFIAEoBRIMCgR0",
+            "ZWFtGAQgASgFEg8KB3VuaXRfaWQYByABKAkSEQoJdW5pdF9uYW1lGAEgASgJ",
+            "EgkKAXgYAiABKAUSCQoBeRgDIAEoBRIRCgltYW5hX3VzZWQYBiABKAUSEgoK",
+            "ZWxhcHNlZF9tcxgIIAEoBCJPCgdDb21tYW5kEhEKCXBsYXllcl9pZBgFIAEo",
+            "BRIMCgR0ZWFtGAQgASgFEg8KB3VuaXRfaWQYByABKAkSEgoKZWxhcHNlZF9t",
+            "cxgIIAEoBCJoCgpHb2xkUmV3YXJkEhEKCXBsYXllcl9pZBgBIAEoBRIMCgR0",
+            "ZWFtGAIgASgFEhIKCmdvbGRfc3BlbnQYAyABKAUSEQoJcmV3YXJkX2lkGAQg",
+            "ASgJEhIKCmVsYXBzZWRfbXMYBSABKAQiOAoNTWF0Y2hGaW5pc2hlZBITCgt3",
+            "aW5uZXJfdGVhbRgBIAEoBRISCgplbGFwc2VkX21zGAIgASgEImoKDkVuZ2lu",
+            "ZVNuYXBzaG90EhAKCHNuYXBzaG90GAEgASgJEhEKCXRpbWVzdGFtcBgCIAEo",
+            "BBISCgplbGFwc2VkX21zGAMgASgEEhEKCXBsYXllcl9pZBgFIAEoBRIMCgR0",
+            "ZWFtGAQgASgFIkYKD0VuZ2luZVNuYXBzaG90cxIzCglzbmFwc2hvdHMYASAD",
+            "KAsyIC5wYW5kb3JhLm1lc3NhZ2VzLkVuZ2luZVNuYXBzaG90IoIBCgRTdGVw",
+            "EhYKDnRpbWVfcGFzc2VkX21zGAEgASgNEi8KCGNvbW1hbmRzGAIgAygLMh0u",
+            "cGFuZG9yYS5tZXNzYWdlcy5TdGVwQ29tbWFuZBIxCgtwbGF5ZXJfaW5mbxgD",
+            "IAMoCzIcLnBhbmRvcmEubWVzc2FnZXMuUGxheWVySW5mbyK9AQoLU3RlcENv",
+            "bW1hbmQSEQoJdGltZXN0YW1wGAIgASgEEigKBXNwYXduGAEgASgLMhcucGFu",
+            "ZG9yYS5tZXNzYWdlcy5TcGF3bkgAEjEKDHVuaXRfY29tbWFuZBgDIAEoCzIZ",
+            "LnBhbmRvcmEubWVzc2FnZXMuQ29tbWFuZEgAEjMKC2dvbGRfUmV3YXJkGAQg",
+            "ASgLMhwucGFuZG9yYS5tZXNzYWdlcy5Hb2xkUmV3YXJkSABCCQoHY29tbWFu",
+            "ZCLZAgoOQ2xpZW50RW52ZWxvcGUSDQoFdG9rZW4YAyABKAkSJgoEam9pbhgC",
+            "IAEoCzIWLnBhbmRvcmEubWVzc2FnZXMuSm9pbkgAEigKBXNwYXduGAEgASgL",
+            "MhcucGFuZG9yYS5tZXNzYWdlcy5TcGF3bkgAEiwKB2NvbW1hbmQYBCABKAsy",
+            "GS5wYW5kb3JhLm1lc3NhZ2VzLkNvbW1hbmRIABIzCgtnb2xkX3Jld2FyZBgH",
+            "IAEoCzIcLnBhbmRvcmEubWVzc2FnZXMuR29sZFJld2FyZEgAEjkKDm1hdGNo",
+            "X2ZpbmlzaGVkGAUgASgLMh8ucGFuZG9yYS5tZXNzYWdlcy5NYXRjaEZpbmlz",
+            "aGVkSAASPQoQZW5naW5lX3NuYXBzaG90cxgGIAEoCzIhLnBhbmRvcmEubWVz",
+            "c2FnZXMuRW5naW5lU25hcHNob3RzSABCCQoHbWVzc2FnZSKCAQoOU2VydmVy",
+            "RW52ZWxvcGUSEwoLZW52ZWxvcGVfaWQYBCABKAMSKAoFc3RhcnQYASABKAsy",
+            "Fy5wYW5kb3JhLm1lc3NhZ2VzLlN0YXJ0SAASJgoEc3RlcBgDIAEoCzIWLnBh",
+            "bmRvcmEubWVzc2FnZXMuU3RlcEgAQgkKB21lc3NhZ2ViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::Pandora.Messages.CosmeticsReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.ReplayFrom), global::Pandora.Messages.ReplayFrom.Parser, new[]{ "ReplayFromId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Join), global::Pandora.Messages.Join.Parser, new[]{ "UserMatchToken", "ReplayFromId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Player), global::Pandora.Messages.Player.Parser, new[]{ "Name", "LeaderboardPosition" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Player), global::Pandora.Messages.Player.Parser, new[]{ "Name", "LeaderboardPosition", "Cosmetics" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Team), global::Pandora.Messages.Team.Parser, new[]{ "Players", "TeamNumber" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.Start), global::Pandora.Messages.Start.Parser, new[]{ "Team", "Timestamp", "Id", "Teams" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Pandora.Messages.PlayerInfo), global::Pandora.Messages.PlayerInfo.Parser, new[]{ "Id", "Team", "Mana" }, null, null, null),
@@ -412,6 +413,7 @@ namespace Pandora.Messages {
     public Player(Player other) : this() {
       name_ = other.name_;
       leaderboardPosition_ = other.leaderboardPosition_;
+      cosmetics_ = other.cosmetics_ != null ? other.cosmetics_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -442,6 +444,17 @@ namespace Pandora.Messages {
       }
     }
 
+    /// <summary>Field number for the "cosmetics" field.</summary>
+    public const int CosmeticsFieldNumber = 3;
+    private global::Pandora.Messages.Cosmetics cosmetics_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Pandora.Messages.Cosmetics Cosmetics {
+      get { return cosmetics_; }
+      set {
+        cosmetics_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as Player);
@@ -457,6 +470,7 @@ namespace Pandora.Messages {
       }
       if (Name != other.Name) return false;
       if (LeaderboardPosition != other.LeaderboardPosition) return false;
+      if (!object.Equals(Cosmetics, other.Cosmetics)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -465,6 +479,7 @@ namespace Pandora.Messages {
       int hash = 1;
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (LeaderboardPosition != 0) hash ^= LeaderboardPosition.GetHashCode();
+      if (cosmetics_ != null) hash ^= Cosmetics.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -486,6 +501,10 @@ namespace Pandora.Messages {
         output.WriteRawTag(16);
         output.WriteInt32(LeaderboardPosition);
       }
+      if (cosmetics_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Cosmetics);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -499,6 +518,9 @@ namespace Pandora.Messages {
       }
       if (LeaderboardPosition != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(LeaderboardPosition);
+      }
+      if (cosmetics_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Cosmetics);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -517,6 +539,12 @@ namespace Pandora.Messages {
       if (other.LeaderboardPosition != 0) {
         LeaderboardPosition = other.LeaderboardPosition;
       }
+      if (other.cosmetics_ != null) {
+        if (cosmetics_ == null) {
+          cosmetics_ = new global::Pandora.Messages.Cosmetics();
+        }
+        Cosmetics.MergeFrom(other.Cosmetics);
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -534,6 +562,13 @@ namespace Pandora.Messages {
           }
           case 16: {
             LeaderboardPosition = input.ReadInt32();
+            break;
+          }
+          case 26: {
+            if (cosmetics_ == null) {
+              cosmetics_ = new global::Pandora.Messages.Cosmetics();
+            }
+            input.ReadMessage(cosmetics_);
             break;
           }
         }

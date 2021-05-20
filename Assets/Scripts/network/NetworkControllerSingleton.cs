@@ -14,6 +14,7 @@ using Pandora.Network.Data.Matchmaking;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using Pandora.Network.Data;
+using Pandora.Network.Data.Mtx;
 using Pandora;
 
 namespace Pandora.Network
@@ -333,10 +334,12 @@ namespace Pandora.Network
 
                 var player = envelope.Start.Teams.First(team => team.TeamNumber == TeamComponent.opponentTeam)?.Players[0];
 
+
                 TeamComponent.Opponent = new Opponent
                 {
                     Name = player.Name,
-                    Position = (player.LeaderboardPosition != 0) ? player.LeaderboardPosition as int? : null
+                    Position = (player.LeaderboardPosition != 0) ? player.LeaderboardPosition as int? : null,
+                    Cosmetics = new CosmeticsMtx(player.Cosmetics)
                 };
 
                 matchStartEvent.Invoke(TeamComponent.Opponent);
