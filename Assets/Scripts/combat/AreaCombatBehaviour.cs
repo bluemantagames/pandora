@@ -58,6 +58,12 @@ namespace Pandora.Combat
             isAttacking = false;
             target = null;
 
+            isVfxRunning = false;
+            vfxTicksElapsed = 0;
+            vfxTotalTimeElapsed = 0;
+
+            PlayVFXAtTime(0f);
+
             var animator = GetComponent<Animator>();
 
             animator.SetBool("Attacking", false);
@@ -158,11 +164,7 @@ namespace Pandora.Combat
                     ? VfxAnimationStartTime + (animationPercent * (VfxEndAnimationTime - VfxAnimationStartTime))
                     : 0;
 
-            foreach (var particle in particles)
-            {
-                particle.Pause();
-                particle.Simulate(time);
-            }
+            PlayVFXAtTime(time);
         }
 
         public void ApplyDamages(uint timeLapsed)
@@ -199,6 +201,15 @@ namespace Pandora.Combat
             }
 
             return direction;
+        }
+
+        void PlayVFXAtTime(float time)
+        {
+            foreach (var particle in particles)
+            {
+                particle.Pause();
+                particle.Simulate(time);
+            }
         }
     }
 }
