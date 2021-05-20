@@ -4,9 +4,8 @@ namespace Pandora.Network.Data.Mtx {
 
         public NameTag() {}
 
-        public NameTag(Pandora.Messages.NameTag protoNameTag) =>
-            new NameTag {
-                Id = protoNameTag.NametagId
-            };
+        public NameTag(Pandora.Messages.NameTag protoNameTag) {
+            Id = protoNameTag?.NametagId;
+        }
     }
 }

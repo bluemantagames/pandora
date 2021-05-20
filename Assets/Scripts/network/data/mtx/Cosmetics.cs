@@ -5,10 +5,9 @@ namespace Pandora.Network.Data.Mtx {
 
         public CosmeticsMtx() {}
 
-        public CosmeticsMtx(Pandora.Messages.Cosmetics protoCosmetics) =>
-            new CosmeticsMtx {
-                NameTag = new NameTag(protoCosmetics.Nametag)
-            };
+        public CosmeticsMtx(Pandora.Messages.Cosmetics protoCosmetics) {
+            NameTag = new NameTag(protoCosmetics?.Nametag);
+        }
 
     }
 }

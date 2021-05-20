@@ -73,17 +73,17 @@ namespace Pandora.Network
         {
             var deck = playerModelSingleton.GetActiveDeck();
 
-            if (deck != null) ExecMatchmaking(deck, false);
+            if (deck != null) ExecMatchmaking(deck, false).Forget();
         }
 
         public void StartMatchmaking(List<string> deck)
         {
-            if (deck != null) ExecMatchmaking(deck, false);
+            if (deck != null) ExecMatchmaking(deck, false).Forget();
         }
 
         public void StartDevMatchmaking(List<string> deck)
         {
-            if (deck != null) ExecMatchmaking(deck, true);
+            if (deck != null) ExecMatchmaking(deck, true).Forget();
         }
 
         public async UniTaskVoid ExecMatchmaking(List<string> deck, bool isDev)
@@ -311,7 +311,7 @@ namespace Pandora.Network
                 try {
                     matchSocket?.Close();
                 } finally {
-                    Debug.LogError(e.Message);
+                    Debug.LogError($"{e} {e.Message}");
 
                     if (matchSocket != null)
                         StartMatch();
@@ -330,10 +330,9 @@ namespace Pandora.Network
                 TeamComponent.assignedTeam = envelope.Start.Team;
                 PlayerId = envelope.Start.Id;
 
-                Debug.Log($"We're team {TeamComponent.assignedTeam}");
-
                 var player = envelope.Start.Teams.First(team => team.TeamNumber == TeamComponent.opponentTeam)?.Players[0];
 
+                Debug.Log($"We're team {TeamComponent.assignedTeam}");
 
                 TeamComponent.Opponent = new Opponent
                 {

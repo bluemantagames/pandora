@@ -17,8 +17,6 @@ namespace Pandora.Network
         private LengthPrefixedWebsocketWrapper wsWrapper;
         public bool IsDebugBuild = Debug.isDebugBuild;
 
-        int messageCount = 0;
-
         String WsBaseUri
         {
             get
