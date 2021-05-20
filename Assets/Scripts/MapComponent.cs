@@ -341,7 +341,7 @@ namespace Pandora
             }
         }
 
-        public bool SpawnCard(string cardName, int team, GridCell cell, int requiredMana = 0)
+        public bool SpawnCard(string cardName, int team, GridCell cell, bool ignoreMana = false)
         {
             if (IsLive) return false;
 
@@ -352,10 +352,10 @@ namespace Pandora
             var id = System.Guid.NewGuid().ToString();
             var manaEnabled = GetComponent<LocalManaBehaviourScript>()?.Enabled ?? true;
             var elapsedMs = engine.TotalElapsed;
-            var requiredManaReserveRaw = GetCardManaReserve(cardName);
-            var requiredManaReserve = requiredManaReserveRaw.HasValue ? requiredManaReserveRaw.Value : 0;
-            var hasEnoughReserve = manaSingleton.MaxMana - manaSingleton.ManaUpperReserve - requiredManaReserve >= 0;
-            var hasEnoughMana = manaSingleton.ManaValue >= requiredMana;
+            var manaReserved = !ignoreMana ? GetCardManaReserved(cardName) : 0;
+            var manaRequired = !ignoreMana ? GetCardManaRequired(cardName) : 0;
+            var hasEnoughReserve = manaSingleton.MaxMana - manaSingleton.ManaUpperReserve - manaReserved >= 0;
+            var hasEnoughMana = manaSingleton.ManaValue >= manaRequired;
             var canBeSpawned = hasEnoughMana && hasEnoughReserve;
 
             // TODO: Notify player somehow if they lack mana
@@ -372,14 +372,14 @@ namespace Pandora
                     cellY = spawnPosition.y,
                     team = TeamComponent.assignedTeam,
                     unitId = id,
-                    manaUsed = requiredMana,
+                    manaUsed = manaRequired,
                     elapsedMs = elapsedMs
                 };
 
             NetworkControllerSingleton.instance.EnqueueMessage(message);
 
             // Handle mana change
-            ManaSingleton.Instance.UpdateMana(ManaSingleton.Instance.ManaValue - requiredMana);
+            ManaSingleton.Instance.UpdateMana(ManaSingleton.Instance.ManaValue - manaRequired);
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
@@ -388,7 +388,7 @@ namespace Pandora
 
                 SpawnUnit(new UnitSpawn(message));
 
-                ManaSingleton.Instance.ManaUnit -= requiredMana;
+                ManaSingleton.Instance.ManaUnit -= manaRequired;
             }
 
             return true;
@@ -463,7 +463,7 @@ namespace Pandora
             }
 
             // Handle mana reserve
-            var manaReserveBehaviour = card.GetComponent<ManaReserveBehaviour>();
+            var manaReserveBehaviour = card.GetComponent<ManaCostsBehaviour>();
 
             if (manaReserveBehaviour != null)
             {
@@ -911,12 +911,18 @@ namespace Pandora
             }
         }
 
-        int? GetCardManaReserve(string unitName)
+        int GetCardManaRequired(string unitName)
         {
             var unit = LoadCard(unitName);
-            var manaReserveComponent = unit.GetComponent<ManaReserveBehaviour>();
-            int? manaReserve = manaReserveComponent?.ReservedMana;
-            return manaReserve;
+            var manaReserveComponent = unit.GetComponent<ManaCostsBehaviour>();
+            return manaReserveComponent.RequiredMana;
+        }
+
+        int GetCardManaReserved(string unitName)
+        {
+            var unit = LoadCard(unitName);
+            var manaReserveComponent = unit.GetComponent<ManaCostsBehaviour>();
+            return manaReserveComponent.ReservedMana;
         }
     }
 }

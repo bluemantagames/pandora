@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: -5040991384820823885}
   - component: {fileID: 1088177903361132395}
   - component: {fileID: -2265523975830079739}
+  - component: {fileID: 7629935892642475199}
   m_Layer: 9
   m_Name: HalfOrc
   m_TagString: Untagged
@@ -333,8 +334,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PivotAdjustmentX: 0
   PivotAdjustmentY: 0
+  SpecularPivotAdjustmentX: 0
+  SpecularPivotAdjustmentY: 0
   ProjectileAdjustmentX: 250
   ProjectileAdjustmentY: 300
+  InitialHideTime: 0
+--- !u!114 &7629935892642475199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341249731494315628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07eedffa294849379327ec100f10b71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RequiredMana: 50
+  ReservedMana: 0
 --- !u!1 &2409834720673952193
 GameObject:
   m_ObjectHideFlags: 0

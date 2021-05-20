@@ -214,7 +214,7 @@ namespace Pandora
                 }
 
                 // Remove mana reserve
-                var manaReservedBehaviour = GetComponent<ManaReserveBehaviour>();
+                var manaReservedBehaviour = GetComponent<ManaCostsBehaviour>();
 
                 if (manaReservedBehaviour != null)
                 {

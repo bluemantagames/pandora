@@ -81,7 +81,7 @@ namespace Pandora.Engine.Animations
         {
             Logger.Debug($"{logPrefix} Spawning unit: {UnitName}");
 
-            mapComponent.SpawnCard(UnitName, 1, new GridCell(UnitX, UnitY));
+            mapComponent.SpawnCard(UnitName, 1, new GridCell(UnitX, UnitY), true);
 
             var entities = mapComponent.engine.Entities;
             var unitEntity = entities[entities.Count - 1];
@@ -96,7 +96,7 @@ namespace Pandora.Engine.Animations
             else if (Mode == TestMode.Attack)
             {
                 // Spawn the enemy
-                mapComponent.SpawnCard(UnitName, 2, new GridCell(EnemyX, EnemyY));
+                mapComponent.SpawnCard(UnitName, 2, new GridCell(EnemyX, EnemyY), true);
                 var enemyEntity = entities[entities.Count - 1];
 
                 var unitCombatBehaviour = unitEntity.GameObject.GetComponent<CombatBehaviour>();
