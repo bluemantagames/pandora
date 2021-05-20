@@ -425,21 +425,17 @@ namespace Pandora
 
             var unitObject = Instantiate(card, cardPosition, Quaternion.identity, transform);
 
-            // We should set the TeamComponent before isntantiate
-            // because there are a lot of component doing
-            // initialization stuff on `Awake`.
-            unitObject.GetComponent<TeamComponent>().Team = spawn.Team;
-
             unitObject.name += $"-{spawn.Id}";
 
             var spawner = unitObject.GetComponent<Spawner>();
 
             if (spawner != null)
             {
-                spawner.Spawn(this, spawn);
+                var unitObjects = spawner.Spawn(this, spawn);
             }
             else
             {
+                unitObject.GetComponent<TeamComponent>().Team = spawn.Team;
                 InitializeComponents(unitObject, unitGridCell, spawn);
             }
 
@@ -483,6 +479,8 @@ namespace Pandora
             var spell = unit.GetComponent<SpellBehaviour>();
 
             var idComponent = unit.AddComponent<UnitIdComponent>();
+
+            teamComponent.Team = unitSpawn.Team;
 
             idComponent.Id = unitSpawn.Id;
             idComponent.UnitName = unitSpawn.UnitName;

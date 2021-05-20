@@ -21,6 +21,7 @@ namespace Pandora
 
             foreach (var position in Positions)
             {
+                Unit.GetComponent<TeamComponent>().Team = spawn.Team;
                 var unit = Instantiate(Unit, map.gameObject.transform);
                 var singleUnitSpawn = spawn.Clone() as UnitSpawn;
 
