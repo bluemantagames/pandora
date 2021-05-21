@@ -1509,9 +1509,12 @@ namespace Pandora.Engine
         /// </summary>
         public int GetAngleFromVectors(Vector2Int source, Vector2Int target)
         {
-            var v0 = new Vector2Int(source.x, source.y + Math.Abs(source.y - target.y));
+            var pointsDistance = Math.Max(Math.Abs(source.x - target.x), Math.Abs(source.y - target.y));
+            var v0 = new Vector2Int(source.x, source.y + pointsDistance);
             var v1 = new Vector2Int(v0.x - source.x, v0.y - source.y);
             var v2 = new Vector2Int(target.x - source.x, target.y - source.y);
+
+            Logger.Debug($"V1 {v1} - V2 {v2} - Source {source} - Target {target}");
 
             var dotProduct = DotProduct(v1, v2);
             var crossProduct = CrossProduct(v1, v2);
