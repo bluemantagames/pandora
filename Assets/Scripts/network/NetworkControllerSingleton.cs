@@ -14,12 +14,13 @@ using Pandora.Network.Data.Matchmaking;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using Pandora.Network.Data;
+using Pandora;
 
 namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {
-        public bool IsDebugBuild = Debug.isDebugBuild;
+        public bool ProdMatchmaking = false;
 
         string userMatchToken = null;
         Socket matchSocket = null;
@@ -61,6 +62,10 @@ namespace Pandora.Network
         private NetworkControllerSingleton()
         {
             jwt = new JWT();
+
+#if !UNITY_EDITOR
+            ProdMatchmaking = true;
+#endif
         }
 
         public void StartMatchmaking()
@@ -137,8 +142,8 @@ namespace Pandora.Network
 
             var startTime = DateTime.Now;
 
-            var matchHost = (IsDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
-            var matchPort = 9090;
+            var matchHost = (ProdMatchmaking) ? Hosts.ProdMatch : Hosts.DevMatch;
+            var matchPort = Hosts.MatchPort;
 
             IPHostEntry dns = null;
 
@@ -240,6 +245,8 @@ namespace Pandora.Network
 
                     receiveThread = null;
                     networkThread = null;
+
+                    shutdownMatchSocket();
 
                     StartMatchmaking();
 
@@ -424,13 +431,7 @@ namespace Pandora.Network
         {
             if (matchSocket != null)
             {
-                var socket = matchSocket;
-
-                // It's important to set the matchSocket to null before shutting it down so that
-                // the ReceiveLoop thread knows this wasn't an unwanted disconnect, and doesn't try to reconnect again
-                matchSocket = null;
-
-                socket.Shutdown(SocketShutdown.Both);
+                shutdownMatchSocket();
             }
 
             receiveThread = null;
@@ -440,6 +441,8 @@ namespace Pandora.Network
             lastEnvelopeId = null;
 
             stepsQueue = new ConcurrentQueue<StepMessage>();
+
+            matchStarted = false;
         }
 
         public static SpawnMessage GenerateSpawnMessage(StepCommand command)
@@ -477,6 +480,16 @@ namespace Pandora.Network
                 rewardId = command.GoldReward.RewardId,
                 elapsedMs = (int)command.GoldReward.ElapsedMs
             };
+        }
+
+        void shutdownMatchSocket() {
+            var socket = matchSocket;
+            
+            // It's important to set the matchSocket to null before shutting it down so that
+            // the ReceiveLoop thread knows this wasn't an unwanted disconnect, and doesn't try to reconnect again
+            matchSocket = null;
+
+            socket?.Shutdown(SocketShutdown.Both);
         }
 
     }

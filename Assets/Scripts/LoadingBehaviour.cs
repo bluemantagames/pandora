@@ -5,6 +5,7 @@ using System.Net;
 using Pandora.Deck;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
+using Pandora.UI.Menu;
 using DG.Tweening;
 
 namespace Pandora
@@ -105,6 +106,7 @@ namespace Pandora
             LocalDeck.Instance.Reset();
             EndGameSingleton.Reset();
             TeamComponent.Reset();
+            MenuEventsSingleton.Reset();
 
             await LoadMainMenu();
         }

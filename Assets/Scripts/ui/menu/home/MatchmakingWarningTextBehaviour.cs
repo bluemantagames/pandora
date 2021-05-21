@@ -20,6 +20,8 @@ namespace Pandora.UI.Menu.Home
         public void SetWarning(MatchmakingWarning? warning)
         {
             currentWarning = warning;
+
+            ShowWarning(currentWarning);
         }
 
         void Awake()
@@ -30,7 +32,6 @@ namespace Pandora.UI.Menu.Home
 
         void Update()
         {
-            ShowWarning(currentWarning);
         }
 
         void ShowWarning(MatchmakingWarning? warning)

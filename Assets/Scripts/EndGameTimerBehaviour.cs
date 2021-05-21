@@ -89,7 +89,7 @@ public class EndGameTimerBehaviour : MonoBehaviour, EngineBehaviour
 
             if (lifeComponent.lifeValue <= 0) continue;
 
-            switch (towerPositionComponent.EngineTowerPosition)
+            switch (towerPositionComponent.WorldTowerPosition)
             {
                 case TowerPosition.BottomMiddle:
                 case TowerPosition.BottomLeft:

@@ -144,6 +144,7 @@ MonoBehaviour:
   lifeValue: 85
   maxLife: 0
   IsDead: 0
+  DisableDamage: 0
   DeathVFX: {fileID: 2685581498212572552, guid: 83f603f9e61cdbd4c8da4a6ec28e3dc1,
     type: 3}
   DeathVFXSpeedMultiplier: 2
@@ -216,7 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 70
-  attackCooldownMs: 0
+  attackCooldownMs: 150
   backswingMs: 550
   animationStateName: Attacking
   AggroRangeCells: 3

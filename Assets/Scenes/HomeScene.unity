@@ -4509,6 +4509,7 @@ MonoBehaviour:
   TextPlay: {fileID: 1953143947}
   BypassCheck: 0
   matchmakingWarningComponent: {fileID: 990938674}
+  BannerText: {fileID: 990938672}
 --- !u!1 &734670940
 GameObject:
   m_ObjectHideFlags: 0
@@ -5586,7 +5587,7 @@ GameObject:
   - component: {fileID: 990938675}
   - component: {fileID: 990938674}
   m_Layer: 5
-  m_Name: MatchmakingWarningText
+  m_Name: MatchmakingInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

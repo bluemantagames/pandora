@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugPathfinding: 0
-  MovementSpeed: 1000
+  MovementSpeed: 1100
 --- !u!114 &3519887656195453972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,8 +219,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 20
-  attackCooldownMs: 100
-  backswingMs: 100
+  attackCooldownMs: 200
+  backswingMs: 200
   animationStateName: Attacking
   AggroRangeCells: 3
   AttackRangeEngineUnits: 200
