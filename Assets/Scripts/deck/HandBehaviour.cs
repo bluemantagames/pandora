@@ -113,15 +113,15 @@ namespace Pandora.Deck
                 if (Deck == null)
                 {
                     var cardNames = new List<string> {
-                        //"Bard",
-                        //"Ranger",
-                        //"Clerics",
-                        //"Cockatrice",
-                        //"Fireball",
-                        //"Harpies",
-                        //"Mermaids",
-                        //"Troll",
-                        //"Zombies",
+                        "Bard",
+                        "Ranger",
+                        "Clerics",
+                        "Cockatrice",
+                        "Fireball",
+                        "Harpies",
+                        "Mermaids",
+                        "Troll",
+                        "Zombies",
                         "FragCannon"
                     };
 
