@@ -1123,7 +1123,7 @@ namespace Pandora.Engine
 
                 if (isNotTargeted) continue;
 
-                var isInRange = IsInTriangularRange(origin, entity, direction, width, height, unitsLeniency, true);
+                var isInRange = IsInTriangularRange(origin, entity, direction, width, height, unitsLeniency);
 
                 if (isInRange)
                 {

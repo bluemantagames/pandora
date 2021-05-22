@@ -21,8 +21,7 @@ MonoBehaviour:
   AnimationStateName: Attacking
   AttackCooldownMs: 1000
   BackswingMs: 1000
-  CombatVFX: {fileID: 7632312015584721506, guid: 27049558b1c864809a9b1acc03b46838,
-    type: 3}
+  CombatVFX: {fileID: 6851803804585199986}
   DamagesDelay: 600
 --- !u!114 &-3596230339052448774
 MonoBehaviour:
@@ -178,4 +177,85 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8076880815249732036, guid: 39824bcc07b054e7298d89f45571fc6a,
     type: 3}
   m_PrefabInstance: {fileID: 4125735356602319807}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5284787505347801607 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8076880815249732024, guid: 39824bcc07b054e7298d89f45571fc6a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4125735356602319807}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &9009192774352389861
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 5284787505347801607}
+    m_Modifications:
+    - target: {fileID: 2454860208664661911, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_Name
+      value: FragCannonShot
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.34682897
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.16172901
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.83731925
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.39044842
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454860208664826807, guid: 18b8f225314084ad69ce4d5371f798ad,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 18b8f225314084ad69ce4d5371f798ad, type: 3}
+--- !u!1 &6851803804585199986 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2454860208664661911, guid: 18b8f225314084ad69ce4d5371f798ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 9009192774352389861}
   m_PrefabAsset: {fileID: 0}
