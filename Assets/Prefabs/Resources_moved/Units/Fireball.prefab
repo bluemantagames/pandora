@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2775991788436886472}
   - component: {fileID: -8930249468233529160}
   - component: {fileID: 3220897905171357003}
+  - component: {fileID: 682659188981857645}
   m_Layer: 0
   m_Name: Fireball
   m_TagString: Untagged
@@ -169,6 +170,7 @@ MonoBehaviour:
   damage: 500
   radius: 3
   Speed: 0
+  towerDamage: 400
   VFX: {fileID: 868720356676599359, guid: 3ec417832afbe44379e83fe22deb2a1e, type: 3}
 --- !u!114 &3220897905171357003
 MonoBehaviour:
@@ -183,3 +185,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Shadow: {fileID: 6304074700551789912, guid: ae7020c11c4ee4bf49b03f03bea482b7, type: 3}
+--- !u!114 &682659188981857645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851135866392614702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07eedffa294849379327ec100f10b71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RequiredMana: 40
+  ReservedMana: 0

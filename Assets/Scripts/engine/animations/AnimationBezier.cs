@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using Pandora.Combat;
-using Pandora.Movement;
+using Pandora.AI;
 using Cysharp.Threading.Tasks;
 using System.Globalization;
 namespace Pandora.Engine.Animations
@@ -71,7 +71,7 @@ namespace Pandora.Engine.Animations
         public int GetUnitSpeed(GameObject targetGameObject)
         {
             var projectileBehaviour = targetGameObject.GetComponent<ProjectileBehaviour>();
-            var movementBehaviour = targetGameObject.GetComponent<MovementComponent>();
+            var movementBehaviour = targetGameObject.GetComponent<BasicEntityController>();
 
             var speed = projectileBehaviour != null
                 ? projectileBehaviour.Speed

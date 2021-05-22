@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Animations;
 using Pandora.Events;
 using Pandora.Network;
+using static System.Linq.Enumerable;
 
 namespace Pandora.Resource.Mana
 {
@@ -14,6 +15,7 @@ namespace Pandora.Resource.Mana
         public float SpentAnimationTime = 0.5f;
         public GameObject ManaTextObject;
         Text manaText;
+        int lastManaBarIndex = 10;
 
         float? animationTimeEnd = null;
 
@@ -23,12 +25,15 @@ namespace Pandora.Resource.Mana
 
             walletsComponent.ManaWallet.Bus.Subscribe<ManaEarned>(new EventSubscriber<ManaEvent>(OnManaEarned, "UIManaEarned"));
             walletsComponent.ManaWallet.Bus.Subscribe<ManaSpent>(new EventSubscriber<ManaEvent>(OnManaSpent, "UIManaSpent"));
+            walletsComponent.ManaWallet.Bus.Subscribe<ManaUpperReserve>(new EventSubscriber<ManaEvent>(OnManaUpperReserve, "UIManaUpperReserve"));
 
             manaText = ManaTextObject?.GetComponent<Text>();
         }
 
         void OnManaEarned(ManaEvent manaEvent)
         {
+            Logger.Debug($"[MANA] Mana earned successful");
+
             var manaEarned = manaEvent as ManaEarned;
 
             if (manaText != null)
@@ -47,14 +52,25 @@ namespace Pandora.Resource.Mana
             UpdateManaUISpent(manaSpent.CurrentAmount, manaSpent.AmountSpent);
         }
 
+        void OnManaUpperReserve(ManaEvent manaEvent)
+        {
+            var manaUpperReserve = manaEvent as ManaUpperReserve;
+
+            UpdateManaUIUpperReserve(manaUpperReserve.UpperReserve);
+        }
+
         void UpdateManaUI(int currentMana, bool resync)
         {
+            Logger.Debug($"[MANA] Starting updating mana UI with current mana {currentMana}");
+
             // Stop playing children if we're playing
             if (spentCurve != null) return;
 
             int manaIndex = ManaBarChildIndex(currentMana);
 
             var childMask = ChildMaskComponent(manaIndex);
+
+            Logger.Debug($"[MANA] Updating mana UI, children {manaIndex}");
 
             if (!childMask.IsPlaying)
                 childMask.PlayEarnAnimation();
@@ -69,28 +85,49 @@ namespace Pandora.Resource.Mana
             spentCurve = AnimationCurve.EaseInOut(Time.time, currentMana + spent, animationTimeEnd.Value, currentMana);
         }
 
+        void UpdateManaUIUpperReserve(int upperReserve)
+        {
+            var reservedBlocks = Mathf.FloorToInt(upperReserve / lastManaBarIndex);
+
+            foreach (var index in Range(0, lastManaBarIndex))
+            {
+                var barComponent = ChildBarComponent(index);
+                var maskComponent = ChildMaskComponent(index);
+
+                var reservedBarIndexMin = lastManaBarIndex - reservedBlocks;
+                var isReserved = index >= reservedBarIndexMin;
+
+                barComponent.Reserved = isReserved;
+            }
+
+            Resync();
+        }
+
         void Resync()
         {
             var currentMana = walletsComponent.ManaWallet.Resource;
             var manaIndex = ManaBarChildIndex(currentMana);
             var unitPercent = ManaBarChildPercent(currentMana, manaIndex);
 
-            for (var i = 0; i < manaIndex; i++)
+            for (var i = 0; i < lastManaBarIndex; i++)
             {
-                ChildMaskComponent(i).Percent = 1f;
+                var manaMaskChild = ChildMaskComponent(i);
+
+                if (i < manaIndex)
+                    manaMaskChild.Percent = 1f;
+                else if (i == manaIndex)
+                {
+                    manaMaskChild.Reset();
+                    manaMaskChild.Percent = unitPercent;
+                }
+                else
+                    manaMaskChild.Reset();
             }
-
-            var manaMask = ChildMaskComponent(manaIndex);
-
-            manaMask.Reset();
-            manaMask.Percent = unitPercent;
         }
 
         void Update()
         {
-            bool isManaActive =
-                (!NetworkControllerSingleton.instance.matchStarted && MapComponent.Instance.gameObject.GetComponent<LocalManaBehaviourScript>().Enabled) ||
-                 NetworkControllerSingleton.instance.matchStarted;
+            bool isManaActive = true;
 
             if (spentCurve != null && isManaActive)
             {
@@ -98,7 +135,8 @@ namespace Pandora.Resource.Mana
                 var manaIndex = ManaBarChildIndex(animationMana);
                 var unitPercent = ManaBarChildPercent(animationMana, manaIndex);
 
-                for (var i = manaIndex + 1; i < 10; i++) {
+                for (var i = manaIndex + 1; i < lastManaBarIndex; i++)
+                {
                     ChildMaskComponent(i).Reset();
                 }
 
@@ -117,11 +155,14 @@ namespace Pandora.Resource.Mana
             }
         }
 
-        int ManaBarChildIndex(int mana) => System.Math.Min(mana / 10, 9);
+        int ManaBarChildIndex(int mana) => System.Math.Min(mana / lastManaBarIndex, 9);
 
         float ManaBarChildPercent(int currentMana, int childIndex) => ((float)currentMana - (childIndex * 10)) / 10f;
 
-        ManaMaskComponent ChildMaskComponent(int childIndex) => 
+        ManaBarComponent ChildBarComponent(int childIndex) =>
+            transform.GetChild(childIndex).GetComponent<ManaBarComponent>();
+
+        ManaMaskComponent ChildMaskComponent(int childIndex) =>
             transform.GetChild(childIndex).GetComponent<ManaBarComponent>().MaskComponent;
     }
 }

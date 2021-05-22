@@ -213,6 +213,14 @@ namespace Pandora
                     }
                 }
 
+                // Remove mana reserve
+                var manaReservedBehaviour = GetComponent<ManaCostsBehaviour>();
+
+                if (manaReservedBehaviour != null)
+                {
+                    ManaSingleton.Instance.RemoveManaUpperReserve(idComponent.Id);
+                }
+
                 // TODO: Play "die" animation
             }
 

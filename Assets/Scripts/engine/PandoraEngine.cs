@@ -46,6 +46,18 @@ namespace Pandora.Engine
             PoolInstances.GridCellListPool
         );
 
+        Dictionary<Vector2Int, int> directionAngleTable = new Dictionary<Vector2Int, int>()
+        {
+            { new Vector2Int(0, 0), 0 },
+            { new Vector2Int(-1, 1), 45 },
+            { new Vector2Int(-1, 0), 90 },
+            { new Vector2Int(-1, -1), 135 },
+            { new Vector2Int(0, -1), 180 },
+            { new Vector2Int(1, -1), 225 },
+            { new Vector2Int(1, 0), 270 },
+            { new Vector2Int(1, 1), 315 },
+        };
+
         // Debug settings
         float debugLinesDuration = 1f;
 
@@ -54,6 +66,12 @@ namespace Pandora.Engine
 
         // This is used just to serialize the behaviours
         public List<SerializableEngineBehaviour> SerializableBehaviours = new List<SerializableEngineBehaviour> { };
+
+        // Mana
+        public static int ManaEveryTimelapse = 1;
+        public static int RoundingTimelapseMs = 280;
+        ManaSingleton manaSingleton;
+        bool manaInitialized = false;
 
         public void Init(MapComponent map)
         {
@@ -94,12 +112,13 @@ namespace Pandora.Engine
             enginePathfindingSampler = CustomSampler.Create("PandoraEngine pathfinding");
 
             grid = new TightGrid(yBounds, xBounds, 19, 32);
+
+            manaSingleton = ManaSingleton.Instance;
         }
 
         public void Process(uint msLapsed)
         {
             var ticksNum = msLapsed / TickTime;
-
 
             for (var tick = 0; tick < ticksNum; tick++)
             {
@@ -349,6 +368,27 @@ namespace Pandora.Engine
         public void NextTick()
         {
             if (DebugEngine) movementSampler.Begin();
+
+            // Initialize mana, this is used
+            // to trigger the very first mana bar
+            // (we probably should remove this condition
+            // with the really small overhead it creates)
+            if (!manaInitialized)
+            {
+                manaSingleton.UpdateMana(0);
+                manaSingleton.UpdateEnemyMana(0);
+                manaInitialized = true;
+            }
+
+            // Handle mana per tick
+            if (TotalElapsed % RoundingTimelapseMs == 0)
+            {
+                Logger.Debug($"Increased mana by {ManaEveryTimelapse} at time {TotalElapsed}");
+
+                manaSingleton.UpdateMana(manaSingleton.ManaValue + ManaEveryTimelapse);
+                manaSingleton.UpdateEnemyMana(manaSingleton.EnemyManaValue + ManaEveryTimelapse);
+            }
+
             // Move units
             foreach (var entity in Entities)
             {
@@ -597,7 +637,6 @@ namespace Pandora.Engine
                 }
             }
 
-
             // Snapshot
             if (TotalElapsed % snapshotEvery == 0)
             {
@@ -766,7 +805,7 @@ namespace Pandora.Engine
         /// <param name="height">The triangle's height (distance from the source entity)</param>
         /// <param name="unitsLeniency">Fix distance of the source entity from the main vertex</param>
         /// <returns>A boolean describing if the target entity is inside the triangle</returns>
-        public bool IsInTriangularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height, int unitsLeniency, bool debug = false)
+        public bool IsInTriangularRange(EngineEntity sourceEntity, EngineEntity targetEntity, Vector2Int direction, int width, int height, int unitsLeniency, bool debug = false)
         {
             // Using barycentric coordinate system
             // (http://totologic.blogspot.com/2014/01/accurate-point-in-triangle-test.html)
@@ -780,7 +819,7 @@ namespace Pandora.Engine
                 width,
                 height,
                 unitsLeniency,
-                sourceEntity.Direction
+                direction
             );
 
             var target = PoolInstances.Vector2IntPool.GetObject();
@@ -808,6 +847,11 @@ namespace Pandora.Engine
             ReturnBounds(targetEntityBound);
 
             return 0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1;
+        }
+
+        public bool IsInTriangularRange(EngineEntity sourceEntity, EngineEntity targetEntity, int width, int height, int unitsLeniency, bool debug = false)
+        {
+            return IsInTriangularRange(sourceEntity, targetEntity, sourceEntity.Direction, width, height, unitsLeniency, debug);
         }
 
         /// <summary>
@@ -1068,6 +1112,33 @@ namespace Pandora.Engine
 
             return targetEntities;
         }
+
+        public List<EngineEntity> FindInTriangularRange(List<EngineEntity> entities, EngineEntity origin, Vector2Int direction, int width, int height, int unitsLeniency, bool countStructures)
+        {
+            List<EngineEntity> targetEntities = new List<EngineEntity> { };
+
+            foreach (var entity in entities)
+            {
+                var isNotTargeted = (entity.IsStructure && !countStructures) || entity.IsMapObstacle;
+
+                if (isNotTargeted) continue;
+
+                var isInRange = IsInTriangularRange(origin, entity, direction, width, height, unitsLeniency);
+
+                if (isInRange)
+                {
+                    targetEntities.Add(entity);
+                }
+            }
+
+            return targetEntities;
+        }
+
+        public List<EngineEntity> FindInTriangularRange(EngineEntity origin, Vector2Int direction, int width, int height, int unitsLeniency, bool countStructures)
+        {
+            return FindInTriangularRange(Entities, origin, direction, width, height, unitsLeniency, countStructures);
+        }
+
 
         public void ReturnBounds(BoxBounds bounds)
         {
@@ -1397,6 +1468,108 @@ namespace Pandora.Engine
                 return RotateFigureByAngle(figure, pivot, 315);
 
             return figure;
+        }
+
+        /// <summary>
+        /// Calculate a Vector2Int's magnitude.
+        /// </summary>
+        public int DMagnitude(Vector2Int vector) => ISqrt((vector.x * vector.x) + (vector.y * vector.y));
+
+        /// <summary>
+        /// Calculate the Dot Product of two Vector2Int.
+        /// </summary>
+        public int DotProduct(Vector2Int a, Vector2Int b) => (a.x * b.x) + (a.y * b.y);
+
+        /// <summary>
+        /// Calculate the Cross Product of two Vector2Int.
+        /// </summary>
+        public int CrossProduct(Vector2Int a, Vector2Int b) => (a.x * b.y) - (a.y * b.x);
+
+        /// <summary>
+        /// Transform Rad to Deg.
+        /// </summary>
+        public Decimal DRadToDeg(Decimal rad) => Decimal.Divide(180, DPi) * rad;
+
+        /// <summary>
+        /// Module implementation.
+        /// </summary>
+        public int Mod(int x, int m) => (x % m + m) % m;
+
+        /// <summary>
+        /// Polinomially approximated ArcCos.
+        /// (This will have an error, see https://stackoverflow.com/a/36387954)
+        /// </summary>
+        public Decimal ACos(Decimal x) =>
+            Decimal.Divide(DPi, 2) + Decimal.Divide(((-0.939115566365855m * x) + (0.9217841528914573m * DPow(x, 3))), (1 + (-1.2845906244690837m * DPow(x, 2)) + (0.295624144969963174m * DPow(x, 4))));
+
+        /// <summary>
+        /// Retrieve the angle in Deg between two Vector2Int.
+        /// This function is used to calculate the direction between
+        /// a unit and its target.
+        /// </summary>
+        public int GetAngleFromVectors(Vector2Int source, Vector2Int target)
+        {
+            var pointsDistance = Math.Max(Math.Abs(source.x - target.x), Math.Abs(source.y - target.y));
+            var v0 = new Vector2Int(source.x, source.y + pointsDistance);
+            var v1 = new Vector2Int(v0.x - source.x, v0.y - source.y);
+            var v2 = new Vector2Int(target.x - source.x, target.y - source.y);
+
+            Logger.Debug($"V1 {v1} - V2 {v2} - Source {source} - Target {target}");
+
+            var dotProduct = DotProduct(v1, v2);
+            var crossProduct = CrossProduct(v1, v2);
+            var sourceMagnitude = DMagnitude(v1);
+            var targetMagnutude = DMagnitude(v2);
+            var cosAngle = Decimal.Divide(dotProduct, sourceMagnitude * targetMagnutude);
+            var sinAngle = Decimal.Divide(crossProduct, sourceMagnitude * targetMagnutude);
+
+            Decimal angle = ACos(cosAngle);
+            if (sinAngle < 0) angle = -angle;
+
+            var degAngle = Mod(Decimal.ToInt32(DRadToDeg(angle)), 360);
+
+            return degAngle;
+        }
+
+        /// <summary>
+        /// Snap an angle in Deg to a determinet Multiple.
+        /// </summary>
+        public int SnapAngleToMultiple(int angle, int multiple)
+        {
+            var absAngle = Math.Abs(angle);
+            int snappedAngle;
+
+            if (absAngle < multiple && absAngle < Decimal.Divide(multiple, 2))
+                snappedAngle = 0;
+            else if (absAngle < multiple && absAngle >= Decimal.Divide(multiple, 2))
+                snappedAngle = multiple;
+            else
+            {
+                var n = absAngle + Decimal.Divide(multiple, 2);
+                snappedAngle = Decimal.ToInt32(n - (n % multiple));
+            }
+
+            return snappedAngle;
+        }
+
+        /// <summary>
+        /// Transform a snapped angle to a Vector2Int representing
+        /// the direction (with magniture = 1).
+        /// </summary>
+        public Vector2Int SnappedAngleToDirection(int angle)
+        {
+            Vector2Int result = new Vector2Int(0, 0);
+
+            foreach (var directionAngle in directionAngleTable)
+            {
+                if (directionAngle.Value == angle)
+                {
+                    result = directionAngle.Key;
+                    break;
+                }
+            }
+
+            return result;
         }
     }
 }

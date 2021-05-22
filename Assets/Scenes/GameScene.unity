@@ -242,6 +242,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 52477cc5fee55424eb0e504f786d7533,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: BlockedManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: d2fd01475fa214a979e450e9903ed0d8,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &3157263 stripped
@@ -725,6 +737,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 52477cc5fee55424eb0e504f786d7533,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: BlockedManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: d2fd01475fa214a979e450e9903ed0d8,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &214956608 stripped
@@ -1805,6 +1829,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 52477cc5fee55424eb0e504f786d7533,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: BlockedManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: d2fd01475fa214a979e450e9903ed0d8,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &492786446 stripped
@@ -3640,7 +3676,6 @@ GameObject:
   - component: {fileID: 996488291}
   - component: {fileID: 996488290}
   - component: {fileID: 996488289}
-  - component: {fileID: 996488292}
   - component: {fileID: 996488293}
   - component: {fileID: 996488295}
   - component: {fileID: 996488294}
@@ -3776,21 +3811,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &996488292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 996488287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66b989dc42c8bba4093530c600b3fa07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Enabled: 0
-  ManaEveryTimelapse: 10
-  StepAmount: 0.2
 --- !u!114 &996488293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3894,10 +3914,11 @@ MonoBehaviour:
   UnitY: 15
   MovementLength: 5
   EnemyX: 6
-  EnemyY: 16
+  EnemyY: 13
   Mode: 1
-  Disabled: 1
+  Disabled: 0
   DisableAttack: 1
+  IsEnemyInvulnerable: 1
 --- !u!1 &1019514922
 GameObject:
   m_ObjectHideFlags: 0
@@ -4094,6 +4115,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 52477cc5fee55424eb0e504f786d7533,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: BlockedManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: d2fd01475fa214a979e450e9903ed0d8,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1110013714 stripped
@@ -4373,6 +4406,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 52477cc5fee55424eb0e504f786d7533,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: BlockedManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: d2fd01475fa214a979e450e9903ed0d8,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1140906579 stripped
@@ -4462,8 +4507,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1130516806}
   m_HandleRect: {fileID: 1130516805}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.99999994
+  m_Value: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5450,6 +5495,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 52477cc5fee55424eb0e504f786d7533,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: BlockedManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: d2fd01475fa214a979e450e9903ed0d8,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1467998383 stripped
@@ -5720,6 +5777,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 52477cc5fee55424eb0e504f786d7533,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: BlockedManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: d2fd01475fa214a979e450e9903ed0d8,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1525482068 stripped
@@ -6500,6 +6569,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 52477cc5fee55424eb0e504f786d7533,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: BlockedManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: d2fd01475fa214a979e450e9903ed0d8,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1601793644 stripped
@@ -6625,6 +6706,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 52477cc5fee55424eb0e504f786d7533,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: BlockedManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: d2fd01475fa214a979e450e9903ed0d8,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1621711281 stripped
@@ -8257,7 +8350,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 6.399872, y: -4.0996094}
+  m_AnchoredPosition: {x: 6.3999023, y: -4.0996094}
   m_SizeDelta: {x: -62.59836, y: -96.35918}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1949382572
@@ -8383,7 +8476,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1530874139}
   m_HandleRect: {fileID: 1530874138}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9439,6 +9532,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 52477cc5fee55424eb0e504f786d7533,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: BlockedManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: d2fd01475fa214a979e450e9903ed0d8,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &304511456792860013 stripped

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Linq;
 using Pandora.Combat;
 using Pandora.Engine;
-using Pandora.Movement;
+using Pandora.AI;
 using System.Collections.Generic;
 using Pandora.UI;
 
@@ -29,7 +29,7 @@ namespace Pandora.Command
 
         public void InvokeCommand()
         {
-            var unitBehaviour = GetComponent<UnitBehaviour>();
+            var unitBehaviour = GetComponent<ArenaEntityBehaviour>();
 
             unitBehaviour.PlayAnimation("Command", 1000, null);
 

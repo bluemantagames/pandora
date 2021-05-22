@@ -146,12 +146,16 @@ namespace Pandora.Network
             var matchPort = Hosts.MatchPort;
 
             IPHostEntry dns = null;
-            
-            while (dns == null) {
-                try {
+
+            while (dns == null)
+            {
+                try
+                {
                     dns = Dns.GetHostEntry(matchHost);
 
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Debug.LogError(e.Message);
 
                     Thread.Sleep(reconnectionWaitMs);
@@ -174,10 +178,14 @@ namespace Pandora.Network
 
             Logger.Debug($"Connecting to {matchHost}:{matchPort}");
 
-            while (!matchSocket.Connected) {
-                try {
+            while (!matchSocket.Connected)
+            {
+                try
+                {
                     matchSocket.Connect(ipe);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Debug.LogError(e.Message);
 
                     Thread.Sleep(reconnectionWaitMs);
@@ -188,8 +196,10 @@ namespace Pandora.Network
 
             ReplayFrom replayFromId = null;
 
-            if (lastEnvelopeId != null) {
-                replayFromId = new ReplayFrom {
+            if (lastEnvelopeId != null)
+            {
+                replayFromId = new ReplayFrom
+                {
                     ReplayFromId = lastEnvelopeId.Value
                 };
             }
@@ -290,7 +300,8 @@ namespace Pandora.Network
 
                     var size = BitConverter.ToInt32(sizeBytes, 0);
 
-                    if (size == 0) {
+                    if (size == 0)
+                    {
                         throw new Exception("Empty Receive call");
                     }
 
@@ -307,9 +318,12 @@ namespace Pandora.Network
             }
             catch (Exception e)
             {
-                try {
+                try
+                {
                     matchSocket?.Close();
-                } finally {
+                }
+                finally
+                {
                     Debug.LogError(e.Message);
 
                     if (matchSocket != null)
@@ -380,16 +394,6 @@ namespace Pandora.Network
                     }
                 }
 
-                // (I don't really like the foreach here...)
-                foreach (var playerInfo in envelope.Step.PlayerInfo)
-                {
-                    if (playerInfo.Id == PlayerId)
-                    {
-                        mana = playerInfo.Mana;
-                        Debug.Log($"Player ({PlayerId}) received mana: {mana}");
-                    }
-                }
-
                 Debug.Log($"Enqueuing Step {envelope.Step.TimePassedMs}");
 
                 lastEnvelopeId = envelope.EnvelopeId;
@@ -416,7 +420,8 @@ namespace Pandora.Network
                 Array.Reverse(lengthBytes);
             }
 
-            if (matchSocket != null && matchSocket.Connected) {
+            if (matchSocket != null && matchSocket.Connected)
+            {
                 matchSocket.Send(lengthBytes);
                 matchSocket.Send(message);
             }

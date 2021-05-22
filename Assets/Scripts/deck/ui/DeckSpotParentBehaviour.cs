@@ -130,7 +130,7 @@ namespace Pandora.Deck.UI
 
             // We could probably use the decimal pool here
             // but it's a really minor improvement
-            var cardsMana = deck.Select(c => c.RequiredMana);
+            var cardsMana = deck.Select(c => c.RequiredManaShowed);
             var curve = CalculateManaCurve(cardsMana);
             var decimalCurve = Convert.ToDecimal(curve);
             var roudedCurve = decimalCurve.ToString("#.#");
