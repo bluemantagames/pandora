@@ -109,5 +109,10 @@ namespace Pandora
         {
             enemyManaWallet.AddUpperReserve(id, amount);
         }
+
+        public static void Reset()
+        {
+            _instance = null;
+        }
     }
 }
