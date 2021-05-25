@@ -92,7 +92,7 @@ namespace Pandora.Combat
             var computedDirection = GetShotDirection(direction);
 
             if (combatVFXFixer != null && CombatVFX != null)
-                CombatVFX.transform.localRotation = combatVFXFixer.FixedShotRotation(computedDirection);
+                combatVFXFixer.FixVFX(computedDirection);
 
             animator.SetFloat("BlendX", direction.x);
             animator.SetFloat("BlendY", direction.y);
