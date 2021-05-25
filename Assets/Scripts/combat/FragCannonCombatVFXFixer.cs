@@ -71,7 +71,7 @@ namespace Pandora.Combat
                 yRotation = FixDirectionBottomLeft;
 
             if (enemyDirection.y > 0)
-                xRotation = -70;
+                xRotation = -40;
 
             var newRotation = Quaternion.Euler(xRotation, yRotation, 0);
 
@@ -84,7 +84,7 @@ namespace Pandora.Combat
 
             if (enemyDirection.x > 0)
                 fixedPosition.x += HorizontalPositionFix;
-            else if (enemyDirection.x < -0)
+            else if (enemyDirection.x < 0)
                 fixedPosition.x -= HorizontalPositionFix;
 
             transform.localPosition = fixedPosition;
@@ -98,13 +98,32 @@ namespace Pandora.Combat
             var fixedLightFront = lightFrontLocalPosition;
             var fixedTrails = trailsLocalPosition;
 
+            var horizontalFix = HorizontalPositionFix * 4;
+            var computedHorizontalFix = enemyDirection.x < 0 ? horizontalFix : enemyDirection.x > 0 ? -horizontalFix : 0;
+
             if (enemyDirection.y < 0)
             {
                 fixedSteamBack.y += VerticalPositionFix / 2;
+                fixedSteamBack.x += computedHorizontalFix;
+
                 fixedLightBack.y += VerticalPositionFix / 2;
+                fixedLightBack.x += computedHorizontalFix;
+
                 fixedSteamFront.y -= VerticalPositionFix;
+                fixedSteamFront.x -= computedHorizontalFix;
+
                 fixedLightFront.y -= VerticalPositionFix;
-                fixedTrails.y -= VerticalPositionFix;
+                fixedLightFront.x -= computedHorizontalFix;
+
+                fixedTrails.y -= VerticalPositionFix * 2;
+            }
+            else if (enemyDirection.y > 0)
+            {
+                fixedSteamBack.y -= VerticalPositionFix;
+                fixedSteamBack.x -= computedHorizontalFix;
+
+                fixedLightBack.y -= VerticalPositionFix;
+                fixedLightBack.x -= computedHorizontalFix;
             }
 
             SteamFront.gameObject.transform.localPosition = fixedSteamFront;
