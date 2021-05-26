@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 7984523475807771379}
   - component: {fileID: -7956079764900003309}
   - component: {fileID: 8385135266863333379}
+  - component: {fileID: 3845377745652220870}
   m_Layer: 9
   m_Name: Cockatrice
   m_TagString: Untagged
@@ -415,6 +416,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Shadow: {fileID: 5112769284340779074, guid: c739f7ba796e3a84a880909c25381786, type: 3}
+--- !u!114 &3845377745652220870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060352442105845753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07eedffa294849379327ec100f10b71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RequiredMana: 40
+  ReservedMana: 0
 --- !u!1 &2356039641497706938
 GameObject:
   m_ObjectHideFlags: 0

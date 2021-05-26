@@ -45,7 +45,8 @@ namespace Pandora.Command
             return targets;
         }
 
-        void Start() {
+        void Start()
+        {
             sourceTeam = GetComponent<TeamComponent>();
             sourceEntity = gameObject.GetComponent<EngineComponent>().Entity;
         }
@@ -72,7 +73,7 @@ namespace Pandora.Command
             var sourceEntity = GetComponent<EngineComponent>().Entity;
             var sourceAnimator = GetComponent<Animator>();
 
-            GetComponent<UnitBehaviour>().PlayAnimation("Command", 1000, null);
+            GetComponent<ArenaEntityBehaviour>().PlayAnimation("Command", 1000, null);
 
             var vfx = Instantiate(VFXObject, transform.position, VFXObject.transform.rotation, transform);
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Pandora.Combat;
 using System.Collections.Generic;
-using Pandora.Movement;
+using Pandora.AI;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 
@@ -24,6 +24,7 @@ namespace Pandora.Engine.Animations
         public TestMode Mode = TestMode.Movement;
         public bool Disabled = false;
         public bool DisableAttack = false;
+        public bool IsEnemyInvulnerable = true;
 
         bool isSpawned = false;
         bool isTurnedBack = false;
@@ -80,7 +81,7 @@ namespace Pandora.Engine.Animations
         {
             Logger.Debug($"{logPrefix} Spawning unit: {UnitName}");
 
-            mapComponent.SpawnCard(UnitName, 1, new GridCell(UnitX, UnitY));
+            mapComponent.SpawnCard(UnitName, 1, new GridCell(UnitX, UnitY), true);
 
             var entities = mapComponent.engine.Entities;
             var unitEntity = entities[entities.Count - 1];
@@ -95,14 +96,15 @@ namespace Pandora.Engine.Animations
             else if (Mode == TestMode.Attack)
             {
                 // Spawn the enemy
-                mapComponent.SpawnCard(UnitName, 2, new GridCell(EnemyX, EnemyY));
+                mapComponent.SpawnCard(UnitName, 2, new GridCell(EnemyX, EnemyY), true);
                 var enemyEntity = entities[entities.Count - 1];
 
                 var unitCombatBehaviour = unitEntity.GameObject.GetComponent<CombatBehaviour>();
                 var enemyCombatBehaviour = enemyEntity.GameObject.GetComponent<CombatBehaviour>();
                 var enemyLifeComponent = enemyEntity.GameObject.GetComponent<LifeComponent>();
 
-                enemyLifeComponent.DisableDamage = true;
+                if (IsEnemyInvulnerable)
+                    enemyLifeComponent.DisableDamage = true;
 
                 enemyEntity.IsMovementPaused = true;
                 unitEntity.IsMovementPaused = true;

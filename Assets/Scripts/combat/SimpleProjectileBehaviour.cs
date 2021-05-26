@@ -6,7 +6,7 @@ using System.Linq;
 using Pandora;
 using Pandora.Pool;
 using Pandora.Engine;
-using Pandora.Movement;
+using Pandora.AI;
 
 namespace Pandora.Combat
 {
@@ -20,7 +20,8 @@ namespace Pandora.Combat
         public GameObject originalPrefab { get; set; }
         public int speed = 1800;
 
-        public int Speed {
+        public int Speed
+        {
             get => speed;
         }
 
@@ -111,7 +112,8 @@ namespace Pandora.Combat
             }
         }
 
-        public void TickUpdate(uint timeLapsed) {
+        public void TickUpdate(uint timeLapsed)
+        {
             var bounds = engineEntity.Engine.GetPooledEntityBounds(target.enemyEntity);
             var targetPosition = PoolInstances.Vector2IntPool.GetObject();
 

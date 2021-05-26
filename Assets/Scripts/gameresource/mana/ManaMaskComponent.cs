@@ -3,22 +3,28 @@ using UnityEngine.UI;
 using UnityEngine.Animations;
 using Cysharp.Threading.Tasks;
 
-namespace Pandora.Resource.Mana {
-    public class ManaMaskComponent: MonoBehaviour {
+namespace Pandora.Resource.Mana
+{
+    public class ManaMaskComponent : MonoBehaviour
+    {
         public float OriginalWidth = 0f;
         Image image;
         AnimationCurve earnCurve = null;
         bool childSet = false;
         RectTransform childRectTransform;
+        ManaBarComponent manaBarComponent;
 
         float _percent = 0f;
 
-        public bool IsPlaying {
+        public bool IsPlaying
+        {
             get => earnCurve != null;
         }
 
-        public float Percent {
-            set {
+        public float Percent
+        {
+            set
+            {
                 _percent = value;
 
                 var currentWidth = _percent * OriginalWidth;
@@ -29,7 +35,8 @@ namespace Pandora.Resource.Mana {
             get => _percent;
         }
 
-        void Start() {
+        void Start()
+        {
             image = GetComponent<Image>();
             childRectTransform = transform.GetChild(0).GetComponent<Image>().rectTransform;
 
@@ -38,24 +45,30 @@ namespace Pandora.Resource.Mana {
             Screen.SetResolution(720, 1280, false);
 
             Application.targetFrameRate = 30;
+
+            manaBarComponent = GetComponentInParent<ManaBarComponent>();
         }
 
-        public void PlayEarnAnimation() {
+        public void PlayEarnAnimation()
+        {
             var timeEnd = (1f - Percent) * LocalManaBehaviourScript.RoundingTimelapse;
 
             earnCurve = AnimationCurve.EaseInOut(Time.time, Percent, Time.time + timeEnd, 1f);
         }
 
-        public void Reset() {
+        public void Reset()
+        {
             Percent = 0;
             earnCurve = null;
         }
 
-        public void StopEarnAnimation() {
+        public void StopEarnAnimation()
+        {
             earnCurve = null;
         }
 
-        public void SetPercent(float percent) {
+        public void SetPercent(float percent)
+        {
             var currentWidth = percent * OriginalWidth;
 
             image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, currentWidth);
@@ -69,7 +82,8 @@ namespace Pandora.Resource.Mana {
         /// size and position of the child. For this reason, here we deanchor the mana image from the mask and reset the position because of
         /// Unity layouting quirks
         /// </summary>
-        void setChildProperSize() {
+        void setChildProperSize()
+        {
             var horizontalSize = childRectTransform.rect.width;
             var verticalSize = childRectTransform.rect.height;
 
@@ -83,20 +97,23 @@ namespace Pandora.Resource.Mana {
             childRectTransform.position = transform.parent.position;
         }
 
-        void Update() {
+        void Update()
+        {
             // It appears that the widths are actually zero for a few frames
             // hence the various if conditions
-            if (OriginalWidth == 0f && image.rectTransform.rect.width != 0) {
+            if (OriginalWidth == 0f && image.rectTransform.rect.width != 0)
+            {
                 OriginalWidth = image.rectTransform.rect.width;
             }
 
-            if (OriginalWidth != 0 && childRectTransform.rect.width != 0 && !childSet) {
+            if (OriginalWidth != 0 && childRectTransform.rect.width != 0 && !childSet)
+            {
                 setChildProperSize();
 
                 childSet = true;
             }
 
-            if (IsPlaying && Percent < 1f)
+            if (IsPlaying && Percent < 1f && !manaBarComponent.Reserved)
                 Percent = earnCurve.Evaluate(Time.time);
         }
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Pandora.Movement;
+using Pandora.AI;
 using Pandora.Spell;
 using Pandora.Network;
 using Pandora.Deck;
@@ -20,7 +20,8 @@ namespace Pandora
         public int Team = 1;
         public string UnitName;
         public string CardName;
-        public int RequiredMana = 0;
+        public int RequiredManaShowed = 0;
+        public int ReservedManaShowed = 0;
         public bool IsAquatic = false;
         public bool FixedInGame = false;
         public bool Global = false;
@@ -174,7 +175,7 @@ namespace Pandora
         {
             if (disabled) return;
 
-            MovementBehaviour movement = null; /*Card.GetComponent<MovementBehaviour>();*/
+            EntityController movement = null; /*Card.GetComponent<MovementBehaviour>();*/
             ProjectileSpellBehaviour projectileSpell = null; /*Card.GetComponent<ProjectileSpellBehaviour>();*/
 
             if (map != null && canBeSpawned)
@@ -189,7 +190,7 @@ namespace Pandora
                 pointed.vector.x = System.Math.Max(0, System.Math.Min(mapComponent.mapSizeX, pointed.vector.x));
                 pointed.vector.y = System.Math.Max(0, System.Math.Min(mapComponent.mapSizeY, pointed.vector.y));
 
-                var spawned = map.SpawnCard(UnitName, Team, pointed, RequiredMana);
+                var spawned = map.SpawnCard(UnitName, Team, pointed);
 
                 if (spawned)
                 {
@@ -226,10 +227,28 @@ namespace Pandora
                 Destroy(gameObject);
             }
 
-            var manaText = GetComponentInChildren<Text>();
+            UpdateManaText();
+        }
 
-            if (manaText != null)
-                manaText.text = (RequiredMana / 10).ToString();
+        void UpdateManaText()
+        {
+            var manaText = GetComponentInChildren<Text>();
+            var manaImage = transform.GetChild(0).GetComponent<Image>();
+
+            if (manaText == null || manaImage == null) return;
+
+            var requiredMana = RequiredManaShowed;
+            var reservedMana = ReservedManaShowed;
+
+            if (reservedMana > 0)
+            {
+                manaImage.color = new Color(255, 0, 255);
+                manaText.text = $"{reservedMana / 10}";
+            }
+            else
+            {
+                manaText.text = $"{requiredMana / 10}";
+            }
         }
 
 

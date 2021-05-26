@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Linq;
 using Pandora.Combat;
 using Pandora.Engine;
-using Pandora.Movement;
+using Pandora.AI;
 using System.Collections.Generic;
 using Pandora.UI;
 
@@ -19,7 +19,8 @@ namespace Pandora.Command
 
         EngineComponent engineComponent;
 
-        void Start () {
+        void Start()
+        {
             engineComponent = GetComponentInParent<EngineComponent>();
         }
 
@@ -57,7 +58,8 @@ namespace Pandora.Command
             tornadoTeamComponent.Team = teamComponent.Team;
         }
 
-        Lane findLane() {
+        Lane findLane()
+        {
             var mapComponent = MapComponent.Instance;
             var position = engineComponent.Entity.GetCurrentCell();
 

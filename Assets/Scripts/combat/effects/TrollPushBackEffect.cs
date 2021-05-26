@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using Pandora.Engine;
-using Pandora.Movement;
+using Pandora.AI;
 using Pandora.Pool;
 
-namespace Pandora.Combat.Effects {
-    public class TrollPushBackEffect: MonoBehaviour, EngineBehaviour, Effect {
+namespace Pandora.Combat.Effects
+{
+    public class TrollPushBackEffect : MonoBehaviour, EngineBehaviour, Effect
+    {
         bool _isDisabled = false;
 
-        public bool IsDisabled {
+        public bool IsDisabled
+        {
             get => _isDisabled;
             set => _isDisabled = value;
         }
-    
+
         public GameObject Origin;
         public Vector2Int OriginDirection;
         uint timePassed = 0;
@@ -19,16 +22,20 @@ namespace Pandora.Combat.Effects {
         public int Force = 30;
         public string ComponentName => "TrollPushBack";
 
-        public Effect Apply(GameObject origin, GameObject target) {
+        public Effect Apply(GameObject origin, GameObject target)
+        {
             var component = target.GetComponent<TrollPushBackEffect>();
             var targetEntity = target.GetComponent<EngineComponent>().Entity;
 
-            if (targetEntity.IsStructure) 
+            if (targetEntity.IsStructure)
                 return null;
 
-            if (component != null) {
+            if (component != null)
+            {
                 component.Refresh();
-            } else {
+            }
+            else
+            {
                 component = target.AddComponent<TrollPushBackEffect>();
                 component.Origin = origin;
                 component.OriginDirection = origin.GetComponent<EngineComponent>().Entity.Direction;
@@ -45,10 +52,11 @@ namespace Pandora.Combat.Effects {
 
             timePassed += timeLapsed;
 
-            if (timePassed % TickMs == 0) {
+            if (timePassed % TickMs == 0)
+            {
                 var newPosition = PoolInstances.Vector2IntPool.GetObject();
                 var engineComponent = gameObject.GetComponent<EngineComponent>();
-                var movementComponent = gameObject.GetComponent<MovementComponent>();
+                var movementComponent = gameObject.GetComponent<BasicEntityController>();
                 var engineEntity = engineComponent.Entity;
 
                 var xForce = OriginDirection.x * Force;
@@ -61,7 +69,8 @@ namespace Pandora.Combat.Effects {
                 movementComponent.ResetPath();
             }
 
-            if (timePassed % DurationMs == 0) {
+            if (timePassed % DurationMs == 0)
+            {
                 Unapply(gameObject);
             }
         }
@@ -75,11 +84,13 @@ namespace Pandora.Combat.Effects {
             RefreshComponents();
         }
 
-        public void Refresh() {
+        public void Refresh()
+        {
             timePassed = 0;
         }
 
-        void RefreshComponents() {
+        void RefreshComponents()
+        {
             gameObject.GetComponent<EngineComponent>().RefreshComponents();
         }
     }

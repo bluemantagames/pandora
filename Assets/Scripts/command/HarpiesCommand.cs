@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Linq;
 using Pandora.Combat;
 using Pandora.Engine;
-using Pandora.Movement;
+using Pandora.AI;
 using System.Collections.Generic;
 using Pandora.UI;
 
@@ -21,7 +21,8 @@ namespace Pandora.Command
         Enemy target = null;
         TeamComponent teamComponent;
 
-        void Start() {
+        void Start()
+        {
             teamComponent = GetComponent<TeamComponent>();
         }
 
@@ -47,7 +48,7 @@ namespace Pandora.Command
 
                 foreach (var harpy in entities)
                 {
-                    harpy.GetComponent<MovementComponent>().Target = target;
+                    harpy.GetComponent<BasicEntityController>().Target = target;
                 }
 
                 var spriteRenderer = target.enemy.GetComponent<SpriteRenderer>();
@@ -76,7 +77,8 @@ namespace Pandora.Command
             }
         }
 
-        Enemy findTarget() {
+        Enemy findTarget()
+        {
             Enemy target = null;
 
             int? hp = null;

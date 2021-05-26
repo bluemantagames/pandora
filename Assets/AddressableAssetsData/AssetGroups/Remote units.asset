@@ -22,6 +22,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Unit
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 5133a8594c9620240a43638101b5244a
+    m_Address: Units/Bard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
     - Remote
     m_MainAsset: {fileID: 1341249731494315628, guid: 5133a8594c9620240a43638101b5244a,
       type: 3}
@@ -171,6 +178,82 @@ MonoBehaviour:
       type: 3}
     m_TargetAsset: {fileID: 586835057315351248, guid: 336b4145f1a12a84fa325858b13fd38a,
       type: 3}
+  - m_GUID: cd8bf7fbffc60904882d214fda34ea8c
+    m_Address: Units/Cockatrice
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: e63834404ee8b5f42bfff14c34603b84
+    m_Address: Units/HalfOrcWolf
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 1d103170791359141b04bc6e9493602e
+    m_Address: Units/HarpiesSpawner
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 08c064bd0f49d0243adf8118d04371b4
+    m_Address: Units/Mermaid
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 3cd0413c4cb58a146953dc7fc2dc8e42
+    m_Address: Units/MermaidsSpawner
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: a6124a5aa057b5c44b7db82ec82b8396
+    m_Address: Units/Ranger
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 2e0ae91c5bc3a6442aeaa0df370fadb2
+    m_Address: Units/Spawner
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: cbd2acd6812f90e45aa0f9b348f67ac6
+    m_Address: Units/Troll
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 336b4145f1a12a84fa325858b13fd38a
+    m_Address: Units/ZombiesSpawner
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: ffa9a18c6af5741b0b66ea05a5426e45
+    m_Address: Units/FragCannon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 39824bcc07b054e7298d89f45571fc6a
+    m_Address: Units/StructureUnit
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a797ade1bb7904c14b8e70534c2ff6fa, type: 2}
   m_SchemaSet:

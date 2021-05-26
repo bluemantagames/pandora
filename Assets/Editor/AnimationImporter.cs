@@ -21,7 +21,7 @@ namespace Pandora.Editor
             var path = EditorUtility.SaveFilePanelInProject("Choose where to save the SpriteAtlas", "atlas", "spriteatlas", "", "Assets/Art/Sprites/Characters/");
 
             var projectFolder = Path.GetFullPath(Path.Combine(Application.dataPath, "../"));
-            var texturesPath = EditorUtility.OpenFolderPanel("Pick the texture folder", "Assets/Art/Sprites/Characters/", "");
+            var texturesPath = EditorUtility.OpenFolderPanel("Pick the texture folder", Path.GetDirectoryName(path), "");
             var projectTexturesPath = texturesPath.Replace(projectFolder, "");
 
             progressBar("Loading clips from manifest", 1f);
@@ -67,7 +67,8 @@ namespace Pandora.Editor
 
             var animationManifestPath = Path.Combine(texturesPath, "animation-manifest.json");
 
-            if (!File.Exists(animationManifestPath)) {
+            if (!File.Exists(animationManifestPath))
+            {
                 EditorUtility.DisplayDialog("Error importing animation", "Missing animation-manifest.json", "Ok");
 
                 return;
@@ -79,7 +80,7 @@ namespace Pandora.Editor
 
             progressBar("Parsing animation manifest", 1f);
 
-            var animations = new Dictionary<int, ClipManifest> { };
+            var animations = new Dictionary<int, List<ClipManifest>> { };
             var blendTrees = new Dictionary<string, BlendTree> { };
 
             int? framesNum = null;
@@ -106,7 +107,10 @@ namespace Pandora.Editor
 
                 for (var i = clip.startFrame; i <= clip.endFrame; i++)
                 {
-                    animations[i] = clip;
+                    if (animations.ContainsKey(i))
+                        animations[i].Add(clip);
+                    else
+                        animations[i] = new List<ClipManifest> { clip };
                 }
 
                 var blendTree = new BlendTree();
@@ -145,22 +149,24 @@ namespace Pandora.Editor
 
                 if (!animations.ContainsKey(frameNumber)) continue;
 
-                var clipManifest = animations[frameNumber];
-                var clipName = clipManifest.name;
-
-                if (!clipFrames.ContainsKey(clipManifest.name))
+                foreach (var clipManifest in animations[frameNumber])
                 {
-                    clipFrames[clipName] = new Dictionary<int, Sprite[]> { };
+                    var clipName = clipManifest.name;
+
+                    if (!clipFrames.ContainsKey(clipManifest.name))
+                    {
+                        clipFrames[clipName] = new Dictionary<int, Sprite[]> { };
+                    }
+
+                    if (!clipFrames[clipName].ContainsKey(angle))
+                    {
+                        clipFrames[clipName][angle] = new Sprite[(clipManifest.endFrame - clipManifest.startFrame) + 1];
+                    }
+
+                    clipFrames[clipName][angle][frameNumber - clipManifest.startFrame] = sprite;
+
+                    Debug.Log($"Adding frame {frameNumber} for angle {angle}");
                 }
-
-                if (!clipFrames[clipName].ContainsKey(angle))
-                {
-                    clipFrames[clipName][angle] = new Sprite[(clipManifest.endFrame - clipManifest.startFrame) + 1];
-                }
-
-                clipFrames[clipName][angle][frameNumber - clipManifest.startFrame] = sprite;
-
-                Debug.Log($"Adding frame {frameNumber} for angle {angle}");
             }
 
             resetProgressBar();
@@ -186,7 +192,8 @@ namespace Pandora.Editor
                     {
                         var sprite = clipFrames[clip][angle][i];
 
-                        if (sprite != null) {
+                        if (sprite != null)
+                        {
                             var keyframe = new ObjectReferenceKeyframe();
 
                             keyframe.time = i / animClip.frameRate;
@@ -204,7 +211,7 @@ namespace Pandora.Editor
 
                     AssetDatabase.CreateAsset(animClip, clipName);
 
-                    var direction = Quaternion.AngleAxis(angle * (360f / clipFrames[clip].Count), Vector3.forward) * Vector2.up;
+                    var direction = Quaternion.AngleAxis(angle * (360f / 12f), Vector3.forward) * Vector2.up;
 
                     blendTrees[clip].AddChild(animClip, direction);
                 }

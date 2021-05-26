@@ -107,6 +107,7 @@ namespace Pandora
             EndGameSingleton.Reset();
             TeamComponent.Reset();
             MenuEventsSingleton.Reset();
+            ManaSingleton.Reset();
 
             await LoadMainMenu();
         }
