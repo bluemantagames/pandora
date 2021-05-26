@@ -16,7 +16,6 @@ namespace Pandora.Combat
         int vfxTicksElapsed = 0;
         uint vfxTotalTimeElapsed = 0;
         int timeSinceLastDamages = 0;
-        CombatVFXFixer combatVFXFixer;
         ParticleSystem[] particles = new ParticleSystem[0];
         Queue<Dictionary<GameObject, int>> delayedDamages = new Queue<Dictionary<GameObject, int>>();
         EngineComponent engineComponent;
@@ -45,7 +44,6 @@ namespace Pandora.Combat
         {
             if (CombatVFX != null)
             {
-                combatVFXFixer = CombatVFX.GetComponent<CombatVFXFixer>();
                 particles = CombatVFX.GetComponentsInChildren<ParticleSystem>();
             }
 
@@ -91,8 +89,12 @@ namespace Pandora.Combat
             var direction = ((Vector2)target.enemy.transform.position - (Vector2)transform.position).normalized;
             var computedDirection = GetShotDirection(direction);
 
-            if (combatVFXFixer != null && CombatVFX != null)
-                combatVFXFixer.FixVFX(computedDirection);
+            var vfxFixers = CombatVFX.GetComponentsInChildren<CombatVFXFixer>();
+
+            foreach (var vfxFixer in vfxFixers)
+            {
+                vfxFixer.FixVFX(computedDirection, direction);
+            }
 
             animator.SetFloat("BlendX", direction.x);
             animator.SetFloat("BlendY", direction.y);

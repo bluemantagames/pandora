@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 94881967327645455}
   - component: {fileID: 94881967327645452}
   - component: {fileID: 94881967327645450}
+  - component: {fileID: 951242266328939854}
   m_Layer: 0
   m_Name: SteamMobile_Top
   m_TagString: Untagged
@@ -458,7 +459,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 30
+    maxNumParticles: 20
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -4684,7 +4685,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 20
   m_RenderMode: 0
   m_SortMode: 3
   m_MinParticleSize: 0
@@ -4723,6 +4724,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   multiplier: 1
+--- !u!114 &951242266328939854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94881967327645448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eba26d74abf4402a8647b72e09ccf61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApplyToChildren: 0
+  FixPositionTopLeft: {x: 1, y: -0.5, z: 0}
+  FixPositionTopRight: {x: 1, y: 0, z: -0.5}
+  FixPositionCenterLeft: {x: 0, y: 0, z: 0}
+  FixPositionCenterRight: {x: 0, y: 0, z: 0}
+  FixPositionBottomLeft: {x: 0, y: 0, z: 0}
+  FixPositionBottomCenter: {x: 0, y: 0, z: 0}
+  FixPositionBottomRight: {x: 0, y: 0, z: 0}
 --- !u!1 &94881967389066903
 GameObject:
   m_ObjectHideFlags: 0
@@ -5251,7 +5272,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 10
+    maxNumParticles: 21
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -9486,7 +9507,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 21
   m_RenderMode: 0
   m_SortMode: 1
   m_MinParticleSize: 0
@@ -9523,6 +9544,7 @@ GameObject:
   - component: {fileID: 94881968358874830}
   - component: {fileID: 94881968358874832}
   - component: {fileID: 94881968358874833}
+  - component: {fileID: 7309597845226942179}
   m_Layer: 0
   m_Name: Firelight_Back
   m_TagString: Untagged
@@ -14275,7 +14297,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 21
   m_RenderMode: 0
   m_SortMode: 1
   m_MinParticleSize: 0
@@ -14301,6 +14323,21 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &7309597845226942179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94881968358874831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9d6e1588639494fbc6815a34f6993f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TopDirectionOrder: 21
+  BottomDirectionOrder: 2
+  CenterDirectionOrder: 31
 --- !u!1 &94881968627102759
 GameObject:
   m_ObjectHideFlags: 0
@@ -14313,6 +14350,8 @@ GameObject:
   - component: {fileID: 94881968627102762}
   - component: {fileID: 94881968627102763}
   - component: {fileID: 94881968627102761}
+  - component: {fileID: 618074309954503453}
+  - component: {fileID: 5749466512423592477}
   m_Layer: 0
   m_Name: SteamMobile_Back
   m_TagString: Untagged
@@ -18985,7 +19024,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 20
   m_RenderMode: 0
   m_SortMode: 3
   m_MinParticleSize: 0
@@ -19024,6 +19063,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   multiplier: 1
+--- !u!114 &618074309954503453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94881968627102759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eba26d74abf4402a8647b72e09ccf61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApplyToChildren: 0
+  FixPositionTopLeft: {x: 1.5, y: 0, z: -1.5}
+  FixPositionTopRight: {x: 0.5, y: 0, z: -1.5}
+  FixPositionCenterLeft: {x: 2, y: -0.5, z: 0}
+  FixPositionCenterRight: {x: 2, y: -0.5, z: 0}
+  FixPositionBottomLeft: {x: 0, y: 0, z: 0}
+  FixPositionBottomCenter: {x: 0, y: 0, z: 0}
+  FixPositionBottomRight: {x: 0, y: 0, z: 0}
+--- !u!114 &5749466512423592477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94881968627102759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9d6e1588639494fbc6815a34f6993f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TopDirectionOrder: 20
+  BottomDirectionOrder: 1
+  CenterDirectionOrder: 30
 --- !u!1 &828490707555290637
 GameObject:
   m_ObjectHideFlags: 0
@@ -19036,6 +19110,8 @@ GameObject:
   - component: {fileID: 828490707540121453}
   - component: {fileID: 828490707540225741}
   - component: {fileID: 828490707548765167}
+  - component: {fileID: 1164698979718075271}
+  - component: {fileID: 1934616091856236799}
   m_Layer: 0
   m_Name: SteamMobile_Front
   m_TagString: Untagged
@@ -23708,7 +23784,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 20
   m_RenderMode: 0
   m_SortMode: 3
   m_MinParticleSize: 0
@@ -23747,6 +23823,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   multiplier: 1
+--- !u!114 &1164698979718075271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828490707555290637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eba26d74abf4402a8647b72e09ccf61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApplyToChildren: 0
+  FixPositionTopLeft: {x: 1, y: 0, z: 0}
+  FixPositionTopRight: {x: 1, y: 0, z: 0}
+  FixPositionCenterLeft: {x: -5, y: -0.5, z: 0}
+  FixPositionCenterRight: {x: -5, y: -0.5, z: 0}
+  FixPositionBottomLeft: {x: -1, y: -1.5, z: 0}
+  FixPositionBottomCenter: {x: 0, y: -2.2, z: 0}
+  FixPositionBottomRight: {x: 1, y: -1.5, z: 0}
+--- !u!114 &1934616091856236799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828490707555290637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9d6e1588639494fbc6815a34f6993f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TopDirectionOrder: 10
+  BottomDirectionOrder: 30
+  CenterDirectionOrder: 20
 --- !u!1 &872153029832771369
 GameObject:
   m_ObjectHideFlags: 0
@@ -23758,6 +23869,7 @@ GameObject:
   - component: {fileID: 872153029832416009}
   - component: {fileID: 872153029847621193}
   - component: {fileID: 872153029847590889}
+  - component: {fileID: 4648824508518474939}
   m_Layer: 0
   m_Name: TrailsWhite
   m_TagString: Untagged
@@ -23852,7 +23964,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
   randomSeed: 0
@@ -28538,7 +28650,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 20
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -28564,6 +28676,26 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &4648824508518474939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872153029832771369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eba26d74abf4402a8647b72e09ccf61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApplyToChildren: 0
+  FixPositionTopLeft: {x: 0, y: 0, z: 0}
+  FixPositionTopRight: {x: 0, y: 0, z: 0}
+  FixPositionCenterLeft: {x: 0, y: 0, z: 0}
+  FixPositionCenterRight: {x: 0, y: 0, z: 0}
+  FixPositionBottomLeft: {x: 0, y: 0, z: 0}
+  FixPositionBottomCenter: {x: 0, y: 0, z: 0}
+  FixPositionBottomRight: {x: 0, y: 0, z: 0}
 --- !u!1 &2454860208664661901
 GameObject:
   m_ObjectHideFlags: 0
@@ -28575,6 +28707,7 @@ GameObject:
   - component: {fileID: 2454860208664826797}
   - component: {fileID: 2454860208680031985}
   - component: {fileID: 2454860208680005457}
+  - component: {fileID: 4234364600485494574}
   m_Layer: 0
   m_Name: Firelight_Front
   m_TagString: Untagged
@@ -33327,7 +33460,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 21
   m_RenderMode: 0
   m_SortMode: 1
   m_MinParticleSize: 0
@@ -33353,6 +33486,21 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &4234364600485494574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2454860208664661901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9d6e1588639494fbc6815a34f6993f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TopDirectionOrder: 11
+  BottomDirectionOrder: 31
+  CenterDirectionOrder: 21
 --- !u!1 &2454860208664661911
 GameObject:
   m_ObjectHideFlags: 0
@@ -33496,22 +33644,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84741f3ec458c436f88dfa65eaa53d48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SteamFront: {fileID: 828490707540225741}
-  LightFront: {fileID: 2454860208680005457}
-  SteamBack: {fileID: 94881968627102763}
-  LightBack: {fileID: 94881968358874833}
-  SteamTop: {fileID: 94881967327645452}
-  LightTop: {fileID: 94881967389066905}
-  Trails: {fileID: 872153029847590889}
+  ApplyToChildren: 0
   FixDirectionTopLeft: 225
-  FixDirectionTopRight: 135
-  FixDirectionCenterLeft: 270
-  FixDirectionCenterRight: 90
+  FixDirectionTopRight: 35
+  FixDirectionCenterLeft: 280
+  FixDirectionCenterRight: 100
   FixDirectionBottomLeft: 315
   FixDirectionBottomCenter: 180
   FixDirectionBottomRight: 35
-  HorizontalPositionFix: 0.2
-  VerticalPositionFix: 0.8
 --- !u!1 &4620453410243494083
 GameObject:
   m_ObjectHideFlags: 0
