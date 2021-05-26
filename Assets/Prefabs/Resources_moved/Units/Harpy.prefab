@@ -217,8 +217,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 70
-  attackCooldownMs: 150
-  backswingMs: 550
+  attackCooldownMs: 350
+  backswingMs: 650
   animationStateName: Attacking
   AggroRangeCells: 3
   AttackRangeEngineUnits: 100

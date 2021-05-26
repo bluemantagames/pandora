@@ -2913,6 +2913,11 @@ PrefabInstance:
       objectReference: {fileID: 738133530}
     - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
+      propertyPath: cooldownMs
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
       propertyPath: isOpponent
       value: 0
       objectReference: {fileID: 0}
@@ -3404,6 +3409,11 @@ PrefabInstance:
       propertyPath: Balista
       value: 
       objectReference: {fileID: 819278251}
+    - target: {fileID: 3866240383038811766, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: cooldownMs
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 4661541363214720064, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -4507,8 +4517,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1130516806}
   m_HandleRect: {fileID: 1130516805}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 0.9999999
+  m_Value: 0
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6117,6 +6127,11 @@ PrefabInstance:
       propertyPath: Balista
       value: 
       objectReference: {fileID: 1559341010}
+    - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
+      propertyPath: cooldownMs
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
       propertyPath: middleTower
@@ -8019,6 +8034,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
+      propertyPath: cooldownMs
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
       propertyPath: isOpponent
       value: 0
       objectReference: {fileID: 0}
@@ -8476,7 +8496,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1530874139}
   m_HandleRect: {fileID: 1530874138}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9876,6 +9896,11 @@ PrefabInstance:
       objectReference: {fileID: 2693967325521330709}
     - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
         type: 3}
+      propertyPath: cooldownMs
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 2693967325251540135, guid: d1e52bdc3ec5dd6449d8749a2604c5a3,
+        type: 3}
       propertyPath: middleTower
       value: 
       objectReference: {fileID: 2089915458}
@@ -10201,6 +10226,11 @@ PrefabInstance:
       propertyPath: Balista
       value: 
       objectReference: {fileID: 3866240383094448599}
+    - target: {fileID: 3866240383038811766, guid: 3ae196b7cda494c4b8d0457362c166ec,
+        type: 3}
+      propertyPath: cooldownMs
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 3866240383038811766, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: isOpponent
