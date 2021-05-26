@@ -96,8 +96,8 @@ namespace Pandora.Combat
                 vfxFixer.FixVFX(computedDirection, direction);
             }
 
-            animator.SetFloat("BlendX", direction.x);
-            animator.SetFloat("BlendY", direction.y);
+            animator.SetFloat("BlendX", computedDirection.x);
+            animator.SetFloat("BlendY", computedDirection.y);
 
             animator.Play(AnimationStateName, 0, timeSinceLastProjectile / (float)(cappedAttackCooldownMs + cappedBackswingMs));
 

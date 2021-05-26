@@ -8,13 +8,20 @@ namespace Pandora.Combat
     public class RotationCombatVFXFixer : MonoBehaviour, CombatVFXFixer
     {
         public bool ApplyToChildren = false;
-        public int FixDirectionTopLeft = 225;
-        public int FixDirectionTopRight = 135;
-        public int FixDirectionCenterLeft = 270;
-        public int FixDirectionCenterRight = 90;
-        public int FixDirectionBottomLeft = 315;
-        public int FixDirectionBottomCenter = 180;
-        public int FixDirectionBottomRight = 35;
+        public Vector3 FixDirectionTopLeft = new Vector3(0, 0, 0);
+        public Vector3 FixDirectionTopCenter = new Vector3(0, 0, 0);
+        public Vector3 FixDirectionTopRight = new Vector3(0, 0, 0);
+        public Vector3 FixDirectionCenterLeft = new Vector3(0, 0, 0);
+        public Vector3 FixDirectionCenterRight = new Vector3(0, 0, 0);
+        public Vector3 FixDirectionBottomLeft = new Vector3(0, 0, 0);
+        public Vector3 FixDirectionBottomCenter = new Vector3(0, 0, 0);
+        public Vector3 FixDirectionBottomRight = new Vector3(0, 0, 0);
+        Vector3 originalLocalRotation;
+
+        void Awake()
+        {
+            originalLocalRotation = transform.localRotation.eulerAngles;
+        }
 
         public void FixVFX(Vector2Int enemyDirection, Vector2 rawDirection)
         {
@@ -32,29 +39,26 @@ namespace Pandora.Combat
 
         Quaternion FixShotRotation(Vector2Int enemyDirection)
         {
-            var xRotation = 0;
-            var yRotation = 0;
-            var zRotation = 0;
+            var fixedRotation = originalLocalRotation;
 
             if (enemyDirection.x == 1 && enemyDirection.y == -1)
-                yRotation = FixDirectionBottomRight;
+                fixedRotation += FixDirectionBottomRight;
             else if (enemyDirection.x == 1 && enemyDirection.y == 0)
-                yRotation = FixDirectionCenterRight;
+                fixedRotation += FixDirectionCenterRight;
             else if (enemyDirection.x == 1 && enemyDirection.y == 1)
-                yRotation = FixDirectionTopRight;
+                fixedRotation += FixDirectionTopRight;
             else if (enemyDirection.x == 0 && enemyDirection.y == -1)
-                yRotation = FixDirectionBottomCenter;
+                fixedRotation += FixDirectionBottomCenter;
             else if (enemyDirection.x == -1 && enemyDirection.y == 1)
-                yRotation = FixDirectionTopLeft;
+                fixedRotation += FixDirectionTopLeft;
             else if (enemyDirection.x == -1 && enemyDirection.y == 0)
-                yRotation = FixDirectionCenterLeft;
+                fixedRotation += FixDirectionCenterLeft;
             else if (enemyDirection.x == -1 && enemyDirection.y == -1)
-                yRotation = FixDirectionBottomLeft;
+                fixedRotation += FixDirectionBottomLeft;
+            else
+                fixedRotation += FixDirectionTopCenter;
 
-            if (enemyDirection.y > 0)
-                xRotation = -40;
-
-            var newRotation = Quaternion.Euler(xRotation, yRotation, zRotation);
+            var newRotation = Quaternion.Euler(fixedRotation.x, fixedRotation.y, fixedRotation.z);
 
             return newRotation;
         }

@@ -4737,8 +4737,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ApplyToChildren: 0
-  FixPositionTopLeft: {x: 1, y: -0.5, z: 0}
-  FixPositionTopRight: {x: 1, y: 0, z: -0.5}
+  FixPositionTopLeft: {x: 1, y: 0, z: 0.5}
+  FixPositionTopRight: {x: -2.5, y: 0, z: 0}
   FixPositionCenterLeft: {x: 0, y: 0, z: 0}
   FixPositionCenterRight: {x: 0, y: 0, z: 0}
   FixPositionBottomLeft: {x: 0, y: 0, z: 0}
@@ -19076,10 +19076,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ApplyToChildren: 0
-  FixPositionTopLeft: {x: 1.5, y: 0, z: -1.5}
-  FixPositionTopRight: {x: 0.5, y: 0, z: -1.5}
-  FixPositionCenterLeft: {x: 2, y: -0.5, z: 0}
-  FixPositionCenterRight: {x: 2, y: -0.5, z: 0}
+  FixPositionTopLeft: {x: 0, y: 0, z: 0}
+  FixPositionTopRight: {x: 0, y: -1, z: 0}
+  FixPositionCenterLeft: {x: 2, y: 0, z: 0}
+  FixPositionCenterRight: {x: 2, y: 0, z: 0}
   FixPositionBottomLeft: {x: 0, y: 0, z: 0}
   FixPositionBottomCenter: {x: 0, y: 0, z: 0}
   FixPositionBottomRight: {x: 0, y: 0, z: 0}
@@ -19097,7 +19097,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TopDirectionOrder: 20
   BottomDirectionOrder: 1
-  CenterDirectionOrder: 30
+  CenterDirectionOrder: 10
 --- !u!1 &828490707555290637
 GameObject:
   m_ObjectHideFlags: 0
@@ -23836,10 +23836,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ApplyToChildren: 0
-  FixPositionTopLeft: {x: 1, y: 0, z: 0}
-  FixPositionTopRight: {x: 1, y: 0, z: 0}
-  FixPositionCenterLeft: {x: -5, y: -0.5, z: 0}
-  FixPositionCenterRight: {x: -5, y: -0.5, z: 0}
+  FixPositionTopLeft: {x: 2, y: 0, z: 1}
+  FixPositionTopRight: {x: -5, y: 0, z: 0}
+  FixPositionCenterLeft: {x: -2, y: -1, z: 0}
+  FixPositionCenterRight: {x: -2, y: -1, z: 0}
   FixPositionBottomLeft: {x: -1, y: -1.5, z: 0}
   FixPositionBottomCenter: {x: 0, y: -2.2, z: 0}
   FixPositionBottomRight: {x: 1, y: -1.5, z: 0}
@@ -23857,7 +23857,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TopDirectionOrder: 10
   BottomDirectionOrder: 30
-  CenterDirectionOrder: 20
+  CenterDirectionOrder: 10
 --- !u!1 &872153029832771369
 GameObject:
   m_ObjectHideFlags: 0
@@ -23870,6 +23870,7 @@ GameObject:
   - component: {fileID: 872153029847621193}
   - component: {fileID: 872153029847590889}
   - component: {fileID: 4648824508518474939}
+  - component: {fileID: 2272650790479258753}
   m_Layer: 0
   m_Name: TrailsWhite
   m_TagString: Untagged
@@ -24447,7 +24448,7 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 8
-    angle: 20
+    angle: 10
     length: 1.5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
@@ -27930,7 +27931,7 @@ ParticleSystem:
     widthOverTrail:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.4
+      scalar: 0.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -28689,13 +28690,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ApplyToChildren: 0
-  FixPositionTopLeft: {x: 0, y: 0, z: 0}
-  FixPositionTopRight: {x: 0, y: 0, z: 0}
-  FixPositionCenterLeft: {x: 0, y: 0, z: 0}
-  FixPositionCenterRight: {x: 0, y: 0, z: 0}
-  FixPositionBottomLeft: {x: 0, y: 0, z: 0}
-  FixPositionBottomCenter: {x: 0, y: 0, z: 0}
-  FixPositionBottomRight: {x: 0, y: 0, z: 0}
+  FixPositionTopLeft: {x: 0, y: -2, z: 0}
+  FixPositionTopRight: {x: 0, y: -1, z: 0}
+  FixPositionCenterLeft: {x: -3, y: -2, z: 0}
+  FixPositionCenterRight: {x: -3, y: -2, z: 0}
+  FixPositionBottomLeft: {x: 0, y: -2, z: 0}
+  FixPositionBottomCenter: {x: 0, y: -4, z: 0}
+  FixPositionBottomRight: {x: 0, y: -2, z: 0}
+--- !u!114 &2272650790479258753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872153029832771369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9d6e1588639494fbc6815a34f6993f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TopDirectionOrder: 10
+  BottomDirectionOrder: 30
+  CenterDirectionOrder: 10
 --- !u!1 &2454860208664661901
 GameObject:
   m_ObjectHideFlags: 0
@@ -33645,13 +33661,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ApplyToChildren: 0
-  FixDirectionTopLeft: 225
-  FixDirectionTopRight: 35
-  FixDirectionCenterLeft: 280
-  FixDirectionCenterRight: 100
-  FixDirectionBottomLeft: 315
-  FixDirectionBottomCenter: 180
-  FixDirectionBottomRight: 35
+  FixDirectionTopLeft: {x: -20, y: 0, z: 0}
+  FixDirectionTopCenter: {x: 0, y: -50, z: 0}
+  FixDirectionTopRight: {x: 20, y: -120, z: 0}
+  FixDirectionCenterLeft: {x: 20, y: 120, z: 0}
+  FixDirectionCenterRight: {x: 20, y: -90, z: 0}
+  FixDirectionBottomLeft: {x: 40, y: 90, z: 0}
+  FixDirectionBottomCenter: {x: 40, y: -50, z: 0}
+  FixDirectionBottomRight: {x: 50, y: 180, z: 0}
 --- !u!1 &4620453410243494083
 GameObject:
   m_ObjectHideFlags: 0
