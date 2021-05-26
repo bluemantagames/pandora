@@ -4737,7 +4737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ApplyToChildren: 0
-  FixPositionTopLeft: {x: 1, y: 0, z: 0.5}
+  FixPositionTopLeft: {x: 0, y: -1, z: 1}
   FixPositionTopRight: {x: -2.5, y: 0, z: 0}
   FixPositionCenterLeft: {x: 0, y: 0, z: 0}
   FixPositionCenterRight: {x: 0, y: 0, z: 0}
@@ -23836,7 +23836,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ApplyToChildren: 0
-  FixPositionTopLeft: {x: 2, y: 0, z: 1}
+  FixPositionTopLeft: {x: 0, y: -2, z: 2}
   FixPositionTopRight: {x: -5, y: 0, z: 0}
   FixPositionCenterLeft: {x: -2, y: -1, z: 0}
   FixPositionCenterRight: {x: -2, y: -1, z: 0}
@@ -33661,7 +33661,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ApplyToChildren: 0
-  FixDirectionTopLeft: {x: -20, y: 0, z: 0}
+  FixDirectionTopLeft: {x: -20, y: 100, z: 0}
   FixDirectionTopCenter: {x: 0, y: -50, z: 0}
   FixDirectionTopRight: {x: 20, y: -120, z: 0}
   FixDirectionCenterLeft: {x: 20, y: 120, z: 0}
