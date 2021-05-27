@@ -87,17 +87,15 @@ namespace Pandora.Combat
             }
 
             var direction = ((Vector2)target.enemy.transform.position - (Vector2)transform.position).normalized;
-            var computedDirection = GetShotDirection(direction);
-
             var vfxFixers = CombatVFX.GetComponentsInChildren<CombatVFXFixer>();
 
             foreach (var vfxFixer in vfxFixers)
             {
-                vfxFixer.FixVFX(computedDirection, direction);
+                vfxFixer.FixVFX(transform.position, target.enemy.transform.position);
             }
 
-            animator.SetFloat("BlendX", computedDirection.x);
-            animator.SetFloat("BlendY", computedDirection.y);
+            animator.SetFloat("BlendX", direction.x);
+            animator.SetFloat("BlendY", direction.y);
 
             animator.Play(AnimationStateName, 0, timeSinceLastProjectile / (float)(cappedAttackCooldownMs + cappedBackswingMs));
 
@@ -190,19 +188,6 @@ namespace Pandora.Combat
             }
 
             timeSinceLastDamages = 0;
-        }
-
-        Vector2Int GetShotDirection(Vector2 enemyDirection)
-        {
-            var direction = new Vector2Int();
-
-            if (enemyDirection != null)
-            {
-                direction.x = enemyDirection.x > shotDirectionThreshold ? 1 : enemyDirection.x < -shotDirectionThreshold ? -1 : 0;
-                direction.y = enemyDirection.y > shotDirectionThreshold ? 1 : enemyDirection.y < -shotDirectionThreshold ? -1 : 0;
-            }
-
-            return direction;
         }
 
         void PlayVFXAtTime(float time)

@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 94881967327645451}
   - component: {fileID: 94881967327645455}
   - component: {fileID: 94881967327645452}
-  - component: {fileID: 94881967327645450}
-  - component: {fileID: 951242266328939854}
   m_Layer: 0
   m_Name: SteamMobile_Top
   m_TagString: Untagged
@@ -28,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 94881967327645448}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 1}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 94881967389066902}
@@ -525,7 +523,7 @@ ParticleSystem:
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 0}
+    m_Rotation: {x: -45, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -4711,39 +4709,6 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &94881967327645450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 94881967327645448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 039587c051912eb4ead9e58344c5f3ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  multiplier: 1
---- !u!114 &951242266328939854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 94881967327645448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eba26d74abf4402a8647b72e09ccf61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ApplyToChildren: 0
-  FixPositionTopLeft: {x: 0, y: -1, z: 1}
-  FixPositionTopRight: {x: -2.5, y: 0, z: 0}
-  FixPositionCenterLeft: {x: 0, y: 0, z: 0}
-  FixPositionCenterRight: {x: 0, y: 0, z: 0}
-  FixPositionBottomLeft: {x: 0, y: 0, z: 0}
-  FixPositionBottomCenter: {x: 0, y: 0, z: 0}
-  FixPositionBottomRight: {x: 0, y: 0, z: 0}
 --- !u!1 &94881967389066903
 GameObject:
   m_ObjectHideFlags: 0
@@ -9544,7 +9509,6 @@ GameObject:
   - component: {fileID: 94881968358874830}
   - component: {fileID: 94881968358874832}
   - component: {fileID: 94881968358874833}
-  - component: {fileID: 7309597845226942179}
   m_Layer: 0
   m_Name: Firelight_Back
   m_TagString: Untagged
@@ -14323,21 +14287,6 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &7309597845226942179
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 94881968358874831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b9d6e1588639494fbc6815a34f6993f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TopDirectionOrder: 21
-  BottomDirectionOrder: 2
-  CenterDirectionOrder: 31
 --- !u!1 &94881968627102759
 GameObject:
   m_ObjectHideFlags: 0
@@ -14350,8 +14299,6 @@ GameObject:
   - component: {fileID: 94881968627102762}
   - component: {fileID: 94881968627102763}
   - component: {fileID: 94881968627102761}
-  - component: {fileID: 618074309954503453}
-  - component: {fileID: 5749466512423592477}
   m_Layer: 0
   m_Name: SteamMobile_Back
   m_TagString: Untagged
@@ -14367,7 +14314,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 94881968627102759}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -1}
+  m_LocalPosition: {x: 0, y: -2, z: 1}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 94881968358874830}
@@ -14864,7 +14811,7 @@ ParticleSystem:
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 0}
+    m_Rotation: {x: -45, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -19063,41 +19010,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   multiplier: 1
---- !u!114 &618074309954503453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 94881968627102759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eba26d74abf4402a8647b72e09ccf61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ApplyToChildren: 0
-  FixPositionTopLeft: {x: 0, y: 0, z: 0}
-  FixPositionTopRight: {x: 0, y: -1, z: 0}
-  FixPositionCenterLeft: {x: 2, y: 0, z: 0}
-  FixPositionCenterRight: {x: 2, y: 0, z: 0}
-  FixPositionBottomLeft: {x: 0, y: 0, z: 0}
-  FixPositionBottomCenter: {x: 0, y: 0, z: 0}
-  FixPositionBottomRight: {x: 0, y: 0, z: 0}
---- !u!114 &5749466512423592477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 94881968627102759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b9d6e1588639494fbc6815a34f6993f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TopDirectionOrder: 20
-  BottomDirectionOrder: 1
-  CenterDirectionOrder: 10
 --- !u!1 &828490707555290637
 GameObject:
   m_ObjectHideFlags: 0
@@ -19110,8 +19022,6 @@ GameObject:
   - component: {fileID: 828490707540121453}
   - component: {fileID: 828490707540225741}
   - component: {fileID: 828490707548765167}
-  - component: {fileID: 1164698979718075271}
-  - component: {fileID: 1934616091856236799}
   m_Layer: 0
   m_Name: SteamMobile_Front
   m_TagString: Untagged
@@ -19127,7 +19037,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 828490707555290637}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.2, z: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 1}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 2454860208664826797}
@@ -19624,7 +19534,7 @@ ParticleSystem:
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 0}
+    m_Rotation: {x: -45, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -23823,41 +23733,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   multiplier: 1
---- !u!114 &1164698979718075271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 828490707555290637}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eba26d74abf4402a8647b72e09ccf61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ApplyToChildren: 0
-  FixPositionTopLeft: {x: 0, y: -2, z: 2}
-  FixPositionTopRight: {x: -5, y: 0, z: 0}
-  FixPositionCenterLeft: {x: -2, y: -1, z: 0}
-  FixPositionCenterRight: {x: -2, y: -1, z: 0}
-  FixPositionBottomLeft: {x: -1, y: -1.5, z: 0}
-  FixPositionBottomCenter: {x: 0, y: -2.2, z: 0}
-  FixPositionBottomRight: {x: 1, y: -1.5, z: 0}
---- !u!114 &1934616091856236799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 828490707555290637}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b9d6e1588639494fbc6815a34f6993f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TopDirectionOrder: 10
-  BottomDirectionOrder: 30
-  CenterDirectionOrder: 10
 --- !u!1 &872153029832771369
 GameObject:
   m_ObjectHideFlags: 0
@@ -23869,8 +23744,6 @@ GameObject:
   - component: {fileID: 872153029832416009}
   - component: {fileID: 872153029847621193}
   - component: {fileID: 872153029847590889}
-  - component: {fileID: 4648824508518474939}
-  - component: {fileID: 2272650790479258753}
   m_Layer: 0
   m_Name: TrailsWhite
   m_TagString: Untagged
@@ -23886,8 +23759,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 872153029832771369}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0.8}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.2}
+  m_LocalPosition: {x: 0, y: 2, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 7546147823674120178}
   m_RootOrder: 3
@@ -24449,12 +24322,12 @@ ParticleSystem:
     enabled: 1
     type: 8
     angle: 10
-    length: 1.5
+    length: 0.5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 0}
+    m_Rotation: {x: -45, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -24534,7 +24407,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.4
+      value: 0.32
       mode: 0
       spread: 0
       speed:
@@ -28677,41 +28550,6 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &4648824508518474939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 872153029832771369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eba26d74abf4402a8647b72e09ccf61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ApplyToChildren: 0
-  FixPositionTopLeft: {x: 0, y: -2, z: 0}
-  FixPositionTopRight: {x: 0, y: -1, z: 0}
-  FixPositionCenterLeft: {x: -3, y: -2, z: 0}
-  FixPositionCenterRight: {x: -3, y: -2, z: 0}
-  FixPositionBottomLeft: {x: 0, y: -2, z: 0}
-  FixPositionBottomCenter: {x: 0, y: -4, z: 0}
-  FixPositionBottomRight: {x: 0, y: -2, z: 0}
---- !u!114 &2272650790479258753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 872153029832771369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b9d6e1588639494fbc6815a34f6993f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TopDirectionOrder: 10
-  BottomDirectionOrder: 30
-  CenterDirectionOrder: 10
 --- !u!1 &2454860208664661901
 GameObject:
   m_ObjectHideFlags: 0
@@ -28723,7 +28561,6 @@ GameObject:
   - component: {fileID: 2454860208664826797}
   - component: {fileID: 2454860208680031985}
   - component: {fileID: 2454860208680005457}
-  - component: {fileID: 4234364600485494574}
   m_Layer: 0
   m_Name: Firelight_Front
   m_TagString: Untagged
@@ -33502,21 +33339,6 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &4234364600485494574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2454860208664661901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b9d6e1588639494fbc6815a34f6993f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TopDirectionOrder: 11
-  BottomDirectionOrder: 31
-  CenterDirectionOrder: 21
 --- !u!1 &2454860208664661911
 GameObject:
   m_ObjectHideFlags: 0
@@ -33529,7 +33351,7 @@ GameObject:
   - component: {fileID: 2454860208654957183}
   - component: {fileID: 2454860208654957181}
   - component: {fileID: 2454860208654484157}
-  - component: {fileID: 5793503839884995803}
+  - component: {fileID: 5563892590905044031}
   m_Layer: 0
   m_Name: FragCannonShot
   m_TagString: Untagged
@@ -33544,8 +33366,8 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2454860208664661911}
-  m_LocalRotation: {x: 0.16172901, y: 0.83731925, z: 0.39044842, w: -0.34682897}
-  m_LocalPosition: {x: 0, y: 0, z: 0.0000009536743}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children:
   - {fileID: 828490707555324461}
@@ -33558,8 +33380,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000019073486, y: 0.0000019073486}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2454860208654957183
 MonoBehaviour:
@@ -33648,7 +33470,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &5793503839884995803
+--- !u!114 &5563892590905044031
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -33657,18 +33479,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2454860208664661911}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84741f3ec458c436f88dfa65eaa53d48, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a627698321f740afa96ab4b06fe9012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ApplyToChildren: 0
-  FixDirectionTopLeft: {x: -20, y: 100, z: 0}
-  FixDirectionTopCenter: {x: 0, y: -50, z: 0}
-  FixDirectionTopRight: {x: 20, y: -120, z: 0}
-  FixDirectionCenterLeft: {x: 20, y: 120, z: 0}
-  FixDirectionCenterRight: {x: 20, y: -90, z: 0}
-  FixDirectionBottomLeft: {x: 40, y: 90, z: 0}
-  FixDirectionBottomCenter: {x: 40, y: -50, z: 0}
-  FixDirectionBottomRight: {x: 50, y: 180, z: 0}
+  FrontShot: {fileID: 828490707540121453}
+  TopShot: {fileID: 94881967327645455}
+  BackShot: {fileID: 94881968627102762}
+  Trail: {fileID: 872153029847621193}
 --- !u!1 &4620453410243494083
 GameObject:
   m_ObjectHideFlags: 0
@@ -38590,7 +38407,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4620453410243494087}
-  m_LocalRotation: {x: -0, y: 0.7071069, z: -0, w: 0.70710677}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.22, y: 0, z: 6.55}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
@@ -39178,7 +38995,7 @@ ParticleSystem:
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 270, y: 0, z: 0}
+    m_Rotation: {x: -45, y: 0, z: 0}
     m_Scale: {x: 2, y: 4, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
