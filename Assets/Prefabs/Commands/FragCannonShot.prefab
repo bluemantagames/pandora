@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 94881967327645448}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 1}
+  m_LocalPosition: {x: 0, y: -0.2, z: 1}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 94881967389066902}
@@ -33482,10 +33482,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a627698321f740afa96ab4b06fe9012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FrontShot: {fileID: 828490707540121453}
-  TopShot: {fileID: 94881967327645455}
-  BackShot: {fileID: 94881968627102762}
-  Trail: {fileID: 872153029847621193}
+  FrontShot: {fileID: 828490707540225741}
+  FrontLight: {fileID: 2454860208680005457}
+  TopShot: {fileID: 94881967327645452}
+  TopLight: {fileID: 94881967389066905}
+  BackShot: {fileID: 94881968627102763}
+  BackLight: {fileID: 94881968358874833}
+  Trail: {fileID: 872153029847590889}
 --- !u!1 &4620453410243494083
 GameObject:
   m_ObjectHideFlags: 0

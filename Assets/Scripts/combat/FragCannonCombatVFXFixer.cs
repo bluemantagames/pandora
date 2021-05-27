@@ -6,40 +6,45 @@ namespace Pandora.Combat
 {
     public class FragCannonCombatVFXFixer : MonoBehaviour, CombatVFXFixer
     {
-        public ParticleSystem FrontShot;
-        public ParticleSystem TopShot;
-        public ParticleSystem BackShot;
-        public ParticleSystem Trail;
-        ParticleSystem.ShapeModule originalFrontShotShape;
-        ParticleSystem.ShapeModule originalTopShotShape;
-        ParticleSystem.ShapeModule originalBackShotShape;
-        ParticleSystem.ShapeModule originalTrailShape;
-        Vector3 originalFrontShotRotation;
-        Vector3 originalTopShotRotation;
-        Vector3 originalBackShotRotation;
-        Vector3 originalTrailRotation;
+        public ParticleSystemRenderer FrontShot;
+        public ParticleSystemRenderer FrontLight;
+        public ParticleSystemRenderer TopShot;
+        public ParticleSystemRenderer TopLight;
+        public ParticleSystemRenderer BackShot;
+        public ParticleSystemRenderer BackLight;
+        public ParticleSystemRenderer Trail;
         Quaternion originalLocalRotation;
 
         void Awake()
         {
-            originalFrontShotShape = FrontShot.shape;
-            originalTopShotShape = TopShot.shape;
-            originalBackShotShape = BackShot.shape;
-            originalTrailShape = Trail.shape;
-
-            originalFrontShotRotation = FrontShot.shape.rotation;
-            originalTopShotRotation = TopShot.shape.rotation;
-            originalBackShotRotation = BackShot.shape.rotation;
-            originalTrailRotation = Trail.shape.rotation;
             originalLocalRotation = transform.localRotation;
         }
 
         public void FixVFX(Vector2 source, Vector2 target)
         {
             var direction = (target - source).normalized;
+
+            FixRotation(direction);
+            FixOrder(direction);
+        }
+
+        void FixRotation(Vector2 direction)
+        {
             var rotation = Quaternion.FromToRotation(Vector3.up, direction);
 
             transform.localRotation = rotation * originalLocalRotation;
+        }
+
+        void FixOrder(Vector2 direction)
+        {
+            FrontShot.sortingOrder = direction.y > 0 ? 10 : 30;
+            FrontLight.sortingOrder = direction.y > 1 ? 11 : 31;
+
+            TopShot.sortingOrder = 20;
+            TopLight.sortingOrder = 21;
+
+            BackShot.sortingOrder = direction.y < 0 ? 10 : 30;
+            BackLight.sortingOrder = direction.y < 1 ? 11 : 31;
         }
     }
 }
