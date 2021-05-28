@@ -5,6 +5,7 @@ using Pandora.Network.Data.Users;
 using Pandora.Network.Data.Matchmaking;
 using Pandora.Network.Data.Analytics;
 using Pandora.Network.Data.Leaderboard;
+using Pandora.Network.Data.Mtx;
 using System.Threading.Tasks;
 using System.Net;
 using System.Collections.Generic;
@@ -278,6 +279,38 @@ namespace Pandora.Network
             var request = new RestRequest($"/users/leaderboard?page={page}&size={size}", Method.GET);
 
             return ExecuteApiRequest<GetLeaderboardResponse>(request, token);
+        }
+
+        /// <summary>
+        /// Selects a cosmetic
+        /// </summary>
+        public Task<ApiResponse<PaginatedResult<string>>> SelectCosmetic(string name, string token)
+        {
+            var request = new RestRequest($"/cosmetics/{name}/selected", Method.POST);
+
+            return ExecuteApiRequest<PaginatedResult<string>>(request, token);
+        }
+
+
+        /// <summary>
+        /// Unselects a cosmetic kind (effectively selects the default one)
+        /// </summary>
+        public Task<ApiResponse<PaginatedResult<string>>> UnselectCosmetic(string kind, string token)
+        {
+            var request = new RestRequest($"/cosmetics/kinds/{kind}/selected", Method.DELETE);
+
+            return ExecuteApiRequest<PaginatedResult<string>>(request, token);
+        }
+
+
+        /// <summary>
+        /// Get list of unlocked cosmetics
+        /// </summary>
+        public Task<ApiResponse<PaginatedResult<CosmeticItem>>> GetUnlockedCosmetics(string kind, string token)
+        {
+            var request = new RestRequest($"/cosmetics?kind={kind}", Method.GET);
+
+            return ExecuteApiRequest<PaginatedResult<CosmeticItem>>(request, token);
         }
     }
 }

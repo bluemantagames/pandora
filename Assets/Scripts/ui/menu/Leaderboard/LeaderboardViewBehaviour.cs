@@ -5,12 +5,13 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Pandora.Network;
 using Pandora;
+using Pandora.UI.Menu.Modal;
 using System.Net;
 using Pandora.Network.Data.Leaderboard;
 
 namespace Pandora.UI.Menu.Leaderboard
 {
-    public class LeaderboardViewBehaviour : MonoBehaviour
+    public class LeaderboardViewBehaviour : MonoBehaviour, ModalInit
     {
         public int UsersPerPage = 20;
         public GameObject SingleValueContainer;
@@ -22,6 +23,12 @@ namespace Pandora.UI.Menu.Leaderboard
         private bool isLoading = false;
         private int currentPage = 1;
         private int lastResultCount = 0;
+
+        public void Init() {
+            GetComponent<Canvas>().enabled = true;
+
+            LoadLeaderboard().Forget();
+        }
 
         public async UniTaskVoid LoadLeaderboard()
         {
