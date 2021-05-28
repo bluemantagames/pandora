@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using Pandora;
 
@@ -7,33 +6,45 @@ namespace Pandora.Combat
 {
     public class FragCannonCombatVFXFixer : MonoBehaviour, CombatVFXFixer
     {
-        public Vector2 EnemyDirection { get; set; }
-        bool fixedRotation = false;
+        public ParticleSystemRenderer FrontShot;
+        public ParticleSystemRenderer FrontLight;
+        public ParticleSystemRenderer TopShot;
+        public ParticleSystemRenderer TopLight;
+        public ParticleSystemRenderer BackShot;
+        public ParticleSystemRenderer BackLight;
+        public ParticleSystemRenderer Trail;
+        Quaternion originalLocalRotation;
 
-        public Quaternion FixedShotRotation(Vector2Int enemyDirection)
+        void Awake()
         {
-            int yRotation = 0;
-            int xRotation = 0;
+            originalLocalRotation = transform.localRotation;
+        }
 
-            if (enemyDirection.x == 1 && enemyDirection.y == -1)
-                yRotation = 45;
-            else if (enemyDirection.x == 1 && enemyDirection.y == 0)
-                yRotation = 90;
-            else if (enemyDirection.x == 1 && enemyDirection.y == 1)
-                yRotation = 135;
-            else if (enemyDirection.x == 0 && enemyDirection.y == 1)
-                yRotation = 180;
-            else if (enemyDirection.x == -1 && enemyDirection.y == 1)
-                yRotation = 225;
-            else if (enemyDirection.x == -1 && enemyDirection.y == 0)
-                yRotation = 270;
-            else if (enemyDirection.x == -1 && enemyDirection.y == -1)
-                yRotation = 315;
+        public void FixVFX(Vector2 source, Vector2 target)
+        {
+            var direction = (target - source).normalized;
 
-            if (enemyDirection.y > 0)
-                xRotation = -50;
+            FixRotation(direction);
+            FixOrder(direction);
+        }
 
-            return Quaternion.Euler(xRotation, yRotation, 0);
+        void FixRotation(Vector2 direction)
+        {
+            var rotation = Quaternion.FromToRotation(Vector3.up, direction);
+
+            transform.localRotation = rotation * originalLocalRotation;
+        }
+
+        void FixOrder(Vector2 direction)
+        {
+            FrontShot.sortingOrder = direction.y > 0 ? 10 : 30;
+            FrontLight.sortingOrder = direction.y > 1 ? 11 : 31;
+
+            TopShot.sortingOrder = 20;
+            TopLight.sortingOrder = 21;
+
+            BackShot.sortingOrder = direction.y < 0 ? 10 : 30;
+            BackLight.sortingOrder = direction.y < 1 ? 11 : 31;
         }
     }
 }

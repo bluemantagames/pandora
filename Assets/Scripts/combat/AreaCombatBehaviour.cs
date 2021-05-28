@@ -16,7 +16,6 @@ namespace Pandora.Combat
         int vfxTicksElapsed = 0;
         uint vfxTotalTimeElapsed = 0;
         int timeSinceLastDamages = 0;
-        CombatVFXFixer combatVFXFixer;
         ParticleSystem[] particles = new ParticleSystem[0];
         Queue<Dictionary<GameObject, int>> delayedDamages = new Queue<Dictionary<GameObject, int>>();
         EngineComponent engineComponent;
@@ -45,7 +44,6 @@ namespace Pandora.Combat
         {
             if (CombatVFX != null)
             {
-                combatVFXFixer = CombatVFX.GetComponent<CombatVFXFixer>();
                 particles = CombatVFX.GetComponentsInChildren<ParticleSystem>();
             }
 
@@ -89,10 +87,12 @@ namespace Pandora.Combat
             }
 
             var direction = ((Vector2)target.enemy.transform.position - (Vector2)transform.position).normalized;
-            var computedDirection = GetShotDirection(direction);
+            var vfxFixers = CombatVFX.GetComponentsInChildren<CombatVFXFixer>();
 
-            if (combatVFXFixer != null && CombatVFX != null)
-                CombatVFX.transform.localRotation = combatVFXFixer.FixedShotRotation(computedDirection);
+            foreach (var vfxFixer in vfxFixers)
+            {
+                vfxFixer.FixVFX(transform.position, target.enemy.transform.position);
+            }
 
             animator.SetFloat("BlendX", direction.x);
             animator.SetFloat("BlendY", direction.y);
@@ -188,19 +188,6 @@ namespace Pandora.Combat
             }
 
             timeSinceLastDamages = 0;
-        }
-
-        Vector2Int GetShotDirection(Vector2 enemyDirection)
-        {
-            var direction = new Vector2Int();
-
-            if (enemyDirection != null)
-            {
-                direction.x = enemyDirection.x > shotDirectionThreshold ? 1 : enemyDirection.x < -shotDirectionThreshold ? -1 : 0;
-                direction.y = enemyDirection.y > shotDirectionThreshold ? 1 : enemyDirection.y < -shotDirectionThreshold ? -1 : 0;
-            }
-
-            return direction;
         }
 
         void PlayVFXAtTime(float time)
