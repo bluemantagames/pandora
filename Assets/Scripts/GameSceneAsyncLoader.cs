@@ -59,7 +59,7 @@ public class GameSceneAsyncLoader : MonoBehaviour
 
         UpdateLoadingAssets();
 
-        await AddressablesSingleton.instance.LoadUnits();
+        await AddressablesSingleton.instance.LoadAddressables();
 
         Logger.Debug("Preloading animations...");
 

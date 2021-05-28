@@ -29,6 +29,10 @@ namespace Pandora.Network
             }
         }
 
+        public string ReferralUrl {
+            get => $"{apiHost}/referral/{PlayerModelSingleton.instance.User.id}";
+        }
+
         private static ApiControllerSingleton privateInstance = null;
 
         private RestClient _client = null;
@@ -146,10 +150,10 @@ namespace Pandora.Network
         /// </summary>
         /// <param name="token">The Google token to exchange for authentication</param>
         /// <returns>A Task with a GoogleSignInResponse (the token)</returns>
-        public Task<ApiResponse<GoogleSignInResponse>> GoogleSignIn(string token)
+        public Task<ApiResponse<GoogleSignInResponse>> GoogleSignIn(string token, string email)
         {
             var request = new RestRequest("/users/googleSignIn", Method.POST);
-            var param = new GoogleSignInRequest { token = token };
+            var param = new GoogleSignInRequest { token = token, email = email };
 
             request.AddJsonBody(param);
 

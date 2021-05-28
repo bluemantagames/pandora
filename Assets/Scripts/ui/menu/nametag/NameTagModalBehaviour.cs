@@ -33,7 +33,7 @@ namespace Pandora.UI.Menu.NameTag
 
         async UniTaskVoid AsyncStart()
         {
-            var nameTags = await CosmeticsRepo.Instance.LoadNameTags();
+            var nameTags = CosmeticsRepo.Instance.LoadNameTags();
             var nameTagNames = new List<string>(nameTags.Keys);
 
             GameObject row = null;

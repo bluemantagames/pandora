@@ -9,7 +9,7 @@ public class DevGameSceneAssetsLoader : MonoBehaviour
 
     private async UniTask StartLoading()
     {
-        await AddressablesSingleton.instance.LoadUnits();
+        await AddressablesSingleton.instance.LoadAddressables();
     }
 
     void Update()

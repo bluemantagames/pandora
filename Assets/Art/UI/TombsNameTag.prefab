@@ -73,5 +73,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TombsNameTag
       objectReference: {fileID: 0}
+    - target: {fileID: 5073882966828601970, guid: e71d914dd04fad1e4a25f815fd2b398d,
+        type: 3}
+      propertyPath: m_TagString
+      value: NameTag
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e71d914dd04fad1e4a25f815fd2b398d, type: 3}

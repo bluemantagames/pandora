@@ -26,7 +26,7 @@ namespace Pandora.UI.HUD
 
             if (opponent != null)
             {
-                await CosmeticsRepo.Instance.ApplyNameTagCosmetic(opponent.Cosmetics.NameTag.Id ?? "", gameObject);
+                CosmeticsRepo.Instance.ApplyNameTagCosmetic(opponent.Cosmetics.NameTag.Id ?? "", gameObject);
 
                 var image = GetComponent<Image>();
                 image.DOFade(1f, FadeDuration);

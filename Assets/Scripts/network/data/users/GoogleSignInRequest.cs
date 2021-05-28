@@ -4,5 +4,6 @@ namespace Pandora.Network.Data.Users
     public class GoogleSignInRequest
     {
         public string token;
+        public string email;
     }
 }

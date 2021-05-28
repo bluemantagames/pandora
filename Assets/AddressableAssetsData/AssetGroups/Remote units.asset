@@ -22,8 +22,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Unit
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    - Remote
+    m_MainAsset: {fileID: 1341249731494315628, guid: 5133a8594c9620240a43638101b5244a,
+      type: 3}
+    m_TargetAsset: {fileID: 1341249731494315628, guid: 5133a8594c9620240a43638101b5244a,
+      type: 3}
   - m_GUID: 5133a8594c9620240a43638101b5244a
     m_Address: Units/Bard
     m_ReadOnly: 0
@@ -40,32 +43,40 @@ MonoBehaviour:
     m_SerializedLabels:
     - Unit
     - Remote
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 1060352442105845753, guid: c5edff71eec47064f840955c4743dcb7,
+      type: 3}
+    m_TargetAsset: {fileID: 1060352442105845753, guid: c5edff71eec47064f840955c4743dcb7,
+      type: 3}
   - m_GUID: 9150f71f95e9a0f479525f2264358d9e
     m_Address: Units/ClericsSpawner
     m_ReadOnly: 0
     m_SerializedLabels:
     - Unit
     - Remote
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 586835057315351248, guid: 9150f71f95e9a0f479525f2264358d9e,
+      type: 3}
+    m_TargetAsset: {fileID: 586835057315351248, guid: 9150f71f95e9a0f479525f2264358d9e,
+      type: 3}
   - m_GUID: cd8bf7fbffc60904882d214fda34ea8c
     m_Address: Units/Cockatrice
     m_ReadOnly: 0
     m_SerializedLabels:
     - Unit
     - Remote
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 1060352442105845753, guid: cd8bf7fbffc60904882d214fda34ea8c,
+      type: 3}
+    m_TargetAsset: {fileID: 1060352442105845753, guid: cd8bf7fbffc60904882d214fda34ea8c,
+      type: 3}
   - m_GUID: 2396cc48b29664b4f97c5ed891f0a64d
     m_Address: Units/Fireball
     m_ReadOnly: 0
     m_SerializedLabels:
     - Unit
     - Remote
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 1851135866392614702, guid: 2396cc48b29664b4f97c5ed891f0a64d,
+      type: 3}
+    m_TargetAsset: {fileID: 1851135866392614702, guid: 2396cc48b29664b4f97c5ed891f0a64d,
+      type: 3}
   - m_GUID: beadc67b4d2cd49428085627d5416841
     m_Address: Units/HalfOrc
     m_ReadOnly: 0
@@ -82,24 +93,30 @@ MonoBehaviour:
     m_SerializedLabels:
     - Unit
     - Remote
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 1060352442105845753, guid: c671d4c876003c3468b9f00b85fd8be3,
+      type: 3}
+    m_TargetAsset: {fileID: 1060352442105845753, guid: c671d4c876003c3468b9f00b85fd8be3,
+      type: 3}
   - m_GUID: e63834404ee8b5f42bfff14c34603b84
     m_Address: Units/HalfOrcWolf
     m_ReadOnly: 0
     m_SerializedLabels:
     - Unit
     - Remote
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 1060352442105845753, guid: e63834404ee8b5f42bfff14c34603b84,
+      type: 3}
+    m_TargetAsset: {fileID: 1060352442105845753, guid: e63834404ee8b5f42bfff14c34603b84,
+      type: 3}
   - m_GUID: 1d103170791359141b04bc6e9493602e
     m_Address: Units/HarpiesSpawner
     m_ReadOnly: 0
     m_SerializedLabels:
     - Unit
     - Remote
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 7233908571152258386, guid: 1d103170791359141b04bc6e9493602e,
+      type: 3}
+    m_TargetAsset: {fileID: 7233908571152258386, guid: 1d103170791359141b04bc6e9493602e,
+      type: 3}
   - m_GUID: c9dc658584a62b640b6f468bb02dd424
     m_Address: Units/Harpy
     m_ReadOnly: 0
@@ -126,8 +143,10 @@ MonoBehaviour:
     m_SerializedLabels:
     - Unit
     - Remote
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 264060199221388477, guid: 3cd0413c4cb58a146953dc7fc2dc8e42,
+      type: 3}
+    m_TargetAsset: {fileID: 264060199221388477, guid: 3cd0413c4cb58a146953dc7fc2dc8e42,
+      type: 3}
   - m_GUID: a6124a5aa057b5c44b7db82ec82b8396
     m_Address: Units/Ranger
     m_ReadOnly: 0
@@ -246,14 +265,20 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Unit
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    - Remote
+    m_MainAsset: {fileID: 5284787505347801723, guid: ffa9a18c6af5741b0b66ea05a5426e45,
+      type: 3}
+    m_TargetAsset: {fileID: 5284787505347801723, guid: ffa9a18c6af5741b0b66ea05a5426e45,
+      type: 3}
   - m_GUID: 39824bcc07b054e7298d89f45571fc6a
     m_Address: Units/StructureUnit
     m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_SerializedLabels:
+    - Remote
+    m_MainAsset: {fileID: 8076880815249732036, guid: 39824bcc07b054e7298d89f45571fc6a,
+      type: 3}
+    m_TargetAsset: {fileID: 8076880815249732036, guid: 39824bcc07b054e7298d89f45571fc6a,
+      type: 3}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a797ade1bb7904c14b8e70534c2ff6fa, type: 2}
   m_SchemaSet:
