@@ -72,6 +72,7 @@ namespace Pandora
         public PandoraEngine engine;
         public GameObject textObject;
         List<GameObject> debug = new List<GameObject> { };
+
         public Vector2 TopLeftTowerPosition, TopRightTowerPosition, TopMiddleTowerPosition,
             BottomLeftTowerPosition, BottomRightTowerPosition, BottomMiddleTowerPosition,
             TopLeftAggroOrigin, TopLeftAggroEnd,
@@ -80,6 +81,7 @@ namespace Pandora
             BottomLeftAggroOrigin, BottomLeftAggroEnd,
             BottomMiddleAggroOrigin, BottomMiddleAggroEnd,
             BottomRightAggroOrigin, BottomRightAggroEnd;
+
         public Boolean IsLive = false;
 
         static MapComponent _instance = null;
@@ -921,6 +923,10 @@ namespace Pandora
             var unit = LoadCard(unitName);
             var manaReserveComponent = unit.GetComponent<ManaCostsBehaviour>();
             return manaReserveComponent.ReservedMana;
+        }
+
+        public void Reset() {
+            _instance = null;
         }
     }
 }

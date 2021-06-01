@@ -108,6 +108,7 @@ namespace Pandora
             TeamComponent.Reset();
             MenuEventsSingleton.Reset();
             ManaSingleton.Reset();
+            MapComponent.Instance.Reset();
 
             await LoadMainMenu();
         }

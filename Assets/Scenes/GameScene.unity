@@ -3693,6 +3693,7 @@ GameObject:
   - component: {fileID: 996488297}
   - component: {fileID: 996488298}
   - component: {fileID: 996488299}
+  - component: {fileID: 996488292}
   m_Layer: 13
   m_Name: Arena
   m_TagString: Untagged
@@ -3821,6 +3822,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &996488292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996488287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66b989dc42c8bba4093530c600b3fa07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Enabled: 0
+  ManaEveryTimelapse: 10
+  StepAmount: 0.2
 --- !u!114 &996488293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10134,7 +10150,7 @@ PrefabInstance:
     - target: {fileID: 3866240383038811720, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
       propertyPath: lifeValue
-      value: 1000
+      value: 1500
       objectReference: {fileID: 0}
     - target: {fileID: 3866240383038811721, guid: 3ae196b7cda494c4b8d0457362c166ec,
         type: 3}
