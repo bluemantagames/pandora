@@ -14,12 +14,14 @@ using Pandora.Network.Data.Matchmaking;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using Pandora.Network.Data;
+using Pandora.Network.Data.Mtx;
+using Pandora;
 
 namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {
-        public bool IsDebugBuild = Debug.isDebugBuild;
+        public bool ProdMatchmaking = false;
 
         string userMatchToken = null;
         Socket matchSocket = null;
@@ -61,23 +63,27 @@ namespace Pandora.Network
         private NetworkControllerSingleton()
         {
             jwt = new JWT();
+
+#if !UNITY_EDITOR
+            ProdMatchmaking = true;
+#endif
         }
 
         public void StartMatchmaking()
         {
             var deck = playerModelSingleton.GetActiveDeck();
 
-            if (deck != null) ExecMatchmaking(deck, false);
+            if (deck != null) ExecMatchmaking(deck, false).Forget();
         }
 
         public void StartMatchmaking(List<string> deck)
         {
-            if (deck != null) ExecMatchmaking(deck, false);
+            if (deck != null) ExecMatchmaking(deck, false).Forget();
         }
 
         public void StartDevMatchmaking(List<string> deck)
         {
-            if (deck != null) ExecMatchmaking(deck, true);
+            if (deck != null) ExecMatchmaking(deck, true).Forget();
         }
 
         public async UniTaskVoid ExecMatchmaking(List<string> deck, bool isDev)
@@ -137,16 +143,20 @@ namespace Pandora.Network
 
             var startTime = DateTime.Now;
 
-            var matchHost = (IsDebugBuild) ? "127.0.0.1" : "pandora.bluemanta.games";
-            var matchPort = 9090;
+            var matchHost = (ProdMatchmaking) ? Hosts.ProdMatch : Hosts.DevMatch;
+            var matchPort = Hosts.MatchPort;
 
             IPHostEntry dns = null;
-            
-            while (dns == null) {
-                try {
+
+            while (dns == null)
+            {
+                try
+                {
                     dns = Dns.GetHostEntry(matchHost);
 
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Debug.LogError(e.Message);
 
                     Thread.Sleep(reconnectionWaitMs);
@@ -169,10 +179,14 @@ namespace Pandora.Network
 
             Logger.Debug($"Connecting to {matchHost}:{matchPort}");
 
-            while (!matchSocket.Connected) {
-                try {
+            while (!matchSocket.Connected)
+            {
+                try
+                {
                     matchSocket.Connect(ipe);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Debug.LogError(e.Message);
 
                     Thread.Sleep(reconnectionWaitMs);
@@ -183,8 +197,10 @@ namespace Pandora.Network
 
             ReplayFrom replayFromId = null;
 
-            if (lastEnvelopeId != null) {
-                replayFromId = new ReplayFrom {
+            if (lastEnvelopeId != null)
+            {
+                replayFromId = new ReplayFrom
+                {
                     ReplayFromId = lastEnvelopeId.Value
                 };
             }
@@ -230,6 +246,8 @@ namespace Pandora.Network
 
                     receiveThread = null;
                     networkThread = null;
+
+                    shutdownMatchSocket();
 
                     StartMatchmaking();
 
@@ -283,7 +301,8 @@ namespace Pandora.Network
 
                     var size = BitConverter.ToInt32(sizeBytes, 0);
 
-                    if (size == 0) {
+                    if (size == 0)
+                    {
                         throw new Exception("Empty Receive call");
                     }
 
@@ -300,9 +319,12 @@ namespace Pandora.Network
             }
             catch (Exception e)
             {
-                try {
+                try
+                {
                     matchSocket?.Close();
-                } finally {
+                }
+                finally
+                {
                     Debug.LogError(e.Message);
 
                     if (matchSocket != null)
@@ -322,14 +344,15 @@ namespace Pandora.Network
                 TeamComponent.assignedTeam = envelope.Start.Team;
                 PlayerId = envelope.Start.Id;
 
-                Debug.Log($"We're team {TeamComponent.assignedTeam}");
-
                 var player = envelope.Start.Teams.First(team => team.TeamNumber == TeamComponent.opponentTeam)?.Players[0];
+
+                Debug.Log($"We're team {TeamComponent.assignedTeam}");
 
                 TeamComponent.Opponent = new Opponent
                 {
                     Name = player.Name,
-                    Position = (player.LeaderboardPosition != 0) ? player.LeaderboardPosition as int? : null
+                    Position = (player.LeaderboardPosition != 0) ? player.LeaderboardPosition as int? : null,
+                    Cosmetics = new CosmeticsMtx(player.Cosmetics)
                 };
 
                 matchStartEvent.Invoke(TeamComponent.Opponent);
@@ -373,16 +396,6 @@ namespace Pandora.Network
                     }
                 }
 
-                // (I don't really like the foreach here...)
-                foreach (var playerInfo in envelope.Step.PlayerInfo)
-                {
-                    if (playerInfo.Id == PlayerId)
-                    {
-                        mana = playerInfo.Mana;
-                        Debug.Log($"Player ({PlayerId}) received mana: {mana}");
-                    }
-                }
-
                 Debug.Log($"Enqueuing Step {envelope.Step.TimePassedMs}");
 
                 lastEnvelopeId = envelope.EnvelopeId;
@@ -409,7 +422,8 @@ namespace Pandora.Network
                 Array.Reverse(lengthBytes);
             }
 
-            if (matchSocket != null && matchSocket.Connected) {
+            if (matchSocket != null && matchSocket.Connected)
+            {
                 matchSocket.Send(lengthBytes);
                 matchSocket.Send(message);
             }
@@ -419,13 +433,7 @@ namespace Pandora.Network
         {
             if (matchSocket != null)
             {
-                var socket = matchSocket;
-
-                // It's important to set the matchSocket to null before shutting it down so that
-                // the ReceiveLoop thread knows this wasn't an unwanted disconnect, and doesn't try to reconnect again
-                matchSocket = null;
-
-                socket.Shutdown(SocketShutdown.Both);
+                shutdownMatchSocket();
             }
 
             receiveThread = null;
@@ -435,6 +443,8 @@ namespace Pandora.Network
             lastEnvelopeId = null;
 
             stepsQueue = new ConcurrentQueue<StepMessage>();
+
+            matchStarted = false;
         }
 
         public static SpawnMessage GenerateSpawnMessage(StepCommand command)
@@ -472,6 +482,16 @@ namespace Pandora.Network
                 rewardId = command.GoldReward.RewardId,
                 elapsedMs = (int)command.GoldReward.ElapsedMs
             };
+        }
+
+        void shutdownMatchSocket() {
+            var socket = matchSocket;
+            
+            // It's important to set the matchSocket to null before shutting it down so that
+            // the ReceiveLoop thread knows this wasn't an unwanted disconnect, and doesn't try to reconnect again
+            matchSocket = null;
+
+            socket?.Shutdown(SocketShutdown.Both);
         }
 
     }

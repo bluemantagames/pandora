@@ -10,8 +10,9 @@ namespace Pandora
     public class AddressablesSingleton
     {
         public Dictionary<string, GameObject> units = new Dictionary<string, GameObject> { };
+        public Dictionary<string, GameObject> NameTags = new Dictionary<string, GameObject> { };
         private static AddressablesSingleton privateInstance = null;
-        string unitsAssetsLabel = "Unit";
+        string remoteAssetsLabel = "Remote", unitAssetsLabel = "Unit";
         float loadingProgress = 0f;
 
         private AddressablesSingleton() { }
@@ -35,7 +36,7 @@ namespace Pandora
         public UniTask<long> GetAddressablesSize()
         {
             return Addressables
-                .GetDownloadSizeAsync(unitsAssetsLabel)
+                .GetDownloadSizeAsync(remoteAssetsLabel)
                 .ToUniTask();
         }
 
@@ -44,7 +45,7 @@ namespace Pandora
         /// </summary>
         public UniTask ClearDependenciesCache()
         {
-            return Addressables.ClearDependencyCacheAsync(unitsAssetsLabel, false).ToUniTask();
+            return Addressables.ClearDependencyCacheAsync(remoteAssetsLabel, false).ToUniTask();
         }
 
         /// <summary>
@@ -54,26 +55,28 @@ namespace Pandora
         public UniTask DownloadDependencies(Action<float> progressHandler = null)
         {
             var progressManager = Progress.Create<float>(progressHandler);
-            return Addressables.DownloadDependenciesAsync(unitsAssetsLabel).ToUniTask(progress: progressManager);
+            return Addressables.DownloadDependenciesAsync(remoteAssetsLabel).ToUniTask(progress: progressManager);
         }
 
         /// <summary>
-        /// Load all the addressables units.
+        /// Load all the necessary addressables.
         /// </summary>
         /// <param name="progressHandler">A function called with the updated progress (this is not actually working).</param>
-        public UniTask LoadUnits(Action<float> progressHandler = null)
+        public UniTask LoadAddressables(Action<float> progressHandler = null)
         {
             var progressManager = Progress.Create<float>(progressHandler);
 
             return Addressables
-                .LoadAssetsAsync<GameObject>(unitsAssetsLabel, loadedUnit =>
+                .LoadAssetsAsync<GameObject>(remoteAssetsLabel, loadedAddressable =>
                 {
-                    var unitName = loadedUnit.name;
+                    var addressableName = loadedAddressable.name;
 
-                    Logger.Debug($"Loaded addressable unit: {unitName}");
+                    Logger.Debug($"Loaded addressable: {addressableName}");
 
-                    if (!units.ContainsKey(unitName))
-                        units.Add(unitName, loadedUnit);
+                    if (loadedAddressable.tag == "NameTag")
+                        NameTags.Add(loadedAddressable.name, loadedAddressable);
+                    else if (!units.ContainsKey(addressableName))
+                        units.Add(addressableName, loadedAddressable);
                 })
                 .ToUniTask(progress: progressManager);
         }

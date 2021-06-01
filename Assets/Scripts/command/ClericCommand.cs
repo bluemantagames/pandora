@@ -35,7 +35,7 @@ namespace Pandora.Command
 
             foreach (var cleric in groupComponent.Objects)
             {
-                cleric.GetComponent<UnitBehaviour>().PlayAnimation("Command", CommandAnimationMs, sacrifice);
+                cleric.GetComponent<ArenaEntityBehaviour>().PlayAnimation("Command", CommandAnimationMs, sacrifice);
             }
 
             if (isEveryoneAlive && targetEntity != null)

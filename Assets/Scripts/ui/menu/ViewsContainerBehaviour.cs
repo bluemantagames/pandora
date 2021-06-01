@@ -9,7 +9,6 @@ namespace Pandora.UI.Menu
 {
     public class ViewsContainerBehaviour : MonoBehaviour
     {
-        private bool initialied = false;
         public GameObject HomeView;
         public GameObject ShopView;
         public GameObject DeckView;

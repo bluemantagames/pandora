@@ -67,7 +67,8 @@ namespace Pandora.Editor
 
             var animationManifestPath = Path.Combine(texturesPath, "animation-manifest.json");
 
-            if (!File.Exists(animationManifestPath)) {
+            if (!File.Exists(animationManifestPath))
+            {
                 EditorUtility.DisplayDialog("Error importing animation", "Missing animation-manifest.json", "Ok");
 
                 return;
@@ -148,7 +149,8 @@ namespace Pandora.Editor
 
                 if (!animations.ContainsKey(frameNumber)) continue;
 
-                foreach (var clipManifest in animations[frameNumber]) {
+                foreach (var clipManifest in animations[frameNumber])
+                {
                     var clipName = clipManifest.name;
 
                     if (!clipFrames.ContainsKey(clipManifest.name))
@@ -190,7 +192,8 @@ namespace Pandora.Editor
                     {
                         var sprite = clipFrames[clip][angle][i];
 
-                        if (sprite != null) {
+                        if (sprite != null)
+                        {
                             var keyframe = new ObjectReferenceKeyframe();
 
                             keyframe.time = i / animClip.frameRate;

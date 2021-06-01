@@ -12,8 +12,7 @@ using Pandora.Engine.Animations;
 
 public class GameSceneAsyncLoader : MonoBehaviour
 {
-    public GameObject PlayButton;
-    public GameObject LoadingText;
+    public GameObject PlayButton, LoadingText, NameTagIcon;
     public LocalizedString LocalizedDownloadingText;
     public LocalizedString LocalizedLoadingText;
 
@@ -60,7 +59,7 @@ public class GameSceneAsyncLoader : MonoBehaviour
 
         UpdateLoadingAssets();
 
-        await AddressablesSingleton.instance.LoadUnits();
+        await AddressablesSingleton.instance.LoadAddressables();
 
         Logger.Debug("Preloading animations...");
 
@@ -79,6 +78,8 @@ public class GameSceneAsyncLoader : MonoBehaviour
         networkControllerSingleton.GameSceneLoading.allowSceneActivation = false;
 
         ShowPlayButton();
+
+        NameTagIcon.SetActive(true);
     }
 
     void ShowLoader()

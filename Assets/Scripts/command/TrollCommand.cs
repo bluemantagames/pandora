@@ -66,7 +66,7 @@ namespace Pandora.Command
 
             sourceEntity.IsMovementPaused = true;
 
-            GetComponent<UnitBehaviour>().PauseBehaviour();
+            GetComponent<ArenaEntityBehaviour>().PauseBehaviour();
 
             foreach (var entity in sourceEntity.Engine.Entities)
             {
@@ -124,7 +124,7 @@ namespace Pandora.Command
                     commandTrigger = false;
                     sourceEntity.IsMovementPaused = false;
 
-                    GetComponent<UnitBehaviour>().UnpauseBehaviour();
+                    GetComponent<ArenaEntityBehaviour>().UnpauseBehaviour();
                 }
             }
         }

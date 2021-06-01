@@ -5,6 +5,7 @@ using Pandora.Network.Data.Users;
 using Pandora.Network.Data.Matchmaking;
 using Pandora.Network.Data.Analytics;
 using Pandora.Network.Data.Leaderboard;
+using Pandora.Network.Data.Mtx;
 using System.Threading.Tasks;
 using System.Net;
 using System.Collections.Generic;
@@ -17,21 +18,19 @@ namespace Pandora.Network
         public bool IsDebugBuild = Debug.isDebugBuild;
         UnityJsonSerializer customSerializer = new UnityJsonSerializer();
 
-        string prodEndpoint = "https://pandora.bluemanta.games/api";
-
         private string apiHost
         {
             get
             {
-#if UNITY_EDITOR
-                if (IsDebugBuild)
-                    return "http://127.0.0.1:8080/api";
+                if (NetworkControllerSingleton.instance.ProdMatchmaking)
+                    return $"{Hosts.ProdMatchmaking}/api";
                 else
-                    return prodEndpoint;
-#else
-                    return prodEndpoint;
-#endif
+                    return $"{Hosts.DevMatchmaking}/api";
             }
+        }
+
+        public string ReferralUrl {
+            get => $"{apiHost}/referral/{PlayerModelSingleton.instance.User.id}";
         }
 
         private static ApiControllerSingleton privateInstance = null;
@@ -151,10 +150,10 @@ namespace Pandora.Network
         /// </summary>
         /// <param name="token">The Google token to exchange for authentication</param>
         /// <returns>A Task with a GoogleSignInResponse (the token)</returns>
-        public Task<ApiResponse<GoogleSignInResponse>> GoogleSignIn(string token)
+        public Task<ApiResponse<GoogleSignInResponse>> GoogleSignIn(string token, string email)
         {
             var request = new RestRequest("/users/googleSignIn", Method.POST);
-            var param = new GoogleSignInRequest { token = token };
+            var param = new GoogleSignInRequest { token = token, email = email };
 
             request.AddJsonBody(param);
 
@@ -231,7 +230,11 @@ namespace Pandora.Network
         public Task<ApiResponse<MatchmakingResponse>> StartMatchmaking(List<string> deck, string token)
         {
             var request = new RestRequest("/matchmaking", Method.POST);
-            var param = new MatchmakingRequest { deck = deck };
+            var param = new MatchmakingRequest
+            {
+                deck = deck,
+                lang = LanguageHelper.GetCurrentISO()
+            };
 
             request.Timeout = int.MaxValue;
             request.AddJsonBody(param);
@@ -280,6 +283,38 @@ namespace Pandora.Network
             var request = new RestRequest($"/users/leaderboard?page={page}&size={size}", Method.GET);
 
             return ExecuteApiRequest<GetLeaderboardResponse>(request, token);
+        }
+
+        /// <summary>
+        /// Selects a cosmetic
+        /// </summary>
+        public Task<ApiResponse<PaginatedResult<string>>> SelectCosmetic(string name, string token)
+        {
+            var request = new RestRequest($"/cosmetics/{name}/selected", Method.POST);
+
+            return ExecuteApiRequest<PaginatedResult<string>>(request, token);
+        }
+
+
+        /// <summary>
+        /// Unselects a cosmetic kind (effectively selects the default one)
+        /// </summary>
+        public Task<ApiResponse<PaginatedResult<string>>> UnselectCosmetic(string kind, string token)
+        {
+            var request = new RestRequest($"/cosmetics/kinds/{kind}/selected", Method.DELETE);
+
+            return ExecuteApiRequest<PaginatedResult<string>>(request, token);
+        }
+
+
+        /// <summary>
+        /// Get list of unlocked cosmetics
+        /// </summary>
+        public Task<ApiResponse<PaginatedResult<CosmeticItem>>> GetUnlockedCosmetics(string kind, string token)
+        {
+            var request = new RestRequest($"/cosmetics?kind={kind}", Method.GET);
+
+            return ExecuteApiRequest<PaginatedResult<CosmeticItem>>(request, token);
         }
     }
 }

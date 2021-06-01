@@ -154,6 +154,11 @@ PrefabInstance:
       propertyPath: RequiredMana
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 1069214256245577550, guid: f3024322f337f5844bd8d8be1328fece,
+        type: 3}
+      propertyPath: RequiredManaShowed
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 1069214256245577551, guid: f3024322f337f5844bd8d8be1328fece,
         type: 3}
       propertyPath: m_Sprite

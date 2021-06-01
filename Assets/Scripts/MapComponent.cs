@@ -5,7 +5,7 @@ using System.Collections;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Pandora.Movement;
+using Pandora.AI;
 using Pandora.Spell;
 using Pandora.Combat;
 using Pandora.Deck;
@@ -73,6 +73,7 @@ namespace Pandora
         public PandoraEngine engine;
         public GameObject textObject;
         List<GameObject> debug = new List<GameObject> { };
+
         public Vector2 TopLeftTowerPosition, TopRightTowerPosition, TopMiddleTowerPosition,
             BottomLeftTowerPosition, BottomRightTowerPosition, BottomMiddleTowerPosition,
             TopLeftAggroOrigin, TopLeftAggroEnd,
@@ -81,6 +82,7 @@ namespace Pandora
             BottomLeftAggroOrigin, BottomLeftAggroEnd,
             BottomMiddleAggroOrigin, BottomMiddleAggroEnd,
             BottomRightAggroOrigin, BottomRightAggroEnd;
+
         public Boolean IsLive = false;
 
         static MapComponent _instance = null;
@@ -286,11 +288,6 @@ namespace Pandora
                         goldReward.RewardApply(this, goldRewardMessage.team, goldRewardMessage.playerId);
                     }
                 }
-
-                if (step.mana != null)
-                {
-                    ManaSingleton.UpdateMana((float)step.mana);
-                }
             }
 
             if (!matchStarted)
@@ -355,19 +352,25 @@ namespace Pandora
             }
         }
 
-        public bool SpawnCard(string cardName, int team, GridCell cell, int requiredMana = 0)
+        public bool SpawnCard(string cardName, int team, GridCell cell, bool ignoreMana = false)
         {
             if (IsLive) return false;
 
             ResetAggroPoints();
 
+            var manaSingleton = ManaSingleton.Instance;
             var spawnPosition = cell.vector;
             var id = System.Guid.NewGuid().ToString();
             var manaEnabled = GetComponent<LocalManaBehaviourScript>()?.Enabled ?? true;
             var elapsedMs = engine.TotalElapsed;
+            var manaReserved = !ignoreMana ? GetCardManaReserved(cardName) : 0;
+            var manaRequired = !ignoreMana ? GetCardManaRequired(cardName) : 0;
+            var hasEnoughReserve = manaSingleton.MaxMana - manaSingleton.ManaUpperReserve - manaReserved >= 0;
+            var hasEnoughMana = manaSingleton.ManaValue >= manaRequired;
+            var canBeSpawned = hasEnoughMana && hasEnoughReserve;
 
             // TODO: Notify player somehow if they lack mana
-            if (manaEnabled && ManaSingleton.manaValue < requiredMana)
+            if (manaEnabled && !canBeSpawned)
             {
                 return false;
             }
@@ -380,11 +383,14 @@ namespace Pandora
                     cellY = spawnPosition.y,
                     team = TeamComponent.assignedTeam,
                     unitId = id,
-                    manaUsed = requiredMana,
+                    manaUsed = manaRequired,
                     elapsedMs = elapsedMs
                 };
 
             NetworkControllerSingleton.instance.EnqueueMessage(message);
+
+            // Handle mana change
+            ManaSingleton.Instance.UpdateMana(ManaSingleton.Instance.ManaValue - manaRequired);
 
             if (!NetworkControllerSingleton.instance.matchStarted)
             {
@@ -393,8 +399,7 @@ namespace Pandora
 
                 SpawnUnit(new UnitSpawn(message));
 
-                ManaSingleton.UpdateMana(ManaSingleton.manaValue - requiredMana);
-                ManaSingleton.manaUnit -= requiredMana;
+                ManaSingleton.Instance.ManaUnit -= manaRequired;
             }
 
             return true;
@@ -437,10 +442,11 @@ namespace Pandora
 
             if (spawner != null)
             {
-                spawner.Spawn(this, spawn);
+                var unitObjects = spawner.Spawn(this, spawn);
             }
             else
             {
+                unitObject.GetComponent<TeamComponent>().Team = spawn.Team;
                 InitializeComponents(unitObject, unitGridCell, spawn);
             }
 
@@ -462,20 +468,30 @@ namespace Pandora
             {
                 CommandViewportBehaviour.Instance.AddCommand(spawn.UnitName, spawn.Id);
             }
+
+            // Handle mana reserve
+            var manaReserveBehaviour = card.GetComponent<ManaCostsBehaviour>();
+
+            if (manaReserveBehaviour != null)
+            {
+                if (spawn.Team == TeamComponent.assignedTeam)
+                    ManaSingleton.Instance.SetManaUpperReserve(spawn.Id, manaReserveBehaviour.ReservedMana);
+                else
+                    ManaSingleton.Instance.SetEnemyManaUpperReserve(spawn.Id, manaReserveBehaviour.ReservedMana);
+            }
         }
 
         /// <summary>Initializes unit components, usually called on spawn</summary>
         public void InitializeComponents(GameObject unit, GridCell cell, UnitSpawn unitSpawn)
         {
             var teamComponent = unit.GetComponent<TeamComponent>();
-
-            teamComponent.Team = unitSpawn.Team;
-
-            var movement = unit.GetComponent<MovementComponent>();
-            var movementBehaviour = unit.GetComponent<MovementBehaviour>();
+            var movement = unit.GetComponent<BasicEntityController>();
+            var movementBehaviour = unit.GetComponent<EntityController>();
             var spell = unit.GetComponent<SpellBehaviour>();
 
             var idComponent = unit.AddComponent<UnitIdComponent>();
+
+            teamComponent.Team = unitSpawn.Team;
 
             idComponent.Id = unitSpawn.Id;
             idComponent.UnitName = unitSpawn.UnitName;
@@ -484,7 +500,7 @@ namespace Pandora
 
             var engineEntity = engine.AddEntity(
                 unit,
-                movementBehaviour?.Speed ?? spell.Speed,
+                movementBehaviour?.Speed ?? spell?.Speed ?? 0,
                 cell,
                 spell == null,
                 unitSpawn.Timestamp
@@ -507,7 +523,7 @@ namespace Pandora
 
             manaCostComponent.ManaCost = unitSpawn.ManaUsed;
 
-            var unitBehaviour = unit.GetComponent<UnitBehaviour>();
+            var unitBehaviour = unit.GetComponent<ArenaEntityBehaviour>();
 
             var blueController = unitBehaviour?.BlueController;
             var redController = unitBehaviour?.RedController;
@@ -653,7 +669,7 @@ namespace Pandora
 
             foreach (var entity in engine.Entities)
             {
-                var component = entity.GameObject.GetComponent<UnitBehaviour>();
+                var component = entity.GameObject.GetComponent<ArenaEntityBehaviour>();
 
                 if (component == null) continue;
 
@@ -902,6 +918,24 @@ namespace Pandora
 
                 selectedCards[0].CardObject.GetComponent<CardBehaviour>().Dragging = true;
             }
+        }
+
+        int GetCardManaRequired(string unitName)
+        {
+            var unit = LoadCard(unitName);
+            var manaReserveComponent = unit.GetComponent<ManaCostsBehaviour>();
+            return manaReserveComponent.RequiredMana;
+        }
+
+        int GetCardManaReserved(string unitName)
+        {
+            var unit = LoadCard(unitName);
+            var manaReserveComponent = unit.GetComponent<ManaCostsBehaviour>();
+            return manaReserveComponent.ReservedMana;
+        }
+
+        public void Reset() {
+            _instance = null;
         }
     }
 }

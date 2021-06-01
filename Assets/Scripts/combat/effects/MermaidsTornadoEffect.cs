@@ -1,5 +1,5 @@
 using UnityEngine;
-using Pandora.Movement;
+using Pandora.AI;
 using Pandora.Engine;
 
 namespace Pandora.Combat.Effects
@@ -15,7 +15,8 @@ namespace Pandora.Combat.Effects
 
         private int engineUnitsRadius;
 
-        public int EngineUnitsRadius {
+        public int EngineUnitsRadius
+        {
             get => engineUnitsRadius;
             set => engineUnitsRadius = value;
 
@@ -80,13 +81,14 @@ namespace Pandora.Combat.Effects
 
             var position = path.Current;
 
-            if (DebugTornado) {
+            if (DebugTornado)
+            {
                 Logger.Debug($"Unit is distant {distanceFromEdge + EngineUnitsRadius}, {force} has been applied, it moved to {position} ({tornado.Position} from {target.Position})");
             }
 
             target.Position = position;
 
-            target.GameObject.GetComponent<MovementComponent>().ResetPath();
+            target.GameObject.GetComponent<BasicEntityController>().ResetPath();
         }
 
         public void Unapply(GameObject target)

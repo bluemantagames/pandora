@@ -5,6 +5,8 @@ using Pandora.Network;
 using Pandora.Network.Data;
 using DG.Tweening;
 using UnityEngine.UI;
+using Pandora.Cosmetics;
+using Cysharp.Threading.Tasks;
 
 namespace Pandora.UI.HUD
 {
@@ -14,12 +16,18 @@ namespace Pandora.UI.HUD
         public float FadeDuration = 1.5f;
         public Color[] PositionColors;
 
-        void Start()
+        void Start() {
+            AsyncStart().Forget();
+        }
+
+        async UniTaskVoid AsyncStart()
         {
             var opponent = TeamComponent.Opponent;
 
             if (opponent != null)
             {
+                CosmeticsRepo.Instance.ApplyNameTagCosmetic(opponent.Cosmetics.NameTag.Id ?? "", gameObject);
+
                 var image = GetComponent<Image>();
                 image.DOFade(1f, FadeDuration);
 

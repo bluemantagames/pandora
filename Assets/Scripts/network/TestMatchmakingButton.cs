@@ -10,6 +10,7 @@ using Pandora.UI.Menu;
 using Pandora.UI.Menu.Event;
 using Pandora.UI.Menu.Home;
 using Pandora.Network.Data;
+using Cysharp.Threading.Tasks;
 
 namespace Pandora.Network
 {
@@ -18,10 +19,7 @@ namespace Pandora.Network
         public bool GameSceneToLoad = false;
 
         /// <summary>Forces matchmaking in prod server if enabled</summary>
-        public bool ProdMatchmaking = false;
 
-        /// <summary>Forces a game without authentication</summary>
-        public bool DevMatchmaking = false;
         public Text TextLoader;
         public Text TextPlay;
         public bool BypassCheck = false;
@@ -32,6 +30,8 @@ namespace Pandora.Network
         string oldPlayText = null;
         bool isLoading = false;
 
+        public GameObject BannerText;
+
         public void Connect()
         {
             // Clear the MatchInfo singleton for
@@ -39,7 +39,7 @@ namespace Pandora.Network
             MatchInfoSingleton.Instance.ClearAll();
 
             var activeDeck = GetActiveDeck();
-            var isDeckValid = DevMatchmaking ? true : IsDeckValid(activeDeck);
+            var isDeckValid = IsDeckValid(activeDeck);
 
             if (!isDeckValid) return;
 
@@ -52,28 +52,40 @@ namespace Pandora.Network
 
             AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.MATCHMAKING_START);
 
-            if (ProdMatchmaking)
-            {
-                NetworkControllerSingleton.instance.IsDebugBuild = false;
-            }
-
             var deck = activeDeck?.Select(cardName => new Card(cardName))?.ToList();
             var deckStr = deck?.Select(card => card.Name)?.ToList();
 
-            if (DevMatchmaking)
-            {
-                NetworkControllerSingleton.instance.StartDevMatchmaking(deckStr);
-            }
-            else
-            {
-                NetworkControllerSingleton.instance.StartMatchmaking(deckStr);
-            }
+            NetworkControllerSingleton.instance.StartMatchmaking(deckStr);
 
             DisableButton();
 
             NetworkControllerSingleton.instance.matchStartEvent.AddListener(LoadGameScene);
 
             HandBehaviour.Deck = deck;
+
+            startMatchmakingMessageLoop().Forget();
+        }
+
+        async UniTaskVoid startMatchmakingMessageLoop() {
+            var matchmakingMessagesController = new MatchmakingMessagesController();
+
+            Logger.Debug("Connecting to matchmaking websocket..");
+
+            await matchmakingMessagesController.Connect(PlayerModelSingleton.instance.Token);
+
+            Logger.Debug("Connected to matchmaking websocket");
+
+            while (!NetworkControllerSingleton.instance.matchStarted) {
+                var message = await matchmakingMessagesController.Receive();
+
+                Logger.Debug($"Message received {message}");
+
+                if (BannerText != null) {
+                    BannerText.GetComponent<Text>().text = message.message;
+                }
+            }
+
+            await matchmakingMessagesController.Disconnect();
         }
 
         public void StartMatch(string username, List<string> deck)
@@ -139,7 +151,7 @@ namespace Pandora.Network
             Logger.Debug("Checking if the matchmaking button is active...");
 
             var activeDeck = GetActiveDeck();
-            var isValid = DevMatchmaking ? true : IsDeckValid(activeDeck);
+            var isValid = IsDeckValid(activeDeck);
 
             if (!isValid)
             {

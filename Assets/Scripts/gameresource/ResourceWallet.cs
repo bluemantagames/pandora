@@ -1,16 +1,21 @@
 using UnityEngine;
 using Pandora.Events;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Pandora.Resource
 {
     public class ResourceWallet<T>
     {
-        private int _resource = 0;
+        private int _resource;
         private Func<int, int, T> resourceEarnedEventFactory;
         private Func<int, int, T> resourceLostEventFactory;
+        private Func<int, int, T> setUpperReserveEventFactory;
 
-        public int? ResourceCap { get; private set; }
+        public int? ResourceUpperCap { get; private set; }
+        public int? ResourceLowerCap { get; private set; }
+        public Dictionary<string, int> UpperReserve { get; private set; } = new Dictionary<string, int>();
 
         public int Resource
         {
@@ -31,21 +36,34 @@ namespace Pandora.Resource
         public ResourceWallet(
             Func<int, int, T> resourceEarnedEventFactory,
             Func<int, int, T> resourceLostEventFactory,
-            int? cap
+            Func<int, int, T> setUpperReserveEventFactory,
+            int? lowerCap,
+            int? upperCap
         )
         {
             this.resourceEarnedEventFactory = resourceEarnedEventFactory;
             this.resourceLostEventFactory = resourceLostEventFactory;
+            this.setUpperReserveEventFactory = setUpperReserveEventFactory;
 
-            ResourceCap = cap;
+            ResourceUpperCap = upperCap;
+            ResourceLowerCap = lowerCap;
+
+            _resource = lowerCap != null ? lowerCap.Value : 0;
 
             Bus = new EventBus<T>();
         }
 
         public void AddResource(int amount)
         {
-            if (ResourceCap != null && Resource + amount > ResourceCap.Value) {
-                amount = ResourceCap.Value - Resource;
+            if (ResourceUpperCap.HasValue)
+            {
+                var upperReserve = GetCurrentUpperReserve();
+                var upperCap = ResourceUpperCap.Value - upperReserve;
+
+                Logger.Debug($"[MANA] Earning amount {amount} with an uppercap of {upperCap}");
+
+                if (_resource + amount > upperCap)
+                    amount = upperCap - _resource;
             }
 
             _resource += amount;
@@ -64,6 +82,42 @@ namespace Pandora.Resource
             Bus.Dispatch(ev);
         }
 
+        public void AddUpperReserve(string id, int amount)
+        {
+            int newUpperReserve = 0;
+            UpperReserve.Add(id, amount);
+
+            if (ResourceUpperCap.HasValue)
+            {
+                var upperReserve = GetCurrentUpperReserve();
+                var upperCap = ResourceUpperCap.Value - upperReserve;
+
+                newUpperReserve = upperReserve;
+
+                if (_resource > upperCap)
+                    _resource = upperCap;
+            }
+
+            var ev = setUpperReserveEventFactory(_resource, newUpperReserve);
+
+            Bus.Dispatch(ev);
+        }
+
+        public void RemoveUpperReserve(string id)
+        {
+            UpperReserve.Remove(id);
+
+            var upperReserve = GetCurrentUpperReserve();
+
+            var ev = setUpperReserveEventFactory(_resource, upperReserve);
+
+            Bus.Dispatch(ev);
+        }
+
+        public int GetCurrentUpperReserve()
+        {
+            return UpperReserve.Values.Sum();
+        }
     }
 
 }

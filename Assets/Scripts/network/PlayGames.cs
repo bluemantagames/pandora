@@ -70,10 +70,11 @@ namespace Pandora.Network
             if (result == SignInStatus.Success)
             {
                 var serverAuthCode = PlayGamesPlatform.Instance.GetServerAuthCode();
+                var email = PlayGamesPlatform.Instance.GetUserEmail();
 
                 Logger.Debug($"Obtained server auth code: {serverAuthCode}");
 
-                var googleSignInResponse = await apiController.GoogleSignIn(serverAuthCode);
+                var googleSignInResponse = await apiController.GoogleSignIn(serverAuthCode, email);
 
                 if (googleSignInResponse.StatusCode == HttpStatusCode.OK && googleSignInResponse.Body != null)
                 {

@@ -34,6 +34,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e8aa43dbcd72744f5bf5acd0bd98f878, type: 2}
   - {fileID: 11400000, guid: 271d2c3beba5549799f2a79e9729fa4d, type: 2}
   - {fileID: 11400000, guid: 7cd458a1f9a444c869c37a8f64cb47b8, type: 2}
+  - {fileID: 11400000, guid: ff337fabe308c261f98d7120ca674fee, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -108,6 +109,8 @@ MonoBehaviour:
     - Locale-it
     - Preload
     - Unit
+    - NameTag
+    - Remote
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 4bae175350b7f4e3bb3244b6e80acd93, type: 2}
@@ -117,9 +120,9 @@ MonoBehaviour:
     m_ClassName: 
   m_ActivePlayerDataBuilderIndex: 3
   m_DataBuilders:
+  - {fileID: 11400000, guid: 5e549c9fe56624b78951f3ce378cc383, type: 2}
   - {fileID: 11400000, guid: 036863a2308ad401daf30e01073de676, type: 2}
   - {fileID: 11400000, guid: c3d5ee78f2c344e13b75055cec4e548c, type: 2}
-  - {fileID: 11400000, guid: 5e549c9fe56624b78951f3ce378cc383, type: 2}
   - {fileID: 11400000, guid: 3f2803c20fafc4f45aaea964888b5fdf, type: 2}
   m_ActiveProfileId: d386f3255399f4320bf310f707e4adf4
   m_HostingServicesManager:

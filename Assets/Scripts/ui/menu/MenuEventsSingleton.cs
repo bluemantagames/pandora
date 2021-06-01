@@ -6,7 +6,7 @@ namespace Pandora.UI.Menu
     public class MenuEventsSingleton
     {
 
-        private static MenuEventsSingleton privateInstance = null;
+        private static MenuEventsSingleton _instance = null;
         EventBus<MenuEvent> privateEventBus = new EventBus<MenuEvent>();
 
         public EventBus<MenuEvent> EventBus
@@ -20,13 +20,18 @@ namespace Pandora.UI.Menu
         {
             get
             {
-                if (privateInstance == null)
+                if (_instance == null)
                 {
-                    privateInstance = new MenuEventsSingleton();
+                    _instance = new MenuEventsSingleton();
                 }
 
-                return privateInstance;
+                return _instance;
             }
+        }
+
+        public static void Reset()
+        {
+            _instance = null;
         }
     }
 }

@@ -74,11 +74,13 @@ namespace Pandora.UI.Modal
             appendedExternalComponent = externalComponent;
         }
 
-        public void AppendComponent(GameObject externalComponent, Vector3 customScale)
+        public void AppendComponent(GameObject externalComponent, Vector3? customScale)
         {
             externalComponent.transform.parent = Viewport.transform;
             externalComponent.transform.localPosition = new Vector2(0, 0);
-            externalComponent.transform.localScale = customScale;
+
+            if (customScale.HasValue)
+                externalComponent.transform.localScale = customScale.Value;
 
             appendedExternalComponent = externalComponent;
         }

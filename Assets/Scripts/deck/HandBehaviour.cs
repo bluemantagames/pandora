@@ -121,7 +121,8 @@ namespace Pandora.Deck
                         "Harpies",
                         "Mermaids",
                         "Troll",
-                        "Zombies"
+                        "Zombies",
+                        "FragCannon"
                     };
 
                     cardNames = new List<string> { "HalfOrc" };
