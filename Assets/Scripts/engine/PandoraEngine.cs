@@ -12,6 +12,7 @@ using Pandora.Network.Messages;
 using Pandora.Engine.Animations;
 using System.Threading.Tasks;
 using System.Threading;
+using Pandora.AI;
 
 namespace Pandora.Engine
 {
@@ -252,10 +253,11 @@ namespace Pandora.Engine
             Logger.Debug($"Assigning speed {speed} in {position}");
 
             var idComponent = gameObject.GetComponent<UnitIdComponent>();
-
             var hitboxComponent = gameObject.GetComponent<DiscreteHitboxComponent>();
-
             var animationBezierComponent = gameObject.GetComponent<AnimationBezier>();
+            var entityController = gameObject.GetComponent<EntityController>();
+
+            var isStructure = entityController != null ? entityController.Speed == 0 : false;
 
             var entity = new EngineEntity
             {
@@ -265,6 +267,7 @@ namespace Pandora.Engine
                 Direction = new Vector2Int(0, 0),
                 Engine = this,
                 IsRigid = isRigid,
+                IsStructure = isStructure,
                 Layer = gameObject.layer,
                 Timestamp = timestamp,
                 DiscreteHitbox = hitboxComponent,
