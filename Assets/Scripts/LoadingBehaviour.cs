@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
 using Pandora.UI.Menu;
 using DG.Tweening;
+using Pandora.Resource;
 
 namespace Pandora
 {
@@ -108,6 +109,8 @@ namespace Pandora
             TeamComponent.Reset();
             MenuEventsSingleton.Reset();
             ManaSingleton.Reset();
+
+            MapComponent.Instance.GetComponent<WalletsComponent>()?.ResetWallets();
             MapComponent.Instance.Reset();
 
             await LoadMainMenu();
