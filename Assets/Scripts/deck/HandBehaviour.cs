@@ -125,7 +125,7 @@ namespace Pandora.Deck
                         "FragCannon"
                     };
 
-                    cardNames = new List<string> { "HalfOrc" };
+                    cardNames = new List<string> { "Harpies" };
 
                     cards =
                         (from card in cardNames

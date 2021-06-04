@@ -131,10 +131,7 @@ namespace Pandora.Editor
             {
                 progressBar($"Indexing {sprite.texture.name}..", sprites.Count);
 
-                var components = sprite.texture.name.Split(new char[] { '-' });
-
-                var angle = Int32.Parse(components[0]);
-                var frameNumber = Int32.Parse(components[1]);
+                var (angle, frameNumber) = getComponents(sprite.texture.name);
 
                 if (!animations.ContainsKey(frameNumber)) continue;
 
@@ -218,6 +215,44 @@ namespace Pandora.Editor
         [MenuItem("Assets/Flipbook Importer/Cleanup unused sprites")]
         public static void CleanupSprites()
         {
+            var ignoreCommandOption = EditorUtility.DisplayDialogComplex(
+                "Ignore command animation?",
+                "Do you want to delete a sprite if it's only in the Command animation?",
+                "Yes",
+                "No",
+                "Cancel"
+            );
+
+            if (ignoreCommandOption >= 2) return;
+
+            var texturesPath = EditorUtility.OpenFolderPanel("Pick the texture folder", "Assets/Art/Sprites/Characters/", "");
+
+            var animationManifest = loadAnimationManifest(texturesPath);
+
+            foreach (var texture in Directory.GetFiles(texturesPath, "*.png"))
+            {
+                Debug.Log($"Parsing {texture}");
+
+                var isFrameUsed = false;
+
+                var (_, frameNumber) = getComponents(Path.GetFileName(texture));
+
+                foreach (var animation in animationManifest.animations)
+                {
+                    if (isFrameUsed) break;
+
+                    if (ignoreCommandOption == 0 && animation.name == "Command") continue;
+
+                    isFrameUsed = frameNumber >= animation.startFrame && frameNumber <= animation.endFrame;
+                }
+
+                if (!isFrameUsed)
+                {
+                    Debug.Log($"Deleting {texture}");
+
+                    File.Delete(texture);
+                }
+            }
         }
 
         private static void progressBar(string message, float percent)
@@ -251,6 +286,16 @@ namespace Pandora.Editor
             return JsonUtility.FromJson<AnimationManifest>(
                 File.ReadAllText(animationManifestPath)
             );
+        }
+
+        static (int, int) getComponents(string filename)
+        {
+            var components = filename.Replace(".png", "").Split(new char[] { '-' });
+
+            var angle = Int32.Parse(components[0]);
+            var frameNumber = Int32.Parse(components[1]);
+
+            return (angle, frameNumber);
         }
     }
 
