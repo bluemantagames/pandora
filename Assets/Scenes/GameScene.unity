@@ -9105,6 +9105,26 @@ PrefabInstance:
       propertyPath: m_textInfo.characterCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2991752286308270999, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f,
+        type: 3}
+      propertyPath: _rectMagnification
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991752286308270999, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f,
+        type: 3}
+      propertyPath: _zoomMagnification
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991752286308270999, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f,
+        type: 3}
+      propertyPath: _referenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991752286308270999, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f,
+        type: 3}
+      propertyPath: _referenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 3005720477010286325, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f,
         type: 3}
       propertyPath: m_SizeDelta.x

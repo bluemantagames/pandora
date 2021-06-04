@@ -13,7 +13,7 @@ namespace Pandora.Editor
 {
     public class AnimationImporter
     {
-        [MenuItem("Assets/Create SpriteAtlas and AnimationClips for selected Sprites")]
+        [MenuItem("Assets/Flipbook Importer/Create SpriteAtlas and AnimationClips for selected Sprites")]
         public static void CreateAtlasForSelectedSprites()
         {
             SpriteAtlas sa = new SpriteAtlas();
@@ -65,18 +65,7 @@ namespace Pandora.Editor
 
             progressBar("Parsing animation manifest", 0f);
 
-            var animationManifestPath = Path.Combine(texturesPath, "animation-manifest.json");
-
-            if (!File.Exists(animationManifestPath))
-            {
-                EditorUtility.DisplayDialog("Error importing animation", "Missing animation-manifest.json", "Ok");
-
-                return;
-            }
-
-            var animationManifest = JsonUtility.FromJson<AnimationManifest>(
-                File.ReadAllText(animationManifestPath)
-            );
+            var animationManifest = loadAnimationManifest(texturesPath);
 
             progressBar("Parsing animation manifest", 1f);
 
@@ -225,6 +214,12 @@ namespace Pandora.Editor
             EditorUtility.ClearProgressBar();
         }
 
+
+        [MenuItem("Assets/Flipbook Importer/Cleanup unused sprites")]
+        public static void CleanupSprites()
+        {
+        }
+
         private static void progressBar(string message, float percent)
         {
             EditorUtility.DisplayProgressBar("Animation importer", message, percent);
@@ -241,6 +236,23 @@ namespace Pandora.Editor
         {
             progressBar(message, ++index / total);
         }
+
+        static AnimationManifest loadAnimationManifest(string texturesPath)
+        {
+            var animationManifestPath = Path.Combine(texturesPath, "animation-manifest.json");
+
+            if (!File.Exists(animationManifestPath))
+            {
+                EditorUtility.DisplayDialog("Error importing animation", "Missing animation-manifest.json", "Ok");
+
+                throw new Exception("Provided path does not exist");
+            }
+
+            return JsonUtility.FromJson<AnimationManifest>(
+                File.ReadAllText(animationManifestPath)
+            );
+        }
     }
+
 
 }
