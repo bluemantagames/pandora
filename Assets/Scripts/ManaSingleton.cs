@@ -8,14 +8,13 @@ namespace Pandora
     public class ManaSingleton
     {
         static ManaSingleton _instance = null;
-        ResourceWallet<ManaEvent> manaWallet;
-        ResourceWallet<ManaEvent> enemyManaWallet;
+        WalletsComponent walletsComponent;
 
         public int ManaValue
         {
             get
             {
-                return manaWallet.Resource;
+                return walletsComponent.ManaWallet.Resource;
             }
         }
 
@@ -23,7 +22,7 @@ namespace Pandora
         {
             get
             {
-                return manaWallet.GetCurrentUpperReserve();
+                return walletsComponent.ManaWallet.GetCurrentUpperReserve();
             }
         }
 
@@ -31,7 +30,7 @@ namespace Pandora
         {
             get
             {
-                return enemyManaWallet.Resource;
+                return walletsComponent.EnemyManaWallet.Resource;
             }
         }
 
@@ -39,7 +38,7 @@ namespace Pandora
         {
             get
             {
-                return manaWallet.ResourceUpperCap.Value;
+                return walletsComponent.ManaWallet.ResourceUpperCap.Value;
             }
         }
 
@@ -47,7 +46,7 @@ namespace Pandora
         {
             get
             {
-                return manaWallet.ResourceLowerCap.Value;
+                return walletsComponent.ManaWallet.ResourceLowerCap.Value;
             }
         }
 
@@ -69,10 +68,7 @@ namespace Pandora
 
         public ManaSingleton()
         {
-            var walletsComponent = MapComponent.Instance.GetComponent<WalletsComponent>();
-
-            manaWallet = walletsComponent.ManaWallet;
-            enemyManaWallet = walletsComponent.EnemyManaWallet;
+            walletsComponent = MapComponent.Instance.GetComponent<WalletsComponent>();
         }
 
         public void UpdateMana(int newValue, ResourceWallet<ManaEvent> manaWallet)
@@ -87,27 +83,27 @@ namespace Pandora
 
         public void UpdateMana(int newValue)
         {
-            UpdateMana(newValue, manaWallet);
+            UpdateMana(newValue, walletsComponent.ManaWallet);
         }
 
         public void UpdateEnemyMana(int newValue)
         {
-            UpdateMana(newValue, enemyManaWallet);
+            UpdateMana(newValue, walletsComponent.EnemyManaWallet);
         }
 
         public void SetManaUpperReserve(string id, int amount)
         {
-            manaWallet.AddUpperReserve(id, amount);
+            walletsComponent.ManaWallet.AddUpperReserve(id, amount);
         }
 
         public void RemoveManaUpperReserve(string id)
         {
-            manaWallet.RemoveUpperReserve(id);
+            walletsComponent.ManaWallet.RemoveUpperReserve(id);
         }
 
         public void SetEnemyManaUpperReserve(string id, int amount)
         {
-            enemyManaWallet.AddUpperReserve(id, amount);
+            walletsComponent.EnemyManaWallet.AddUpperReserve(id, amount);
         }
 
         public static void Reset()
