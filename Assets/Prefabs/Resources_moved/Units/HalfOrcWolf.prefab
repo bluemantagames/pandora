@@ -142,6 +142,7 @@ MonoBehaviour:
   lifeValue: 150
   maxLife: 0
   IsDead: 0
+  DisableDamage: 0
   DeathVFX: {fileID: 2685581498212572552, guid: 83f603f9e61cdbd4c8da4a6ec28e3dc1,
     type: 3}
   DeathVFXSpeedMultiplier: 2
@@ -157,7 +158,7 @@ Animator:
   m_GameObject: {fileID: 1060352442105845753}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9444a0dc08153bd4c9cf0fa573b67a1e, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -196,8 +197,8 @@ MonoBehaviour:
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  BlueController: {fileID: 9100000, guid: d6160f1eb782b4bd597f3f03fdb95fa9, type: 2}
-  RedController: {fileID: 9100000, guid: 334bf6cf6d39a4ba7bccceba72ac6648, type: 2}
+  BlueController: {fileID: 9100000, guid: 703ad138e697949868d30615a8011b89, type: 2}
+  RedController: {fileID: 9100000, guid: 9ebc1ede0f41d7b9592123f77a9490fa, type: 2}
   WalkingAnimationStateName: Walking
   WalkingAnimationEnabled: 1
   WalkingAnimationEngineUnits: 400

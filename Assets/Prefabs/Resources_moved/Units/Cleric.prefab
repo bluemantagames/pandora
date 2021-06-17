@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 11
-  m_Sprite: {fileID: 21300000, guid: ffc1f3e70b9ab4f349ccf011c7022751, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dd29552474e835c34928f0764a7ff3c6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -199,8 +199,8 @@ MonoBehaviour:
   hitbox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  BlueController: {fileID: 9100000, guid: ed4c153803d724652a6cf18158bee828, type: 2}
-  RedController: {fileID: 9100000, guid: 41de390fb9bb045f9afd9b7049bd5013, type: 2}
+  BlueController: {fileID: 9100000, guid: e1fab7cf6eb77d5d2b0473062efc1571, type: 2}
+  RedController: {fileID: 9100000, guid: c040f4f4efae6a4a986e71896696a664, type: 2}
   WalkingAnimationStateName: Walking
   WalkingAnimationEnabled: 1
   WalkingAnimationEngineUnits: 200
@@ -240,7 +240,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 2}
+    oldSize: {x: 2.142857, y: 2.142857}
     newSize: {x: 1.02, y: 1.19}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

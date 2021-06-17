@@ -13,7 +13,7 @@ namespace Pandora.Editor
 {
     public class AnimationImporter
     {
-        [MenuItem("Assets/Create SpriteAtlas and AnimationClips for selected Sprites")]
+        [MenuItem("Assets/Flipbook Importer/Create SpriteAtlas and AnimationClips for selected Sprites")]
         public static void CreateAtlasForSelectedSprites()
         {
             SpriteAtlas sa = new SpriteAtlas();
@@ -65,18 +65,7 @@ namespace Pandora.Editor
 
             progressBar("Parsing animation manifest", 0f);
 
-            var animationManifestPath = Path.Combine(texturesPath, "animation-manifest.json");
-
-            if (!File.Exists(animationManifestPath))
-            {
-                EditorUtility.DisplayDialog("Error importing animation", "Missing animation-manifest.json", "Ok");
-
-                return;
-            }
-
-            var animationManifest = JsonUtility.FromJson<AnimationManifest>(
-                File.ReadAllText(animationManifestPath)
-            );
+            var animationManifest = loadAnimationManifest(texturesPath);
 
             progressBar("Parsing animation manifest", 1f);
 
@@ -142,10 +131,7 @@ namespace Pandora.Editor
             {
                 progressBar($"Indexing {sprite.texture.name}..", sprites.Count);
 
-                var components = sprite.texture.name.Split(new char[] { '-' });
-
-                var angle = Int32.Parse(components[0]);
-                var frameNumber = Int32.Parse(components[1]);
+                var (angle, frameNumber) = getComponents(sprite.texture.name);
 
                 if (!animations.ContainsKey(frameNumber)) continue;
 
@@ -225,6 +211,50 @@ namespace Pandora.Editor
             EditorUtility.ClearProgressBar();
         }
 
+
+        [MenuItem("Assets/Flipbook Importer/Cleanup unused sprites")]
+        public static void CleanupSprites()
+        {
+            var ignoreCommandOption = EditorUtility.DisplayDialogComplex(
+                "Ignore command animation?",
+                "Do you want to delete a sprite if it's only in the Command animation?",
+                "Yes",
+                "No",
+                "Cancel"
+            );
+
+            if (ignoreCommandOption >= 2) return;
+
+            var texturesPath = EditorUtility.OpenFolderPanel("Pick the texture folder", "Assets/Art/Sprites/Characters/", "");
+
+            var animationManifest = loadAnimationManifest(texturesPath);
+
+            foreach (var texture in Directory.GetFiles(texturesPath, "*.png"))
+            {
+                Debug.Log($"Parsing {texture}");
+
+                var isFrameUsed = false;
+
+                var (_, frameNumber) = getComponents(Path.GetFileName(texture));
+
+                foreach (var animation in animationManifest.animations)
+                {
+                    if (isFrameUsed) break;
+
+                    if (ignoreCommandOption == 0 && animation.name == "Command") continue;
+
+                    isFrameUsed = frameNumber >= animation.startFrame && frameNumber <= animation.endFrame;
+                }
+
+                if (!isFrameUsed)
+                {
+                    Debug.Log($"Deleting {texture}");
+
+                    File.Delete(texture);
+                }
+            }
+        }
+
         private static void progressBar(string message, float percent)
         {
             EditorUtility.DisplayProgressBar("Animation importer", message, percent);
@@ -241,6 +271,33 @@ namespace Pandora.Editor
         {
             progressBar(message, ++index / total);
         }
+
+        static AnimationManifest loadAnimationManifest(string texturesPath)
+        {
+            var animationManifestPath = Path.Combine(texturesPath, "animation-manifest.json");
+
+            if (!File.Exists(animationManifestPath))
+            {
+                EditorUtility.DisplayDialog("Error importing animation", "Missing animation-manifest.json", "Ok");
+
+                throw new Exception("Provided path does not exist");
+            }
+
+            return JsonUtility.FromJson<AnimationManifest>(
+                File.ReadAllText(animationManifestPath)
+            );
+        }
+
+        static (int, int) getComponents(string filename)
+        {
+            var components = filename.Replace(".png", "").Split(new char[] { '-' });
+
+            var angle = Int32.Parse(components[0]);
+            var frameNumber = Int32.Parse(components[1]);
+
+            return (angle, frameNumber);
+        }
     }
+
 
 }
