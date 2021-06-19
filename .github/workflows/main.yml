@@ -7,7 +7,7 @@ on:
 
 jobs:
   ReleaseType:
-    runs-on: self-hosted
+    runs-on: mjollnir
     outputs:
       release_type: ${{ steps.release_type.outputs.release_type }}
     steps:
@@ -22,7 +22,7 @@ jobs:
 
   BuildAndroid:
     name: Build Android release
-    runs-on: self-hosted
+    runs-on: mjollnir
     needs: ReleaseType
     steps:
       - uses: actions/checkout@v2
@@ -58,7 +58,7 @@ jobs:
 
   ReleaseInternal:
     name: Release to the Google Play Store
-    runs-on: self-hosted
+    runs-on: mjollnir
     needs: [ReleaseType, BuildAndroid, UploadBundles]
     if: ${{ needs.ReleaseType.outputs.release_type == 'internal' }}
     env:
@@ -101,7 +101,7 @@ jobs:
 
   ReleaseAlpha:
     name: Release to the Google Play Store
-    runs-on: self-hosted
+    runs-on: mjollnir
     needs: [ReleaseType, BuildAndroid, UploadBundles]
     if: ${{ needs.ReleaseType.outputs.release_type == 'alpha' }}
     env:
@@ -143,7 +143,7 @@ jobs:
           name: bundles-Android
 
   UploadBundles:
-    runs-on: self-hosted
+    runs-on: mjollnir
     needs: [BuildAndroid]
     steps:
     - name: Download bundle
