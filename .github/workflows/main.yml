@@ -24,7 +24,7 @@ jobs:
     name: Build Android release
     runs-on: mjollnir
     needs: ReleaseType
-    cointainer:
+    container:
       options:
         - '--user 1001:1001'
     steps:
