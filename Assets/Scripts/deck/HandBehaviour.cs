@@ -126,6 +126,8 @@ namespace Pandora.Deck
                         "FragCannon"
                     };
 
+                    cardNames = new List<string> { "Ranger" };
+
                     cards =
                         (from card in cardNames
                          select new Card(card)).ToList();
