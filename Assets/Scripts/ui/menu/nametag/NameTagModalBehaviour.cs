@@ -42,7 +42,7 @@ namespace Pandora.UI.Menu.NameTag
             {
                 if (i % 2 == 0)
                 {
-                    row = Instantiate(RowPrefab, Vector2.zero, Quaternion.identity, Viewport.transform); ;
+                    row = Instantiate(RowPrefab, Vector2.zero, Quaternion.identity, Viewport.transform);
                 }
 
                 var nameTagName = nameTagNames[i];
@@ -67,6 +67,8 @@ namespace Pandora.UI.Menu.NameTag
             foreach (var nameTag in cosmetics.Body.result)
             {
                 unlockedNameTags.Add(nameTag.name);
+
+                Debug.Log($"Unlocking {nameTag.name}");
 
                 var nameTagBehaviour = nameTagContainers[nameTag.name];
 

@@ -21,7 +21,7 @@ namespace Pandora.Network
 {
     public class NetworkControllerSingleton
     {
-        public bool ProdMatchmaking = false;
+        public bool ProdMatchmaking = true;
 
         string userMatchToken = null;
         Socket matchSocket = null;
