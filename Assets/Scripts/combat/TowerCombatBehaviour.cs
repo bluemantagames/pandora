@@ -179,7 +179,7 @@ namespace Pandora.Combat
 
                     balistaAnimator.Play(AttackingStateName, 0, animationPercent);
 
-                    var direction = ((Vector2)CurrentTarget.transform.position - (Vector2)transform.position).normalized;
+                    var direction = ((Vector2)CurrentTarget.transform.position - (Vector2)Balista.transform.position).normalized;
 
                     balistaAnimator.SetFloat("BlendX", direction.x);
                     balistaAnimator.SetFloat("BlendY", direction.y);
