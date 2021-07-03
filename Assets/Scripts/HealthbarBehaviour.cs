@@ -12,12 +12,23 @@ namespace Pandora
         LineRenderer lineRenderer;
         public GameObject HPSeparator;
         public GameObject EmptyHealthbar;
+        public GameObject HealthbarCanvas;
         public int HPSeparatorRange = 20;
         public LifeComponent LifeComponent;
         RectTransform rectTransform;
 
+
+        void Start() {
+            if (MapComponent.Instance.DisableHealthbars) {
+                HealthbarCanvas.GetComponent<Canvas>().enabled = false;
+
+                return;
+            }
+        }
+
         void Awake()
         {
+
             imageComponent = GetComponent<Image>();
             emptyHealthbarImageComponent = EmptyHealthbar.GetComponent<Image>();
 

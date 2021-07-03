@@ -73,6 +73,7 @@ namespace Pandora
         public PandoraEngine engine;
         public GameObject textObject;
         List<GameObject> debug = new List<GameObject> { };
+        public bool DisableHealthbars = false, DisableCostLabels = false;
 
         public Vector2 TopLeftTowerPosition, TopRightTowerPosition, TopMiddleTowerPosition,
             BottomLeftTowerPosition, BottomRightTowerPosition, BottomMiddleTowerPosition,
@@ -539,6 +540,8 @@ namespace Pandora
 
         public void ShowManaUsedAlert(GameObject unit, int manaUsed, Vector2 position)
         {
+            if (DisableCostLabels) return;
+
             var manaUsedObject = unit.GetComponentInChildren<ManaUsedAlertBehaviour>()?.gameObject;
 
             if (manaUsedObject == null) return;
