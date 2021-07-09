@@ -29,8 +29,6 @@ namespace Pandora.UI.Login
         {
             AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.LOGIN_SCENE);
 
-            _ = PlayGamesAuthentication();
-
             if (PlayerPrefs.HasKey(usernameKey) && PlayerPrefs.HasKey(passwordKey))
             {
                 UsernameInput.text = PlayerPrefs.GetString(usernameKey);
@@ -82,33 +80,6 @@ namespace Pandora.UI.Login
                     ErrorText.text = loginResponse.Error.message;
                 }
             }
-        }
-
-        /// <summary>
-        /// Platform-aware play games auth caller
-        /// </summary>
-        private async UniTaskVoid PlayGamesAuthentication()
-        {
-#if UNITY_ANDROID            
-            var authenticated = await PlayGames.instance.Authenticate();
-
-            if (authenticated)
-            {
-                _ = loadingBehaviour.LoadMainMenu();
-
-                AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.LOGIN, new Dictionary<string, object>() {
-                    {"mode", "google-play"},
-                    {"failed", false}
-                });
-            }
-            else
-            {
-                AnalyticsSingleton.Instance.TrackEvent(AnalyticsSingleton.LOGIN, new Dictionary<string, object>() {
-                    {"mode", "google-play"},
-                    {"failed", true}
-                });
-            }
-#endif
         }
 
         private bool ValidateLoginForm(string username, string password)
