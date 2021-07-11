@@ -63,6 +63,7 @@ namespace Pandora.Deck
         public GameObject MulliganTakeObject;
         public GameObject MulliganRejectObject;
         public GameObject MulliganTimerText;
+        public Boolean MulliganDisabled = false;
         private uint mulliganMsDuration;
         private uint mulliganTimePassed;
         private uint mulliganTimeLeft;
@@ -74,6 +75,11 @@ namespace Pandora.Deck
             {
                 DisableMulliganUI();
                 return;
+            }
+
+            if (MulliganDisabled)
+            {
+                DisableMulliganUI();
             }
 
             baseCard = Resources.Load($"Cards/BaseCard") as GameObject;
