@@ -242,6 +242,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1668697520900385023, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: efd3a3794e48843bd9fbd4c9e1e98835,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 97b90e467a63e4bdbaa26628e7d7b319,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &3157263 stripped
@@ -467,7 +479,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a31016415d0af4cf1b3b34410e179a73, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cdbecda614c7b4aa2bece4ee96133235, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -725,6 +737,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1668697520900385023, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: efd3a3794e48843bd9fbd4c9e1e98835,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 97b90e467a63e4bdbaa26628e7d7b319,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &214956608 stripped
@@ -1819,6 +1843,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1668697520900385023, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: efd3a3794e48843bd9fbd4c9e1e98835,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 97b90e467a63e4bdbaa26628e7d7b319,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &492786446 stripped
@@ -4143,6 +4179,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1668697520900385023, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: efd3a3794e48843bd9fbd4c9e1e98835,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 97b90e467a63e4bdbaa26628e7d7b319,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1110013714 stripped
@@ -4422,6 +4470,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1668697520900385023, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: efd3a3794e48843bd9fbd4c9e1e98835,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 97b90e467a63e4bdbaa26628e7d7b319,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1140906579 stripped
@@ -4511,8 +4571,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1130516806}
   m_HandleRect: {fileID: 1130516805}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.99999994
+  m_Value: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4705,7 +4765,7 @@ PrefabInstance:
     - target: {fileID: 687130929401861027, guid: e2a0b839b7a47504d870103b21d93d2c,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 53.99344
+      value: 53.993652
       objectReference: {fileID: 0}
     - target: {fileID: 687130929401861027, guid: e2a0b839b7a47504d870103b21d93d2c,
         type: 3}
@@ -5499,6 +5559,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1668697520900385023, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: efd3a3794e48843bd9fbd4c9e1e98835,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 97b90e467a63e4bdbaa26628e7d7b319,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1467998383 stripped
@@ -5769,6 +5841,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1668697520900385023, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: efd3a3794e48843bd9fbd4c9e1e98835,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 97b90e467a63e4bdbaa26628e7d7b319,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1525482068 stripped
@@ -6574,6 +6658,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1668697520900385023, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: efd3a3794e48843bd9fbd4c9e1e98835,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 97b90e467a63e4bdbaa26628e7d7b319,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1601793644 stripped
@@ -6699,6 +6795,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1668697520900385023, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: efd3a3794e48843bd9fbd4c9e1e98835,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 97b90e467a63e4bdbaa26628e7d7b319,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &1621711281 stripped
@@ -7685,7 +7793,7 @@ PrefabInstance:
     - target: {fileID: 687130929401861027, guid: e2a0b839b7a47504d870103b21d93d2c,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 53.993378
+      value: 53.993164
       objectReference: {fileID: 0}
     - target: {fileID: 687130929401861027, guid: e2a0b839b7a47504d870103b21d93d2c,
         type: 3}
@@ -8467,7 +8575,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1530874139}
   m_HandleRect: {fileID: 1530874138}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9543,6 +9651,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SingleManaBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1668697520900385023, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: efd3a3794e48843bd9fbd4c9e1e98835,
+        type: 3}
+    - target: {fileID: 8954732445076471223, guid: 62b49970eec204eb197a66b3fbfd5e76,
+        type: 3}
+      propertyPath: EmptyManaImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 97b90e467a63e4bdbaa26628e7d7b319,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62b49970eec204eb197a66b3fbfd5e76, type: 3}
 --- !u!224 &304511456792860013 stripped
