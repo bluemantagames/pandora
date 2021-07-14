@@ -242,7 +242,7 @@ namespace Pandora
 
             if (reservedMana > 0)
             {
-                manaImage.color = new Color(255, 0, 255);
+                manaImage.color = new Color(20, 20, 20);
                 manaText.text = $"{reservedMana / 10}";
             }
             else
